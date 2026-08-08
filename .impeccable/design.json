@@ -1,0 +1,402 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-07T00:00:00Z",
+  "title": "Design System: Veloris Lab",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Бумага",
+        "canonical": "#ececed",
+        "tonalRamp": [
+          "#0a0e0d",
+          "#141a18",
+          "#2b3532",
+          "#4f5754",
+          "#616a67",
+          "#a9b1ae",
+          "#d6d9d8",
+          "#ececed"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Поверхность",
+        "canonical": "#ffffff"
+      },
+      "surface-sunken": {
+        "role": "neutral",
+        "displayName": "Утопленная поверхность",
+        "canonical": "#f5f6f6"
+      },
+      "deploy-green": {
+        "role": "primary",
+        "displayName": "Зелёный деплой",
+        "canonical": "#0e7c66",
+        "tonalRamp": [
+          "#041a15",
+          "#063028",
+          "#08483b",
+          "#0b6853",
+          "#0e7c66",
+          "#16a687",
+          "#35debc",
+          "#b3f2e3"
+        ]
+      },
+      "deploy-green-deep": {
+        "role": "primary",
+        "displayName": "Зелёный деплой, нажатый",
+        "canonical": "#0b6853"
+      },
+      "console-signal": {
+        "role": "primary",
+        "displayName": "Сигнал консоли",
+        "canonical": "#35debc",
+        "tonalRamp": [
+          "#062a22",
+          "#0a4638",
+          "#0f6350",
+          "#158269",
+          "#1ba284",
+          "#23c4a1",
+          "#35debc",
+          "#a6f1e2"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Чернила",
+        "canonical": "#141a18",
+        "tonalRamp": [
+          "#050807",
+          "#0a0e0d",
+          "#141a18",
+          "#242e2b",
+          "#3a4643",
+          "#4f5754",
+          "#616a67",
+          "#9aa5a1"
+        ]
+      },
+      "ink-mute": {
+        "role": "neutral",
+        "displayName": "Приглушённые чернила",
+        "canonical": "#4f5754"
+      },
+      "ink-faint": {
+        "role": "neutral",
+        "displayName": "Бледные чернила",
+        "canonical": "#616a67"
+      },
+      "dark-slab": {
+        "role": "neutral",
+        "displayName": "Тёмная плита",
+        "canonical": "#0f1614",
+        "tonalRamp": [
+          "#050a09",
+          "#0a100f",
+          "#0f1614",
+          "#1a2422",
+          "#2b3532",
+          "#4f5754",
+          "#7e918c",
+          "#9aada8"
+        ]
+      },
+      "dark-slab-deep": {
+        "role": "neutral",
+        "displayName": "Тёмная плита, глубокая",
+        "canonical": "#0a100f"
+      },
+      "on-dark": {
+        "role": "neutral",
+        "displayName": "Текст на плите",
+        "canonical": "#ffffff"
+      },
+      "on-dark-mute": {
+        "role": "neutral",
+        "displayName": "Приглушённый на плите",
+        "canonical": "#9aada8"
+      },
+      "on-dark-faint": {
+        "role": "neutral",
+        "displayName": "Бледный на плите",
+        "canonical": "#7e918c"
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Линия",
+        "canonical": "#d6d9d8"
+      },
+      "rule-soft": {
+        "role": "neutral",
+        "displayName": "Мягкая линия",
+        "canonical": "#e3e5e4"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Дисплей",
+        "purpose": "Заголовок первого экрана. Ровно один на страницу."
+      },
+      "headline": {
+        "displayName": "Заголовок секции",
+        "purpose": "Заголовки разделов страницы."
+      },
+      "title": {
+        "displayName": "Название",
+        "purpose": "Названия кейсов и карточек."
+      },
+      "body": {
+        "displayName": "Текст",
+        "purpose": "Подводки секций и проза. Мера не шире 62 знаков."
+      },
+      "label": {
+        "displayName": "Подпись",
+        "purpose": "Надзаголовки, ключи таблиц, подписи полей. Моноширинный капс."
+      },
+      "data": {
+        "displayName": "Данные",
+        "purpose": "Значения таблиц, теги, бейджи, номера шагов, цена."
+      }
+    },
+    "shadows": [
+      {
+        "name": "contact",
+        "value": "0 1px 1px rgba(18,32,28,.06), 0 2px 5px -2px rgba(18,32,28,.14)",
+        "purpose": "Залитый контрол выступает над своей поверхностью. Обведённый рамкой остаётся вровень."
+      },
+      {
+        "name": "contact-press",
+        "value": "0 1px 2px rgba(18,32,28,.14)",
+        "purpose": "То же при нажатии: контрол вдавливается, но не смещается."
+      },
+      {
+        "name": "bar",
+        "value": "0 1px 1px rgba(18,32,28,.05), 0 4px 14px -4px rgba(18,32,28,.14)",
+        "purpose": "Липкая шапка, единственная плоскость, под которой проезжает контент. Самый короткий шлейф в системе."
+      },
+      {
+        "name": "rest",
+        "value": "0 1px 2px rgba(18,32,28,.05), 0 8px 20px -8px rgba(18,32,28,.13), 0 18px 40px -22px rgba(18,32,28,.18)",
+        "purpose": "Покой: объект лежит прямо на серой бумаге. Все белые карточки и линованные таблицы верхнего уровня."
+      },
+      {
+        "name": "raise",
+        "value": "0 2px 4px rgba(18,32,28,.06), 0 14px 28px -10px rgba(18,32,28,.16), 0 32px 64px -32px rgba(18,32,28,.24)",
+        "purpose": "Подъём: объект стоит перед другим объектом. На странице ровно один, карточка бюро поверх фотографии."
+      },
+      {
+        "name": "raise-up",
+        "value": "0 -2px 4px rgba(18,32,28,.06), 0 -14px 28px -10px rgba(18,32,28,.16), 0 10px 24px -14px rgba(18,32,28,.12)",
+        "purpose": "Тот же подъём, перевёрнутый: на узком экране стык переезжает на верхнюю кромку карточки."
+      },
+      {
+        "name": "slab",
+        "value": "0 2px 6px -1px rgba(10,18,16,.22), 0 14px 30px -16px rgba(10,18,16,.38)",
+        "purpose": "Контакт под тёмной плитой на серой бумаге. Тонирована её же значением, тугая, с отрицательным spread: широкое пятно под почти чёрным объектом читается как грязь."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state",
+        "value": "0.16s ease",
+        "purpose": "Все интерактивные состояния: наведение, фокус, выбор."
+      },
+      {
+        "name": "diagram",
+        "value": "0.3s ease",
+        "purpose": "Смена подсвеченного узла в схеме пайплайна."
+      },
+      {
+        "name": "entrance",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Единственная поставленная сцена: выезд заголовка по словам."
+      },
+      {
+        "name": "ticker",
+        "value": "80s linear infinite",
+        "purpose": "Бегущая строка возможностей. Останавливается при наведении."
+      },
+      {
+        "name": "set-piece",
+        "value": "0.5s cubic-bezier(0.76, 0, 0.24, 1)",
+        "purpose": "Единственное исключение из 0.16s: прокрутка названия шага, номер и заливка линии в блоке процесса. Второго такого быть не должно."
+      },
+      {
+        "name": "scroll-linked",
+        "value": "useScroll offset ['start end', 'end center'] по собственной полосе (78vh, 520–720px)",
+        "purpose": "Линия, рисующая себя в пустой полосе перед финальным блоком. Эффекту нужен и ход, и место: слоем под непрозрачными секциями наружу выходят только обрывки в просветах."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "lg",
+        "value": "1080px"
+      },
+      {
+        "name": "sm",
+        "value": "720px"
+      }
+    ],
+    "rounded": {
+      "rule": "Короткая видимая сторона объекта, делённая на три, вниз до ступени. Размерная лестница кончается на 12px; дальше выбирает роль. Ступень не меняется на других разрешениях.",
+      "chip": "4px",
+      "control-sm": "8px",
+      "control": "12px",
+      "nested": "16px",
+      "card": "24px",
+      "dot": "999px",
+      "nesting": "Скруглённый ребёнок не превышает ступень ниже родителя. Ребёнок без зазора радиус не объявляет и наследует изгиб обрезкой."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Главное действие на светлой поверхности.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\">Рассчитать проект</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; font-family: Inter, system-ui, sans-serif; font-size: 15px; font-weight: 500; line-height: 1; letter-spacing: -0.01em; color: #fff; background: #0e7c66; border: 1px solid #0e7c66; border-radius: 12px; box-shadow: 0 1px 1px rgba(18,32,28,.06), 0 2px 5px -2px rgba(18,32,28,.14); padding: 14px 22px; text-decoration: none; cursor: pointer; transition: background 0.16s ease, border-color 0.16s ease; } .ds-btn-primary:hover { background: #0b6853; border-color: #0b6853; } .ds-btn-primary:focus-visible { outline: 2px solid #0e7c66; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Второстепенное действие рядом с главным.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Смотреть кейсы</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; font-family: Inter, system-ui, sans-serif; font-size: 15px; font-weight: 500; line-height: 1; color: #141a18; background: #fff; border: 1px solid #d6d9d8; border-radius: 12px; padding: 14px 22px; text-decoration: none; cursor: pointer; transition: border-color 0.16s ease; } .ds-btn-ghost:hover { border-color: #141a18; } .ds-btn-ghost:focus-visible { outline: 2px solid #0e7c66; outline-offset: 2px; }"
+    },
+    {
+      "name": "Signal Button (on dark)",
+      "kind": "button",
+      "refersTo": "button-on-dark",
+      "description": "Главное действие на тёмной плите. Единственное место, где живёт яркий зелёный.",
+      "html": "<div style=\"background:#0f1614;padding:24px;border-radius: 12px\"><a class=\"ds-btn-signal\" href=\"#\">Обсудить задачу</a></div>",
+      "css": ".ds-btn-signal { display: inline-flex; align-items: center; justify-content: center; font-family: Inter, system-ui, sans-serif; font-size: 15px; font-weight: 500; line-height: 1; color: #0f1614; background: #35debc; border: 1px solid #35debc; border-radius: 12px; padding: 14px 22px; text-decoration: none; cursor: pointer; transition: background 0.16s ease; } .ds-btn-signal:hover { background: #55e6c8; border-color: #55e6c8; } .ds-btn-signal:focus-visible { outline: 2px solid #35debc; outline-offset: 3px; }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Вариант ответа в калькуляторе. Выбранный заливается зелёным.",
+      "html": "<label class=\"ds-chip\">Интеграция систем</label><label class=\"ds-chip ds-chip-on\">AI-агент</label>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; font-family: Inter, system-ui, sans-serif; font-size: 14px; line-height: 1; color: #141a18; background: #fff; border: 1px solid #d6d9d8; border-radius: 12px; padding: 11px 16px; margin-right: 8px; cursor: pointer; transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease; } .ds-chip:hover { border-color: #616a67; } .ds-chip-on { color: #fff; background: #0e7c66; border-color: #0e7c66; } .ds-chip-on:hover { background: #0b6853; border-color: #0b6853; }"
+    },
+    {
+      "name": "Case Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Карточка кейса: заголовок со статусом, теги, разбор в утопленном блоке.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-head\"><div class=\"ds-card-top\"><h3>Cowee</h3><span class=\"ds-badge\">Работает</span></div><p class=\"ds-card-sub\">Telegram-бот для групповых фокус-сессий.</p></div><div class=\"ds-card-tags\"><span class=\"ds-tag\">Python</span><span class=\"ds-tag\">aiogram</span><span class=\"ds-tag\">PostgreSQL</span></div><div class=\"ds-card-psr\"><span class=\"ds-label\">Результат</span><p>Живёт в Telegram и проводит сессии.</p></div></article>",
+      "css": ".ds-card { background: #fff; border: 1px solid #d6d9d8; border-radius: 24px; box-shadow: 0 1px 2px rgba(18,32,28,.05), 0 8px 20px -8px rgba(18,32,28,.13), 0 18px 40px -22px rgba(18,32,28,.18); overflow: hidden; font-family: Inter, system-ui, sans-serif; max-width: 420px; } .ds-card-head { padding: 26px 26px 16px; } .ds-card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; } .ds-card-top h3 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.025em; color: #141a18; } .ds-card-sub { margin: 10px 0 0; font-size: 15px; line-height: 1.5; color: #4f5754; } .ds-badge { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; color: #0e7c66; background: rgba(14,124,102,0.09); border: 1px solid rgba(14,124,102,0.22); padding: 4px 9px; border-radius: 24px; } .ds-card-tags { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 26px 20px; } .ds-tag { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.04em; color: #616a67; background: #f5f6f6; border: 1px solid #e3e5e4; padding: 4px 8px; border-radius: 24px; } .ds-card-psr { padding: 22px 26px; border-top: 1px solid #e3e5e4; background: #f5f6f6; } .ds-card-psr p { margin: 5px 0 0; font-size: 14px; line-height: 1.5; color: #141a18; } .ds-label { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #616a67; }"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Текстовое поле. Фокус меняет только цвет рамки.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Telegram или почта\" />",
+      "css": ".ds-input { width: 100%; max-width: 320px; font-family: Inter, system-ui, sans-serif; font-size: 15px; color: #141a18; background: #fff; border: 1px solid #d6d9d8; border-radius: 12px; padding: 12px 14px; transition: border-color 0.16s ease; } .ds-input::placeholder { color: #616a67; } .ds-input:focus { outline: none; border-color: #0e7c66; }"
+    },
+    {
+      "name": "Facts Table",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Подпись системы: таблица проверяемых фактов на тёмной плите первого экрана. Не более трёх значений красятся сигналом.",
+      "html": "<div class=\"ds-facts\"><span class=\"ds-facts-label\">Что вы получаете</span><div class=\"ds-facts-row\"><span class=\"ds-facts-k\">Цена</span><span class=\"ds-facts-v ds-facts-hot\">до старта работ</span></div><div class=\"ds-facts-row\"><span class=\"ds-facts-k\">Разбор задачи</span><span class=\"ds-facts-v ds-facts-hot\">бесплатно</span></div><div class=\"ds-facts-row\"><span class=\"ds-facts-k\">Проектов сдано</span><span class=\"ds-facts-v\">15+</span></div></div>",
+      "css": ".ds-facts { background: #0f1614; padding: 28px 24px; border-radius: 24px; box-shadow: 0 1px 2px rgba(18,32,28,.05), 0 8px 20px -8px rgba(18,32,28,.13), 0 18px 40px -22px rgba(18,32,28,.18); font-family: Inter, system-ui, sans-serif; max-width: 380px; } .ds-facts-label { display: block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #7e918c; padding-bottom: 12px; } .ds-facts-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.13); } .ds-facts-row:last-child { border-bottom: 0; } .ds-facts-k { font-size: 14px; color: #9aada8; } .ds-facts-v { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: #fff; text-align: right; font-variant-numeric: tabular-nums; } .ds-facts-hot { color: #35debc; }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Белая липкая полоса с линией снизу. Переключатель языка — сегментированная группа.",
+      "html": "<div class=\"ds-nav\"><span class=\"ds-nav-brand\"><i class=\"ds-nav-mark\"></i>Veloris Lab</span><nav class=\"ds-nav-links\"><a href=\"#\">Услуги</a><a href=\"#\">Кейсы</a><a href=\"#\">Расчёт</a></nav><span class=\"ds-langsw\"><span class=\"ds-lang-on\">ru</span><a href=\"#\">en</a></span></div>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 22px; height: 60px; padding: 0 20px; background: #fff; border-bottom: 1px solid #d6d9d8; font-family: Inter, system-ui, sans-serif; } .ds-nav-brand { display: inline-flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: #141a18; } .ds-nav-mark { width: 20px; height: 20px; border-radius: 12px; box-shadow: 0 1px 1px rgba(18,32,28,.05), 0 4px 14px -4px rgba(18,32,28,.14); background: #0e7c66; } .ds-nav-links { display: flex; gap: 22px; } .ds-nav-links a { font-size: 14px; color: #4f5754; text-decoration: none; transition: color 0.16s ease; } .ds-nav-links a:hover { color: #141a18; } .ds-langsw { display: inline-flex; margin-left: auto; border: 1px solid #d6d9d8; border-radius: 12px; overflow: hidden; } .ds-langsw a, .ds-langsw span { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 7px 11px; text-decoration: none; color: #4f5754; } .ds-lang-on { color: #fff; background: #141a18; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Инженерная ведомость",
+    "overview": "Страница читается как рабочий документ инженерной фирмы, а не как продающий лендинг. Серая бумага вместо белой, содержимое разложено по таблицам и сеткам на общих волосяных линиях, каждое число набрано моноширинным. Ведомость не уговаривает: она перечисляет то, что можно проверить. Первый экран поэтому открывается не обещанием, а таблицей фактов, каждая строка которой подтверждается ниже по странице.\n\nХарактер сдержанный, точный, без украшений. Ничего не скруглено сверх необходимого, ничего не отбрасывает тень, ни один цвет не появляется просто так. Плотность выше средней для сайта-визитки: мелкий шаг типографики и узкие отступы внутри карточек дают ощущение прибора, а не брошюры.\n\nЕдинственное отступление от ровного серого поля — тёмные плиты. Их ровно три на странице, и это осознанный дефицит: тёмное здесь редкий материал, которым отмечают начало, расчёт и финальное действие. Отвергнутые направления зафиксированы прямо: тёмный фон всей страницы пробовали и отклонили, круглые кнопки-пилюли пробовали и отклонили.",
+    "keyCharacteristics": [
+      "Серая бумага #ececed, белые карточки, тёмная плита как редкий акцент",
+      "Волосяные линии 1px вместо зазоров: сетки делятся общими границами",
+      "Два семейства: Inter для прозы, JetBrains Mono для всех подписей и чисел",
+      "Острые углы: 2px и 4px, круглое только у точек-индикаторов",
+      "Плоскость: теней в сборке нет ни одной",
+      "Один зелёный, только на действиях и живых значениях"
+    ],
+    "rules": [
+      {
+        "name": "Правило одного сигнала",
+        "body": "Зелёный означает действие или живое значение, больше ничего. Заголовок, рамка, иконка или разделитель зелёными не бывают. Если на экране больше трёх зелёных пятен, одно из них декоративное и должно уйти.",
+        "section": "colors"
+      },
+      {
+        "name": "Правило двух светлот",
+        "body": "#0e7c66 живёт только на светлом, #35debc только на тёмном. Перепутать их местами нельзя: первый на тёмном тонет, второй на светлом слепнет.",
+        "section": "colors"
+      },
+      {
+        "name": "Правило трёх плит",
+        "body": "Тёмная поверхность появляется не более трёх раз на странице. Каждая должна нести свою работу: открытие, расчёт, действие. Четвёртая превращает дефицит в фон.",
+        "section": "colors"
+      },
+      {
+        "name": "Правило машинописи",
+        "body": "Всё, что можно измерить, посчитать или отсортировать, набрано моноширинным: числа, единицы, теги, статусы, номера шагов, названия технологий. Всё, что произносится вслух, набрано Inter. Проверка: если строку нельзя прочитать как предложение, она моноширинная.",
+        "section": "typography"
+      },
+      {
+        "name": "Правило одного дисплея",
+        "body": "Размер 58px существует ровно для одного элемента на странице. Второй заголовок такого размера означает, что страница потеряла главный.",
+        "section": "typography"
+      },
+      {
+        "name": "Правило общей линии",
+        "body": "Между двумя ячейками одной сетки ровно одна граница, а не две соприкасающиеся рамки. Достигается зазором 1px на фоне цвета линии, а не рамками на ячейках.",
+        "section": "layout"
+      },
+      {
+        "name": "Правило непустой клетки",
+        "body": "Если элементов в сетке нечётное число, последний растягивается на всю ширину. Голая клетка фона читается как дыра.",
+        "section": "layout"
+      },
+      {
+        "name": "Правило двух радиусов",
+        "body": "В системе два скругления: 2px для мелочи и 4px для всего остального. Третье значение означает, что элемент не отнесли ни к одной из групп.",
+        "section": "shapes"
+      },
+      {
+        "name": "Правило одного исключения",
+        "body": "Все состояния идут на 0.16s. Единственное исключение — прокрутка шагов процесса на 0.5s, потому что это главный жест страницы, а не отклик контрола. Второго исключения быть не должно.",
+        "section": "elevation"
+      },
+      {
+        "name": "Правило достижимого конца",
+        "body": "Любой эффект, привязанный к прокрутке, должен завершаться на достижимой позиции. Проверка: доскроллить до самого низа страницы и убедиться, что эффект дошёл до конца. Блок у низа страницы центром до середины экрана не доезжает никогда.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do строить сетки на общих границах: зазор 1px на контейнере цвета линии.",
+      "Do набирать моноширинным всё измеримое: числа, теги, статусы, номера, названия технологий.",
+      "Do держать зелёный на действиях и живых значениях, не более трёх пятен на экран.",
+      "Do брать #35debc только на тёмном, #0e7c66 только на светлом.",
+      "Do растягивать последний элемент нечётной сетки на всю ширину.",
+      "Do держать переходы состояний на 0.16s, а смену состояний схемы на 0.3s.",
+      "Do проверять контраст на обеих светлых поверхностях: бумага темнее белого, и #616a67 на ней даёт ровно 4.8:1."
+    ],
+    "donts": [
+      "Don't делать фон страницы тёмным. Тёмное — акцентная поверхность, не более трёх плит на страницу. Пробовали и отклонили.",
+      "Don't использовать пилюли. Радиус 999px разрешён только точкам-индикаторам. Пробовали и отклонили.",
+      "Don't применять градиенты. Единственная фактура на странице рисуется на canvas в герое, а не CSS-градиентом.",
+      "Don't вводить третий радиус помимо 2px и 4px.",
+      "Don't ставить рамку толще 1px.",
+      "Don't использовать вес шрифта выше 600.",
+      "Don't ставить второй элемент размером 58px на одной странице."
+    ]
+  }
+}
