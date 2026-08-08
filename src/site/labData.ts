@@ -79,7 +79,6 @@ export const UI: Record<string, LS> = {
 }
 
 export const HERO = {
-  status: { en: 'Open for new projects', ru: 'Открыты для новых проектов' },
   h1: {
     en: 'We take the routine off your team and hand it to machines',
     ru: 'Снимаем с команды рутину, которую можно отдать машине',

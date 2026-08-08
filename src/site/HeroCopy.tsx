@@ -19,12 +19,20 @@ export default function HeroCopy({ lang }: { lang: LabLang }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
   const reduce = useReducedMotion()
 
+  /* The last word carries a light plaque, the way the pinned reference marks its
+     final word. Same typeface, not a serif swapped in: a foreign family injected
+     into one word of a sans headline is the tell, the plaque is the effect. */
+  const parts = L(HERO.h1).split(' ')
+  const head = { lead: parts.slice(0, -1).join(' '), last: parts[parts.length - 1] }
+
   // The availability status moved to the announcement bar at the top of the
   // page, so the hero opens straight on the headline.
   if (reduce) {
     return (
       <div className="vl-hero-copy">
-        <h1 className="vl-h1">{L(HERO.h1)}</h1>
+        <h1 className="vl-h1">
+          {head.lead}{head.lead && ' '}<span className="vl-word-mark">{head.last}</span>
+        </h1>
         <p className="vl-hero-sub">{L(HERO.sub)}</p>
         <div className="vl-hero-acts">
           <a href="#calc" className="vl-btn-signal">{L(UI.ctaCalc)}</a>
@@ -52,6 +60,9 @@ export default function HeroCopy({ lang }: { lang: LabLang }) {
               <motion.span
                 variants={{ hidden: { y: '105%' }, shown: { y: 0 } }}
                 transition={{ duration: 0.62, ease: EASE, delay: 0.18 + i * 0.045 }}
+                /* The plaque rides the same clipping box as the reveal, so it
+                   wipes up with its word instead of sitting there waiting. */
+                className={i === words.length - 1 ? 'vl-word-mark' : undefined}
               >
                 {w}
               </motion.span>

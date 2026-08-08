@@ -12,6 +12,7 @@ import CopyEmail from './CopyEmail'
 import Calculator from './Calculator'
 import HeroCopy from './HeroCopy'
 import HeroTexture from './HeroTexture'
+import HeroField from './HeroField'
 import Pipeline from './Pipeline'
 import ToolGrid from './ToolGrid'
 import Faq from './Faq'
@@ -55,13 +56,6 @@ export default function Lab({ lang }: { lang: LabLang }) {
   return (
     <div className="vl-root">
 
-      {/* ANNOUNCEMENT BAR. The brief's green strip at the page entry point; it
-          owns the availability status so the hero does not repeat it. */}
-      <div className="vl-announce">
-        <span className="vl-live" aria-hidden="true" />
-        {L(HERO.status)}
-      </div>
-
       {/* NAV */}
       <header className="vl-nav">
         <div className="vl-wrap vl-nav-in">
@@ -102,6 +96,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
           band, where it has the width to be read across instead of down. */}
       <section id="top" className="vl-heroband">
         <HeroTexture />
+        <HeroField />
         <div className="vl-wrap vl-hero">
           <HeroCopy lang={lang} />
           <Pipeline lang={lang} />

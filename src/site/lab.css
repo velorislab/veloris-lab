@@ -131,13 +131,12 @@
    content is visible by default, always. */
 
 @keyframes vl-ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@keyframes vl-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
 .vl-word { display: inline-block; overflow: hidden; vertical-align: bottom; }
 .vl-word > span { display: inline-block; will-change: transform; }
 
 @media (prefers-reduced-motion: reduce) {
-  .vl-root .vl-ticker-track, .vl-root .vl-live { animation: none !important; }
+  .vl-root .vl-ticker-track { animation: none !important; }
   .vl-root .vl-roll-stack, .vl-root .vl-roll-row::after { transition: none !important; }
   .vl-root * { transition-duration: 0.01ms !important; }
 }
@@ -222,16 +221,7 @@
 }
 .vl-heroband .vl-btn-ghost:hover { border-color: var(--on-dark); background: rgba(255, 255, 255, 0.06); }
 
-/* ============ ANNOUNCEMENT + NAV ============ */
-
-.vl-announce {
-  background: var(--dark); color: var(--on-dark);
-  font-family: var(--font-vl-mono), ui-monospace, monospace;
-  font-size: 12px; letter-spacing: 0.04em;
-  padding: 11px 20px;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-}
-.vl-announce .vl-live { background: var(--accent-bright); }
+/* ============ NAV ============ */
 
 /* The only element that trades its border for a shadow. At scroll 0 it meets
    the dark hero and a grey hairline across the top of that band was always a
@@ -273,10 +263,31 @@
    screen. */
 .vl-heroband {
   position: relative; background: var(--dark); color: var(--on-dark); overflow: hidden;
-  min-height: calc(100svh - 100px); display: flex; align-items: center;
+  min-height: calc(100svh - 60px); display: flex; align-items: center;
 }
 .vl-heroband > .vl-wrap { width: 100%; }
 .vl-texture { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+
+/* The particle field. Above the texture, under everything that is read.
+   Named `-hero-field`, because `.vl-field` is the calculator's text input. */
+.vl-hero-field { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 0; }
+
+/* Notch marks down both edges of the band, a detail lifted straight from the
+   reference: short hairlines stacked at a fixed interval, which give the black
+   an edge to be measured against. `repeating-linear-gradient` rather than
+   elements, because there is nothing here to select, focus or announce. */
+.vl-heroband::before,
+.vl-heroband::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 22px; z-index: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.14) 0 1px,
+    transparent 1px 14px
+  );
+}
+.vl-heroband::before { left: 0; z-index: 1; }
+.vl-heroband::after { right: 0; z-index: 1; }
 
 
 .vl-heroband > .vl-wrap { position: relative; z-index: 1; }
@@ -286,65 +297,96 @@
    text blocks cap their own measure instead of the column doing it. */
 .vl-hero {
   display: flex; flex-direction: column; align-items: center;
-  padding: 72px 0 64px; text-align: center;
+  padding: 60px 0 52px; text-align: center;
 }
 .vl-hero-copy { display: flex; flex-direction: column; align-items: center; gap: 22px; }
 
-.vl-live { width: 6px; height: 6px; border-radius: var(--r-full); background: var(--accent-bright); flex: none; animation: vl-blink 2.6s ease-in-out infinite; }
-
 /* 20ch is deliberately tight: it holds the headline to three or four lines so
    the centred block stays a block and does not spread into a banner. */
-.vl-h1 { font-size: 58px; font-weight: 600; line-height: 1.04; letter-spacing: -0.035em; text-wrap: balance; max-width: 20ch; }
+/* 48px, not the 58px the type scale calls Display. The centred composition has
+   to hold a headline, a subhead, two buttons and a 360px diagram inside one
+   screen; at 58px the diagram fell past the fold. Still the only element at this
+   size on the page. */
+.vl-h1 { font-size: 48px; font-weight: 600; line-height: 1.06; letter-spacing: -0.03em; text-wrap: balance; max-width: 22ch; }
 .vl-hero-sub { font-size: 17px; line-height: 1.5; color: var(--on-dark-mute); max-width: 56ch; text-wrap: pretty; }
 .vl-hero-acts { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
 
-/* ============ HERO PIPELINE ============
-   Four stages of a finished automation, read left to right under the statement.
+/* The plaque on the headline's last word. `box-decoration-break: clone` so that
+   if the word ever wraps, both fragments get their own plaque instead of one
+   stretched box with a gap in the middle. The inline padding is negative on the
+   margin side, so the plaque overhangs the glyphs without pushing the words
+   apart and re-flowing the line. */
+.vl-word-mark {
+  background: var(--on-dark); color: var(--dark);
+  padding: 0.04em 0.14em 0.1em; margin: 0 -0.06em;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
 
-   The rail's lit portion is driven by a `--lit` fraction, not a transform, so
-   one number serves both orientations: horizontal here, vertical on a phone
-   where four columns would be 80px each. A `scaleX` would have to be swapped
-   for a `scaleY` at the breakpoint from JS, which the component would then need
-   to know about. */
+/* Square, at 1px, and only inside the band. The reference's hero is sharp all
+   through, and on a black field that squareness is most of what makes it read
+   as an instrument. Everything below the band keeps the page's 12px. */
+.vl-heroband .vl-btn-signal,
+.vl-heroband .vl-btn-ghost { border-radius: 1px; }
+
+/* ============ HERO PIPELINE ============
+   Two renderings of the same four stages: a wired stage at desktop width, and
+   the plain list everywhere else. Only one is ever visible. */
 
 .vl-pipe {
-  width: 100%; max-width: 960px; margin-top: 64px;
+  width: 100%; margin-top: 42px;
   display: flex; flex-direction: column; align-items: center;
-  border-top: 1px solid var(--rule-dark); padding-top: 26px;
+  border-top: 1px solid var(--rule-dark); padding-top: 24px;
 }
-.vl-pipe-label { text-align: center; padding-bottom: 26px; }
+.vl-pipe-label { text-align: center; padding-bottom: 18px; }
 
+/* --- the wired stage --- */
+.vl-stage { position: relative; flex: none; }
+.vl-stage-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+.vl-spoke { stroke: rgba(255, 255, 255, 0.14); stroke-width: 1; transition: stroke 0.45s ease; }
+.vl-spoke-on { stroke: rgba(53, 222, 188, 0.55); }
+.vl-lead { stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; transition: stroke 0.45s ease; }
+.vl-lead-on { stroke: var(--accent-bright); }
+
+.vl-hub { stroke: rgba(255, 255, 255, 0.16); stroke-width: 1; }
+.vl-hub-inner { stroke: rgba(255, 255, 255, 0.09); stroke-width: 1; }
+.vl-hub-core { fill: var(--accent-bright); }
+
+.vl-nodedot { fill: var(--dark); stroke: var(--rule-dark-strong); stroke-width: 1; transition: fill 0.45s ease, stroke 0.45s ease; }
+.vl-nodedot-on { fill: var(--accent-bright); stroke: var(--accent-bright); }
+
+/* 1px corners, not the page's 12px: this is the reference's own geometry and it
+   is confined to the stage, where the boxes read as instrument labels rather
+   than as controls. Nothing else in the hero borrows it. */
+.vl-callout {
+  position: absolute;
+  display: flex; align-items: center; gap: 9px;
+  height: 42px; padding: 0 13px;
+  background: var(--dark-2);
+  border: 1px solid var(--rule-dark-strong); border-radius: 1px;
+  transition: border-color 0.45s ease, background 0.45s ease;
+}
+.vl-callout-tick { width: 7px; height: 7px; flex: none; background: var(--on-dark-faint); transition: background 0.45s ease; }
+.vl-callout-t { font-size: 14px; font-weight: 500; color: var(--on-dark-mute); transition: color 0.45s ease; }
+.vl-callout-on { border-color: var(--accent-bright); background: rgba(53, 222, 188, 0.06); }
+.vl-callout-on .vl-callout-tick { background: var(--accent-bright); }
+.vl-callout-on .vl-callout-t { color: var(--on-dark); }
+
+/* --- the list. Hidden while the stage is up, and the only thing below it. --- */
 .vl-pipe-list {
-  position: relative; list-style: none; width: 100%;
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;
+  display: none; list-style: none; width: 100%; max-width: 560px;
+  flex-direction: column; gap: 18px;
 }
-/* Inset by half a cell at each end so the rail spans dot centre to dot centre
-   instead of running out past the first and last node. */
-.vl-pipe-rail {
-  position: absolute; top: 8px; left: 12.5%; right: 12.5%;
-  height: 1px; background: var(--rule-dark); overflow: hidden;
-}
-.vl-pipe-rail-lit {
-  display: block; height: 100%; width: calc(var(--lit, 0) * 100%);
-  background: var(--accent-bright);
-  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.vl-pipe-node {
-  position: relative; display: flex; flex-direction: column; align-items: center;
-  gap: 12px; padding: 0 12px; text-align: center;
-}
-.vl-pipe-dot { position: relative; flex: none; width: 17px; height: 17px; border-radius: var(--r-full); background: var(--dark); border: 1px solid var(--rule-dark-strong); transition: border-color 0.3s ease, background 0.3s ease; }
-.vl-pipe-on .vl-pipe-dot { border-color: var(--accent-bright); background: var(--accent-bright); }
-.vl-pipe-halo { position: absolute; inset: -5px; border-radius: var(--r-full); border: 1px solid rgba(53, 222, 188, 0.35); }
-
+.vl-pipe-node { display: flex; align-items: flex-start; gap: 14px; }
+.vl-pipe-dot { flex: none; width: 13px; height: 13px; margin-top: 4px; border-radius: var(--r-full); background: var(--dark); border: 1px solid var(--rule-dark-strong); transition: background 0.45s ease, border-color 0.45s ease; }
+.vl-pipe-on .vl-pipe-dot { background: var(--accent-bright); border-color: var(--accent-bright); }
 .vl-pipe-text { display: flex; flex-direction: column; gap: 3px; }
-.vl-pipe-text b { font-size: 15px; font-weight: 500; color: var(--on-dark-faint); transition: color 0.3s ease; }
-.vl-pipe-text span { font-size: 13px; line-height: 1.45; color: var(--on-dark-faint); transition: color 0.3s ease; }
+.vl-pipe-text b { font-size: 15px; font-weight: 500; color: var(--on-dark-faint); transition: color 0.45s ease; }
+.vl-pipe-text span { font-size: 13px; line-height: 1.45; color: var(--on-dark-faint); transition: color 0.45s ease; }
 .vl-pipe-on .vl-pipe-text b { color: var(--on-dark); }
 .vl-pipe-on .vl-pipe-text span { color: var(--on-dark-mute); }
 
-.vl-pipe-foot { margin-top: 30px; font-size: 13px; color: var(--on-dark-mute); }
+.vl-pipe-foot { margin-top: 22px; font-size: 13px; color: var(--on-dark-mute); }
 
 /* ============ FACTS STRIP ============
    The hero's old right rail, now a ruled table under the dark band with the
@@ -845,11 +887,10 @@
 @media (max-width: 1080px) {
   .vl-hero { padding: 56px 0 52px; }
   .vl-pipe { margin-top: 48px; }
-  /* Two columns rather than four: the labels are short but their descriptions
-     are not, and 250px is where they stop wrapping into three lines. */
-  .vl-pipe-list { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 30px; }
-  /* With two rows the horizontal rail has nothing single to span, so it goes. */
-  .vl-pipe-rail { display: none; }
+  /* The stage is 860px of fixed wiring. Below this it cannot shrink honestly,
+     so it is dropped and the list it duplicates takes over. */
+  .vl-stage { display: none; }
+  .vl-pipe-list { display: flex; }
   .vl-facts-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 44px; }
   /* Stacked, the horizontal overlap has nothing left to overlap, so it rotates:
      the card rides the photograph's bottom edge instead of its right one. It
@@ -886,19 +927,10 @@
   .vl-on-light { padding: 28px 20px; }
   .vl-h1 { font-size: 32px; letter-spacing: -0.03em; max-width: none; }
   .vl-hero { padding: 40px 0 44px; }
-  /* One column, and the diagram turns back into the vertical rail it started
-     as: the dots stack down the left with the rail behind them, which is what
-     `--lit` was kept as a fraction for. */
   .vl-pipe { margin-top: 40px; padding-top: 22px; }
   .vl-pipe-label { text-align: left; padding-bottom: 20px; }
-  .vl-pipe-list { grid-template-columns: 1fr; row-gap: 20px; }
-  .vl-pipe-rail {
-    display: block; left: 8px; right: auto; top: 16px; bottom: 16px;
-    width: 1px; height: auto;
-  }
-  .vl-pipe-rail-lit { width: 100%; height: calc(var(--lit, 0) * 100%); transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-  .vl-pipe-node { flex-direction: row; align-items: flex-start; gap: 14px; padding: 0; text-align: left; }
-  .vl-pipe-foot { margin-top: 24px; align-self: flex-start; text-align: left; }
+  .vl-pipe-list { gap: 16px; }
+  .vl-pipe-foot { margin-top: 22px; align-self: flex-start; text-align: left; }
   .vl-facts-strip { grid-template-columns: 1fr; margin-top: 36px; }
   .vl-facts-cell { padding: 18px 20px; }
   .vl-sec-head { padding-bottom: 24px; }
