@@ -413,7 +413,6 @@
 .vl-pipe-text b { font-size: 15px; font-weight: 500; color: var(--on-dark); }
 .vl-pipe-text span { font-size: 13px; line-height: 1.45; color: var(--on-dark-mute); }
 
-.vl-pipe-foot { margin-top: 22px; font-size: 13px; color: var(--on-dark-mute); }
 
 /* ============ FACTS STRIP ============
    The hero's old right rail, now a ruled table under the dark band with the
@@ -428,7 +427,6 @@
 .vl-facts-cell { display: flex; flex-direction: column; gap: 9px; padding: 22px 24px; background: var(--surface); }
 .vl-facts-v { font-size: 19px; font-weight: 500; line-height: 1.3; letter-spacing: -0.015em; color: var(--ink); text-wrap: pretty; }
 .vl-facts-hot { color: var(--accent); }
-.vl-pipe-foot { font-size: 13px; color: var(--on-dark-mute); }
 
 /* ============ STACK TICKER ============
    A dark strip of the tools we actually use, in the technical voice. */
@@ -957,7 +955,6 @@
   .vl-pipe { margin-top: 40px; padding-top: 22px; }
   .vl-pipe-label { text-align: left; padding-bottom: 20px; }
   .vl-pipe-list { gap: 16px; }
-  .vl-pipe-foot { margin-top: 22px; align-self: flex-start; text-align: left; }
   .vl-facts-strip { grid-template-columns: 1fr; margin-top: 36px; }
   .vl-facts-cell { padding: 18px 20px; }
   .vl-sec-head { padding-bottom: 24px; }

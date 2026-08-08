@@ -500,10 +500,6 @@ export const PIPELINE = {
     { t: { en: 'Systems', ru: 'Системы' }, d: { en: 'Database, CRM, payments', ru: 'База, CRM, платежи' } },
     { t: { en: 'You', ru: 'Вы' }, d: { en: 'Telegram, dashboard, report', ru: 'Telegram, дашборд, отчёт' } },
   ],
-  foot: {
-    en: 'Built and running in production: Swiftin, 1000+ users',
-    ru: 'Собрано и работает в проде: Swiftin, 1000+ пользователей',
-  },
 }
 
 /** Three entry points. They mirror the calculator's readiness question. */

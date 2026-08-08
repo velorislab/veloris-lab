@@ -25,8 +25,6 @@ const BRANCHES = [
   // from the centre. This is the number that matters: at 22 the four paths were
   // near-straight diagonals meeting in a cross, which is a star, not wiring. At
   // 70 they become long shallow arcs, which is what the reference draws.
-  // `sweep` is which way the gradient plane travels, and it decides whether a
-  // branch lights from its label inward or from the hub outward.
   // `dir` is which way the light runs. The top pair feeds the hub, the bottom
   // pair is fed by it, which is the shape of the sentence the diagram is making:
   // a source and an agent go in, systems and you come out.
@@ -225,10 +223,6 @@ export default function Pipeline({ lang }: { lang: LabLang }) {
           </li>
         ))}
       </ol>
-
-      <div className="vl-pipe-foot">
-        <span>{L(PIPELINE.foot)}</span>
-      </div>
     </div>
   )
 }
