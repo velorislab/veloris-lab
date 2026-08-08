@@ -281,44 +281,84 @@
 
 .vl-heroband > .vl-wrap { position: relative; z-index: 1; }
 
-.vl-hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; padding: 0; align-items: stretch; }
-.vl-hero-copy { display: flex; flex-direction: column; gap: 22px; padding: 80px 48px 80px 0; }
-.vl-hero-rail { border-left: 1px solid var(--rule-dark); padding: 40px 0 40px 40px; display: flex; flex-direction: column; gap: 28px; justify-content: center; }
+/* Centred: statement, then the system diagram under it, rather than a split
+   with the diagram beside the words. The centre line is the composition, so the
+   text blocks cap their own measure instead of the column doing it. */
+.vl-hero {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 72px 0 64px; text-align: center;
+}
+.vl-hero-copy { display: flex; flex-direction: column; align-items: center; gap: 22px; }
 
 .vl-live { width: 6px; height: 6px; border-radius: var(--r-full); background: var(--accent-bright); flex: none; animation: vl-blink 2.6s ease-in-out infinite; }
 
-.vl-h1 { font-size: 58px; font-weight: 600; line-height: 1.04; letter-spacing: -0.035em; text-wrap: balance; }
-.vl-hero-sub { font-size: 17px; line-height: 1.5; color: var(--on-dark-mute); max-width: 48ch; }
-.vl-hero-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 6px; }
+/* 20ch is deliberately tight: it holds the headline to three or four lines so
+   the centred block stays a block and does not spread into a banner. */
+.vl-h1 { font-size: 58px; font-weight: 600; line-height: 1.04; letter-spacing: -0.035em; text-wrap: balance; max-width: 20ch; }
+.vl-hero-sub { font-size: 17px; line-height: 1.5; color: var(--on-dark-mute); max-width: 56ch; text-wrap: pretty; }
+.vl-hero-acts { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
 
-/* Facts table. Mono values, three of them accented, hairline rows. */
-.vl-ftable { display: flex; flex-direction: column; }
-.vl-ftable-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--rule-dark); }
-.vl-ftable-row:last-child { border-bottom: 0; }
-.vl-ftable-k { font-size: 14px; color: var(--on-dark-mute); }
-.vl-ftable-v { font-family: var(--font-vl-mono), ui-monospace, monospace; font-size: 13px; color: var(--on-dark); text-align: right; font-variant-numeric: tabular-nums; }
-.vl-ftable-hot { color: var(--accent-bright); }
+/* ============ HERO PIPELINE ============
+   Four stages of a finished automation, read left to right under the statement.
 
-/* ============ HERO PIPELINE (inside the rail) ============ */
+   The rail's lit portion is driven by a `--lit` fraction, not a transform, so
+   one number serves both orientations: horizontal here, vertical on a phone
+   where four columns would be 80px each. A `scaleX` would have to be swapped
+   for a `scaleY` at the breakpoint from JS, which the component would then need
+   to know about. */
 
-.vl-pipe { display: flex; flex-direction: column; }
-.vl-panel-top { padding: 0 0 14px; }
-.vl-pipe-list { position: relative; list-style: none; display: flex; flex-direction: column; gap: 18px; padding: 2px 0 0 0; }
-.vl-pipe-rail { position: absolute; left: 8px; top: 16px; bottom: 16px; width: 1px; background: var(--rule-dark); overflow: hidden; }
-.vl-pipe-rail-lit { display: block; width: 100%; height: 100%; background: var(--accent-bright); transform-origin: top center; }
+.vl-pipe {
+  width: 100%; max-width: 960px; margin-top: 64px;
+  display: flex; flex-direction: column; align-items: center;
+  border-top: 1px solid var(--rule-dark); padding-top: 26px;
+}
+.vl-pipe-label { text-align: center; padding-bottom: 26px; }
 
-.vl-pipe-node { position: relative; display: flex; align-items: flex-start; gap: 14px; }
+.vl-pipe-list {
+  position: relative; list-style: none; width: 100%;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;
+}
+/* Inset by half a cell at each end so the rail spans dot centre to dot centre
+   instead of running out past the first and last node. */
+.vl-pipe-rail {
+  position: absolute; top: 8px; left: 12.5%; right: 12.5%;
+  height: 1px; background: var(--rule-dark); overflow: hidden;
+}
+.vl-pipe-rail-lit {
+  display: block; height: 100%; width: calc(var(--lit, 0) * 100%);
+  background: var(--accent-bright);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vl-pipe-node {
+  position: relative; display: flex; flex-direction: column; align-items: center;
+  gap: 12px; padding: 0 12px; text-align: center;
+}
 .vl-pipe-dot { position: relative; flex: none; width: 17px; height: 17px; border-radius: var(--r-full); background: var(--dark); border: 1px solid var(--rule-dark-strong); transition: border-color 0.3s ease, background 0.3s ease; }
 .vl-pipe-on .vl-pipe-dot { border-color: var(--accent-bright); background: var(--accent-bright); }
 .vl-pipe-halo { position: absolute; inset: -5px; border-radius: var(--r-full); border: 1px solid rgba(53, 222, 188, 0.35); }
 
-.vl-pipe-text { display: flex; flex-direction: column; gap: 2px; }
-.vl-pipe-text b { font-size: 14px; font-weight: 500; color: var(--on-dark-faint); transition: color 0.3s ease; }
+.vl-pipe-text { display: flex; flex-direction: column; gap: 3px; }
+.vl-pipe-text b { font-size: 15px; font-weight: 500; color: var(--on-dark-faint); transition: color 0.3s ease; }
 .vl-pipe-text span { font-size: 13px; line-height: 1.45; color: var(--on-dark-faint); transition: color 0.3s ease; }
 .vl-pipe-on .vl-pipe-text b { color: var(--on-dark); }
 .vl-pipe-on .vl-pipe-text span { color: var(--on-dark-mute); }
 
-.vl-panel-foot { padding: 16px 0 0; border-top: 1px solid var(--rule-dark); margin-top: 4px; }
+.vl-pipe-foot { margin-top: 30px; font-size: 13px; color: var(--on-dark-mute); }
+
+/* ============ FACTS STRIP ============
+   The hero's old right rail, now a ruled table under the dark band with the
+   width to be read across. Six cells in the house shared-hairline grammar. */
+
+.vl-facts-strip {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+  border-radius: var(--r-5); overflow: hidden; box-shadow: var(--sh-2);
+  margin: 56px 0 0;
+}
+.vl-facts-cell { display: flex; flex-direction: column; gap: 9px; padding: 22px 24px; background: var(--surface); }
+.vl-facts-v { font-size: 19px; font-weight: 500; line-height: 1.3; letter-spacing: -0.015em; color: var(--ink); text-wrap: pretty; }
+.vl-facts-hot { color: var(--accent); }
 .vl-pipe-foot { font-size: 13px; color: var(--on-dark-mute); }
 
 /* ============ STACK TICKER ============
@@ -335,12 +375,6 @@
 .vl-ticker:hover .vl-ticker-track { animation-play-state: paused; }
 .vl-ticker-word { font-family: var(--font-vl-mono), ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; padding: 0 20px; color: var(--on-dark-mute); }
 .vl-ticker-dot { width: 3px; height: 3px; border-radius: var(--r-full); background: var(--accent-bright); flex: none; }
-
-/* ============ PROOF STRIP ============ */
-
-.vl-proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: var(--r-5); overflow: hidden; box-shadow: var(--sh-2); margin: 56px 0 0; }
-.vl-proof-cell { display: flex; flex-direction: column; gap: 8px; padding: 22px 24px; background: var(--surface); }
-.vl-proof-cell b { font-size: 19px; font-weight: 500; line-height: 1.3; letter-spacing: -0.015em; color: var(--ink); }
 
 /* ============ SECTIONS ============ */
 
@@ -809,9 +843,14 @@
 /* ============ RESPONSIVE ============ */
 
 @media (max-width: 1080px) {
-  .vl-hero { grid-template-columns: 1fr; }
-  .vl-hero-copy { padding: 56px 0 32px; }
-  .vl-hero-rail { border-left: 0; border-top: 1px solid var(--rule-dark); padding: 32px 0 56px; }
+  .vl-hero { padding: 56px 0 52px; }
+  .vl-pipe { margin-top: 48px; }
+  /* Two columns rather than four: the labels are short but their descriptions
+     are not, and 250px is where they stop wrapping into three lines. */
+  .vl-pipe-list { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 30px; }
+  /* With two rows the horizontal rail has nothing single to span, so it goes. */
+  .vl-pipe-rail { display: none; }
+  .vl-facts-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 44px; }
   /* Stacked, the horizontal overlap has nothing left to overlap, so it rotates:
      the card rides the photograph's bottom edge instead of its right one. It
      keeps its right edge flush with the photo's and steps in 64 from the left,
@@ -845,7 +884,23 @@
   .vl-wrap { padding: 0 18px; }
   .vl-sec, .vl-sec-light { padding-top: 48px; }
   .vl-on-light { padding: 28px 20px; }
-  .vl-h1 { font-size: 32px; letter-spacing: -0.03em; }
+  .vl-h1 { font-size: 32px; letter-spacing: -0.03em; max-width: none; }
+  .vl-hero { padding: 40px 0 44px; }
+  /* One column, and the diagram turns back into the vertical rail it started
+     as: the dots stack down the left with the rail behind them, which is what
+     `--lit` was kept as a fraction for. */
+  .vl-pipe { margin-top: 40px; padding-top: 22px; }
+  .vl-pipe-label { text-align: left; padding-bottom: 20px; }
+  .vl-pipe-list { grid-template-columns: 1fr; row-gap: 20px; }
+  .vl-pipe-rail {
+    display: block; left: 8px; right: auto; top: 16px; bottom: 16px;
+    width: 1px; height: auto;
+  }
+  .vl-pipe-rail-lit { width: 100%; height: calc(var(--lit, 0) * 100%); transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .vl-pipe-node { flex-direction: row; align-items: flex-start; gap: 14px; padding: 0; text-align: left; }
+  .vl-pipe-foot { margin-top: 24px; align-self: flex-start; text-align: left; }
+  .vl-facts-strip { grid-template-columns: 1fr; margin-top: 36px; }
+  .vl-facts-cell { padding: 18px 20px; }
   .vl-sec-head { padding-bottom: 24px; }
   .vl-sec-head h2 { font-size: 26px; }
   .vl-hero-sub, .vl-contact-sub { font-size: 15px; }
@@ -864,7 +919,6 @@
   .vl-faq { grid-template-columns: 1fr; }
   .vl-faq-item:nth-child(even) { border-left: 0; padding-left: 0; }
   .vl-faq-item:nth-child(odd) { padding-right: 0; }
-  .vl-proof { grid-template-columns: 1fr; margin-top: 40px; }
   .vl-case-head { padding: 22px 18px 14px; }
   .vl-case-top { flex-direction: column-reverse; align-items: flex-start; gap: 8px; }
   .vl-tags, .vl-case-links { padding-left: 18px; padding-right: 18px; }

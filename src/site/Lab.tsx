@@ -25,7 +25,7 @@ import {
   CASES, CASES_LABEL, CASES_SUB, CASE_KEYS,
   PROCESS_LABEL, PROCESS_SUB,
   WHY, WHY_LABEL, WHY_SUB,
-  CALC, PROOF, HERO, FAQ_LABEL, FAQ_SUB,
+  CALC, HERO, FAQ_LABEL, FAQ_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB,
   BUREAU, CONTACT, FOOTER, LOGOS, REVIEWS,
@@ -94,27 +94,17 @@ export default function Lab({ lang }: { lang: LabLang }) {
       <main id="main-content">
 
       {/* HERO BAND. Full-bleed dark, painted by HeroTexture rather than backed
-          by a licensed photo. The right rail carries a table of facts that are
-          each checkable further down the page, so the first screen proves
-          instead of promising. */}
+          by a licensed photo.
+
+          Centred, with the system diagram as the thing under the statement
+          rather than beside it. This replaced a split composition whose right
+          rail held the facts table; the table now runs as a strip under the
+          band, where it has the width to be read across instead of down. */}
       <section id="top" className="vl-heroband">
         <HeroTexture />
         <div className="vl-wrap vl-hero">
           <HeroCopy lang={lang} />
-          <aside className="vl-hero-rail">
-            <div>
-              <span className="vl-lbl" style={{ paddingBottom: 10 }}>{L(HERO.factsLabel)}</span>
-              <div className="vl-ftable">
-                {HERO.facts.map((f, i) => (
-                  <div className="vl-ftable-row" key={i}>
-                    <span className="vl-ftable-k">{L(f.k)}</span>
-                    <span className={f.hot ? 'vl-ftable-v vl-ftable-hot' : 'vl-ftable-v'}>{L(f.v)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <Pipeline lang={lang} />
-          </aside>
+          <Pipeline lang={lang} />
         </div>
       </section>
 
@@ -139,16 +129,20 @@ export default function Lab({ lang }: { lang: LabLang }) {
         </div>
       </div>
 
-      {/* PROOF STRIP. Restates promises the page keeps elsewhere, nothing new. */}
+      {/* FACTS STRIP. What used to be the hero's right rail, and what used to be
+          a separate three-cell strip that repeated its first three rows word for
+          word. One table now, six rows, each checkable further down the page.
+          This is the honest version of the reference's client-logo wall: real
+          facts about us instead of borrowed marks from companies we never had. */}
       <div className="vl-wrap">
-        <div className="vl-proof">
-          {PROOF.map((p, i) => (
-            <div className="vl-proof-cell" key={i}>
-              <span className="vl-lbl">{L(p.k)}</span>
-              <b>{L(p.v)}</b>
+        <dl className="vl-facts-strip">
+          {HERO.facts.map((f, i) => (
+            <div className="vl-facts-cell" key={i}>
+              <dt className="vl-lbl">{L(f.k)}</dt>
+              <dd className={f.hot ? 'vl-facts-v vl-facts-hot' : 'vl-facts-v'}>{L(f.v)}</dd>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
 
       {/* SERVICES */}

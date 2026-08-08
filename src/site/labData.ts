@@ -88,21 +88,16 @@ export const HERO = {
     en: 'AI agents, integrations and data pipelines. We build the system, ship it to production and keep it running, instead of leaving you with a prototype.',
     ru: 'AI-агенты, интеграции и пайплайны данных. Собираем систему, доводим до прода и поддерживаем, а не оставляем вас с прототипом.',
   },
-  panelLabel: { en: 'Our own product', ru: 'Наш продукт' },
-  panelBadge: { en: 'In production', ru: 'В проде' },
-  panel: [
-    { k: { en: 'Product', ru: 'Продукт' }, v: 'Swiftin' },
-    { k: { en: 'Users', ru: 'Пользователей' }, v: '1000+' },
-    { k: { en: 'Translation languages', ru: 'Языков перевода' }, v: '100+' },
-    { k: { en: 'Payments', ru: 'Платежи' }, v: { en: 'cards and crypto', ru: 'карты и крипта' } },
-    { k: { en: 'Storefront', ru: 'Витрина' }, v: 'Chrome Web Store' },
-  ],
-
   /**
-   * Facts table in the hero. Every row is checkable somewhere else on this
-   * page, so the first screen proves instead of promising. `hot` marks the
-   * values that carry the accent; keep that to three or the accent stops
-   * meaning anything.
+   * The facts strip, directly under the dark band. Every row is checkable
+   * somewhere else on this page, so the opening proves instead of promising.
+   *
+   * These used to sit in the hero's right rail while a separate PROOF constant
+   * repeated the first three of them word for word in a strip below. The rail
+   * is gone, the strip is these, and the duplicate is deleted.
+   *
+   * `hot` marks the values that carry the accent. Keep it to three or the
+   * accent stops meaning anything.
    */
   factsLabel: { en: 'What you get', ru: 'Что вы получаете' },
   facts: [
@@ -130,11 +125,6 @@ export const SERVICES_SUB = {
   ru: 'Шесть направлений, которые закрываем целиком: от первого звонка до системы, которой команда пользуется каждый день.',
 }
 
-/**
- * Section category labels. The pinned brief makes the tracked-out uppercase
- * eyebrow a first-class component of the system, so these sit above every
- * section heading as structural anchors. Uppercased by CSS, not by the string.
- */
 /*
  * There is no EYEBROW map any more, and no section label above any heading.
  *
@@ -498,12 +488,6 @@ export const CONTACT = {
  * gives the price, PROCESS step 01 is the free scoping, CONTACT states the
  * reply window. Do not add a fourth line unless the page backs it too.
  */
-export const PROOF: { k: LS; v: LS }[] = [
-  { k: { en: 'Price', ru: 'Цена' }, v: { en: 'Before we start', ru: 'Известна до старта' } },
-  { k: { en: 'Scoping', ru: 'Разбор' }, v: { en: 'Free, and can end it', ru: 'Бесплатный, может всё отменить' } },
-  { k: { en: 'Reply', ru: 'Ответ' }, v: { en: 'Same working day', ru: 'В тот же рабочий день' } },
-]
-
 /**
  * Hero diagram. Four stages of a finished automation, animated as a packet
  * travelling down the rail. It replaces the old static spec panel because it
