@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react'
+import { useHydrated } from './useHydrated'
 
 /**
  * A stroke that draws itself as you scroll into the close.
@@ -33,6 +34,12 @@ import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react'
 export default function ScrollStroke() {
   const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  /* The scroll-linked value is attached only after hydration. `useReducedMotion`
+     reads nothing on the server, so branching the rendered `style` on it wrote
+     dash attributes server-side and a plain `pathLength` client-side, which React
+     reported as attributes it could not patch. With no style until hydration the
+     server sends the finished line, which is also the correct still version. */
+  const hydrated = useHydrated()
 
   // Starts when the band's top reaches the bottom of the viewport, finishes as
   // its bottom reaches the middle. Ending on `center` rather than `end` matters
@@ -65,7 +72,7 @@ export default function ScrollStroke() {
           strokeLinecap="round"
           strokeLinejoin="round"
           vectorEffect="non-scaling-stroke"
-          style={{ pathLength: reduce ? 1 : drawn }}
+          style={hydrated && !reduce ? { pathLength: drawn } : undefined}
         />
       </svg>
     </div>

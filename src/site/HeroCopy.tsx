@@ -1,7 +1,7 @@
 'use client'
 
 import { Fragment } from 'react'
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { type LabLang, tx, UI, HERO } from './labData'
 
 const EASE = [0.16, 1, 0.3, 1] as const
@@ -17,31 +17,21 @@ const EASE = [0.16, 1, 0.3, 1] as const
  */
 export default function HeroCopy({ lang }: { lang: LabLang }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
-  const reduce = useReducedMotion()
+  /* ONE TREE, ALWAYS. There used to be an `if (useReducedMotion())` here that
+     returned a plain headline instead of the word-by-word one, and it was a
+     hydration bug: that hook has nothing to read on the server, so the server
+     always rendered the animated markup and a client with reduced motion
+     rendered the plain markup, and React threw the whole subtree away and
+     rebuilt it. Nothing in the DOM may depend on that hook.
+
+     Reduced motion is handled in CSS instead, where server and client cannot
+     disagree: the media query neutralises the word transform with `!important`,
+     which outranks the inline style Motion writes. The words simply start where
+     they finish. */
 
   /* The last word carries a light plaque, the way the pinned reference marks its
      final word. Same typeface, not a serif swapped in: a foreign family injected
      into one word of a sans headline is the tell, the plaque is the effect. */
-  const parts = L(HERO.h1).split(' ')
-  const head = { lead: parts.slice(0, -1).join(' '), last: parts[parts.length - 1] }
-
-  // The availability status moved to the announcement bar at the top of the
-  // page, so the hero opens straight on the headline.
-  if (reduce) {
-    return (
-      <div className="vl-hero-copy">
-        <h1 className="vl-h1">
-          {head.lead}{head.lead && ' '}<span className="vl-word-mark">{head.last}</span>
-        </h1>
-        <p className="vl-hero-sub">{L(HERO.sub)}</p>
-        <div className="vl-hero-acts">
-          <a href="#calc" className="vl-btn-signal">{L(UI.ctaCalc)}</a>
-          <a href="#cases" className="vl-btn-ghost">{L(UI.viewCases)}</a>
-        </div>
-      </div>
-    )
-  }
-
   const words = L(HERO.h1).split(' ')
   // The headline owns most of the sequence, so everything after it is offset
   // by roughly how long the word run takes.

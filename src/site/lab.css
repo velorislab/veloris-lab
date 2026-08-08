@@ -137,6 +137,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .vl-root .vl-ticker-track { animation: none !important; }
+  /* The sweep stops and the wiring stays. Nothing is lost: the lines, the hub
+     and the labels are the diagram; the beam was only ever the life in it. */
+  .vl-root .vl-beam { display: none; }
+  /* The headline's word reveal. `!important` because Motion writes the transform
+     inline, and this has to win: the alternative was branching the markup on
+     `useReducedMotion()`, which is a hydration bug, since the hook has nothing
+     to read on the server. */
+  .vl-root .vl-word > span { transform: none !important; }
   .vl-root .vl-roll-stack, .vl-root .vl-roll-row::after { transition: none !important; }
   .vl-root * { transition-duration: 0.01ms !important; }
 }
@@ -343,17 +351,34 @@
 .vl-stage { position: relative; flex: none; }
 .vl-stage-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 
-.vl-spoke { stroke: rgba(255, 255, 255, 0.14); stroke-width: 1; transition: stroke 0.45s ease; }
-.vl-spoke-on { stroke: rgba(53, 222, 188, 0.55); }
-.vl-lead { stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; transition: stroke 0.45s ease; }
-.vl-lead-on { stroke: var(--accent-bright); }
+/* --- the wiring, and the beam that sweeps along it ---
+
+   Two strokes per branch. The dim one is the diagram. The lit one is the same
+   path stroked with a linear gradient whose x1/x2 are animated straight across
+   the stage, so the bright band passes over the stroke and only the part
+   currently under it glows. That is where the soft head and the fading tail come
+   from, and it is why this is not a dash: a dash has ends. */
+
+.vl-wire { stroke: rgba(255, 255, 255, 0.17); stroke-width: 1; }
+
+/* `stop-color` set as a CSS property, which does resolve `var()`. As an SVG
+   presentation attribute it does not, and the beam simply never appears. */
+.vl-beam-head { stop-color: var(--accent-bright); }
+.vl-beam-tail { stop-color: var(--accent); }
+
+.vl-beam {
+  stroke-width: 2; stroke-linecap: round;
+  /* The bloom. Without it the gradient is a colour change on a hairline; with it
+     the lit stretch reads as light. Two shadows, one tight for the filament and
+     one wide and faint for the halo. */
+  filter: drop-shadow(0 0 4px rgba(53, 222, 188, 0.55))
+          drop-shadow(0 0 12px rgba(53, 222, 188, 0.28));
+}
 
 .vl-hub { stroke: rgba(255, 255, 255, 0.16); stroke-width: 1; }
 .vl-hub-inner { stroke: rgba(255, 255, 255, 0.09); stroke-width: 1; }
 .vl-hub-core { fill: var(--accent-bright); }
 
-.vl-nodedot { fill: var(--dark); stroke: var(--rule-dark-strong); stroke-width: 1; transition: fill 0.45s ease, stroke 0.45s ease; }
-.vl-nodedot-on { fill: var(--accent-bright); stroke: var(--accent-bright); }
 
 /* 1px corners, not the page's 12px: this is the reference's own geometry and it
    is confined to the stage, where the boxes read as instrument labels rather
@@ -362,15 +387,14 @@
   position: absolute;
   display: flex; align-items: center; gap: 9px;
   height: 42px; padding: 0 13px;
+  color: var(--on-dark-mute);
   background: var(--dark-2);
   border: 1px solid var(--rule-dark-strong); border-radius: 1px;
-  transition: border-color 0.45s ease, background 0.45s ease;
 }
-.vl-callout-tick { width: 7px; height: 7px; flex: none; background: var(--on-dark-faint); transition: background 0.45s ease; }
-.vl-callout-t { font-size: 14px; font-weight: 500; color: var(--on-dark-mute); transition: color 0.45s ease; }
-.vl-callout-on { border-color: var(--accent-bright); background: rgba(53, 222, 188, 0.06); }
-.vl-callout-on .vl-callout-tick { background: var(--accent-bright); }
-.vl-callout-on .vl-callout-t { color: var(--on-dark); }
+/* Both children read `currentColor`, so the one keyframe above lights the box,
+   its tick and its label together instead of needing three. */
+.vl-callout-tick { width: 7px; height: 7px; flex: none; background: currentColor; }
+.vl-callout-t { font-size: 14px; font-weight: 500; color: currentColor; }
 
 /* --- the list. Hidden while the stage is up, and the only thing below it. --- */
 .vl-pipe-list {
@@ -378,13 +402,16 @@
   flex-direction: column; gap: 18px;
 }
 .vl-pipe-node { display: flex; align-items: flex-start; gap: 14px; }
-.vl-pipe-dot { flex: none; width: 13px; height: 13px; margin-top: 4px; border-radius: var(--r-full); background: var(--dark); border: 1px solid var(--rule-dark-strong); transition: background 0.45s ease, border-color 0.45s ease; }
-.vl-pipe-on .vl-pipe-dot { background: var(--accent-bright); border-color: var(--accent-bright); }
+/* `animation-delay: inherit` picks up the per-row delay set inline on the <li>,
+   which saves setting the same number twice from the component. */
+.vl-pipe-dot {
+  flex: none; width: 13px; height: 13px; margin-top: 4px;
+  border-radius: var(--r-full);
+  background: var(--dark); border: 1px solid var(--accent-bright);
+}
 .vl-pipe-text { display: flex; flex-direction: column; gap: 3px; }
-.vl-pipe-text b { font-size: 15px; font-weight: 500; color: var(--on-dark-faint); transition: color 0.45s ease; }
-.vl-pipe-text span { font-size: 13px; line-height: 1.45; color: var(--on-dark-faint); transition: color 0.45s ease; }
-.vl-pipe-on .vl-pipe-text b { color: var(--on-dark); }
-.vl-pipe-on .vl-pipe-text span { color: var(--on-dark-mute); }
+.vl-pipe-text b { font-size: 15px; font-weight: 500; color: var(--on-dark); }
+.vl-pipe-text span { font-size: 13px; line-height: 1.45; color: var(--on-dark-mute); }
 
 .vl-pipe-foot { margin-top: 22px; font-size: 13px; color: var(--on-dark-mute); }
 

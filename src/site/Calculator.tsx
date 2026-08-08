@@ -5,6 +5,7 @@ import {
   AnimatePresence, motion, useReducedMotion, useSpring, useTransform,
 } from 'motion/react'
 import { type LabLang, tx, CALC, EMAIL, TELEGRAM } from './labData'
+import { useHydrated } from './useHydrated'
 import {
   PRICING_IS_DRAFT, WORK_TYPES, READINESS, ADDONS,
   estimate, money,
@@ -27,6 +28,7 @@ const EASE = [0.16, 1, 0.3, 1] as const
 export default function Calculator({ lang }: { lang: LabLang }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
   const reduce = useReducedMotion()
+  const hydrated = useHydrated()
 
   // Direction rides along with the step so the panel can slide the way the
   // visitor is actually moving.
@@ -104,7 +106,21 @@ export default function Calculator({ lang }: { lang: LabLang }) {
   }) => (
     <motion.label
       className={`vl-opt${on ? ' vl-opt-on' : ''}`}
-      whileTap={reduce ? undefined : { scale: 0.955 }}
+      /* Unconditional, and `tabIndex={-1}` alongside it, for two reasons that
+         turn out to be the same reason. Motion makes anything with `whileTap`
+         focusable, so the label picked up a `tabindex="0"` on top of the real
+         radio inside it, giving every chip two tab stops. And gating the prop on
+         `useReducedMotion()` meant the server wrote that attribute while a
+         reduced-motion client did not, which React reported as an attribute it
+         could not patch. Fixing the tab stop fixes the mismatch: the attribute is
+         now the same on both sides and focus stays on the input, which is what
+         the `:has(input:focus-visible)` ring is drawn against.
+
+         The press scale stays for everyone. It is a 4.5% squash in direct
+         response to the reader's own finger, which is the one kind of movement
+         reduced motion is not asking us to remove. */
+      tabIndex={-1}
+      whileTap={{ scale: 0.955 }}
       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
     >
       <input
@@ -115,7 +131,12 @@ export default function Calculator({ lang }: { lang: LabLang }) {
     </motion.label>
   )
 
-  const slide = (offset: number) => (reduce ? { opacity: 0 } : { opacity: 0, x: offset })
+  /* `hydrated &&` so the decision cannot differ between the server render and the
+     hydrating one: these values reach `initial` and `exit`, and a difference
+     there is a mismatch. After hydration the reduced-motion reader gets the
+     fade without the sideways travel. */
+  const slide = (offset: number) =>
+    hydrated && reduce ? { opacity: 0 } : { opacity: 0, x: offset }
 
   return (
     <div className="vl-calc">
