@@ -1,0 +1,29 @@
+LICENSE PLACEHOLDER
+===================
+
+Copyright (c) 2024 <YOUR NAME OR COMPANY>
+
+Replace this file with the licence you intend to ship under (MIT, a commercial
+template EULA, or your own terms).
+
+Third-party notices
+-------------------
+
+This template incorporates assets and design work that are NOT covered by the
+licence you choose for the code:
+
+1. Original design
+   The "Aston" template design is by Praha (https://www.framer.com/@praha/).
+   Reproduce or redistribute it only if you hold the appropriate licence from
+   the original author.
+
+2. Clash Grotesk
+   Indian Type Foundry, distributed by Fontshare under the ITF Free Font
+   Licence. See https://www.fontshare.com/fonts/clash-grotesk
+
+3. Instrument Sans, Manrope
+   SIL Open Font License 1.1, served through next/font/google.
+
+4. Photography and illustration
+   Bundled under public/images/ and originating from the source project.
+   Confirm your rights before redistributing.
