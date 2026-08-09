@@ -6,11 +6,14 @@ import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
+/* One import from `routing`, not two. The second line arrived with the switch
+   to path-derived locale crossing and still carried `localizedHref`, which the
+   header stopped calling when `getSite` began handing it `site.home`. */
+import { LANGS, stripLocale, twinPath } from "@/site/routing";
 import { getSite, type NavLink } from "@/config/site";
 import { transitions } from "@/lib/motion";
 import { Mark } from "@/components/ui/Mark";
 import type { LabLang } from "@/site/labData";
-import { LANGS, localizedHref } from "@/site/routing";
 
 /**
  * The nav pill, in the template's shape and our navigation.
@@ -78,19 +81,22 @@ function MenuPanel({
 /**
  * The switcher crosses to the SAME page in the other language.
  *
- * `twin` is what makes that possible off the home page, and it is a function
- * rather than a slug because service, case and pricing URLs are built three
- * different ways. Without it the switcher would answer every reader with the
- * home page, which is the one destination they did not ask for.
+ * It used to be handed a callback by whichever page rendered the header, which
+ * stopped working the moment this component became `"use client"`: a function
+ * cannot cross that boundary, and the build failed on the case pages saying so.
+ *
+ * It reads its own path instead. Every route here is `/x` or `/ru/x`, so
+ * crossing is a prefix operation and needs nothing from the page. A route added
+ * later gets a working switcher without anybody remembering to wire one.
  */
 function LangSwitch({
   lang,
   label,
-  twin,
+  pathname,
 }: {
   lang: LabLang;
   label: string;
-  twin?: (to: LabLang) => string;
+  pathname: string;
 }) {
   return (
     // `role` and not a bare div: an aria-label on a div with no role is a label
@@ -108,7 +114,7 @@ function LangSwitch({
         ) : (
           <Link
             key={code}
-            href={twin ? twin(code) : localizedHref(code)}
+            href={twinPath(pathname, code)}
             hrefLang={code}
             className="flex h-[38px] items-center rounded-pill px-[10px] text-[16px] leading-[24px] font-semibold text-ink-50 transition-colors duration-200 hover:text-surface"
           >
@@ -120,15 +126,11 @@ function LangSwitch({
   );
 }
 
-export function Header({
-  lang,
-  twin,
-}: {
-  lang: LabLang;
-  twin?: (to: LabLang) => string;
-}) {
-  const site = getSite(lang, { offHome: Boolean(twin) });
+export function Header({ lang }: { lang: LabLang }) {
   const pathname = usePathname();
+  /* Anchors have to become absolute the moment the reader is not on the home
+     page, and the path is what says so. Nobody has to pass a flag. */
+  const site = getSite(lang, { offHome: stripLocale(pathname) !== "/" });
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -249,7 +251,7 @@ export function Header({
               )}
             </div>
 
-            <LangSwitch lang={lang} label={site.labels.language} twin={twin} />
+            <LangSwitch lang={lang} label={site.labels.language} pathname={pathname} />
 
             <Link
               href={site.cta.href}

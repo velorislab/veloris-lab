@@ -1,35 +1,57 @@
 import Calculator from '@/site/Calculator'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { EYEBROW, CALC, tx, type LabLang } from '@/site/labData'
+import { EYEBROW, CALC, tx, type LabLang, type LS } from '@/site/labData'
 
 /**
  * The calculator, in a section of its own.
  *
- * The template had no equivalent, because it sells a subscription and the price
+ * The template had no equivalent, because it sells a subscription and its price
  * is three cards. This business sells project work and the price is the whole
  * argument, so the estimator is the page's centre of gravity and gets the
  * section heading treatment every other block gets.
  *
  * `id="estimate"` is the anchor the hero button, the about block, the process
- * block, all six service pages and the price list already point at. Before this
- * existed, every one of those was a link to nowhere.
+ * block, all six service pages and the price list point at. Before this
+ * existed, every one of those was a link to nowhere. It also means this
+ * component REPLACES a page's own estimate section rather than sitting inside
+ * one: two elements on one id is one too many.
+ *
+ * `seedType` restores something the old design had and the first port dropped.
+ * A service page already names the kind of work in its h1, so asking the
+ * question again underneath is a question with one obvious answer; seeded, the
+ * reader arrives with step one already filled in. The heading pair is
+ * overridable for the same reason: the wording that suits a page about one
+ * service is not the wording that suits the home page.
  */
-export function Estimate({ lang }: { lang: LabLang }) {
+export function Estimate({
+  lang,
+  seedType,
+  title,
+  description,
+  badgeIcon = '/images/icons/badge/pricing.svg',
+}: {
+  lang: LabLang
+  seedType?: string
+  title?: LS
+  description?: LS
+  badgeIcon?: string
+}) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
 
   return (
     <section
       id="estimate"
-      className="flex w-full scroll-mt-[86px] flex-col items-center gap-10 px-4 tablet:px-10 desktop:px-0"
+      /* Clears the fixed pill, or the jump parks the heading under it. */
+      className="flex w-full scroll-mt-[120px] flex-col items-center gap-10 px-4 tablet:px-10 desktop:px-0"
     >
       <SectionHeading
-        badge={{ icon: '/images/icons/badge/pricing.svg', label: L(EYEBROW.calc) }}
-        title={L(CALC.label)}
-        description={L(CALC.sub)}
-        textWidth={720}
+        badge={{ icon: badgeIcon, label: L(EYEBROW.calc) }}
+        title={L(title ?? CALC.label)}
+        description={L(description ?? CALC.sub)}
+        textWidth={780}
       />
       <div className="w-full max-w-[1101px]">
-        <Calculator lang={lang} />
+        <Calculator lang={lang} seedType={seedType} />
       </div>
     </section>
   )

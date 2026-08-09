@@ -1,27 +1,38 @@
-import { Inter, JetBrains_Mono } from 'next/font/google'
 import PricingPageBody from './PricingPage'
-import { DIRECTION_CONTRACT, NOSCRIPT_CSS, pricingJsonLd } from './meta'
+import { pricingJsonLd } from './meta'
 import type { LabLang } from './routing'
 
 /**
- * The wrapper for the price list: fonts, the two raw style blocks, and the
- * OfferCatalog + BreadcrumbList payload. Mirrors ServiceShell so the page kinds
- * cannot drift on the parts that are not their content.
+ * The wrapper for the price list: the OfferCatalog + BreadcrumbList payload,
+ * and nothing else any more.
+ *
+ * THREE THINGS LEFT WITH THE OLD DESIGN, and none of them was content.
+ *
+ *   The Inter / JetBrains Mono pair. Those were the previous design's faces,
+ *   loaded here as CSS variables that the page's own stylesheet read. The
+ *   template's three faces come from the root layout for every route, so a
+ *   second font pair on this one route would download two families nothing
+ *   sets.
+ *
+ *   `DIRECTION_CONTRACT`. It is the previous design's thesis, written out as an
+ *   HTML comment so it could be audited in the shipped markup: grey ground,
+ *   sharp 4px corners, "nothing is a pill". Every line of it is now false on
+ *   this page, and a design contract that describes a design the page no longer
+ *   has is worse than none. It still lives in `meta.ts` for the routes that
+ *   have not been reskinned yet.
+ *
+ *   `NOSCRIPT_CSS`. It forced `opacity:1` onto `.vl-root` descendants so the
+ *   old page's motion did not leave the headline invisible without JS. This
+ *   page has no `.vl-root` and no entrance animation; the rule matched nothing.
  */
-
-const fontSans = Inter({ subsets: ['latin', 'cyrillic'], variable: '--font-vl-sans', display: 'swap' })
-const fontMono = JetBrains_Mono({ subsets: ['latin', 'cyrillic'], variable: '--font-vl-mono', display: 'swap' })
-
 export default function PricingShell({ lang }: { lang: LabLang }) {
   return (
-    <div className={`${fontSans.variable} ${fontMono.variable}`}>
-      <div dangerouslySetInnerHTML={{ __html: DIRECTION_CONTRACT }} />
-      <noscript><style dangerouslySetInnerHTML={{ __html: NOSCRIPT_CSS }} /></noscript>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingJsonLd(lang)) }}
       />
       <PricingPageBody lang={lang} />
-    </div>
+    </>
   )
 }

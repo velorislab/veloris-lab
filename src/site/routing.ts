@@ -112,3 +112,27 @@ export function buildPricingAlternates(lang: LabLang) {
     },
   }
 }
+
+/**
+ * The same page in the other language, worked out from the path itself.
+ *
+ * The language switcher used to be handed a callback by whatever page rendered
+ * the header. That stopped being possible the moment the header became a client
+ * component: functions are not serializable across that boundary, and the build
+ * failed on the case pages with exactly that error.
+ *
+ * A path is serializable, and a client component can read its own. Since every
+ * route on this site is either `/x` or `/ru/x`, crossing is a prefix operation
+ * and needs no per-page knowledge at all. That also means a route added later
+ * gets a working switcher without anybody remembering to wire one.
+ */
+/** The path with any locale prefix removed: `/ru/pricing` becomes `/pricing`. */
+export function stripLocale(pathname: string): string {
+  return pathname.replace(/^\/ru(?=\/|$)/, '') || '/'
+}
+
+export function twinPath(pathname: string, to: LabLang): string {
+  const bare = stripLocale(pathname)
+  if (to === 'en') return bare
+  return bare === '/' ? '/ru' : `/ru${bare}`
+}

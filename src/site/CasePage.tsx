@@ -24,8 +24,8 @@ import { localizedHref, servicePath, casePath } from '@/site/routing'
  * new set of surfaces:
  *
  *   hero          the standalone-page heading scale `SectionHeading` documents
- *                 (32/42/56, `as="h1"`), with the section badge's pill reused
- *                 for the eyebrow tokens and the status.
+ *                 (32/42/56, `as="h1"`); `SectionBadge`'s pill for the two
+ *                 eyebrow tokens, the hero badge's pill for the status.
  *   difficulties  the numbered plate from `CoreFeatures`, laid on its side so
  *                 three long paragraphs read in a column instead of across it.
  *   sidebar       the stack on the white card + ring every feature card uses,
@@ -121,9 +121,13 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
 
   return (
     <>
-      {/* `twin` is what sends the switcher to THIS case in the other language
-          rather than to the home page. */}
-      <Header lang={lang} twin={(to) => casePath(to, page.slug)} />
+      {/* No `twin` prop, and that is current rather than an omission.
+          The header used to take a callback returning the same page in the
+          other language; a function cannot cross into a client component, and
+          these four pages are where that broke. It now reads its own path and
+          crosses the `/ru` prefix itself, so the switcher lands on THIS case in
+          the other language with nothing passed. */}
+      <Header lang={lang} />
 
       {/* `page-main`'s widths and its 200/150/80 rhythm are written out here
           rather than borrowed: that utility is sized for a home page whose first
@@ -157,8 +161,15 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
             )}
 
             {/* The heading scale SectionHeading documents for a standalone page
-                hero, with the status riding beside it instead of under it. */}
-            <div className="flex w-full flex-col items-start gap-4 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-8">
+                hero, with the status riding beside it rather than under it.
+
+                `flex-wrap`, NOT `justify-between`. Two of the four titles are a
+                single word: pushed to opposite ends of the 1200px shell, the
+                chip and "Swiftin" end up 980px apart and the gap reads as a
+                mistake rather than as alignment. Wrapping keeps the pair
+                together at every title length, and the cap on the heading is
+                what still guarantees the chip a place on the line. */}
+            <div className="flex w-full flex-wrap items-center gap-x-5 gap-y-4">
               <h1 className="max-w-[900px] text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] tablet:leading-[1.25] desktop:text-[56px] desktop:leading-[72.8px]">
                 {L(c.title)}
               </h1>
