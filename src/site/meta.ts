@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { BRAND, EMAIL, TELEGRAM, LINKEDIN, SERVICES, tx } from './labData'
-import { buildAlternates, buildServiceAlternates, localizedUrl, serviceUrl, type LabLang } from './routing'
+import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, type LabLang } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
+import { CASE_PAGES, type CasePage } from './casePages'
+import { CASES } from './labData'
 import { WORK_TYPES, money, priced } from './labPricing'
 
 /**
@@ -180,3 +182,53 @@ export function serviceJsonLd(lang: LabLang, page: ServicePage) {
 
 /** Every service slug, for generateStaticParams on both locales. */
 export const SERVICE_SLUGS = SERVICE_PAGES.map((p) => ({ slug: p.slug }))
+
+/* ---------------------------------------------------------------------------
+   Case pages.
+   --------------------------------------------------------------------------- */
+
+/** The CASES entry a case page describes, matched on the English title. */
+export function caseFor(page: CasePage) {
+  return CASES.find((c) => tx(c.title, 'en') === page.match)
+}
+
+export function caseMetadata(lang: LabLang, page: CasePage): Metadata {
+  const c = caseFor(page)
+  const name = tx(c?.title, lang)
+  const title = lang === 'ru' ? `${name}, кейс — ${BRAND}` : `${name}, a case — ${BRAND}`
+  const description = tx(c?.sub, lang)
+  const url = caseUrl(lang, page.slug)
+  return {
+    title,
+    description,
+    alternates: buildCaseAlternates(lang, page.slug),
+    openGraph: { type: 'article', title, description, url, siteName: BRAND },
+  }
+}
+
+/** CreativeWork + BreadcrumbList. Not `Product`: none of these are for sale. */
+export function caseJsonLd(lang: LabLang, page: CasePage) {
+  const c = caseFor(page)
+  const url = caseUrl(lang, page.slug)
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CreativeWork',
+      name: tx(c?.title, lang),
+      abstract: tx(c?.sub, lang),
+      url,
+      creator: { '@type': 'Organization', name: BRAND, url: localizedUrl(lang) },
+      keywords: (c?.tags ?? []).join(', '),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: BRAND, item: localizedUrl(lang) },
+        { '@type': 'ListItem', position: 2, name: tx(c?.title, lang), item: url },
+      ],
+    },
+  ]
+}
+
+export const CASE_SLUGS = CASE_PAGES.map((p) => ({ slug: p.slug }))

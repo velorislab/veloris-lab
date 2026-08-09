@@ -74,6 +74,8 @@ export const UI: Record<string, LS> = {
   viewCases: { en: 'See cases', ru: 'Смотреть кейсы' },
   copied: { en: 'copied', ru: 'скопировано' },
   copyHint: { en: 'Click to copy', ru: 'Нажмите, чтобы скопировать' },
+  moreOn: { en: 'More on this', ru: 'Подробнее' },
+  readCase: { en: 'Read the case', ru: 'Читать кейс' },
   founderLink: { en: 'About the founder', ru: 'Об основателе' },
   productLink: { en: 'Our product', ru: 'Наш продукт' },
 }

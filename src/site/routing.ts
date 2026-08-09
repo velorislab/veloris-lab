@@ -70,3 +70,24 @@ export function buildServiceAlternates(lang: LabLang, slug: string) {
     },
   }
 }
+
+/* Case pages, same shape as the service ones. */
+
+export function casePath(lang: LabLang, slug: string): string {
+  return lang === 'en' ? `/cases/${slug}` : `/${lang}/cases/${slug}`
+}
+
+export function caseUrl(lang: LabLang, slug: string): string {
+  return `${SITE_URL}${casePath(lang, slug)}`
+}
+
+export function buildCaseAlternates(lang: LabLang, slug: string) {
+  return {
+    canonical: caseUrl(lang, slug),
+    languages: {
+      en: caseUrl('en', slug),
+      ru: caseUrl('ru', slug),
+      'x-default': caseUrl('en', slug),
+    },
+  }
+}

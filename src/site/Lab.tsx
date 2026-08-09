@@ -32,7 +32,11 @@ import {
   BUREAU, CONTACT, LOGOS, REVIEWS,
   SOCIAL, ABOUT_URL,
 } from './labData'
+import Link from 'next/link'
 import { WORK_TYPES, money, priced } from './labPricing'
+import { SERVICE_PAGES } from './servicePages'
+import { CASE_PAGES } from './casePages'
+import { servicePath, casePath } from './routing'
 import './lab.css'
 
 /** Keyed off SOCIAL so a profile can never render with the wrong mark. */
@@ -157,6 +161,18 @@ export default function Lab({ lang }: { lang: LabLang }) {
                   <p>{L(c.res)}</p>
                 </div>
               </div>
+              {/* The case page always exists, so this link is unconditional; the
+                  external ones below still only render where a real URL exists. */}
+              <div className="vl-case-links">
+                {(() => {
+                  const cp = CASE_PAGES.find((x) => x.match === tx(c.title, 'en'))
+                  return cp ? (
+                    <Link href={casePath(lang, cp.slug)} className="vl-case-link vl-case-link-main">
+                      {L(UI.readCase)}
+                    </Link>
+                  ) : null
+                })()}
+              </div>
               {c.links.length > 0 && (
                 <div className="vl-case-links">
                   {c.links.map((l, j) => (
@@ -165,7 +181,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
                       href={l.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={l.primary ? 'vl-case-link vl-case-link-main' : 'vl-case-link'}
+                      className="vl-case-link"
                     >
                       {l.label}
                     </a>
@@ -205,12 +221,18 @@ export default function Lab({ lang }: { lang: LabLang }) {
         <div className="vl-grid">
           {SERVICES.map((s, i) => {
             const w = WORK_TYPES.find((t) => t.key === s.key)
+            const sp = SERVICE_PAGES.find((x) => x.key === s.key)
             return (
               <article className="vl-cell" key={s.key}>
                 <span className="vl-cell-n">{String(i + 1).padStart(2, '0')}</span>
                 <h3 className="vl-cell-t">{L(s.t)}</h3>
                 <p className="vl-cell-d">{L(s.d)}</p>
                 <p className="vl-cell-when">{L(s.when)}</p>
+                {sp && (
+                  <Link className="vl-cell-go" href={servicePath(lang, sp.slug)}>
+                    {L(UI.moreOn)}
+                  </Link>
+                )}
                 {w && (
                   <dl className="vl-cell-stats">
                     <div>
