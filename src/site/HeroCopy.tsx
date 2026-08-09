@@ -34,6 +34,10 @@ export default function HeroCopy({ lang }: { lang: LabLang }) {
   /* The last word carries a light plaque, the way the pinned reference marks its
      final word. Same typeface, not a serif swapped in: a foreign family injected
      into one word of a sans headline is the tell, the plaque is the effect. */
+  /* The shortest first-version window on the price table. Read, not typed, so
+     it moves with labPricing like every other figure on the page. */
+  const fastest = Math.min(...WORK_TYPES.map((t) => t.weeks[0]))
+
   const words = L(HERO.h1).split(' ')
   // The headline owns most of the sequence, so everything after it is offset
   // by roughly how long the word run takes.
@@ -94,7 +98,7 @@ export default function HeroCopy({ lang }: { lang: LabLang }) {
         <span className="vl-hero-floor">
           {L(UI.heroFloor)} {money(priced(Math.min(...WORK_TYPES.map((t) => t.from))))}{' '}
           <span className="vl-hero-floor-sep" aria-hidden="true">·</span>{' '}
-          {L(UI.heroSpeed)} {Math.min(...WORK_TYPES.map((t) => t.weeks[0]))} {L(CALC.weeksShort)}
+          {L(UI.heroSpeed)} {fastest} {L(fastest === 1 ? CALC.weekShortOne : CALC.weeksShort)}
         </span>
       </motion.div>
     </motion.div>

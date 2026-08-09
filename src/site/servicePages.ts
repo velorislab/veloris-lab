@@ -43,19 +43,19 @@ export const SERVICE_PAGES: ServicePage[] = [
   {
     slug: 'ai-agents',
     key: 'agent',
-    category: { en: 'Automation', ru: 'Автоматизация' },
+    category: { en: 'Automation · Processes', ru: 'Автоматизация · Процессы' },
     when: [
       {
-        en: 'When somebody repeats the same chain of steps by hand every day.',
-        ru: 'Когда одну и ту же цепочку действий кто-то повторяет руками каждый день.',
+        en: 'Every morning somebody opens the same tabs and copies the same fields into the same forms.',
+        ru: 'Каждое утро кто-то открывает те же вкладки и переносит те же поля в те же формы.',
       },
       {
-        en: 'When the rules are known but nobody has written them down anywhere a machine could read.',
-        ru: 'Когда правила известны, но нигде не записаны так, чтобы их могла прочитать машина.',
+        en: 'The rules are known, and they live in someone\'s head rather than anywhere a machine can read.',
+        ru: 'Правила известны, но живут у кого-то в голове, а не там, где их прочитает машина.',
       },
       {
-        en: 'When the work is not hard, only constant, and it is quietly eating a salary.',
-        ru: 'Когда работа не сложная, а просто постоянная, и тихо съедает чью-то зарплату.',
+        en: 'The moment that person takes a holiday, the process stops.',
+        ru: 'Стоит этому человеку уйти в отпуск, и процесс встаёт.',
       },
     ],
     firstVersion: [
@@ -66,27 +66,27 @@ export const SERVICE_PAGES: ServicePage[] = [
       { en: 'Logs every decision', ru: 'Пишет журнал решений' },
     ],
     priceDrivers: {
-      en: 'How many steps the chain has, and whether each one can be reached programmatically. A source with a documented API is cheap; a source that only exists as a screen is the expensive part. After that it is how much of the decision is a rule and how much has to be a model, because a rule is testable and a model has to be evaluated. Volume matters less than people expect and predictability matters more.',
-      ru: 'Сколько шагов в цепочке и до каждого ли можно дотянуться программно. Источник с документированным API стоит дёшево, источник, который существует только как экран, и есть дорогая часть. Дальше вопрос в том, какая доля решения это правило, а какая модель: правило тестируется, модель приходится оценивать. Объём влияет меньше, чем принято думать, а предсказуемость больше.',
+      en: 'Access sets the price, not volume. A step you can reach through an API costs almost nothing. A step that exists only as a screen is the expensive part. Then we split the decision in two: what can be written as a rule, and what has to be handed to a model. A rule is written once, and a model has to be checked against real examples, which is separate work. We also look at whether a mistake can be undone: where it cannot, a person confirms the decision. The cheapest thing you can do before we start is write the process out step by step.',
+      ru: 'Цену задаёт доступ, а не объём. Шаг, до которого можно дотянуться по API, стоит копейки. Шаг, который существует только как экран, и есть дорогая часть. Дальше делим решение надвое: что записывается правилом, а что придётся отдать модели. Правило пишется один раз, а модель приходится проверять на живых примерах, и это отдельная работа. Смотрим и на то, можно ли откатить ошибку: где нельзя, там решение подтверждает человек. Самое дешёвое, что вы можете сделать до старта, это выписать процесс по шагам.',
     },
-    ctaLabel: { en: 'Price an automation', ru: 'Посчитать автоматизацию' },
+    ctaLabel: { en: 'Price the AI agent in a minute', ru: 'Посчитать AI-агента за минуту' },
   },
   {
     slug: 'integrations',
     key: 'integr',
-    category: { en: 'Backend', ru: 'Бэкенд' },
+    category: { en: 'Backend · Sync', ru: 'Бэкенд · Синхронизация' },
     when: [
       {
-        en: 'When the data already exists in three systems and only meets inside somebody’s head.',
-        ru: 'Когда данные уже есть в трёх системах, а сходятся только в чьей-то голове.',
+        en: 'The same order sits in the inbox, in a spreadsheet and in the CRM, and a person reconciles all three.',
+        ru: 'Один и тот же заказ лежит в почте, в таблице и в CRM, а сводит всё это человек.',
       },
       {
-        en: 'When somebody re-types the same record into a second system every day.',
-        ru: 'Когда одну и ту же запись каждый день перебивают руками во вторую систему.',
+        en: 'A sync exists, and once a week somebody still checks it by eye.',
+        ru: 'Синхронизация вроде есть, и раз в неделю кто-то всё равно сверяет её глазами.',
       },
       {
-        en: 'When a sync exists, breaks quietly, and nobody notices until a client does.',
-        ru: 'Когда синхронизация вроде есть, ломается молча, и первым это замечает клиент.',
+        en: 'The exchange was set up by a contractor who no longer replies, and nobody dares touch it.',
+        ru: 'Обмен когда-то настроил подрядчик, который больше не отвечает, и трогать это боятся.',
       },
     ],
     firstVersion: [
@@ -97,27 +97,27 @@ export const SERVICE_PAGES: ServicePage[] = [
       { en: 'A log you can audit', ru: 'Журнал, который можно проверить' },
     ],
     priceDrivers: {
-      en: 'The number of systems, and how well each one is documented. Two well-behaved APIs are quick; one undocumented internal system sets the price for the whole job. Then whether data merely moves or has to be reconciled, because reconciliation means deciding which side wins and that is a business question before it is a technical one. Real-time costs more than nightly, and it is worth checking you need it.',
-      ru: 'Число систем и то, насколько каждая описана. Два вменяемых API это быстро; одна недокументированная внутренняя система задаёт цену всей работе. Дальше вопрос в том, данные просто переносятся или их надо сверять. Сверка означает решить, чья версия побеждает, а это вопрос бизнеса раньше, чем технический. Реальное время дороже ночной выгрузки, и стоит проверить, нужно ли оно.',
+      en: 'We look at the documentation, not the number of systems. Two described APIs are quick. One internal system nobody ever wrote down sets the price for the whole job. The next question is the big one: does the data simply move, or does it have to be reconciled. Reconciling means deciding whose version wins in a conflict, and that is a business question more than a technical one. Third: does the other side have a test environment. If the only place to check is live data, the work goes slower and more carefully. A nightly export is cheaper than real time, and it is worth asking honestly whether you need it.',
+      ru: 'Смотрим не на число систем, а на их документацию. Два описанных API это быстро. Одна внутренняя система, про которую никто ничего не написал, задаёт цену всей работе. Дальше главный вопрос: данные просто переносятся или их надо сверять. Сверять значит решить, чья версия побеждает при расхождении, а это скорее вопрос бизнеса, чем техники. Третий фактор: есть ли у второй стороны тестовый контур. Если проверять можно только на боевых данных, работа идёт медленнее и осторожнее. Ночная выгрузка дешевле реального времени, и стоит честно проверить, нужно ли оно вам.',
     },
-    ctaLabel: { en: 'Price an integration', ru: 'Посчитать интеграцию' },
+    ctaLabel: { en: 'Price the integration in a minute', ru: 'Посчитать интеграцию за минуту' },
   },
   {
     slug: 'parsing',
     key: 'parsing',
-    category: { en: 'Data', ru: 'Данные' },
+    category: { en: 'Data · No API', ru: 'Данные · Без API' },
     when: [
       {
-        en: 'When the numbers are right there on screen and there is nowhere to export them from.',
-        ru: 'Когда нужные данные видно на экране, а выгрузить их неоткуда.',
+        en: 'The numbers are on the screen, there is no export button, and somebody retypes them by hand.',
+        ru: 'Цифры видно на экране, кнопки «выгрузить» нет, и кто-то переписывает их руками.',
       },
       {
-        en: 'When the supplier sends a price list as a PDF and somebody keys it in.',
-        ru: 'Когда поставщик присылает прайс в PDF, и кто-то забивает его руками.',
+        en: 'The supplier sends the price list as a PDF, laid out differently every time, and somebody keys it in.',
+        ru: 'Поставщик присылает прайс в PDF, каждый раз в новой вёрстке, и его забивают руками.',
       },
       {
-        en: 'When other teams have already turned the task down.',
-        ru: 'Когда от задачи уже отказались другие.',
+        en: 'Somebody else has already turned this down, because the source has no API.',
+        ru: 'От этой задачи уже отказались другие, потому что у источника нет API.',
       },
     ],
     firstVersion: [
@@ -127,27 +127,27 @@ export const SERVICE_PAGES: ServicePage[] = [
       { en: 'Tells you when it breaks', ru: 'Сообщает, когда сломался' },
     ],
     priceDrivers: {
-      en: 'Whether the source wants to be read. A public page with stable markup is straightforward; a source behind a login, a rate limit or a bot check is a different job. The second factor is how often it changes, because that decides whether you are buying a script or a thing that has to be maintained, and we would rather say that out loud than discover it together in month two. Volume and schedule come last.',
-      ru: 'Хочет ли источник, чтобы его читали. Публичная страница со стабильной вёрсткой это просто; источник за логином, лимитом запросов или проверкой на робота это другая работа. Второй фактор это то, как часто он меняется, потому что это решает, покупаете вы скрипт или вещь, которую придётся сопровождать; лучше сказать это вслух, чем выяснить вместе на втором месяце. Объём и расписание идут последними.',
+      en: 'Everything turns on whether the source wants to be read. An open page with stable markup is cheap. A login, a rate limit and a bot check are a different job. Second factor: how often the source changes. That decides whether you are buying a script or a thing somebody has to keep alive, and it is better said before the start than discovered together in month two. Third: how the result gets checked. No number at all beats a number that quietly drifted, so validation goes into the first version. Volume and schedule come last and barely move the figure.',
+      ru: 'Всё решает, хочет ли источник, чтобы его читали. Открытая страница со стабильной вёрсткой стоит дёшево. Логин, лимит запросов и проверка на робота это уже другая работа. Второй фактор: как часто источник меняется. От этого зависит, покупаете вы скрипт или вещь, которую придётся держать живой, и лучше сказать это до старта, чем выяснить вместе на втором месяце. Третий: как проверяется результат. Лучше никакой цифры, чем цифра, которая молча съехала, поэтому проверки закладываем в первую версию. Объём и расписание идут последними и почти не двигают цифру.',
     },
-    ctaLabel: { en: 'Price a parser', ru: 'Посчитать парсер' },
+    ctaLabel: { en: 'Price the parser in a minute', ru: 'Посчитать парсер за минуту' },
   },
   {
     slug: 'dashboards',
     key: 'dash',
-    category: { en: 'Analytics', ru: 'Аналитика' },
+    category: { en: 'Analytics · Reporting', ru: 'Аналитика · Отчётность' },
     when: [
       {
-        en: 'When the answer to «how are we doing» is a spreadsheet somebody assembles by hand.',
-        ru: 'Когда на вопрос «как идут дела» отвечают таблицей, которую кто-то собирает руками.',
+        en: 'The question «how are we doing» ends in a spreadsheet somebody assembles for half a day.',
+        ru: 'Вопрос «как идут дела» упирается в таблицу, которую кто-то собирает полдня.',
       },
       {
-        en: 'When two departments quote different numbers for the same week.',
-        ru: 'Когда два отдела называют разные цифры за одну и ту же неделю.',
+        en: 'Two departments quote different numbers for the same week, and each is right by its own definition.',
+        ru: 'Два отдела называют разные цифры за одну и ту же неделю, и каждый прав по своему определению.',
       },
       {
-        en: 'When the report exists but arrives too late to change anything.',
-        ru: 'Когда отчёт есть, но приходит слишком поздно, чтобы что-то изменить.',
+        en: 'The report lands on Monday, about something that could still have been changed on Wednesday.',
+        ru: 'В понедельник приходит отчёт о том, что можно было изменить в среду.',
       },
     ],
     firstVersion: [
@@ -157,27 +157,27 @@ export const SERVICE_PAGES: ServicePage[] = [
       { en: 'Refreshes on a schedule', ru: 'Обновляется по расписанию' },
     ],
     priceDrivers: {
-      en: 'Whether the metrics are already agreed. If three people define «active client» three ways, that conversation is the project and the charts are the easy part. After that: how many sources feed it, whether any of them need a parser first, and whether history has to be backfilled, which is often the single largest line and the one nobody budgets for.',
-      ru: 'Согласованы ли метрики. Если «активный клиент» у трёх человек означает три разных вещи, то этот разговор и есть проект, а графики это лёгкая часть. Дальше: сколько источников её питает, нужен ли кому-то из них сначала парсер, и надо ли поднимать историю за прошлые периоды. Это часто самая крупная строка и та, которую не закладывают.',
+      en: 'The expensive part is metrics nobody has agreed on. If «active client» means three different things to three people, that conversation is the project and the charts are the easy half. Then we count the sources: how many there are, and whether any of them needs a parser written first. The line almost nobody budgets for is history. Backfilling past periods often costs more than building the dashboard itself. Last, freshness of the data. Once a day and once a minute are different infrastructure, and the decision you make is usually the same either way.',
+      ru: 'Дорого стоят несогласованные метрики. Если «активный клиент» у трёх человек означает три разные вещи, то этот разговор и есть проект, а графики лёгкая половина. Дальше считаем источники: сколько их и не нужно ли кому-то из них сначала написать парсер. Строка, которую почти никто не закладывает, это история. Поднять прошлые периоды часто дороже, чем построить сам дашборд. И последнее, свежесть данных. Раз в сутки и раз в минуту это разная инфраструктура, а решение вы примете одно и то же.',
     },
-    ctaLabel: { en: 'Price a dashboard', ru: 'Посчитать дашборд' },
+    ctaLabel: { en: 'Price the dashboard in a minute', ru: 'Посчитать дашборд за минуту' },
   },
   {
     slug: 'mvp',
     key: 'mvp',
-    category: { en: 'Product', ru: 'Продукт' },
+    category: { en: 'Product · Launch', ru: 'Продукт · Запуск' },
     when: [
       {
-        en: 'When the idea is clear and there is still nothing to put in front of a first customer.',
-        ru: 'Когда идея понятна, а показать первому клиенту всё ещё нечего.',
+        en: 'You have explained the idea ten times over, because there is still nothing to show.',
+        ru: 'Идею вы объясняете словами уже десятый раз, потому что показать пока нечего.',
       },
       {
-        en: 'When a prototype exists and nobody is willing to put real users on it.',
-        ru: 'Когда прототип есть, но пускать на него живых людей никто не готов.',
+        en: 'A prototype exists, and nobody is willing to put real users on it.',
+        ru: 'Прототип есть, а пускать на него живых людей никто не готов.',
       },
       {
-        en: 'When you need the smallest thing that can honestly be charged for.',
-        ru: 'Когда нужно самое маленькое, за что уже не стыдно брать деньги.',
+        en: 'You need the smallest thing you can honestly charge for, not another demo.',
+        ru: 'Нужно самое маленькое, за что уже не стыдно взять деньги, а не ещё одно демо.',
       },
     ],
     firstVersion: [
@@ -188,27 +188,27 @@ export const SERVICE_PAGES: ServicePage[] = [
       { en: 'A way to charge, if it needs one', ru: 'Приём оплаты, если он нужен' },
     ],
     priceDrivers: {
-      en: 'How much is decided and how much is still open. An MVP with one written user path is a build; an MVP that is still an argument is discovery with a build attached. Then the unavoidable parts: accounts, payments and a real deployment each add a floor of their own. Platforms multiply rather than add, so one platform done properly beats two done thinly, and that is usually the cheapest advice on this page.',
-      ru: 'Сколько решено и сколько ещё открыто. MVP с одним записанным пользовательским сценарием это сборка; MVP, который всё ещё спор, это исследование со сборкой в нагрузку. Дальше неизбежное: аккаунты, оплата и настоящий деплой добавляют каждый свой пол. Платформы умножают, а не складывают, поэтому одна сделанная как следует лучше двух сделанных тонким слоем, и обычно это самый дешёвый совет на этой странице.',
+      en: 'We count open questions, not features. An MVP with one written user path is a build. An MVP that is still an argument is discovery with a build attached. Then the unavoidable parts: accounts, taking payment and a real deployment each raise the floor. So does the admin panel everyone remembers last, and without it the product gets supported by hand in the database. Platforms multiply the price rather than add to it. One platform done properly beats two done thinly, and that is the cheapest advice on this page.',
+      ru: 'Считаем не функции, а нерешённые вопросы. MVP с одним записанным сценарием это сборка. MVP, который всё ещё спор, это исследование со сборкой в нагрузку. Дальше неизбежное: аккаунты, приём оплаты и настоящий деплой, каждый поднимает нижнюю границу. Админка, о которой вспоминают последней, тоже её поднимает: без неё продукт поддерживают руками в базе. Платформы цену умножают, а не прибавляют. Одна платформа, сделанная как следует, лучше двух, размазанных тонким слоем, и это самый дешёвый совет на этой странице.',
     },
-    ctaLabel: { en: 'Price an MVP', ru: 'Посчитать MVP' },
+    ctaLabel: { en: 'Price the MVP in a minute', ru: 'Посчитать MVP за минуту' },
   },
   {
     slug: 'payments',
     key: 'billing',
-    category: { en: 'Payments', ru: 'Платежи' },
+    category: { en: 'Money · Subscriptions', ru: 'Деньги · Подписки' },
     when: [
       {
-        en: 'When it is time to take money, not just collect enquiries.',
-        ru: 'Когда пора принимать деньги, а не собирать заявки.',
+        en: 'A customer is ready to pay right now, and all you can take is an enquiry.',
+        ru: 'Клиент готов заплатить прямо сейчас, а вы можете только принять заявку.',
       },
       {
-        en: 'When subscriptions exist and somebody checks renewals by hand.',
-        ru: 'Когда подписки уже есть, а продления кто-то проверяет вручную.',
+        en: 'Subscriptions already run, and somebody checks renewals and failed charges against a spreadsheet.',
+        ru: 'Подписки уже идут, а продления и неудачные списания кто-то сверяет по таблице.',
       },
       {
-        en: 'When a payment succeeds and access does not arrive.',
-        ru: 'Когда оплата прошла, а доступ не выдался.',
+        en: 'The money went through, the access did not arrive, and it gets sorted out in a chat thread.',
+        ru: 'Деньги списались, доступ не пришёл, и разбираются в переписке.',
       },
     ],
     firstVersion: [
@@ -219,10 +219,10 @@ export const SERVICE_PAGES: ServicePage[] = [
       { en: 'Refunds and cancellation handled', ru: 'Возвраты и отмены обработаны' },
     ],
     priceDrivers: {
-      en: 'One provider or several, and whether the money is one-off or recurring. Subscriptions are where the cost is: upgrades, downgrades, proration, failed renewals, refunds and the grace period all have to behave, and each of them is a state somebody eventually lands in. Webhooks must be idempotent, because they will arrive twice. We have shipped this twice on our own product, cards and crypto, which is why the estimate is not a guess.',
-      ru: 'Один провайдер или несколько, и деньги разовые или регулярные. Стоимость живёт в подписках: переходы между тарифами вверх и вниз, пересчёт, несостоявшиеся продления, возвраты и льготный период должны вести себя правильно, и в каждом из этих состояний рано или поздно кто-то окажется. Вебхуки обязаны быть идемпотентными, потому что они придут дважды. Мы прошли это на своём продукте дважды, картами и криптой, поэтому оценка не гадание.',
+      en: 'A one-off charge and a subscription are two different jobs. The one-off is quick. The cost lives in subscriptions: moving between plans up and down, prorating the remainder, a renewal that fails, a refund, a grace period. A real customer eventually lands in every one of those states, and each has to be written down before any code. The second thing that moves the figure is the number of providers, and where your buyers are decides which ones you can connect at all. Webhooks have to be idempotent, because they will arrive twice. We shipped this on our own product, cards and crypto, so the estimate here is not a guess.',
+      ru: 'Разовый платёж и подписка это две разные работы. Разовый делается быстро. Стоимость живёт в подписках: переходы между тарифами вверх и вниз, пересчёт остатка, несостоявшееся продление, возврат, льготный период. В каждом из этих состояний рано или поздно окажется живой клиент, и каждое надо описать до кода. Второе, что двигает цифру, это число провайдеров, а география покупателей решает, каких вы вообще сможете подключить. Вебхуки обязаны быть идемпотентными, потому что они придут дважды. Мы прошли это на своём продукте, картами и криптой, поэтому оценка тут не гадание.',
     },
-    ctaLabel: { en: 'Price a billing build', ru: 'Посчитать приём оплаты' },
+    ctaLabel: { en: 'Price the billing in a minute', ru: 'Посчитать оплату за минуту' },
   },
 ]
 

@@ -501,6 +501,10 @@
    Must stay after the rule above to win on source order. */
 .vl-sec--act { padding-top: calc(var(--sec-gap) * 1.6); }
 .vl-sec-head { display: flex; flex-direction: column; gap: 12px; padding-bottom: 32px; }
+/* The eyebrow belongs to the heading under it, so it does not get the full
+   section gap. Negative margin rather than a smaller gap on the parent, which
+   would also pull the sub up into the heading. */
+.vl-sec-head > .vl-lbl { margin-bottom: -6px; }
 .vl-sec-head h2 { font-size: 34px; font-weight: 600; line-height: 1.12; letter-spacing: -0.03em; max-width: 22ch; text-wrap: balance; }
 .vl-sec-head p { font-size: 16px; line-height: 1.55; color: var(--ink-mute); max-width: 62ch; }
 

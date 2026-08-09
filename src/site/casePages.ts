@@ -165,13 +165,13 @@ export function casePageBySlug(slug: string): CasePage | undefined {
 
 /** Section headings, shared by all four pages. */
 export const CP_LABELS = {
-  task: { en: 'The task', ru: 'Исходная задача' },
-  audience: { en: 'Who for', ru: 'Для кого' },
+  task: { en: 'Where this started', ru: 'С чего всё началось' },
+  audience: { en: 'Who we built it for', ru: 'Для кого мы это делали' },
   difficulties: { en: 'What fought back', ru: 'Что сопротивлялось' },
-  did: { en: 'What we built', ru: 'Что сделали' },
-  outcome: { en: 'What came of it', ru: 'Что получилось' },
-  stack: { en: 'Stack', ru: 'Стек' },
-  similar: { en: 'Similar work', ru: 'Похожая работа' },
-  other: { en: 'Other work', ru: 'Другие работы' },
+  did: { en: 'What we actually built', ru: 'Что собрали в итоге' },
+  outcome: { en: 'What came of it', ru: 'Что из этого вышло' },
+  stack: { en: 'Built with', ru: 'На чём собрано' },
+  similar: { en: 'Similar work for you', ru: 'Похожая работа для вас' },
+  other: { en: 'What else we have shipped', ru: 'Что ещё мы запускали' },
   open: { en: 'See it live', ru: 'Посмотреть вживую' },
 }

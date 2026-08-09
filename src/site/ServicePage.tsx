@@ -234,17 +234,17 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
  * two kinds in different files makes it obvious which is which.
  */
 const SP_LABELS = {
-  when: { en: 'This may also be you', ru: 'Это тоже про вас' },
-  first: { en: 'What the first version includes', ru: 'Что входит в первую версию' },
+  when: { en: 'Two more signs this is you', ru: 'Ещё два признака, что это про вас' },
+  first: { en: 'Here is what we build first', ru: 'Вот что соберём первым' },
   firstSub: {
-    en: 'The smallest thing that is worth running in production, not a demo.',
-    ru: 'Самое маленькое, что уже имеет смысл держать в проде, а не демо.',
+    en: 'The first version is deliberately small, and complete enough to run on real data.',
+    ru: 'Первая версия намеренно небольшая, но достаточно полная, чтобы работать на живых данных.',
   },
-  drivers: { en: 'What moves the price', ru: 'Что двигает цену' },
-  related: { en: 'We have built this before', ru: 'Такое мы уже делали' },
-  estimate: { en: 'Price it here', ru: 'Посчитайте здесь' },
+  drivers: { en: 'The expensive part is rarely obvious', ru: 'Дорого обычно не то, что кажется' },
+  related: { en: 'We have built this, and it still runs', ru: 'Такое мы уже собирали, и оно работает' },
+  estimate: { en: 'You can leave here with a figure', ru: 'Отсюда можно уйти с цифрой' },
   estimateSub: {
-    en: 'The first question is already answered by the page you are on. Four left.',
-    ru: 'На первый вопрос уже отвечает страница, на которой вы стоите. Осталось четыре.',
+    en: 'The page you are on answers the first question. Four left, and you see the figure without telling us anything.',
+    ru: 'На первый вопрос уже отвечает эта страница. Осталось четыре, и цифру вы увидите, ничего о себе не сообщая.',
   },
 }

@@ -66,7 +66,7 @@ export const UI: Record<string, LS> = {
   navProcess: { en: 'Process', ru: 'Как работаем' },
   navCalc: { en: 'Estimate', ru: 'Расчёт' },
   navBureau: { en: 'Bureau', ru: 'О бюро' },
-  ctaCalc: { en: 'Price your project', ru: 'Рассчитать проект' },
+  ctaCalc: { en: 'Get the price in a minute', ru: 'Узнать цену за минуту' },
   /**
    * The one button on all 22 routes, and it now names the free thing instead
    * of asking for a generic sales call.
@@ -82,16 +82,16 @@ export const UI: Record<string, LS> = {
   sendMailDirect: { en: 'Write by email', ru: 'Написать на почту' },
   /* Mid-page anchors back to the calculator, so the objection-handling half of
      the page stops being a corridor with no doors. */
-  startScoping: { en: 'Start with the scoping. It is free.', ru: 'Начните с разбора. Он бесплатный.' },
+  startScoping: { en: 'See the number without sending anything', ru: 'Посмотреть цифру, ничего не отправляя' },
   /* The two halves of the hero's mono line. Both figures are read from
      labPricing at render time; neither is typed anywhere. */
   heroFloor: { en: 'Projects from', ru: 'Проекты от' },
   heroSpeed: { en: 'first version from', ru: 'первая версия от' },
   copied: { en: 'copied', ru: 'скопировано' },
   copyHint: { en: 'Click to copy', ru: 'Нажмите, чтобы скопировать' },
-  moreOn: { en: 'More on this', ru: 'Подробнее' },
-  readCase: { en: 'Read the case', ru: 'Читать кейс' },
-  priceList: { en: 'See the full price list', ru: 'Открыть полный прайс' },
+  moreOn: { en: 'What is included', ru: 'Что входит' },
+  readCase: { en: 'How it was built', ru: 'Как это устроено' },
+  priceList: { en: 'Open the full price list', ru: 'Открыть полный прайс' },
   founderLink: { en: 'About the founder', ru: 'Об основателе' },
   productLink: { en: 'Our product', ru: 'Наш продукт' },
 }
@@ -115,12 +115,12 @@ export const HERO = {
    * written to end on a word worth marking.
    */
   h1: {
-    en: 'You know the price before the first line of code',
-    ru: 'Цену вы узнаете до первой строки кода',
+    en: 'Not a line of code until you know the price',
+    ru: 'Ни строки кода, пока вы не знаете цену',
   },
   sub: {
-    en: 'AI agents, integrations, dashboards, parsing, payments and whole products. The scoping is free, and it can end with us telling you not to build it.',
-    ru: 'AI-агенты, интеграции, дашборды, парсинг, платежи и продукты под ключ. Разбор задачи бесплатный, и он может закончиться советом не делать.',
+    en: 'AI agents, integrations, parsing, dashboards, payments and whole products. The scoping is free, and it can end with us telling you not to build it.',
+    ru: 'AI-агенты, интеграции, парсинг, дашборды, платежи и продукты под ключ. Разбор задачи бесплатный, и он может закончиться советом этого не делать.',
   },
   /**
    * The facts strip, directly under the dark band. Every row is checkable
@@ -133,14 +133,14 @@ export const HERO = {
    * `hot` marks the values that carry the accent. Keep it to three or the
    * accent stops meaning anything.
    */
-  factsLabel: { en: 'What you get', ru: 'Что вы получаете' },
+  factsLabel: { en: 'Known in advance', ru: 'Что известно заранее' },
   facts: [
     { k: { en: 'Price', ru: 'Цена' }, v: { en: 'before we start', ru: 'до старта работ' }, hot: true },
     { k: { en: 'Scoping call', ru: 'Разбор задачи' }, v: { en: 'free', ru: 'бесплатно' }, hot: true },
-    { k: { en: 'First reply', ru: 'Первый ответ' }, v: { en: 'same working day', ru: 'в тот же день' }, hot: false },
-    { k: { en: 'Shipped projects', ru: 'Проектов сдано' }, v: '15+', hot: false },
+    { k: { en: 'First reply', ru: 'Первый ответ' }, v: { en: 'same working day', ru: 'в тот же рабочий день' }, hot: false },
+    { k: { en: 'Projects shipped', ru: 'Проектов сдано' }, v: '15+', hot: false },
     { k: { en: 'Automations built', ru: 'Автоматизаций' }, v: '20+', hot: false },
-    { k: { en: 'Own product live', ru: 'Свой продукт в проде' }, v: { en: 'Swiftin, 1000+ users', ru: 'Swiftin, 1000+' }, hot: true },
+    { k: { en: 'Own product', ru: 'Свой продукт' }, v: { en: 'Swiftin, 1000+ users', ru: 'Swiftin, 1000+ пользователей' }, hot: true },
   ] as { k: LS; v: LS; hot: boolean }[],
 }
 
@@ -160,28 +160,54 @@ export interface Service {
    says "what we take off your team", not "Services". Nav items stay short, since
    a nav is a set of labels by nature. */
 
+/**
+ * Section eyebrows: one word above each heading.
+ *
+ * THIS REVERSES A DOCUMENTED DECISION, so here is the whole argument.
+ *
+ * There used to be an eyebrow over every section and it was deleted, correctly.
+ * Each one said its own heading back in mono caps: "What we do" over "What we
+ * take off your team", "How it runs" over "How the work runs, step by step".
+ * Trimming them to the three that carried a count only exposed the next
+ * problem, because those counts were already in the paragraph underneath. A
+ * heading that needs a label over it is a heading that is not doing its job.
+ *
+ * That argument stands, and these pass it. They are not the heading restated:
+ * every heading here is now a spoken sentence («Поддержка это пятый шаг, а не
+ * допродажа», «Это можно проверить без нас», «Каждый инструмент здесь уже был
+ * в проде») and not one of them names its own topic. The eyebrow carries the
+ * topic so the heading does not have to, which is exactly what buys the
+ * heading its voice. On a page this long that word is also the scan layer a
+ * reader uses to find the section they came for.
+ *
+ * The test, if a tenth is ever added: if the eyebrow and its heading could be
+ * swapped without loss, the eyebrow is decoration and goes.
+ *
+ * One or two words, never more. Deliberately NOT above the closing block: a
+ * «Контакты» kicker over «Разберём бесплатно и скажем как есть» adds nothing,
+ * and that ban was argued once already and has no exceptions.
+ */
+export const EYEBROW: Record<string, LS> = {
+  services: { en: 'Services', ru: 'Услуги' },
+  cases: { en: 'Cases', ru: 'Кейсы' },
+  entry: { en: 'Starting point', ru: 'Точка входа' },
+  calc: { en: 'Estimate', ru: 'Расчёт' },
+  process: { en: 'Process', ru: 'Процесс' },
+  stack: { en: 'Tools', ru: 'Инструменты' },
+  why: { en: 'Proof', ru: 'Доказательства' },
+  bureau: { en: 'Bureau', ru: 'Бюро' },
+  faq: { en: 'Questions', ru: 'Вопросы' },
+}
+
 /* The old heading, «Что снимаем с вашей команды», echoed the old hero almost
    verbatim AND mislabelled its own grid: dashboards, MVPs and billing are not
    routine coming off a team. */
-export const SERVICES_LABEL = { en: 'Six kinds of work, each taken to production', ru: 'Шесть направлений, каждое доводим до прода' }
+export const SERVICES_LABEL = { en: 'Six kinds of work. Yours is one of them', ru: 'Шесть направлений. Ваша задача в одном из них' }
 export const SERVICES_SUB = {
-  en: 'Each card says when this is you, what it starts at and how long the first version takes.',
-  ru: 'На каждой карточке написано, когда это про вас, с чего начинается цена и сколько занимает первая версия.',
+  en: 'Every card says when this is you, where the price starts and how long the first version runs.',
+  ru: 'На каждой карточке: когда это про вас, с чего начинается цена и сколько идёт первая версия.',
 }
 
-/*
- * There is no EYEBROW map any more, and no section label above any heading.
- *
- * There used to be one over every section, each saying its own heading back in
- * mono caps: "What we do" over "What we take off your team", "How it runs" over
- * "How the work runs, step by step". Trimming them to three that carried a
- * count only exposed the next problem, because the counts were already in the
- * paragraph directly underneath: the cases label read "Four projects" over a
- * sentence starting "Four projects we can talk about openly".
- *
- * A heading that needs a label over it is a heading that is not doing its job.
- * Section topic lives in the heading, counts live in the sentence under it.
- */
 
 /* The ticker under the hero used to be MARQUEE, thirteen capability words kept
    by hand in two languages. It now derives from WORK_TYPES so it carries the six
@@ -197,8 +223,8 @@ export const SERVICES: Service[] = [
       ru: 'Автономные сценарии, которые закрывают ручные шаги целиком, а не подсказывают человеку, что сделать.',
     },
     when: {
-      en: 'When somebody repeats the same chain of steps by hand every day.',
-      ru: 'Когда одну и ту же цепочку действий кто-то повторяет руками каждый день.',
+      en: 'Every morning somebody opens the same tabs and copies the same fields into the same forms.',
+      ru: 'Каждое утро кто-то открывает те же вкладки и переносит те же поля в те же формы.',
     },
   },
   {
@@ -209,8 +235,8 @@ export const SERVICES: Service[] = [
       ru: 'CRM, вебхуки, мессенджеры, API и базы данных, связанные в один рабочий контур.',
     },
     when: {
-      en: 'When the data already exists in three systems and only meets inside somebody’s head.',
-      ru: 'Когда данные уже есть в трёх системах, а сходятся только в чьей-то голове.',
+      en: 'The same order sits in the inbox, in a spreadsheet and in the CRM, and a person reconciles all three.',
+      ru: 'Один и тот же заказ лежит в почте, в таблице и в CRM, а сводит всё это человек.',
     },
   },
   {
@@ -221,8 +247,8 @@ export const SERVICES: Service[] = [
       ru: 'Достаём данные оттуда, где готового API нет. Это те задачи, от которых обычно отказываются.',
     },
     when: {
-      en: 'When the numbers are right there on screen and there is nowhere to export them from.',
-      ru: 'Когда нужные данные видно на экране, а выгрузить их неоткуда.',
+      en: 'The numbers are on the screen, there is no export button, and somebody retypes them by hand.',
+      ru: 'Цифры видно на экране, кнопки «выгрузить» нет, и кто-то переписывает их руками.',
     },
   },
   {
@@ -233,8 +259,8 @@ export const SERVICES: Service[] = [
       ru: 'Метрики из разных сервисов на одном экране, с фильтрами под то, как думает ваш бизнес.',
     },
     when: {
-      en: 'When the answer to «how are we doing» is a spreadsheet somebody assembles by hand.',
-      ru: 'Когда на вопрос «как идут дела» отвечают таблицей, которую кто-то собирает руками.',
+      en: 'The question «how are we doing» ends in a spreadsheet somebody assembles for half a day.',
+      ru: 'Вопрос «как идут дела» упирается в таблицу, которую кто-то собирает полдня.',
     },
   },
   {
@@ -245,8 +271,8 @@ export const SERVICES: Service[] = [
       ru: 'От идеи и архитектуры до живых пользователей. Свой продукт мы уже провели этим путём целиком.',
     },
     when: {
-      en: 'When the idea is clear and there is still nothing to put in front of a first customer.',
-      ru: 'Когда идея понятна, а показать первому клиенту всё ещё нечего.',
+      en: 'You have explained the idea ten times over, because there is still nothing to show.',
+      ru: 'Идею вы объясняете словами уже десятый раз, потому что показать пока нечего.',
     },
   },
   {
@@ -257,8 +283,8 @@ export const SERVICES: Service[] = [
       ru: 'Подписки, тарифы и приём оплаты, включая крипту. Идемпотентные вебхуки, а не «работает через раз».',
     },
     when: {
-      en: 'When it is time to take money, not just collect enquiries.',
-      ru: 'Когда пора принимать деньги, а не собирать заявки.',
+      en: 'A customer is ready to pay right now, and all you can take is an enquiry.',
+      ru: 'Клиент готов заплатить прямо сейчас, а вы можете только принять заявку.',
     },
   },
 ]
@@ -286,15 +312,15 @@ export interface Case {
 // All four are shipped, so the heading can say so. Each card still carries its
 // own status badge; if anything unlaunched is ever added here, soften this line
 // back to "built" rather than letting one card make the heading lie.
-export const CASES_LABEL = { en: 'What we have already built and shipped', ru: 'Что уже собрали и запустили' }
+export const CASES_LABEL = { en: 'Three we built for clients, one for ourselves', ru: 'Три сделали для клиентов, один для себя' }
 export const CASES_SUB = {
   en: 'Four projects we can talk about openly. Work under NDA is discussed on a call.',
   ru: 'Четыре проекта, о которых можем говорить открыто. Работы под NDA обсуждаем на созвоне.',
 }
 export const CASE_KEYS = {
   task: { en: 'Task', ru: 'Задача' },
-  sol: { en: 'Solution', ru: 'Решение' },
-  res: { en: 'Result', ru: 'Результат' },
+  sol: { en: 'What we actually built', ru: 'Что собрали в итоге' },
+  res: { en: 'What came of it', ru: 'Что из этого вышло' },
 }
 
 export const CASES: Case[] = [
@@ -410,39 +436,39 @@ export interface Step {
    names the two real ends instead. That is information rather than filler:
    support being the far end of the process, not an upsell after it, is the
    thing this section is quietly proving. */
-export const PROCESS_LABEL = { en: 'How the work runs, from the scoping call to support', ru: 'Как идёт работа, от разбора задачи до поддержки' }
+export const PROCESS_LABEL = { en: 'Support is step five, not an upsell', ru: 'Поддержка это пятый шаг, а не допродажа' }
 export const PROCESS_SUB = {
-  en: 'Five steps, in this order. The first one can end the project, and that is the point of it.',
-  ru: 'Пять шагов, именно в таком порядке. Первый может закончить проект, и в этом его смысл.',
+  en: 'The order matters. The first step can end the project, and that is the point of it.',
+  ru: 'Порядок именно такой. Первый шаг может закончить проект, и в этом его смысл.',
 }
 
 export const PROCESS: Step[] = [
   {
-    t: { en: 'Scoping', ru: 'Разбор задачи' },
+    t: { en: 'Scoping', ru: 'Разбор' },
     d: {
       en: 'We measure what the process costs you today, in hours and in money. If automation will not pay that back, you hear it on the first call.',
       ru: 'Считаем, во что процесс обходится сейчас, в часах и в деньгах. Если автоматизация это не отобьёт, вы услышите об этом на первом созвоне.',
     },
   },
   {
-    t: { en: 'Architecture and estimate', ru: 'Архитектура и смета' },
+    t: { en: 'Estimate', ru: 'Смета' },
     d: {
-      en: 'We show what the system is made of, what it costs and how long it takes, before any code is written.',
-      ru: 'Показываем, из чего состоит система, сколько стоит и сколько займёт, до того как написана первая строка.',
+      en: 'We show what the system is made of, what it costs and how long it takes. The estimate is ready before the build starts.',
+      ru: 'Показываем, из чего состоит система, сколько она стоит и сколько займёт. Смета готова до начала сборки.',
     },
   },
   {
     t: { en: 'Build', ru: 'Сборка' },
     d: {
-      en: 'We work in iterations, so you watch progress instead of waiting in silence until the deadline.',
-      ru: 'Работаем итерациями, вы видите прогресс, а не ждёте в тишине до дедлайна.',
+      en: 'We work in iterations. You see progress along the way, not on the day of the deadline.',
+      ru: 'Идём итерациями. Прогресс видно по ходу, а не в день дедлайна.',
     },
   },
   {
     t: { en: 'Launch', ru: 'Запуск' },
     d: {
-      en: 'We deploy on your data and your accounts, then walk your team through using it.',
-      ru: 'Ставим на ваши данные и ваши доступы, показываем команде, как этим пользоваться.',
+      en: 'We deploy on your data and in your accounts, then walk your team through using it.',
+      ru: 'Разворачиваем на ваших данных и аккаунтах, потом показываем команде, как этим пользоваться.',
     },
   },
   {
@@ -470,7 +496,7 @@ export interface Reason {
  * The count lives in the sub rather than in the heading, so a sixth entry
  * breaks one string instead of two.
  */
-export const WHY_LABEL = { en: 'What you can check without asking us', ru: 'Что можно проверить, не спрашивая нас' }
+export const WHY_LABEL = { en: 'You can check all of this without us', ru: 'Это можно проверить без нас' }
 export const WHY_SUB = {
   en: 'Five claims about what is already done, not about what we are like.',
   ru: 'Пять утверждений о том, что уже сделано, а не о том, какие мы.',
@@ -480,26 +506,26 @@ export const WHY: Reason[] = [
   {
     t: { en: 'Our own product in production', ru: 'Свой продукт в проде' },
     d: {
-      en: 'Swiftin: 1000+ users, paid subscriptions, live in the Chrome Web Store. We have walked the whole route, not just the client-facing pieces of it.',
-      ru: 'Swiftin: 1000+ пользователей, платные подписки, живёт в Chrome Web Store. Мы прошли весь путь, а не только клиентские его куски.',
+      en: 'Swiftin: 1000+ users, paid subscriptions, live in the Chrome Web Store. We have walked the whole route, not only the stretch a contractor usually gets.',
+      ru: 'Swiftin: 1000+ пользователей, платные подписки, живёт в Chrome Web Store. Мы прошли весь путь, а не только тот кусок, который обычно достаётся подрядчику.',
     },
   },
   {
     t: { en: 'One contractor for the whole chain', ru: 'Один подрядчик на всю цепочку' },
     d: {
-      en: 'Architecture, code, infrastructure, payments, launch. Nothing gets lost in a handover between teams.',
-      ru: 'Архитектура, код, инфраструктура, платежи, запуск. Ничего не теряется при передаче между командами.',
+      en: 'Architecture, code, infrastructure, payments, launch. There is no handover between teams, so there is nothing to lose in one.',
+      ru: 'Архитектура, код, инфраструктура, платежи, запуск. Передавать между командами нечего, поэтому и терять нечего.',
     },
   },
   {
-    t: { en: 'We take the no-API work', ru: 'Берём то, где нет API' },
+    t: { en: 'We take the work with no API', ru: 'Берём задачи, где нет API' },
     d: {
-      en: 'Reverse engineering and parsing outside the happy path, and unfamiliar stacks without flinching.',
-      ru: 'Реверс-инжиниринг и парсинг вне «счастливого» сценария, и незнакомые стеки без страха.',
+      en: 'Reverse engineering and parsing where the source does not want to be read. An unfamiliar stack is not a reason to pass either.',
+      ru: 'Реверс-инжиниринг и парсинг там, где источник не хочет, чтобы его читали. Незнакомый стек тоже не повод отказаться.',
     },
   },
   {
-    t: { en: 'Four cases out of four are still running', ru: 'Четыре кейса из четырёх до сих пор работают' },
+    t: { en: 'Four cases out of four still run', ru: 'Четыре кейса из четырёх работают' },
     d: {
       en: 'Swiftin in the Chrome Web Store, Cowee in Telegram, the dashboards and the BAS automations at their clients. Every case above carries its own status.',
       ru: 'Swiftin в Chrome Web Store, Cowee в Telegram, дашборды и автоматизации на BAS у клиентов. У каждого кейса выше стоит свой статус.',
@@ -510,23 +536,23 @@ export const WHY: Reason[] = [
        hero sub, PROCESS_SUB, PROCESS[0].d, the FAQ, CALC.disclaimer and
        CONTACT.h. A seventh copy of one promise is not a fifth reason. This
        claim appears nowhere else and takes one click to verify. */
-    t: { en: 'The calculator’s own multipliers are published', ru: 'Коэффициенты калькулятора опубликованы' },
+    t: { en: 'The calculator’s multipliers are public', ru: 'Коэффициенты калькулятора открыты' },
     d: {
-      en: 'The pricing page shows the estimator’s own multipliers, not just the totals. They are the same numbers the calculator above runs on, and checking that takes a minute.',
-      ru: 'На странице цен лежат сами множители оценки, а не только итоговые суммы. Это те же числа, по которым считает калькулятор выше, и проверить это занимает минуту.',
+      en: 'The pricing page shows the multipliers themselves, not just the totals. They are exactly what the calculator above runs on, so anyone can check it.',
+      ru: 'На странице цен лежат сами множители, а не только итоговые суммы. По ним и считает калькулятор выше, так что сверить может любой.',
     },
   },
 ]
 
 export const BUREAU = {
-  label: { en: 'Who is behind this', ru: 'Кто за этим стоит' },
+  label: { en: 'One person answers, not a department', ru: 'Отвечает один человек, а не отдел' },
   // The lead describes the bureau, not the man in the photograph, so it reads as
   // the section standfirst rather than as card copy. Moving it out is also what
   // lets the card hold only what a person card should: a name, a role, one
   // paragraph, a row of ways to reach him.
   lead: {
-    en: 'Veloris Lab is a small engineering bureau. Small is the feature: nothing is thrown over a wall between departments.',
-    ru: 'Veloris Lab, небольшое инженерное бюро. Небольшое, и это преимущество: здесь нечего перебрасывать через забор между отделами.',
+    en: 'Veloris Lab is a small engineering bureau. Small on purpose: there is nobody standing between you and the work.',
+    ru: 'Veloris Lab, небольшое инженерное бюро. И это намеренно: между вами и работой нет ни одного посредника.',
   },
   name: { en: 'Denys Kandyba', ru: 'Денис Кандыба' },
   // One string for both locales: the Russian copy uses the English term as-is,
@@ -536,8 +562,8 @@ export const BUREAU = {
   // deployed engineer:") is gone, because the heading and the role line
   // immediately above now say exactly that. Paste it back to revert.
   body: {
-    en: 'The same person designs the system, writes it, and picks up the phone when something breaks. First code in 2014, automation from 2023, working with AI full time since 2024.',
-    ru: 'Один человек проектирует систему, пишет её и выходит на связь, когда что-то ломается. Первый код в 2014-м, автоматизация с 2023-го, полный день с AI с 2024-го.',
+    en: 'One and the same person designs the system, writes it, and picks up the phone when something breaks. First code in 2014, automation from 2023, AI full time from 2024.',
+    ru: 'Один и тот же человек проектирует систему, пишет её и выходит на связь, когда что-то ломается. Первый код в 2014-м, автоматизация с 2023-го, с 2024-го AI на полный день.',
   },
   // Describes who is in the frame and where, because the place is a fact the
   // table below repeats. Not "a photo of a man", which tells a screen reader
@@ -572,54 +598,54 @@ export const BUREAU = {
  * agency relationship goes wrong.
  */
 export const SEPARATE_LABEL = {
-  en: 'What you pay for separately',
-  ru: 'За что вы платите отдельно',
+  en: 'These bills do not come from us',
+  ru: 'Эти счета придут не от нас',
 }
 export const SEPARATE_SUB = {
-  en: 'These are billed to you by the provider, not by us, and never with a margin on top. The estimate covers the work, not somebody else’s subscription.',
-  ru: 'Это счета от провайдеров, а не от нас, и без наценки сверху. Смета покрывает работу, а не чужую подписку.',
+  en: 'The provider invoices you directly. There is no margin on top, because that money never passes through us.',
+  ru: 'Их выставляет провайдер, и выставляет напрямую вам. Наценки сверху нет, потому что через нас эти деньги не проходят.',
 }
 export const SEPARATE: { k: LS; d: LS }[] = [
   {
     k: { en: 'Hosting and servers', ru: 'Хостинг и серверы' },
     d: {
-      en: 'The provider invoices you directly. We do not resell capacity.',
-      ru: 'Счёт приходит вам напрямую от провайдера. Мы не перепродаём мощности.',
+      en: 'We do not resell capacity, so we earn nothing when your bill grows.',
+      ru: 'Мощности мы не перепродаём, поэтому на их росте ничего не зарабатываем.',
     },
   },
   {
     k: { en: 'Domain', ru: 'Домен' },
     d: {
-      en: 'Registered to your business, not to us. This one matters more than it looks.',
-      ru: 'Оформляется на ваш бизнес, а не на нас. Это важнее, чем кажется.',
+      en: 'Registered to your business, never to ours. Of everything here, it is the one line that outlives any contractor.',
+      ru: 'Регистрируется на ваш бизнес, а не на нас. Из всего списка это единственная строка, которая переживёт любого подрядчика.',
     },
   },
   {
     k: { en: 'AI model usage', ru: 'Обращения к AI-моделям' },
     d: {
-      en: 'Paid per use at the provider’s published rate. We size it before we build.',
-      ru: 'Оплата по факту использования, по публичному тарифу провайдера. Объём считаем до сборки.',
+      en: 'Paid per use, at the model\'s published rate. We size the expected volume before we build, so the monthly bill is not a surprise.',
+      ru: 'Оплата по факту, по публичному тарифу модели. Ожидаемый объём считаем до сборки, чтобы счёт за месяц не стал новостью.',
     },
   },
   {
     k: { en: 'Payment provider fees', ru: 'Комиссии платёжных систем' },
     d: {
-      en: 'A percentage of each transaction, taken by the provider or the network.',
-      ru: 'Процент с каждой операции забирает платёжная система или сеть.',
+      en: 'The provider or the network takes a percentage of every transaction. This line grows with your revenue; the others here mostly do not.',
+      ru: 'Процент с каждой операции забирает платёжная система или сеть. Эта строка растёт вместе с выручкой, в отличие от остальных.',
     },
   },
   {
     k: { en: 'Store accounts', ru: 'Аккаунты магазинов' },
     d: {
-      en: 'Chrome Web Store, App Store and Google Play each charge a developer fee.',
-      ru: 'Chrome Web Store, App Store и Google Play берут свой взнос с разработчика.',
+      en: 'Chrome Web Store, App Store and Google Play each charge a developer fee. The account is opened for your business, or the app lives under somebody else\'s name.',
+      ru: 'Chrome Web Store, App Store и Google Play берут свой взнос с разработчика. Аккаунт заводится на ваш бизнес, иначе приложение живёт под чужим именем.',
     },
   },
   {
     k: { en: 'Mail and messaging', ru: 'Письма и сообщения' },
     d: {
-      en: 'Delivery services bill by volume once you outgrow their free tier.',
-      ru: 'Сервисы доставки считают по объёму, как только перерастаете бесплатный лимит.',
+      en: 'Mail delivery services bill by volume once you outgrow the free tier. The mail goes out from your domain, which is why we verify it during setup.',
+      ru: 'Сервисы рассылки считают по объёму, как только вы перерастёте бесплатный лимит. Письма уходят с вашего домена, поэтому его и подтверждаем при настройке.',
     },
   },
 ]
@@ -629,15 +655,15 @@ export const CONTACT = {
   // Names the free deliverable AND the possible negative verdict. Backed by
   // PROCESS step 01, so it promises nothing the process does not already do.
   h: {
-    en: 'We will cost your task free and tell you straight whether it pays off',
-    ru: 'Посчитаем вашу задачу бесплатно и честно скажем, окупится ли она',
+    en: 'We will scope it free and tell you straight',
+    ru: 'Разберём бесплатно и скажем как есть',
   },
   /* "Describe the task in two sentences" is the highest-leverage instruction
      available on a site that deliberately has no form: it replaces the blank
      page a reader faces when they open a chat with a stranger. */
   sub: {
-    en: 'Write on Telegram or by email and describe the task in two sentences. We usually reply the same working day, timezone UTC+4.',
-    ru: 'Напишите в Telegram или на почту и опишите задачу в двух предложениях. Обычно отвечаем в тот же рабочий день, часовой пояс UTC+4.',
+    en: 'Write on Telegram or by email and describe the task in two sentences. There is no form here on purpose. We usually reply the same working day, timezone UTC+4.',
+    ru: 'Напишите в Telegram или на почту и опишите задачу в двух предложениях. Формы здесь нет специально. Обычно отвечаем в тот же рабочий день, часовой пояс UTC+4.',
   },
   /* The close handed out a bare address while the calculator two screens up
      had a properly prefilled mailto. Same treatment now, and the body is three
@@ -673,31 +699,31 @@ export const PIPELINE = {
 }
 
 /** Three entry points. They mirror the calculator's readiness question. */
-export const ENTRY_LABEL = { en: 'You can start from wherever you are', ru: 'Начать можно с любой точки' }
+export const ENTRY_LABEL = { en: 'Where to start when there is no spec', ru: 'С чего начать, если ТЗ ещё нет' }
 export const ENTRY_SUB = {
-  en: 'No finished spec required. Show what you have and we will work from there.',
-  ru: 'Готовое ТЗ не нужно. Покажите, что уже есть, и дальше пойдём от этого.',
+  en: 'An idea will do, or a process still done by hand, or a system that already runs. That is what we work from.',
+  ru: 'Подойдёт идея, процесс, который пока делают руками, или система, которая уже работает. От этого и пойдём.',
 }
 export const ENTRY: { t: LS; d: LS }[] = [
   {
-    t: { en: 'There is an idea', ru: 'Есть идея' },
-    d: { en: 'We break it down to a first version, pick the one scenario worth building first, and show the price before any code.', ru: 'Разложим её до первой версии, выберем один сценарий, который стоит собрать первым, и покажем цену до кода.' },
+    t: { en: 'We turn the idea into an estimate', ru: 'Соберём смету прямо из идеи' },
+    d: { en: 'So far there is only an idea. One short call, and you have one scenario for the first version, its price and its window.', ru: 'Пока есть только идея. Короткий созвон, и у вас на руках один сценарий первой версии, его цена и срок.' },
   },
   {
-    t: { en: 'There is a process, done by hand', ru: 'Есть процесс, но руками' },
-    d: { en: 'We count what the manual version costs per month, then say plainly whether automating it pays for itself.', ru: 'Посчитаем, во что ручной вариант обходится в месяц, и прямо скажем, окупится ли автоматизация.' },
+    t: { en: 'We work out whether it pays for itself', ru: 'Посчитаем, окупится ли автоматизация' },
+    d: { en: 'The process already runs, but by hand. We turn the hours into money and say plainly when automating is not worth it.', ru: 'Процесс уже идёт, но руками. Переводим часы в деньги и прямо говорим, когда автоматизировать не стоит.' },
   },
   {
-    t: { en: 'There is a running system', ru: 'Есть работающая система' },
-    d: { en: 'We read the code and the architecture, find the limits, and propose the next release without a rewrite.', ru: 'Прочитаем код и архитектуру, найдём ограничения и предложим следующий релиз без переписывания с нуля.' },
+    t: { en: 'We plan the next release, no rewrite', ru: 'Предложим релиз без переписывания' },
+    d: { en: 'The system already runs. We read the code and the architecture, find where it hits a ceiling, and plan what ships next.', ru: 'Система уже работает. Читаем код и архитектуру, находим, во что она упирается, и планируем следующий релиз.' },
   },
 ]
 
 /** Stack, grouped. Same set as the founder page, so the two never disagree. */
-export const STACK_LABEL = { en: 'We do not sell one stack for every task', ru: 'Не продаём один стек под любую задачу' }
+export const STACK_LABEL = { en: 'Every tool here has shipped something', ru: 'Каждый инструмент здесь уже был в проде' }
 export const STACK_SUB = {
-  en: 'The stack follows the task. These are the tools already used in shipped work, not a wish list.',
-  ru: 'Стек идёт за задачей. Это инструменты из уже сданных работ, а не список пожеланий.',
+  en: 'Under each one is where we run it: Swiftin, Cowee or this site. The list is not closed, and the task picks the stack.',
+  ru: 'Под каждым написано, где он у нас работает: Swiftin, Cowee или этот сайт. Список не закрыт, стек выбирает задача.',
 }
 /* There is no STACK array any more.
  *
@@ -762,7 +788,7 @@ export const TOOLS: Tool[] = [
 export const FAQ_LABEL = { en: 'What people ask before the first call', ru: 'О чём спрашивают до первого созвона' }
 export const FAQ_SUB = {
   en: 'Short answers. Each one is backed by something further up this page.',
-  ru: 'Короткие ответы. Каждый подтверждается чем-то выше на этой странице.',
+  ru: 'Короткие ответы. За каждым стоит что-то выше на этой странице.',
 }
 
 export interface FaqItem { q: LS; a: LS }
@@ -848,15 +874,15 @@ export const FAQ: FaqItem[][] = [
 /** Calculator copy. The numbers it works on live in labPricing.ts. */
 export const CALC = {
   label: {
-    en: 'Price it here, before the first call',
-    ru: 'Посчитайте цену здесь, до первого созвона',
+    en: 'Price it yourself, right here',
+    ru: 'Посчитайте цену сами, прямо здесь',
   },
   sub: {
     // Five, not four: the calculator's own progress line says "Step 1 of 5",
     // and the copy contradicting the control the reader is looking at is worse
     // than either number on its own. STEPS in Calculator.tsx is the source.
-    en: 'Five steps. The estimate accounts for the kind of work, what you already have, and what the thing needs inside.',
-    ru: 'Пять шагов. Расчёт учитывает тип работы, что у вас уже готово и что понадобится внутри.',
+    en: 'Five steps, and you can see the number without leaving a contact. The estimate accounts for the kind of work, what you already have and what it will need inside.',
+    ru: 'Пять шагов, и увидеть цифру можно без контактов. Расчёт учитывает тип работы, что у вас уже готово и что понадобится внутри.',
   },
   stepOf: { en: 'Step', ru: 'Шаг' },
   stepOfMid: { en: 'of', ru: 'из' },
@@ -896,6 +922,10 @@ export const CALC = {
   supportLbl: { en: 'Support', ru: 'Поддержка' },
   perMonth: { en: '/mo', ru: '/мес' },
   weeksShort: { en: 'weeks', ru: 'нед.' },
+  /* English needs a singular; Russian «нед.» is an abbreviation and does not.
+     The hero's floor line reads the shortest window on the price table, which
+     is one week today, so without this it printed "1 weeks". */
+  weekShortOne: { en: 'week', ru: 'нед.' },
   waiting: { en: 'Pick the kind of work to see a number', ru: 'Выберите тип работы, чтобы увидеть цифру' },
 
   // The honest hedge that makes publishing a number safe: it is a floor, and
@@ -929,8 +959,8 @@ export const CALC = {
 
 export const FOOTER = {
   line: {
-    en: 'Veloris Lab, engineering bureau. AI development, automation and integrations.',
-    ru: 'Veloris Lab, инженерное бюро. AI-разработка, автоматизация и интеграции.',
+    en: 'Veloris Lab, an engineering bureau. The number comes first, then the work.',
+    ru: 'Veloris Lab, инженерное бюро. Сначала цифра, потом работа.',
   },
 }
 

@@ -28,7 +28,7 @@ import {
   CALC, HERO, FAQ_LABEL, FAQ_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB,
-  BUREAU, CONTACT, LOGOS, REVIEWS,
+  BUREAU, CONTACT, LOGOS, REVIEWS, EYEBROW,
   SOCIAL, ABOUT_URL,
 } from './labData'
 import Link from 'next/link'
@@ -156,6 +156,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
       <section id="services" className="vl-wrap vl-sec-light vl-sec--act">
         <div className="vl-on-light">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.services)}</span>
           <h2>{L(SERVICES_LABEL)}</h2>
           <p>{L(SERVICES_SUB)}</p>
           {/* The six cards each carry one floor; a reader comparing all six
@@ -207,6 +208,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
       {/* CASES */}
       <section id="cases" className="vl-wrap vl-sec">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.cases)}</span>
           <h2>{L(CASES_LABEL)}</h2>
           <p>{L(CASES_SUB)}</p>
         </div>
@@ -290,6 +292,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
           The process steps below keep their numbers because that IS a sequence. */}
       <section className="vl-wrap vl-sec">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.entry)}</span>
           <h2>{L(ENTRY_LABEL)}</h2>
           <p>{L(ENTRY_SUB)}</p>
         </div>
@@ -313,6 +316,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
           after the price instead of a preamble to it. */}
       <section id="calc" className="vl-wrap vl-sec vl-sec--act">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.calc)}</span>
           <h2>{L(CALC.label)}</h2>
           <p>{L(CALC.sub)}</p>
           {/* The calculator answers one configuration at a time; the reader who
@@ -329,6 +333,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
       <section id="process" className="vl-wrap vl-sec-light">
         <div className="vl-on-light">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.process)}</span>
           <h2>{L(PROCESS_LABEL)}</h2>
           <p>{L(PROCESS_SUB)}</p>
         </div>
@@ -340,6 +345,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
       {/* STACK */}
       <section className="vl-wrap vl-sec">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.stack)}</span>
           <h2>{L(STACK_LABEL)}</h2>
           <p>{L(STACK_SUB)}</p>
         </div>
@@ -350,6 +356,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
       <section className="vl-wrap vl-sec-light">
         <div className="vl-on-light">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.why)}</span>
           <h2>{L(WHY_LABEL)}</h2>
           <p>{L(WHY_SUB)}</p>
         </div>
@@ -368,6 +375,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
       {/* BUREAU */}
       <section id="bureau" className="vl-wrap vl-sec">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.bureau)}</span>
           <h2>{L(BUREAU.label)}</h2>
           <p>{L(BUREAU.lead)}</p>
         </div>
@@ -462,6 +470,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
           proof and the price, and what is left is the objections. */}
       <section className="vl-wrap vl-sec vl-sec--act">
         <div className="vl-sec-head">
+          <span className="vl-lbl">{L(EYEBROW.faq)}</span>
           <h2>{L(FAQ_LABEL)}</h2>
           <p>{L(FAQ_SUB)}</p>
         </div>

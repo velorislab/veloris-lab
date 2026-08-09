@@ -258,9 +258,13 @@ export function pricingMetadata(lang: LabLang): Metadata {
   const title = lang === 'ru'
     ? `Цены на разработку и автоматизацию, от ${money(lowest)} · ${BRAND}`
     : `Development and automation pricing, from ${money(lowest)} · ${BRAND}`
+  /* «пол» for a price floor is a calque of the English word and a Russian
+     reader parses it as the floor of a room before they parse it as a minimum.
+     The page copy was corrected; this string is served to search results, so it
+     has to match. */
   const description = lang === 'ru'
-    ? `Шесть направлений с ценой, сроком и поддержкой. Каждое число это пол, а не смета; точную цифру фиксируем после бесплатного разбора задачи.`
-    : `Six kinds of work with a floor, a timeline and a support figure. Every number is a floor rather than a quote; the binding figure is fixed after a free scoping call.`
+    ? `Шесть направлений с ценой, сроком и поддержкой. Каждое число это нижняя граница, а не смета: точную цифру фиксируем после бесплатного разбора задачи.`
+    : `Six kinds of work with a starting figure, a timeline and a support figure. Every number is where the work starts, not a quote; the binding figure is fixed after a free scoping call.`
   return {
     title,
     description,
