@@ -22,7 +22,7 @@ import {
   type LabLang,
   tx,
   BRAND, EMAIL, TELEGRAM, TELEGRAM_HANDLE, SWIFTIN,
-  UI, MARQUEE, SERVICES, SERVICES_LABEL, SERVICES_SUB,
+  UI, SERVICES, SERVICES_LABEL, SERVICES_SUB,
   CASES, CASES_LABEL, CASES_SUB, CASE_KEYS,
   PROCESS_LABEL, PROCESS_SUB,
   WHY, WHY_LABEL, WHY_SUB,
@@ -32,6 +32,7 @@ import {
   BUREAU, CONTACT, FOOTER, LOGOS, REVIEWS,
   SOCIAL, ABOUT_URL,
 } from './labData'
+import { WORK_TYPES, money, priced } from './labPricing'
 import './lab.css'
 
 /** Keyed off SOCIAL so a profile can never render with the wrong mark. */
@@ -103,19 +104,26 @@ export default function Lab({ lang }: { lang: LabLang }) {
         </div>
       </section>
 
-      {/* CAPABILITY TICKER. Two identical passes, animated by exactly -50%, so
-          the loop has no seam. Each pass repeats the word list twice: one pass
-          has to be at least as wide as the viewport or the strip visibly runs
-          out on a wide monitor, and a single copy is only ~1480px. `min-width:
-          100vw` in the CSS is the backstop for anything wider still.
-          aria-hidden because it is decorative and would be announced 4x. */}
+      {/* PRICE TICKER. Was a hand-kept list of thirteen capability words; it is
+          now the six services with their floors, derived from labPricing, so the
+          price ladder is stated once before the reader reaches any section that
+          argues about it. A list of adjectives said what we know; this says what
+          it costs.
+
+          Loop mechanics unchanged and load-bearing: two identical passes moved
+          by exactly -50%, with the list repeated inside each pass, because one
+          pass narrower than the viewport shows a gap on a wide monitor.
+          aria-hidden because it is decorative and would otherwise be announced
+          four times over. */}
       <div className="vl-ticker" aria-hidden="true">
         <div className="vl-ticker-track">
           {[0, 1].map((pass) => (
             <div className="vl-ticker-pass" key={pass}>
-              {[0, 1].map((copy) => MARQUEE[lang].map((word, i) => (
+              {[0, 1].map((copy) => WORK_TYPES.map((t, i) => (
                 <span className="vl-ticker-item" key={`${copy}-${i}`}>
-                  <span className="vl-ticker-word">{word}</span>
+                  <span className="vl-ticker-word">
+                    {L(t.label)} {L(CALC.bfFrom)} {money(priced(t.from))}
+                  </span>
                   <span className="vl-ticker-dot" />
                 </span>
               )))}
@@ -147,13 +155,38 @@ export default function Lab({ lang }: { lang: LabLang }) {
           <h2>{L(SERVICES_LABEL)}</h2>
           <p>{L(SERVICES_SUB)}</p>
         </div>
+        {/* Each card carries its own floor, window and support figure, all read
+            from labPricing at render time. No numeral is typed here on purpose:
+            with the same figures due on service pages, a pricing page and the
+            ticker, a hand-typed one drifts the first time the table moves. */}
         <div className="vl-grid">
-          {SERVICES.map((s, i) => (
-            <article className="vl-cell" key={i}>
-              <h3 className="vl-cell-t">{L(s.t)}</h3>
-              <p className="vl-cell-d">{L(s.d)}</p>
-            </article>
-          ))}
+          {SERVICES.map((s, i) => {
+            const w = WORK_TYPES.find((t) => t.key === s.key)
+            return (
+              <article className="vl-cell" key={s.key}>
+                <span className="vl-cell-n">{String(i + 1).padStart(2, '0')}</span>
+                <h3 className="vl-cell-t">{L(s.t)}</h3>
+                <p className="vl-cell-d">{L(s.d)}</p>
+                <p className="vl-cell-when">{L(s.when)}</p>
+                {w && (
+                  <dl className="vl-cell-stats">
+                    <div>
+                      <dt>{L(CALC.resultLbl)}</dt>
+                      <dd>{L(CALC.bfFrom)} {money(priced(w.from))}</dd>
+                    </div>
+                    <div>
+                      <dt>{L(CALC.termLbl)}</dt>
+                      <dd>{w.weeks[0]}–{w.weeks[1]} {L(CALC.weeksShort)}</dd>
+                    </div>
+                    <div>
+                      <dt>{L(CALC.supportLbl)}</dt>
+                      <dd>{L(CALC.bfFrom)} {money(priced(w.support))}{L(CALC.perMonth)}</dd>
+                    </div>
+                  </dl>
+                )}
+              </article>
+            )
+          })}
         </div>
         </div>
       </section>

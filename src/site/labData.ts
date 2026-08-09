@@ -36,6 +36,7 @@ export const TELEGRAM_HANDLE = 't.me/samweyd'
  *  the page's schema.org `sameAs`. The full slug matters: the shortened
  *  `/in/denys-kandyba` does not resolve. */
 export const LINKEDIN = 'https://www.linkedin.com/in/denys-kandyba-721b803a4/'
+export const INSTAGRAM = 'https://www.instagram.com/veloris_dev/'
 export const SWIFTIN = 'https://swiftin.dev/'
 
 /** The founder's long-form page. Absolute, because it lives on the Swiftin site
@@ -45,14 +46,13 @@ export const ABOUT_URL = 'https://swiftin.dev/about'
 /**
  * Social profiles for the founder card, in the order they are shown.
  *
- * Telegram and LinkedIn are real addresses we hold. Instagram is wanted but no
- * address has been supplied, so it carries an empty `url` and the row skips it:
- * the block is correct today and completes the moment the string is filled in.
+ * All three are addresses the owner supplied. The row renders only entries with
+ * a `url`, which is how it stayed correct while Instagram was still missing.
  * Never guess a profile URL. A wrong link in a contact row is worse than a
  * missing one, because the reader believes it.
  */
 export const SOCIAL: { key: 'instagram' | 'telegram' | 'linkedin'; label: string; url: string }[] = [
-  { key: 'instagram', label: 'Instagram', url: '' },
+  { key: 'instagram', label: 'Instagram', url: INSTAGRAM },
   { key: 'telegram', label: 'Telegram', url: TELEGRAM },
   { key: 'linkedin', label: 'LinkedIn', url: LINKEDIN },
 ]
@@ -110,8 +110,15 @@ export const HERO = {
 }
 
 export interface Service {
+  /** Joins to WORK_TYPES[].key in labPricing. This is the whole reason a card can
+   *  show a price without a number ever being typed into a component. */
+  key: string
   t: LS
   d: LS
+  /** The recognition line. Their scenario catalogue works because a reader finds
+   *  their own situation described in it; one sentence per service buys most of
+   *  that effect without fifty-six priced entries nobody can maintain. */
+  when: LS
 }
 
 /* Section headings are written as spoken phrases, not category labels: the page
@@ -138,53 +145,82 @@ export const SERVICES_SUB = {
  * Section topic lives in the heading, counts live in the sentence under it.
  */
 
-/** Capability ticker under the hero. Uppercased in the markup by CSS. */
-export const MARQUEE: Record<LabLang, string[]> = {
-  en: ['AI agents', 'Automation', 'Integrations', 'Data pipelines', 'Parsing', 'Reverse engineering', 'Dashboards', 'SQL', 'Webhooks', 'Payments', 'MVP', 'Architecture', 'Support'],
-  ru: ['AI-агенты', 'Автоматизация', 'Интеграции', 'Пайплайны данных', 'Парсинг', 'Реверс-инжиниринг', 'Дашборды', 'SQL', 'Вебхуки', 'Платежи', 'MVP', 'Архитектура', 'Поддержка'],
-}
+/* The ticker under the hero used to be MARQUEE, thirteen capability words kept
+   by hand in two languages. It now derives from WORK_TYPES so it carries the six
+   floors instead, and a hand-kept list that could disagree with the price table
+   is one fewer thing to forget. */
 
 export const SERVICES: Service[] = [
   {
+    key: 'agent',
     t: { en: 'AI agents and automation', ru: 'AI-агенты и автоматизация' },
     d: {
       en: 'Autonomous flows that close manual steps end to end, instead of prompting a human to do them.',
       ru: 'Автономные сценарии, которые закрывают ручные шаги целиком, а не подсказывают человеку, что сделать.',
     },
+    when: {
+      en: 'When somebody repeats the same chain of steps by hand every day.',
+      ru: 'Когда одну и ту же цепочку действий кто-то повторяет руками каждый день.',
+    },
   },
   {
+    key: 'integr',
     t: { en: 'Integrations and data pipelines', ru: 'Интеграции и пайплайны данных' },
     d: {
       en: 'CRM, webhooks, messengers, APIs and databases wired into one working loop.',
       ru: 'CRM, вебхуки, мессенджеры, API и базы данных, связанные в один рабочий контур.',
     },
+    when: {
+      en: 'When the data already exists in three systems and only meets inside somebody’s head.',
+      ru: 'Когда данные уже есть в трёх системах, а сходятся только в чьей-то голове.',
+    },
   },
   {
+    key: 'parsing',
     t: { en: 'Parsing and reverse engineering', ru: 'Парсинг и реверс-инжиниринг' },
     d: {
       en: 'We pull data from places with no public API. These are the tasks most teams turn down.',
       ru: 'Достаём данные оттуда, где готового API нет. Это те задачи, от которых обычно отказываются.',
     },
+    when: {
+      en: 'When the numbers are right there on screen and there is nowhere to export them from.',
+      ru: 'Когда нужные данные видно на экране, а выгрузить их неоткуда.',
+    },
   },
   {
+    key: 'dash',
     t: { en: 'Dashboards and analytics', ru: 'Дашборды и аналитика' },
     d: {
       en: 'Metrics from scattered services on one screen, with filters shaped around how your business thinks.',
       ru: 'Метрики из разных сервисов на одном экране, с фильтрами под то, как думает ваш бизнес.',
     },
+    when: {
+      en: 'When the answer to «how are we doing» is a spreadsheet somebody assembles by hand.',
+      ru: 'Когда на вопрос «как идут дела» отвечают таблицей, которую кто-то собирает руками.',
+    },
   },
   {
+    key: 'mvp',
     t: { en: 'MVP and product development', ru: 'MVP и продуктовая разработка' },
     d: {
       en: 'From idea and architecture to live users. We have already taken our own product that whole route.',
       ru: 'От идеи и архитектуры до живых пользователей. Свой продукт мы уже провели этим путём целиком.',
     },
+    when: {
+      en: 'When the idea is clear and there is still nothing to put in front of a first customer.',
+      ru: 'Когда идея понятна, а показать первому клиенту всё ещё нечего.',
+    },
   },
   {
+    key: 'billing',
     t: { en: 'Payments and billing', ru: 'Платежи и биллинг' },
     d: {
       en: 'Subscriptions, plans and checkout, crypto included. Idempotent webhooks, not the flaky kind.',
       ru: 'Подписки, тарифы и приём оплаты, включая крипту. Идемпотентные вебхуки, а не «работает через раз».',
+    },
+    when: {
+      en: 'When it is time to take money, not just collect enquiries.',
+      ru: 'Когда пора принимать деньги, а не собирать заявки.',
     },
   },
 ]

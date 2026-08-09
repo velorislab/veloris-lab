@@ -467,9 +467,44 @@
    on a card is not a second card. */
 .vl-on-light .vl-grid, .vl-on-light .vl-why { border-radius: var(--r-4); box-shadow: none; }
 
-.vl-cell { background: var(--surface); padding: 24px 22px 26px; display: flex; flex-direction: column; gap: 8px; }
+/* The card reads top to bottom as: which one this is, what it is, what it does,
+   when it is your case, what it costs. The stat row is pinned to the foot by
+   `margin-top: auto`, so six cards of unequal prose still line their numbers up
+   across the row, which is the whole point of putting numbers on them. */
+.vl-cell { background: var(--surface); padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 8px; }
+.vl-cell-n {
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 11px; letter-spacing: 0.08em; color: var(--ink-faint);
+}
 .vl-cell-t { font-size: 16px; font-weight: 600; letter-spacing: -0.015em; }
 .vl-cell-d { font-size: 14px; line-height: 1.5; color: var(--ink-mute); }
+
+/* The recognition line. Set apart from the description by a rule rather than by
+   a colour, because it is a different KIND of sentence: the description says
+   what we do, this says whether it is you. */
+.vl-cell-when {
+  margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--rule-soft);
+  font-size: 13.5px; line-height: 1.45; color: var(--ink);
+}
+
+.vl-cell-stats {
+  margin-top: auto; padding-top: 16px;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.vl-cell-stats > div { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.vl-cell-stats dt {
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.vl-cell-stats dd {
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+/* The floor is the number the reader came for, so it is the only one that takes
+   the accent. Two of three would make it a colour scheme rather than a signal. */
+.vl-cell-stats > div:first-child dd { color: var(--accent); font-size: 15px; }
 
 /* ============ CASES ============ */
 
