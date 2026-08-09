@@ -28,7 +28,7 @@ import {
   CALC, HERO, FAQ_LABEL, FAQ_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB,
-  BUREAU, CONTACT, LOGOS, REVIEWS, EYEBROW,
+  BUREAU, CONTACT, LOGOS, REVIEWS, EYEBROW, MARQUEE,
   SOCIAL, ABOUT_URL,
 } from './labData'
 import Link from 'next/link'
@@ -81,26 +81,28 @@ export default function Lab({ lang }: { lang: LabLang }) {
         </div>
       </section>
 
-      {/* PRICE TICKER. Was a hand-kept list of thirteen capability words; it is
-          now the six services with their floors, derived from labPricing, so the
-          price ladder is stated once before the reader reaches any section that
-          argues about it. A list of adjectives said what we know; this says what
-          it costs.
+      {/* THE TICKER, and it is meant to be visible before any scroll.
 
-          Loop mechanics unchanged and load-bearing: two identical passes moved
-          by exactly -50%, with the list repeated inside each pass, because one
-          pass narrower than the viewport shows a gap on a wide monitor.
+          It sits below the dark band, where it has always been. It used to
+          start at y=948 against a fold at 900, so on an ordinary desktop nobody
+          saw it without scrolling; the band above it has been trimmed by about
+          ninety pixels of padding to bring it up. Nothing was taken from the
+          diagram: its geometry and its callouts are in pixels, so it does not
+          survive being scaled.
+
+          The words are the capability list again rather than the six services
+          with their prices. See the note on MARQUEE in labData.
+
           aria-hidden because it is decorative and would otherwise be announced
-          four times over. */}
+          four times over: the list is rendered twice inside each of two passes,
+          which is what makes the -50% loop seamless. */}
       <div className="vl-ticker" aria-hidden="true">
         <div className="vl-ticker-track">
           {[0, 1].map((pass) => (
             <div className="vl-ticker-pass" key={pass}>
-              {[0, 1].map((copy) => WORK_TYPES.map((t, i) => (
+              {[0, 1].map((copy) => MARQUEE[lang].map((word, i) => (
                 <span className="vl-ticker-item" key={`${copy}-${i}`}>
-                  <span className="vl-ticker-word">
-                    {L(t.label)} {L(CALC.bfFrom)} {money(priced(t.from))}
-                  </span>
+                  <span className="vl-ticker-word">{word}</span>
                   <span className="vl-ticker-dot" />
                 </span>
               )))}

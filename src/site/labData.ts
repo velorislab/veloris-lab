@@ -96,6 +96,26 @@ export const UI: Record<string, LS> = {
   productLink: { en: 'Our product', ru: 'Наш продукт' },
 }
 
+/**
+ * The capability ticker, restored on the founder's call.
+ *
+ * It was swapped for the six services with their price floors, on the argument
+ * that a list of adjectives says what we know while a price ladder says what it
+ * costs. The argument was not wrong, but the strip stopped reading as a ribbon:
+ * six sentences of roughly forty characters each move slowly and are read
+ * rather than glanced at, and the price ladder is now carried in three better
+ * places anyway. The hero's own mono line prints the lowest floor and the
+ * shortest window, all six cards print their own figure, and /pricing prints
+ * the table.
+ *
+ * So this goes back to what a ticker is for: thirteen short words, glanceable
+ * at speed, telling a reader in one pass what kind of shop this is.
+ */
+export const MARQUEE: Record<LabLang, string[]> = {
+  en: ['AI agents', 'Automation', 'Integrations', 'Data pipelines', 'Parsing', 'Reverse engineering', 'Dashboards', 'SQL', 'Webhooks', 'Payments', 'MVP', 'Architecture', 'Support'],
+  ru: ['AI-агенты', 'Автоматизация', 'Интеграции', 'Пайплайны данных', 'Парсинг', 'Реверс-инжиниринг', 'Дашборды', 'SQL', 'Вебхуки', 'Платежи', 'MVP', 'Архитектура', 'Поддержка'],
+}
+
 export const HERO = {
   /**
    * The headline states the OFFER, not the category.

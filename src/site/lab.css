@@ -141,24 +141,34 @@
 @media (prefers-reduced-motion: reduce) {
   .vl-root .vl-ticker-track { animation: none !important; }
   /* Stopping the marquee is not enough on its own. The track is
-     `width: max-content` over a doubled pass that is itself `flex: none` and
-     `min-width: 100vw`, so frozen it showed one or two of the six prices and
-     hid the rest off the side of a `overflow: hidden` strip, permanently, at
-     every screen size. Whoever needs reduced motion needs the prices most.
-     One pass, one copy of the six, wrapped and centred. The wrap has to go on
-     the PASS: that is the flex container the items actually live in. */
-  .vl-root .vl-ticker-track { width: auto; }
-  .vl-root .vl-ticker-pass + .vl-ticker-pass { display: none; }
-  .vl-root .vl-ticker-pass {
-    flex: 1 1 auto; min-width: 0;
-    flex-wrap: wrap; justify-content: center; row-gap: 4px;
+     `width: max-content` over a doubled pass, inside a strip that clips, so
+     frozen it showed one or two of the six prices and hid the rest off the side
+     permanently, at every screen size.
+
+     IT STAYS A STRIP. The first fix wrapped the six onto several centred rows,
+     which did surface them all and turned a 40px band into a 58px block on a
+     desktop and a 130px one on a phone. It stopped reading as a ticker and
+     started reading as a paragraph, and the band's whole job is to be a band.
+
+     So: one row, still the full width of the content, but the reader scrolls it
+     themselves instead of it scrolling at them. That is the ordinary accessible
+     answer to a marquee, it keeps the silhouette at 40px, and it removes the
+     automatic motion, which is the only thing the media query actually asks
+     for. The right edge fades so there is a reason to try. */
+  .vl-root .vl-ticker { overflow-x: auto; overscroll-behavior-x: contain; }
+  .vl-root .vl-ticker::-webkit-scrollbar { height: 0; }
+  .vl-root .vl-ticker {
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right, #000 calc(100% - 56px), transparent);
   }
   /* The pass holds the six twice over, for the loop's benefit. Frozen, the
      second copy is just the list said again. */
-  .vl-root .vl-ticker-pass > .vl-ticker-item:nth-child(n+7) { display: none; }
-  /* A single item is wider than a phone, and nowrap would push it off the
-     side again, which is the bug this block exists to fix. */
-  .vl-root .vl-ticker-word { white-space: normal; padding: 0 12px; text-align: center; }
+  .vl-root .vl-ticker-pass + .vl-ticker-pass { display: none; }
+  .vl-root .vl-ticker-pass > .vl-ticker-item:nth-child(n+14) { display: none; }
+  /* `space-around` spreads six items across a 100vw floor; once they are wider
+     than the viewport that spacing goes negative and the first item starts
+     off-screen to the left. Pack them from the start instead. */
+  .vl-root .vl-ticker-pass { justify-content: flex-start; }
   /* The sweep stops and the wiring stays. Nothing is lost: the lines, the hub
      and the labels are the diagram; the beam was only ever the life in it. */
   .vl-root .vl-beam { display: none; }
@@ -307,7 +317,15 @@
    screen. */
 .vl-heroband {
   position: relative; background: var(--dark); color: var(--on-dark); overflow: hidden;
-  min-height: calc(100svh - 60px); display: flex; align-items: center;
+  /* THE STRIP BELOW THIS BAND HAS TO LAND ABOVE THE FOLD.
+     108 = the 68px the band starts at under the sticky nav, plus the 40px the
+     ticker is tall. Reserving both here means that whenever the hero content is
+     shorter than the screen, the band stretches to exactly the point where the
+     ticker ends flush with the bottom edge, at any viewport height, instead of
+     stretching to the full screen and pushing the strip out of sight.
+     It used to be `100svh - 60px`, which is the nav alone, and the ticker
+     started at y=948 against a fold at 900. */
+  min-height: calc(100svh - 108px); display: flex; align-items: center;
 }
 .vl-heroband > .vl-wrap { width: 100%; }
 .vl-texture { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
@@ -341,7 +359,7 @@
    text blocks cap their own measure instead of the column doing it. */
 .vl-hero {
   display: flex; flex-direction: column; align-items: center;
-  padding: 60px 0 52px; text-align: center;
+  padding: 32px 0 24px; text-align: center;
 }
 .vl-hero-copy { display: flex; flex-direction: column; align-items: center; gap: 22px; }
 
@@ -387,11 +405,11 @@
    the plain list everywhere else. Only one is ever visible. */
 
 .vl-pipe {
-  width: 100%; margin-top: 42px;
+  width: 100%; margin-top: 20px;
   display: flex; flex-direction: column; align-items: center;
-  border-top: 1px solid var(--rule-dark); padding-top: 24px;
+  border-top: 1px solid var(--rule-dark); padding-top: 14px;
 }
-.vl-pipe-label { text-align: center; padding-bottom: 18px; }
+.vl-pipe-label { text-align: center; padding-bottom: 12px; }
 
 /* --- the wired stage --- */
 .vl-stage { position: relative; flex: none; }
@@ -1331,10 +1349,21 @@
   font-size: 12px; color: var(--accent);
 }
 
+/* 1080p at 125% display scaling is 864 CSS pixels tall, and at that height it is
+   the hero's own content rather than its min-height that pushes the ticker off.
+   Everything reclaimed here is padding; the diagram is untouched, because its
+   geometry and its callouts are in pixels and it does not survive scaling. */
+@media (max-height: 900px) and (min-width: 1081px) {
+  .vl-hero { padding: 20px 0 16px; }
+  .vl-hero-copy { gap: 16px; }
+  .vl-pipe { margin-top: 12px; padding-top: 10px; }
+  .vl-pipe-label { padding-bottom: 8px; }
+}
+
 @media (max-width: 1080px) {
   .vl-pr-addons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .vl-hero { padding: 56px 0 52px; }
-  .vl-pipe { margin-top: 48px; }
+  .vl-pipe { margin-top: 28px; }
   /* The stage is 860px of fixed wiring. Below this it cannot shrink honestly,
      so it is dropped and the list it duplicates takes over. */
   .vl-stage { display: none; }
@@ -1379,7 +1408,7 @@
   .vl-on-light { padding: 28px 20px; }
   .vl-h1 { font-size: 32px; letter-spacing: -0.03em; max-width: none; }
   .vl-hero { padding: 40px 0 44px; }
-  .vl-pipe { margin-top: 40px; padding-top: 22px; }
+  .vl-pipe { margin-top: 28px; padding-top: 16px; }
   .vl-pipe-label { text-align: left; padding-bottom: 20px; }
   .vl-pipe-list { gap: 16px; }
   .vl-facts-strip { grid-template-columns: 1fr; margin-top: 36px; }
