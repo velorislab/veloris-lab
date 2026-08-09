@@ -631,14 +631,20 @@ export const STACK_SUB = {
   en: 'The stack follows the task. These are the tools already used in shipped work, not a wish list.',
   ru: 'Стек идёт за задачей. Это инструменты из уже сданных работ, а не список пожеланий.',
 }
-export const STACK: { label: LS; chips: string[] }[] = [
-  { label: { en: 'AI', ru: 'AI' }, chips: ['Multi-agent AI', 'RAG', 'Vector search', 'MCP', 'LLMs'] },
-  { label: { en: 'Development', ru: 'Разработка' }, chips: ['TypeScript', 'React', 'Next.js', 'Node.js', 'Python'] },
-  { label: { en: 'Backend and data', ru: 'Бэкенд и данные' }, chips: ['Databases', 'SQL', 'APIs', 'Webhooks', 'OAuth'] },
-  { label: { en: 'Automation', ru: 'Автоматизация' }, chips: ['BAS', 'Parsing', 'Scraping', 'Reverse engineering'] },
-  { label: { en: 'Infrastructure', ru: 'Инфраструктура' }, chips: ['Cloud deploy', 'CI/CD', 'Containers', 'Monitoring'] },
-  { label: { en: 'Product', ru: 'Продукт' }, chips: ['System architecture', 'Competitor analysis', 'Payments'] },
-]
+/* There is no STACK array any more.
+ *
+ * It held six groups and twenty-eight chips, was exported, and was imported by
+ * nothing: ToolGrid renders TOOLS instead. The plan drawn from the competitor
+ * teardown proposed reviving it and retiring the grid, and reading the two side
+ * by side says the opposite. Every one of the twelve entries in TOOLS carries a
+ * note saying where we actually used it; not one of the twenty-eight chips
+ * carried anything, and several were capabilities rather than tools.
+ *
+ * Twelve sourced names beat twenty-eight unsourced ones, and provenance is the
+ * one claim a bureau of this size can make that a larger studio cannot. Padding
+ * the list to look broader would also have implied a team that does not exist.
+ */
+
 
 /**
  * Tool grid under the stack heading.

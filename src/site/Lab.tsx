@@ -149,49 +149,6 @@ export default function Lab({ lang }: { lang: LabLang }) {
         </dl>
       </div>
 
-      {/* SERVICES */}
-      <section id="services" className="vl-wrap vl-sec-light">
-        <div className="vl-on-light">
-        <div className="vl-sec-head">
-          <h2>{L(SERVICES_LABEL)}</h2>
-          <p>{L(SERVICES_SUB)}</p>
-        </div>
-        {/* Each card carries its own floor, window and support figure, all read
-            from labPricing at render time. No numeral is typed here on purpose:
-            with the same figures due on service pages, a pricing page and the
-            ticker, a hand-typed one drifts the first time the table moves. */}
-        <div className="vl-grid">
-          {SERVICES.map((s, i) => {
-            const w = WORK_TYPES.find((t) => t.key === s.key)
-            return (
-              <article className="vl-cell" key={s.key}>
-                <span className="vl-cell-n">{String(i + 1).padStart(2, '0')}</span>
-                <h3 className="vl-cell-t">{L(s.t)}</h3>
-                <p className="vl-cell-d">{L(s.d)}</p>
-                <p className="vl-cell-when">{L(s.when)}</p>
-                {w && (
-                  <dl className="vl-cell-stats">
-                    <div>
-                      <dt>{L(CALC.resultLbl)}</dt>
-                      <dd>{L(CALC.bfFrom)} {money(priced(w.from))}</dd>
-                    </div>
-                    <div>
-                      <dt>{L(CALC.termLbl)}</dt>
-                      <dd>{w.weeks[0]}–{w.weeks[1]} {L(CALC.weeksShort)}</dd>
-                    </div>
-                    <div>
-                      <dt>{L(CALC.supportLbl)}</dt>
-                      <dd>{L(CALC.bfFrom)} {money(priced(w.support))}{L(CALC.perMonth)}</dd>
-                    </div>
-                  </dl>
-                )}
-              </article>
-            )
-          })}
-        </div>
-        </div>
-      </section>
-
       {/* CASES */}
       <section id="cases" className="vl-wrap vl-sec">
         <div className="vl-sec-head">
@@ -261,108 +218,48 @@ export default function Lab({ lang }: { lang: LabLang }) {
         </section>
       )}
 
-      {/* ENTRY POINTS. Deliberately unnumbered: the reader self-selects the one
-          that matches them, so an order would be decoration, not information.
-          The process steps below keep their numbers because that IS a sequence. */}
-      <section className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(ENTRY_LABEL)}</h2>
-          <p>{L(ENTRY_SUB)}</p>
-        </div>
-        <div className="vl-entries">
-          {ENTRY.map((e, i) => (
-            <article className="vl-entry" key={i}>
-              <h3 className="vl-entry-t">{L(e.t)}</h3>
-              <p className="vl-entry-d">{L(e.d)}</p>
-              <a href="#calc" className="vl-entry-link">{L(UI.ctaCalc)}</a>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* STACK */}
-      <section className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(STACK_LABEL)}</h2>
-          <p>{L(STACK_SUB)}</p>
-        </div>
-        <ToolGrid lang={lang} />
-      </section>
-
-      {/* PROCESS */}
-      <section id="process" className="vl-wrap vl-sec-light">
+      {/* SERVICES */}
+      <section id="services" className="vl-wrap vl-sec-light">
         <div className="vl-on-light">
         <div className="vl-sec-head">
-          <h2>{L(PROCESS_LABEL)}</h2>
-          <p>{L(PROCESS_SUB)}</p>
+          <h2>{L(SERVICES_LABEL)}</h2>
+          <p>{L(SERVICES_SUB)}</p>
         </div>
-        <RollingSteps lang={lang} />
-        </div>
-      </section>
-
-      {/* CALCULATOR. Sits right after the process on purpose: the visitor has
-          just read that step 01 is a free costing call, and this lets them run
-          a rough version of it themselves before talking to anyone. */}
-      <section id="calc" className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(CALC.label)}</h2>
-          <p>{L(CALC.sub)}</p>
-        </div>
-        
-          <Calculator lang={lang} />
-        
-      </section>
-
-      {/* WHAT YOU PAY FOR SEPARATELY. Their strongest trust block per line of
-          copy, and the one section of theirs that needs no material we lack.
-          Deliberately without figures: these bills come from third parties and
-          move, and a price quoted on a landing page goes stale in silence. */}
-      <section className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(SEPARATE_LABEL)}</h2>
-          <p>{L(SEPARATE_SUB)}</p>
-        </div>
-        <dl className="vl-sep">
-          {SEPARATE.map((x, i) => (
-            <div className="vl-sep-row" key={i}>
-              <dt>{L(x.k)}</dt>
-              <dd>{L(x.d)}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      {/* WHY */}
-      <section className="vl-wrap vl-sec-light">
-        <div className="vl-on-light">
-        <div className="vl-sec-head">
-          <h2>{L(WHY_LABEL)}</h2>
-          <p>{L(WHY_SUB)}</p>
-        </div>
-        <div className="vl-why">
-          {WHY.map((r, i) => (
-            <article className="vl-reason" key={i}>
-              <h3 className="vl-reason-t">{L(r.t)}</h3>
-              <p className="vl-reason-d">{L(r.d)}</p>
-            </article>
-          ))}
+        {/* Each card carries its own floor, window and support figure, all read
+            from labPricing at render time. No numeral is typed here on purpose:
+            with the same figures due on service pages, a pricing page and the
+            ticker, a hand-typed one drifts the first time the table moves. */}
+        <div className="vl-grid">
+          {SERVICES.map((s, i) => {
+            const w = WORK_TYPES.find((t) => t.key === s.key)
+            return (
+              <article className="vl-cell" key={s.key}>
+                <span className="vl-cell-n">{String(i + 1).padStart(2, '0')}</span>
+                <h3 className="vl-cell-t">{L(s.t)}</h3>
+                <p className="vl-cell-d">{L(s.d)}</p>
+                <p className="vl-cell-when">{L(s.when)}</p>
+                {w && (
+                  <dl className="vl-cell-stats">
+                    <div>
+                      <dt>{L(CALC.resultLbl)}</dt>
+                      <dd>{L(CALC.bfFrom)} {money(priced(w.from))}</dd>
+                    </div>
+                    <div>
+                      <dt>{L(CALC.termLbl)}</dt>
+                      <dd>{w.weeks[0]}–{w.weeks[1]} {L(CALC.weeksShort)}</dd>
+                    </div>
+                    <div>
+                      <dt>{L(CALC.supportLbl)}</dt>
+                      <dd>{L(CALC.bfFrom)} {money(priced(w.support))}{L(CALC.perMonth)}</dd>
+                    </div>
+                  </dl>
+                )}
+              </article>
+            )
+          })}
         </div>
         </div>
       </section>
-
-      {/* TESTIMONIALS, renders only once REVIEWS holds real quotes. */}
-      {REVIEWS.length > 0 && (
-        <section className="vl-wrap vl-sec">
-          <div className="vl-why">
-            {REVIEWS.map((rev, i) => (
-              <blockquote className="vl-reason" key={i}>
-                <p className="vl-reason-d">{L(rev.quote)}</p>
-                <footer className="vl-lbl">{rev.author}, {L(rev.role)}, {rev.company}</footer>
-              </blockquote>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* BUREAU */}
       <section id="bureau" className="vl-wrap vl-sec">
@@ -439,6 +336,113 @@ export default function Lab({ lang }: { lang: LabLang }) {
           ))}
         </dl>
       </section>
+
+      {/* ENTRY POINTS. Deliberately unnumbered: the reader self-selects the one
+          that matches them, so an order would be decoration, not information.
+          The process steps below keep their numbers because that IS a sequence. */}
+      <section className="vl-wrap vl-sec">
+        <div className="vl-sec-head">
+          <h2>{L(ENTRY_LABEL)}</h2>
+          <p>{L(ENTRY_SUB)}</p>
+        </div>
+        <div className="vl-entries">
+          {ENTRY.map((e, i) => (
+            <article className="vl-entry" key={i}>
+              <h3 className="vl-entry-t">{L(e.t)}</h3>
+              <p className="vl-entry-d">{L(e.d)}</p>
+              <a href="#calc" className="vl-entry-link">{L(UI.ctaCalc)}</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* CALCULATOR. The page's centre of gravity, and it now sits BEFORE the
+          process rather than after it. The old order argued that a reader should
+          see how the work runs before being shown a number; the funnel argues
+          the opposite, and the entry points immediately above already say "start
+          from wherever you are", which is the same sentence the first question
+          asks. Process, stack and pass-through costs become the reassurance tail
+          after the price instead of a preamble to it. */}
+      <section id="calc" className="vl-wrap vl-sec">
+        <div className="vl-sec-head">
+          <h2>{L(CALC.label)}</h2>
+          <p>{L(CALC.sub)}</p>
+        </div>
+        
+          <Calculator lang={lang} />
+        
+      </section>
+
+      {/* PROCESS */}
+      <section id="process" className="vl-wrap vl-sec-light">
+        <div className="vl-on-light">
+        <div className="vl-sec-head">
+          <h2>{L(PROCESS_LABEL)}</h2>
+          <p>{L(PROCESS_SUB)}</p>
+        </div>
+        <RollingSteps lang={lang} />
+        </div>
+      </section>
+
+      {/* STACK */}
+      <section className="vl-wrap vl-sec">
+        <div className="vl-sec-head">
+          <h2>{L(STACK_LABEL)}</h2>
+          <p>{L(STACK_SUB)}</p>
+        </div>
+        <ToolGrid lang={lang} />
+      </section>
+
+      {/* WHAT YOU PAY FOR SEPARATELY. Their strongest trust block per line of
+          copy, and the one section of theirs that needs no material we lack.
+          Deliberately without figures: these bills come from third parties and
+          move, and a price quoted on a landing page goes stale in silence. */}
+      <section className="vl-wrap vl-sec">
+        <div className="vl-sec-head">
+          <h2>{L(SEPARATE_LABEL)}</h2>
+          <p>{L(SEPARATE_SUB)}</p>
+        </div>
+        <dl className="vl-sep">
+          {SEPARATE.map((x, i) => (
+            <div className="vl-sep-row" key={i}>
+              <dt>{L(x.k)}</dt>
+              <dd>{L(x.d)}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      {/* WHY */}
+      <section className="vl-wrap vl-sec-light">
+        <div className="vl-on-light">
+        <div className="vl-sec-head">
+          <h2>{L(WHY_LABEL)}</h2>
+          <p>{L(WHY_SUB)}</p>
+        </div>
+        <div className="vl-why">
+          {WHY.map((r, i) => (
+            <article className="vl-reason" key={i}>
+              <h3 className="vl-reason-t">{L(r.t)}</h3>
+              <p className="vl-reason-d">{L(r.d)}</p>
+            </article>
+          ))}
+        </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS, renders only once REVIEWS holds real quotes. */}
+      {REVIEWS.length > 0 && (
+        <section className="vl-wrap vl-sec">
+          <div className="vl-why">
+            {REVIEWS.map((rev, i) => (
+              <blockquote className="vl-reason" key={i}>
+                <p className="vl-reason-d">{L(rev.quote)}</p>
+                <footer className="vl-lbl">{rev.author}, {L(rev.role)}, {rev.company}</footer>
+              </blockquote>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* FAQ. Sits last before the CTA: by here the reader has the offer, the
           proof and the price, and what is left is the objections. */}
