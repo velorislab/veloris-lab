@@ -1,9 +1,24 @@
 import { Accordion } from "@/components/ui/Accordion";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { faq } from "@/data/home";
+import { getHome } from "@/data/content";
+import type { LabLang } from "@/site/labData";
 
-/** "Frequently Asked Questions" — 796px column of boxed accordion rows. */
-export function Faq() {
+/**
+ * The objections block, on our content.
+ *
+ * A straight swap: same 796px column, same boxed accordion, same badge. The
+ * only thing that changed is where the rows come from. `content.ts` flattens
+ * the two FAQ groups into one list, so all ten questions render here rather
+ * than the template's seven, and the accordion opens closed (`defaultOpen={-1}`)
+ * exactly as before.
+ *
+ * The section has no description slot in this template and does not get one:
+ * `FAQ_SUB` exists in `labData`, but adding a paragraph here would be a design
+ * change, not a content one.
+ */
+export function Faq({ lang }: { lang: LabLang }) {
+  const { faq } = getHome(lang);
+
   return (
     <section
       id="faq"

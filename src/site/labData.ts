@@ -219,6 +219,19 @@ export const EYEBROW: Record<string, LS> = {
   faq: { en: 'Questions', ru: 'Вопросы' },
 }
 
+/**
+ * The blue block under the hero, and its own heading.
+ *
+ * It first reused CONTACT.h, which put «Разберём бесплатно и скажем как есть»
+ * at the top of the page and again at the bottom of it. This line is written
+ * for the slot instead, and the three figures underneath are what back it:
+ * fifteen projects shipped, twenty automations, four cases still running.
+ */
+export const MOTTO_TITLE = {
+  en: 'We have done this before, and it is still running',
+  ru: 'Мы это уже делали, и оно до сих пор работает',
+}
+
 /* The old heading, «Что снимаем с вашей команды», echoed the old hero almost
    verbatim AND mislabelled its own grid: dashboards, MVPs and billing are not
    routine coming off a team. */

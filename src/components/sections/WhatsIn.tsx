@@ -1,57 +1,17 @@
 import Image from "next/image";
+import Link from "next/link";
 
-import { BeamVideo } from "@/components/ui/BeamVideo";
-import { MarqueeColumn } from "@/components/ui/Marquee";
-import { whatsIn } from "@/data/home";
-
-/**
- * Positions of the six drifting logos inside one 150×174 ticker cell, taken
- * straight from the source's absolute layout.
- */
-const ORBIT_CELL: Array<{
-  src: string;
-  size: number;
-  top: number;
-  left: number;
-  centre?: boolean;
-}> = [
-  { src: whatsIn.orbitLogos[0], size: 34, top: 140, left: 0 },
-  { src: whatsIn.orbitLogos[1], size: 34, top: 96, left: 75, centre: true },
-  { src: whatsIn.orbitLogos[2], size: 28, top: 50, left: 40 },
-  { src: whatsIn.orbitLogos[3], size: 28, top: 20, left: 110 },
-  { src: whatsIn.orbitLogos[4], size: 28, top: 6, left: 6 },
-  { src: whatsIn.orbitLogos[5], size: 34, top: 140, left: 116 },
-];
-
-/** One repeated cell of the vertical logo ticker. */
-function OrbitCell() {
-  return (
-    <div className="relative h-[174px] w-[150px] shrink-0">
-      {ORBIT_CELL.map((logo) => (
-        <Image
-          key={logo.src}
-          src={logo.src}
-          alt=""
-          width={logo.size}
-          height={logo.size}
-          className="absolute"
-          style={{
-            top: logo.top,
-            left: logo.left,
-            width: logo.size,
-            height: logo.size,
-            transform: logo.centre ? "translateX(-50%)" : undefined,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+import { getHome, type HomeContent } from "@/data/content";
+import { tx, type LabLang } from "@/site/labData";
 
 /**
- * The composition behind the badge: a grid, two dark beams angled at ±30° and
- * a column of logos drifting downwards. Geometry matches the source's
- * 1380×360 backdrop.
+ * The composition behind the badge: a grid and two dark beams angled at ±30°.
+ * Geometry matches the source's 1380×360 backdrop.
+ *
+ * The source also drifted a column of partner logos down through this. Those
+ * logos were six companies we have no relationship with, so `orbitLogos` is
+ * empty in content.ts and the column is gone with it — the grid and the beams
+ * are the part of this composition that carries no claim.
  */
 function OrbitBackdrop() {
   return (
@@ -78,21 +38,10 @@ function OrbitBackdrop() {
             className="absolute top-0 h-[293px] w-[675px] overflow-hidden"
             style={{ left: isLeft ? 0 : 705 }}
           >
-            <div
-              className="absolute top-[10px] h-[170px] w-[494px] isolate"
-              style={{
-                left: isLeft ? 181 : 0,
-                transform: isLeft ? "rotate(30deg)" : "rotate(-30deg) scaleY(-1)",
-              }}
-            >
-              <BeamVideo flipped={!isLeft} />
-              <div className="absolute inset-0 bg-[#0b1023] mix-blend-color" />
-              <div className="absolute inset-y-0 left-[282px] w-[212px] bg-[linear-gradient(270deg,#110f20_0%,rgba(17,15,32,0)_100%)]" />
-              <div className="absolute inset-y-0 left-0 w-[212px] bg-[linear-gradient(90deg,#110f20_0%,rgba(17,15,32,0)_100%)]" />
-              <div className="absolute inset-x-0 top-0 h-[54px] bg-[linear-gradient(178deg,#110f20_0%,rgba(17,15,32,0)_100%)]" />
-              <div className="absolute inset-x-0 top-[116px] h-[54px] bg-[linear-gradient(356deg,#110f20_0%,rgba(17,15,32,0)_100%)]" />
-            </div>
-
+            {/* The template ran a looping video of its own product through
+                this slot, masked into a light beam. The file was not copied and
+                the footage is not ours, so the beam is gone and the shell fades
+                below keep the panel's edges soft on their own. */}
             {/* Shell-level fades that blend the beam into the section. */}
             <div
               className="absolute top-[95px] h-[198px] w-[536px] bg-[linear-gradient(0.16deg,#110f20_0%,rgba(17,15,32,0)_100%)]"
@@ -113,53 +62,53 @@ function OrbitBackdrop() {
           </div>
         );
       })}
-
-      {/* Logos drifting downwards behind the badge. */}
-      <div className="absolute top-0 left-1/2 z-[2] h-[174px] w-[150px] -translate-x-1/2">
-        <MarqueeColumn speed={30} direction="down" gap={20} fade={false}>
-          <OrbitCell />
-          <OrbitCell />
-        </MarqueeColumn>
-      </div>
     </div>
   );
 }
 
+type ServiceCard = HomeContent["whatsIn"]["cards"][number];
+
 interface CardProps {
-  card: (typeof whatsIn.cards)[number];
+  card: ServiceCard;
+  /** The two words the figures sit beside, already resolved for the locale. */
+  labels: { from: string; weeks: string };
 }
 
-/** Dark feature card: artwork plate on top, copy underneath. */
-function Card({ card }: CardProps) {
+/**
+ * One service, as the template's dark card.
+ *
+ * The template's card was artwork on a plate with a caption under it, and it
+ * went nowhere. Ours has no plate — those illustrations were raster files that
+ * did not come across, and content.ts hands a card no image — and it has two
+ * things the template's card never carried: what the work starts at, and how
+ * long the first version runs. Both arrive as finished strings from the price
+ * table; no figure is written here.
+ *
+ * The pills are the template's own: the white one is the pill it uses for a
+ * fact on a dark panel, the translucent one is the fill its section badge uses
+ * in dark tone. The whole card is the link, which is why the arrow only has to
+ * confirm what the cursor already says.
+ */
+function Card({ card, labels }: CardProps) {
   return (
-    <article className="flex flex-col items-center overflow-hidden rounded-[24px] bg-[#141126]">
-      <div className="relative flex w-full flex-col items-start gap-[10px] p-[10px]">
-        <div
-          className="relative flex w-full items-center justify-center overflow-hidden rounded-panel"
-          style={{ aspectRatio: card.aspect, maxHeight: 224 }}
-        >
-          <Image
-            src={card.background}
-            alt=""
-            fill
-            sizes="(min-width: 1320px) 700px, 100vw"
-            className="object-cover"
-          />
-          <Image
-            src={card.image}
-            alt=""
-            fill
-            sizes="(min-width: 1320px) 700px, 100vw"
-            className="object-cover"
-          />
-        </div>
-        {/* Two stacked gradients fade the artwork into the card, as in the source. */}
-        <div
+    <Link
+      href={card.href}
+      className="group flex h-full flex-col items-center overflow-hidden rounded-[24px] bg-[#141126] px-5 pt-5 pb-6 text-center transition-colors duration-200 hover:bg-[#1b1834] tablet:px-[30px] tablet:pb-[30px]"
+    >
+      {/* Its own row rather than an absolute corner, so a long title can use
+          the full width of the card without running under it. */}
+      <div className="flex w-full justify-end">
+        <Image
+          src="/images/icons/arrow-diagonal.svg"
+          alt=""
+          width={25}
+          height={25}
           aria-hidden
-          className="pointer-events-none absolute inset-x-[1px] bottom-0 h-[125px] bg-linear-to-b from-[rgba(20,18,38,0)] from-[51.5%] to-[#141226]"
+          className="size-6 opacity-40 transition-opacity duration-200 group-hover:opacity-100"
         />
       </div>
-      <div className="flex w-full flex-col items-center gap-1 px-5 pt-5 pb-6 text-center tablet:px-[30px] tablet:pb-[30px]">
+
+      <div className="flex w-full flex-col items-center gap-1">
         <h3 className="text-[20px] leading-[30px] text-white tablet:text-[22px] tablet:leading-[33px]">
           {card.title}
         </h3>
@@ -169,36 +118,59 @@ function Card({ card }: CardProps) {
           </p>
         )}
       </div>
-    </article>
+
+      {(card.price || card.weeks) && (
+        <div className="mt-auto flex flex-wrap items-center justify-center gap-2 pt-5">
+          {card.price && (
+            <span className="flex items-center gap-[6px] rounded-pill bg-surface px-4 py-2">
+              <span className="text-[16px] leading-6 text-ink-300">
+                {labels.from}
+              </span>
+              <span className="font-display text-[16px] leading-6 text-ink-800">
+                {card.price}
+              </span>
+            </span>
+          )}
+          {card.weeks && (
+            <span className="rounded-pill bg-white/10 px-4 py-2 text-[16px] leading-6 whitespace-nowrap text-white">
+              {card.weeks} {labels.weeks}
+            </span>
+          )}
+        </div>
+      )}
+    </Link>
   );
 }
 
 /**
- * "What's in our Community" — dark rounded panel with an orbiting logo badge
- * and two rows of artwork cards.
+ * The six kinds of work, on the template's dark rounded panel.
  *
- * The two card rows use uneven column ratios. Those ratios (1.499:1 and
- * 0.886:1:1) are the measured proportions of the original layout, where the
- * widths fall out of each artwork's aspect ratio.
+ * TWO THINGS ARE NOT THE TEMPLATE'S, AND BOTH FOLLOW FROM THE CONTENT.
+ *
+ * The panel is a flat fill. `whats-in-section.png` was a raster that did not
+ * come across, and it was very close to flat already: #110f20, the same value
+ * every beam fade above resolves to. The type on this panel is white, so unlike
+ * a decorative layer this one could not simply be dropped.
+ *
+ * The cards sit in an even grid. The template ran five cards across two rows at
+ * 1.499:1 and 0.886:1:1, and those ratios were not a design idea — they fell out
+ * of each artwork's aspect ratio. There is no artwork and there are six cards,
+ * so the honest translation of "two rows of cards" is three columns by two.
  */
-export function WhatsIn() {
-  const [wide, half, ...rest] = whatsIn.cards;
+export function WhatsIn({ lang }: { lang: LabLang }) {
+  const { whatsIn } = getHome(lang);
+  const labels = {
+    from: tx({ en: "from", ru: "от" }, lang),
+    weeks: tx({ en: "weeks", ru: "нед." }, lang),
+  };
 
   return (
     <section
       id="what-in"
-      className="relative flex w-full flex-col items-end gap-10 overflow-hidden rounded-[50px] px-4 pt-20 pb-10 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:pt-24 tablet:pb-16 desktop:gap-20 desktop:px-20 desktop:pt-[130px] desktop:pb-20"
+      className="relative flex w-full flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 pt-20 pb-10 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:pt-24 tablet:pb-16 desktop:gap-20 desktop:px-20 desktop:pt-[130px] desktop:pb-20"
     >
-      <Image
-        src="/images/backgrounds/whats-in-section.png"
-        alt=""
-        fill
-        sizes="100vw"
-        className="rounded-[50px] object-cover"
-      />
-
       <div className="relative flex w-full flex-col items-center gap-5">
-        {/* ---- orbiting logo badge ---- */}
+        {/* ---- badge, on its beam-lit backdrop ---- */}
         <div className="relative flex size-[150px] items-center justify-center">
           <OrbitBackdrop />
 
@@ -237,23 +209,21 @@ export function WhatsIn() {
           <h2 className="text-[28px] leading-[1.25] text-white tablet:text-[40px] desktop:text-[56px] desktop:leading-[72.8px]">
             {whatsIn.title}
           </h2>
-          <p className="text-[16px] leading-6 text-line-strong tablet:text-[18px] tablet:leading-[27px]">
-            {whatsIn.description}
-          </p>
+          {whatsIn.description && (
+            <p className="text-[16px] leading-6 text-line-strong tablet:text-[18px] tablet:leading-[27px]">
+              {whatsIn.description}
+            </p>
+          )}
         </div>
       </div>
 
-      <div className="relative flex w-full flex-col items-start gap-5">
-        <div className="grid w-full grid-cols-1 gap-5 desktop:grid-cols-[1.499fr_1fr]">
-          <Card card={wide} />
-          <Card card={half} />
-        </div>
-        <div className="grid w-full grid-cols-1 gap-5 tablet:grid-cols-2 desktop:grid-cols-[0.886fr_1fr_1fr]">
-          {rest.map((card) => (
-            <Card key={card.title} card={card} />
+      {whatsIn.cards.length > 0 && (
+        <div className="relative grid w-full grid-cols-1 gap-5 tablet:grid-cols-2 desktop:grid-cols-3">
+          {whatsIn.cards.map((card) => (
+            <Card key={card.title} card={card} labels={labels} />
           ))}
         </div>
-      </div>
+      )}
     </section>
   );
 }

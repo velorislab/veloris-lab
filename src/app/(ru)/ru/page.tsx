@@ -1,8 +1,8 @@
-import LabPage from '../../../site/Page'
+import AstonHome from '../../../site/AstonHome'
 import { labMetadata } from '../../../site/meta'
 
 export const metadata = labMetadata('ru')
 
-export default function Page() {
-  return <LabPage lang="ru" />
+export default function RuHome() {
+  return <AstonHome lang="ru" />
 }

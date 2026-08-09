@@ -1,72 +1,66 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/Button";
-import { siteConfig } from "@/config/site";
-import { hero } from "@/data/home";
-import { heroVariants, transitions, widgetColumnVariants } from "@/lib/motion";
+import { getSite } from "@/config/site";
+import { getHome } from "@/data/content";
+import { heroVariants, transitions } from "@/lib/motion";
+import { UI, tx, type LabLang } from "@/site/labData";
+import { pricingPath } from "@/site/routing";
 
-/** One floating artwork tile in the hero's side columns. */
-function Widget({
-  src,
-  w,
-  h,
-  top,
-  left,
-  rotate,
-  radius,
-  shadow,
-}: {
-  src: string;
-  w: number;
-  h: number;
-  top: number;
-  left: number;
-  rotate: number;
-  radius: number;
-  shadow: string;
-}) {
-  return (
-    <div
-      className="absolute overflow-hidden"
-      style={{
-        width: w,
-        height: h,
-        top,
-        left,
-        borderRadius: radius,
-        transform: `rotate(${rotate}deg)`,
-        boxShadow: shadow,
-      }}
-    >
-      <Image
-        src={src}
-        alt=""
-        width={w}
-        height={h}
-        className="size-full object-cover"
-        style={{ borderRadius: radius }}
-      />
-    </div>
-  );
-}
-
-export function Hero() {
+/**
+ * The hero, on our content.
+ *
+ * FOUR OF THE TEMPLATE'S SLOTS ARE GONE, and all four for the same reason: the
+ * thing behind them does not exist here (see the comments in `data/content.ts`,
+ * which empties every one of them at the seam).
+ *
+ *   avatar stack     three stock portraits inside the badge pill. The badge now
+ *                    carries our one strongest credential as text, so the pill
+ *                    lost the 60px avatar rail and its padding was evened up
+ *                    from 8/14 to a symmetric 14.
+ *   hero visual      a screenshot of the template's own dashboard, with a play
+ *                    button over it. We have no product film and no dashboard
+ *                    to show at the top of a services page.
+ *   widget columns   two rails of floating tiles, plus the gradient masks that
+ *                    faded them into the page. Every tile was a screenshot of
+ *                    somebody else's product.
+ *   trust strip      "Trusted by over 14,540 businesses", six invented client
+ *                    logos, the divider under them and two review-score cards.
+ *                    Three separate claims about strangers, so the whole block
+ *                    goes rather than being rewritten smaller.
+ *
+ * The section's bottom edge closes on its own: the removed blocks were the two
+ * later children of a flex column, and `page-main` already puts 200/150/80px
+ * between the hero and the first section, so nothing has to be padded back in.
+ */
+export function Hero({ lang }: { lang: LabLang }) {
+  const { hero } = getHome(lang);
   const reduceMotion = useReducedMotion();
   // Framer animates these once on load; with reduced motion we render the
   // resolved state directly rather than a shortened animation.
   const animate = reduceMotion ? undefined : "visible";
   const initial = reduceMotion ? "visible" : "hidden";
 
-  // The widget columns slide a shorter distance on tablet (±111px vs ±201px),
-  // matching the project's per-breakpoint override.
-  const [widgetTravel, setWidgetTravel] = useState(201);
-  useEffect(() => {
-    setWidgetTravel(window.matchMedia("(min-width: 1320px)").matches ? 201 : 111);
-  }, []);
+  /* TWO BUTTONS, and the pair is ours rather than the template's, which ended
+     on a single CTA to its own checkout.
+
+     The primary now reads from `getSite(lang).heroCta`, so the calculator
+     anchor is spelled once, in `ANCHORS`, rather than typed here as well. The
+     secondary has no counterpart in the chrome (the price list is a footer
+     column there, not a CTA), so it stays composed from `UI` and `routing`.
+     Neither line types a figure or a URL.
+
+     STILL TO SETTLE, and it is the reason `#estimate` currently goes nowhere:
+     the calculator is not in this composition yet. The old home page carried it
+     as `id="calc"` while the service and pricing pages carry it as
+     `id="estimate"`. This button, `content.ts` (about and process) and
+     `ANCHORS.estimate` all say `#estimate`, so the three light up together the
+     moment that section lands under that id. */
+  const primaryCta = getSite(lang).heroCta;
+  const secondaryCta = { label: tx(UI.priceList, lang), href: pricingPath(lang) };
 
   return (
     <section
@@ -74,67 +68,25 @@ export function Hero() {
       className="relative flex w-full flex-col items-center gap-[50px] overflow-hidden px-4 pt-[160px] pb-[10px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
     >
       {/* -------------------------------------------------- decorative layer */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[725px]">
-        <motion.div
-          variants={heroVariants.lightRayLeft}
-          initial={initial}
-          animate={animate}
-          transition={transitions.lightRay}
-          className="absolute top-0 left-0 h-[462px] w-[345px] desktop:h-[725px] desktop:w-[541px]"
-        >
-          <Image
-            src="/images/backgrounds/hero-light-ray-left.jpg"
-            alt=""
-            fill
-            sizes="(min-width: 1320px) 541px, 345px"
-            className="object-contain"
-            priority
-          />
-        </motion.div>
-        <motion.div
-          variants={heroVariants.lightRayRight}
-          initial={initial}
-          animate={animate}
-          transition={transitions.lightRay}
-          className="absolute top-0 right-0 h-[462px] w-[345px] desktop:h-[725px] desktop:w-[541px]"
-        >
-          <Image
-            src="/images/backgrounds/hero-light-ray-right.jpg"
-            alt=""
-            fill
-            sizes="(min-width: 1320px) 541px, 345px"
-            className="object-contain"
-            priority
-          />
-        </motion.div>
+      {/* GONE, and this is why, because the markup looked harmless.
 
-        {/* Widget columns are hidden on phone, matching the Framer variants. */}
-        <motion.div
-          variants={widgetColumnVariants("left", widgetTravel)}
-          initial={initial}
-          animate={animate}
-          transition={transitions.widgetColumn}
-          className="absolute top-0 -left-[90px] hidden h-[725px] w-[217px] tablet:block desktop:left-0"
-        >
-          {hero.widgets.left.map((widget) => (
-            <Widget key={widget.src} {...widget} shadow="var(--shadow-widget)" />
-          ))}
-          <div className="absolute inset-x-0 top-[300px] h-[345px] bg-linear-to-b from-transparent to-page" />
-        </motion.div>
+          The template opened on two raster glows, `hero-light-ray-left.jpg` and
+          `-right.jpg`, in an `aria-hidden pointer-events-none absolute` layer.
+          Neither file was copied into this repo and neither is coming back.
 
-        <motion.div
-          variants={widgetColumnVariants("right", widgetTravel)}
-          initial={initial}
-          animate={animate}
-          transition={transitions.widgetColumn}
-          className="absolute top-0 -right-[90px] hidden h-[725px] w-[201px] tablet:block desktop:right-0"
-        >
-          {hero.widgets.right.map((widget) => (
-            <Widget key={widget.src} {...widget} shadow="var(--shadow-widget-alt)" />
-          ))}
-          <div className="absolute top-[300px] right-[-16px] left-0 h-[345px] bg-linear-to-b from-transparent to-page" />
-        </motion.div>
-      </div>
+          Kept in place they cost two failing optimiser requests per render, and
+          `priority` turned each one into a `<link rel="preload">` carrying a
+          fifteen-candidate srcset of URLs that answer 400. They bought nothing
+          back: the layer is out of flow, so it sets no height and no spacing,
+          and with no file behind it the hero already painted with no glow. The
+          pixels are identical without it.
+
+          To restore the layer: drop two wide, transparent artworks at those two
+          paths and re-add a `motion.div` per side using `heroVariants.lightRayLeft`
+          / `lightRayRight` with `transitions.lightRay`, positioned
+          `absolute top-0 left-0` / `right-0`, sized
+          `h-[462px] w-[345px] desktop:h-[725px] desktop:w-[541px]`, inside an
+          `aria-hidden pointer-events-none absolute inset-x-0 top-0 h-[725px]` box. */}
 
       {/* ------------------------------------------------------------ content */}
       <div className="relative flex w-full max-w-[1101px] flex-col items-center gap-[50px]">
@@ -162,22 +114,9 @@ export function Hero() {
               initial={initial}
               animate={animate}
               transition={transitions.badge}
-              className="flex items-center gap-[6px] overflow-hidden rounded-pill bg-surface py-2 pr-[14px] pl-2 shadow-[var(--shadow-badge)]"
+              className="flex items-center overflow-hidden rounded-pill bg-surface px-[14px] py-2 shadow-[var(--shadow-badge)]"
             >
-              <span className="relative flex h-[26px] w-[60px] shrink-0">
-                {hero.badge.avatars.map((avatar, index) => (
-                  <Image
-                    key={avatar}
-                    src={avatar}
-                    alt=""
-                    width={26}
-                    height={26}
-                    className="absolute top-0 size-[26px] rounded-pill shadow-[0_0_0_2px_#ffffff]"
-                    style={{ left: index * 15 }}
-                  />
-                ))}
-              </span>
-              <span className="text-[16px] leading-6 text-ink-600">
+              <span className="text-center text-[16px] leading-6 text-ink-600">
                 {hero.badge.text}
               </span>
             </motion.div>
@@ -205,19 +144,33 @@ export function Hero() {
           </div>
 
           <div className="relative flex flex-col items-center justify-center gap-4">
+            {/* Both buttons ride the template's single button entrance, so the
+                pair arrives as one beat rather than two. */}
             <motion.div
               variants={heroVariants.riseIn}
               initial={initial}
               animate={animate}
               transition={transitions.button}
+              className="flex flex-wrap items-center justify-center gap-3"
             >
               <Button
-                href={siteConfig.heroCta.href}
+                href={primaryCta.href}
                 className="h-[58px] px-6 py-4 text-[17px] leading-[25.5px]"
               >
-                {siteConfig.heroCta.label}
+                {primaryCta.label}
+              </Button>
+              <Button
+                href={secondaryCta.href}
+                variant="muted"
+                className="h-[58px] px-6 py-4 text-[17px] leading-[25.5px]"
+              >
+                {secondaryCta.label}
               </Button>
             </motion.div>
+            {/* The note kept its place and its type, and lost the Figma glyph
+                that used to sit in front of it: the line now states our price
+                floor and shortest window, and a Figma mark beside that reads as
+                an offer of a file we do not ship. */}
             <motion.div
               variants={heroVariants.riseIn}
               initial={initial}
@@ -225,112 +178,11 @@ export function Hero() {
               transition={transitions.note}
               className="flex items-center justify-center gap-1"
             >
-              <Image
-                src="/images/icons/figma.svg"
-                alt=""
-                width={18}
-                height={18}
-                className="size-[18px]"
-              />
-              <span className="text-[16px] leading-6 text-ink-250">{hero.note}</span>
+              <span className="text-center text-[16px] leading-6 text-ink-250">
+                {hero.note}
+              </span>
             </motion.div>
           </div>
-        </div>
-
-        <motion.div
-          variants={heroVariants.visual}
-          initial={initial}
-          animate={animate}
-          transition={transitions.visual}
-          className="relative w-full"
-        >
-          <div className="relative w-full overflow-hidden rounded-panel border border-white shadow-[var(--shadow-ring-6)]">
-            <Image
-              src={hero.visual}
-              alt="The Aston learning dashboard"
-              width={1101}
-              height={578}
-              priority
-              sizes="(min-width: 1320px) 1101px, (min-width: 810px) 740px, 100vw"
-              className="h-auto w-full object-cover"
-            />
-            <span className="absolute top-1/2 left-1/2 flex size-[47px] -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-              <Image
-                src="/images/icons/play-button.svg"
-                alt=""
-                width={47}
-                height={47}
-              />
-            </span>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* ------------------------------------------------- trust + ratings */}
-      <div className="relative flex w-full max-w-[1101px] flex-col items-center gap-10">
-        <div className="flex w-full flex-col items-center gap-[30px]">
-          <p className="text-center text-[16px] leading-6 text-ink-600 tablet:text-[18px] tablet:leading-[27px]">
-            {hero.trustedText}
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-[14px]">
-            {hero.logos.map((logo, index) => (
-              <div key={logo} className="flex items-center gap-[14px]">
-                {index > 0 && <div aria-hidden className="h-6 w-px bg-line" />}
-                <Image
-                  src={logo}
-                  alt=""
-                  width={126}
-                  height={42}
-                  className="h-[42px] w-[126px] object-contain"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div aria-hidden className="h-px w-[470px] max-w-full bg-line" />
-
-        <div className="flex flex-col items-center gap-6 tablet:flex-row tablet:gap-[50px]">
-          {hero.ratings.map((rating, index) => (
-            <div key={rating.label} className="flex items-center gap-[50px]">
-              {index > 0 && (
-                <div aria-hidden className="hidden h-[50px] w-px bg-line tablet:block" />
-              )}
-              <a
-                href={rating.href}
-                target="_blank"
-                rel="noreferrer noopener"
-                /* 229px is the source width; pinning it keeps the pair centred
-                   identically regardless of numeral metrics. */
-                className="flex items-center gap-[10px] overflow-hidden rounded-card border border-line bg-surface-muted py-[10px] pr-5 pl-[10px] shadow-[var(--shadow-ring)] transition-colors duration-200 hover:bg-surface-subtle desktop:w-[229px]"
-              >
-                <span className="flex size-[58px] items-center justify-center rounded-[12px] border border-line-soft bg-surface p-[14px]">
-                  <Image src={rating.icon} alt="" width={30} height={30} />
-                </span>
-                <span className="flex flex-col items-start gap-1">
-                  <span className="flex items-center gap-2 rounded-pill bg-line-soft py-[2px] pr-3 pl-[2px]">
-                    <span className="flex items-center gap-[2px] rounded-[100px_6px_6px_100px] bg-surface px-[6px] py-[2px]">
-                      <Image
-                        src="/images/icons/star.svg"
-                        alt=""
-                        width={15}
-                        height={14}
-                      />
-                      <span className="font-numeric text-[15px] leading-[22.5px] font-semibold text-ink-600">
-                        {rating.score}
-                      </span>
-                    </span>
-                    <span className="font-numeric text-[15px] leading-[22.5px] font-semibold text-ink-250">
-                      {rating.count}
-                    </span>
-                  </span>
-                  <span className="text-[15px] leading-[22.5px] text-ink-400">
-                    {rating.label}
-                  </span>
-                </span>
-              </a>
-            </div>
-          ))}
         </div>
       </div>
     </section>

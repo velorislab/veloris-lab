@@ -1,68 +1,26 @@
-import Image from "next/image";
-
 import { Button } from "@/components/ui/Button";
 import { SectionBadge } from "@/components/ui/SectionBadge";
-import { process, type ProcessStep } from "@/data/home";
+import { getHome, type HomeContent } from "@/data/content";
+import type { LabLang } from "@/site/labData";
 
+type ProcessStep = HomeContent["process"]["steps"][number];
+
+/**
+ * One step. The template's card was two thirds artwork: a well holding an
+ * oversized phone render on a dotted plate, with two SVG notches tucking the
+ * white text panel under it. `screen` is empty for all five of our steps and
+ * always will be — there is no product screenshot of a scoping call — so the
+ * well, the notches and the plates are gone and the text panel is the card.
+ *
+ * The panel itself is untouched: same 6px frame, same hairline and white ring,
+ * same numbered pill, same 22px display title over 16px body.
+ */
 function StepCard({ step }: { step: ProcessStep }) {
   return (
-    <article className="relative flex flex-col items-end overflow-hidden rounded-[24px] p-[6px] shadow-[0_0_0_1px_var(--color-line),0_0_0_5px_#ffffff]">
-      <Image
-        src="/images/backgrounds/process-section.png"
-        alt=""
-        fill
-        sizes="(min-width: 1320px) 388px, 100vw"
-        className="rounded-[24px] object-fill"
-      />
-
-      {/* Artwork well: the phone is oversized and clipped by the well. */}
-      <div className="relative aspect-[376/322] w-full overflow-hidden rounded-t-[24px] shadow-[inset_0_2px_0_0_#fff,inset_2px_0_0_0_#fff,inset_-2px_0_0_0_#fff]">
-        <Image
-          src="/images/backgrounds/process-dots.png"
-          alt=""
-          fill
-          sizes="376px"
-          className="object-cover"
-        />
-        <Image
-          src="/images/backgrounds/process-light.png"
-          alt=""
-          fill
-          sizes="376px"
-          className="object-cover mix-blend-hard-light"
-        />
-        {/* Screenshot sits where the device screen does in the source — 240 of
-            the well's 376 wide, 40px down. It is taller than the well, so the
-            bottom is clipped. */}
-        <div className="absolute top-[12.43%] left-1/2 aspect-[240/510.4] w-[63.83%] -translate-x-1/2 overflow-hidden rounded-panel">
-          <Image
-            src={step.screen}
-            alt=""
-            fill
-            sizes="(min-width: 1320px) 240px, 40vw"
-            className="object-cover"
-          />
-        </div>
-      </div>
-
-      <div className="relative flex w-full flex-col items-center justify-center gap-3 rounded-b-panel bg-surface px-[30px] py-6 shadow-[0_2px_4px_0_rgba(178,180,187,0.2),0_-2px_6px_0_rgba(182,182,182,0.1)]">
-        {/* Notches that tuck the panel under the artwork well. */}
-        <Image
-          src="/images/backgrounds/process-shape-left.svg"
-          alt=""
-          width={35}
-          height={66}
-          aria-hidden
-          className="absolute -top-[66px] left-0"
-        />
-        <Image
-          src="/images/backgrounds/process-shape-right.svg"
-          alt=""
-          width={35}
-          height={66}
-          aria-hidden
-          className="absolute -top-[66px] right-0"
-        />
+    <article className="relative flex w-full flex-col overflow-hidden rounded-[24px] bg-linear-to-b from-[#ebf3f9] via-[#f2f8fc] to-[#fbfdfe] p-[6px] shadow-[0_0_0_1px_var(--color-line),0_0_0_5px_#ffffff] tablet:w-[calc((100%-20px)/2)] desktop:w-[calc((100%-40px)/3)]">
+      {/* `grow` keeps every panel in a row the same height now that the artwork
+          well is not setting it. */}
+      <div className="relative flex w-full grow flex-col items-center justify-center gap-3 rounded-panel bg-surface px-[30px] py-6 shadow-[0_2px_4px_0_rgba(178,180,187,0.2),0_-2px_6px_0_rgba(182,182,182,0.1)]">
         <span className="rounded-pill border border-line-soft px-[10px] py-[5px] text-[15px] leading-[22.5px] text-ink-500">
           {step.step}
         </span>
@@ -70,31 +28,58 @@ function StepCard({ step }: { step: ProcessStep }) {
           <h3 className="font-display text-[20px] leading-[30px] text-ink-800 tablet:text-[22px] tablet:leading-[33px]">
             {step.title}
           </h3>
-          <p className="text-[16px] leading-6 text-ink-300">{step.description}</p>
+          <p className="text-[16px] leading-6 text-ink-300">
+            {step.description}
+          </p>
         </div>
       </div>
     </article>
   );
 }
 
-/** "Steps to Start" — three cards and a closing CTA. */
-export function Process() {
+/**
+ * The five steps, and the closing CTA.
+ *
+ * The template ran three steps in a `grid-cols-3`. Five in that grid leaves the
+ * last row hanging off to the left, so the track is a wrapping flex row at the
+ * template's own widths: same 20px gutter, same two-then-three column counts,
+ * with the trailing row centred instead of orphaned. Card widths are the grid's
+ * arithmetic written out, so the rhythm does not move.
+ *
+ * The card background was process-section.png, the same wash as the "who can
+ * use" panel. Its three stops are reproduced in CSS; see the note there.
+ */
+export function Process({ lang }: { lang: LabLang }) {
+  const { process } = getHome(lang);
+
   return (
-    <section className="section-shell items-start gap-10 desktop:gap-[60px]">
+    <section
+      id="process"
+      className="section-shell items-start gap-10 desktop:gap-[60px]"
+    >
       <div className="flex w-full flex-col items-center gap-4">
         <SectionBadge {...process.badge} />
-        <h2 className="text-center text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
-          {process.title}
-        </h2>
+        <div className="flex w-full max-w-[780px] flex-col items-center gap-[14px] text-center">
+          <h2 className="text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
+            {process.title}
+          </h2>
+          {process.description && (
+            <p className="text-[16px] leading-6 text-ink-400 tablet:text-[18px] tablet:leading-[27px]">
+              {process.description}
+            </p>
+          )}
+        </div>
       </div>
 
       <div className="flex w-full flex-col items-center gap-8 desktop:gap-[50px]">
-        <div className="grid w-full grid-cols-1 gap-5 tablet:grid-cols-2 desktop:grid-cols-3">
+        <div className="flex w-full flex-wrap justify-center gap-5">
           {process.steps.map((step) => (
             <StepCard key={step.step} step={step} />
           ))}
         </div>
-        <Button href={process.ctaHref}>{process.ctaLabel}</Button>
+        {process.ctaLabel && (
+          <Button href={process.ctaHref}>{process.ctaLabel}</Button>
+        )}
       </div>
     </section>
   );

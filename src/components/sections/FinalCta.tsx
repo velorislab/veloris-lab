@@ -1,13 +1,66 @@
 import Image from "next/image";
 
 import { Button } from "@/components/ui/Button";
-import { finalCta } from "@/data/home";
+import { getHome } from "@/data/content";
+import {
+  CONTACT,
+  EMAIL,
+  TELEGRAM,
+  TELEGRAM_HANDLE,
+  UI,
+  tx,
+  type LabLang,
+} from "@/site/labData";
 
-/** "Get Started with Aston" — blue gradient panel with three assurance chips. */
-export function FinalCta() {
+/**
+ * The anchor the whole site points at. `whoCanUse.panel`, the nav and the
+ * service and case pages all link to `#contact`; before this section carried
+ * the id, every one of those links landed nowhere on the home page.
+ *
+ * The template's own `#get-started` id went with it, and nothing points at it
+ * any more: the header's Aston menu, which was its last reader, is gone too.
+ * `ANCHORS.contact` in `src/config/site.ts` is now the one place the chrome
+ * spells this id, so the section and the nav cannot drift apart.
+ */
+const SECTION_ID = "contact";
+
+/**
+ * The close, on our content: blue gradient panel, three assurance chips, and
+ * the two addresses that actually reach us.
+ *
+ * TWO RASTER DECORATIONS ARE GONE, both because the file is not in this repo
+ * and is not coming back: `cta-design.jpg`, a full-bleed texture over the
+ * gradient, and `cta-icon-light.png`, a colour-dodge glow in front of the icon
+ * plate. Neither is load-bearing (both are `absolute` children of an
+ * `aria-hidden` layer), so dropping them costs no layout, where keeping them
+ * would cost two 404s on every render. The four SVG decorations stay.
+ *
+ * ONE BUTTON BECAME A ROW. The template ends on a single CTA; this business
+ * ends on a choice of two channels, which the template has no slot for, so the
+ * lone `Button` is now a `flex-wrap` row of the same buttons in the same two
+ * template variants. Neither one prints an address: the label names the
+ * action, and the handle rides along as the Telegram button's tooltip, which
+ * is what lets a reader see where they are going before they click.
+ */
+export function FinalCta({ lang }: { lang: LabLang }) {
+  const { finalCta } = getHome(lang);
+  const L = (v: Parameters<typeof tx>[0]) => tx(v, lang);
+
+  /* Prefilled, exactly as the calculator and the service pages do it: a mail
+     client that opens on an empty window gets the same three prompts here. */
+  const mailHref = `mailto:${EMAIL}?subject=${encodeURIComponent(
+    L(CONTACT.mailDirectSubject),
+  )}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`;
+
+  /* `content.ts` sends the close's own CTA to `#contact`, which is now this
+     section: a button that scrolls you to the block you are already reading.
+     So it renders only once it has somewhere else to go. Today it does not,
+     and the row below is the two real destinations. */
+  const showOwnCta = finalCta.ctaHref !== `#${SECTION_ID}`;
+
   return (
     <section
-      id="get-started"
+      id={SECTION_ID}
       className="section-shell overflow-hidden rounded-section border border-line px-6 py-12 tablet:px-12 tablet:py-16 desktop:gap-[50px] desktop:px-20 desktop:py-[60px]"
       style={{
         backgroundImage:
@@ -15,13 +68,6 @@ export function FinalCta() {
       }}
     >
       <div aria-hidden className="pointer-events-none absolute inset-0">
-        <Image
-          src="/images/backgrounds/cta-design.jpg"
-          alt=""
-          fill
-          sizes="(min-width: 1320px) 1200px, 100vw"
-          className="object-cover"
-        />
         <Image
           src="/images/backgrounds/cta-dots.svg"
           alt=""
@@ -41,8 +87,8 @@ export function FinalCta() {
       <div className="relative flex w-full max-w-[1040px] flex-col items-center gap-[30px]">
         <div className="flex w-full flex-col items-center gap-5">
           <div className="relative flex size-[92px] items-start justify-start rounded-pill bg-[rgba(2,48,252,0.2)] p-[10px]">
-            {/* Two glows spill out beyond the badge: a grid behind it and a
-                color-dodge light in front, both clipped by their own boxes. */}
+            {/* The grid glow behind the badge. Its companion in front of it was
+                the missing PNG, so the plate now sits on one layer, not two. */}
             <span
               aria-hidden
               className="pointer-events-none absolute top-[-140px] left-1/2 z-0 h-[247px] w-[350px] -translate-x-1/2 overflow-hidden"
@@ -53,18 +99,6 @@ export function FinalCta() {
                 fill
                 sizes="350px"
                 className="object-cover"
-              />
-            </span>
-            <span
-              aria-hidden
-              className="pointer-events-none absolute top-[-63.5px] left-1/2 z-[1] h-[219px] w-[398px] -translate-x-1/2 overflow-hidden"
-            >
-              <Image
-                src="/images/backgrounds/cta-icon-light.png"
-                alt=""
-                fill
-                sizes="398px"
-                className="object-cover mix-blend-color-dodge"
               />
             </span>
             <div className="relative z-[2] flex size-[72px] items-center rounded-pill p-4 shadow-[0_6px_8px_0_rgba(131,124,124,0.06),inset_0_2px_2px_0_#81b1fb,inset_2px_0_2px_0_#81b1fb]">
@@ -95,28 +129,50 @@ export function FinalCta() {
           </div>
         </div>
 
-        <ul className="flex flex-wrap items-start justify-center gap-[10px]">
-          {finalCta.points.map((point) => (
-            <li
-              key={point}
-              className="flex items-center justify-center gap-[5px] rounded-pill bg-surface py-2 pr-4 pl-2"
-            >
-              <Image
-                src="/images/icons/list/cta-check.svg"
-                alt=""
-                width={24}
-                height={24}
-                className="size-6"
-              />
-              <span className="text-[16px] leading-6 text-ink-500">{point}</span>
-            </li>
-          ))}
-        </ul>
+        {finalCta.points.length > 0 && (
+          <ul className="flex flex-wrap items-start justify-center gap-[10px]">
+            {finalCta.points.map((point) => (
+              <li
+                key={point}
+                className="flex items-center justify-center gap-[5px] rounded-pill bg-surface py-2 pr-4 pl-2"
+              >
+                <Image
+                  src="/images/icons/list/cta-check.svg"
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="size-6"
+                />
+                <span className="text-[16px] leading-6 text-ink-500">
+                  {point}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
-      <Button href={finalCta.ctaHref} variant="secondary" className="relative">
-        {finalCta.ctaLabel}
-      </Button>
+      {/* Same `relative` the single button carried, moved onto the row so the
+          whole group clears the decorative layer. `gap-3` is the hero's
+          button-pair gap, so the two rows of the page match. */}
+      <div className="relative flex flex-wrap items-center justify-center gap-3">
+        {showOwnCta && (
+          <Button href={finalCta.ctaHref} variant="secondary">
+            {finalCta.ctaLabel}
+          </Button>
+        )}
+        {/* The handle lives on the wrapper rather than the button: `Button` has
+            no `title` prop, and a tooltip set on an ancestor still answers for
+            the link inside it. */}
+        <span className="inline-flex" title={TELEGRAM_HANDLE}>
+          <Button href={TELEGRAM} variant="secondary">
+            {L(UI.ctaTg)}
+          </Button>
+        </span>
+        <Button href={mailHref} variant="muted">
+          {L(UI.sendMailDirect)}
+        </Button>
+      </div>
     </section>
   );
 }

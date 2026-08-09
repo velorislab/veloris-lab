@@ -2,7 +2,10 @@ import Image from "next/image";
 
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { comparison } from "@/data/home";
-import { siteConfig } from "@/config/site";
+// The brand name only. `siteConfig` became `getSite(lang)` when the chrome was
+// ported; this section is not on the page (an us-versus-them table we have no
+// data to fill) and takes no `lang`, so it reads the one constant it needs.
+import { BRAND } from "@/site/labData";
 
 function Row({ label, active }: { label: string; active: boolean }) {
   return (
@@ -94,7 +97,7 @@ export function Comparison() {
                 />
               </span>
               <span className="flex h-[57px] w-[84px] shrink-0 items-center pl-2 font-display text-[20px] leading-[30px] text-ink-800">
-                {siteConfig.name}
+                {BRAND}
               </span>
               <span
                 aria-hidden
