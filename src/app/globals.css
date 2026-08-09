@@ -30,12 +30,21 @@
   --color-ink-400: #4d4d4d;
   --color-ink-300: #606060;
   --color-ink-250: #666666;
-  --color-ink-200: #7f7f7f;
+  /* 3.74:1 on the page ground as the template shipped it, and it carries the
+     13px section labels, so it was failing AA on the smallest type on the site.
+     #6f6f6f is 4.69:1. */
+  --color-ink-200: #6f6f6f;
   --color-ink-100: #999999;
   --color-ink-50: #cccccc;
 
   /* ---- Accent ---------------------------------------------------------- */
-  --color-accent: #3384ff;
+  /* One shade darker than the template's #3384ff, and the reason is measured
+     rather than aesthetic: white on #3384ff is 3.57:1, and the primary button
+     sets its label at 17px regular, which needs 4.5:1. #2470e6 is 4.63:1 and
+     is the smallest step that clears it, so the blue still reads as the same
+     blue. Anything lighter here puts unreadable text on the one control the
+     whole page is pointing at. */
+  --color-accent: #2470e6;
   --color-accent-600: #4c93ff;
   --color-accent-400: #66a3ff;
   --color-accent-300: #7fb2ff;
