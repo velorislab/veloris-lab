@@ -61,6 +61,7 @@ export const CWS = 'https://chromewebstore.google.com/detail/swiftin/fhfnfmakgco
 /** UI chrome strings. */
 export const UI: Record<string, LS> = {
   navServices: { en: 'Services', ru: 'Услуги' },
+  navPricing: { en: 'Pricing', ru: 'Цены' },
   navCases: { en: 'Cases', ru: 'Кейсы' },
   navProcess: { en: 'Process', ru: 'Как работаем' },
   navCalc: { en: 'Estimate', ru: 'Расчёт' },
@@ -76,6 +77,7 @@ export const UI: Record<string, LS> = {
   copyHint: { en: 'Click to copy', ru: 'Нажмите, чтобы скопировать' },
   moreOn: { en: 'More on this', ru: 'Подробнее' },
   readCase: { en: 'Read the case', ru: 'Читать кейс' },
+  priceList: { en: 'See the full price list', ru: 'Открыть полный прайс' },
   founderLink: { en: 'About the founder', ru: 'Об основателе' },
   productLink: { en: 'Our product', ru: 'Наш продукт' },
 }

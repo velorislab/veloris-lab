@@ -43,7 +43,7 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
 
   return (
     <div className="vl-root">
-      <SiteNav lang={lang} />
+      <SiteNav lang={lang} twin={(to) => casePath(to, page.slug)} />
 
       <main id="main-content">
         <nav className="vl-wrap vl-crumb" aria-label="Breadcrumb">

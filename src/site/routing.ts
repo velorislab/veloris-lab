@@ -91,3 +91,24 @@ export function buildCaseAlternates(lang: LabLang, slug: string) {
     },
   }
 }
+
+/* The pricing page. A fixed path rather than a segment, so it needs no params. */
+
+export function pricingPath(lang: LabLang): string {
+  return lang === 'en' ? '/pricing' : `/${lang}/pricing`
+}
+
+export function pricingUrl(lang: LabLang): string {
+  return `${SITE_URL}${pricingPath(lang)}`
+}
+
+export function buildPricingAlternates(lang: LabLang) {
+  return {
+    canonical: pricingUrl(lang),
+    languages: {
+      en: pricingUrl('en'),
+      ru: pricingUrl('ru'),
+      'x-default': pricingUrl('en'),
+    },
+  }
+}

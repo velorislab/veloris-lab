@@ -9,7 +9,7 @@ import {
 } from './labData'
 import { WORK_TYPES, money, priced } from './labPricing'
 import { CASES_BY_SERVICE, type ServicePage as SP } from './servicePages'
-import { localizedHref } from './routing'
+import { localizedHref, servicePath } from './routing'
 import CopyEmail from './CopyEmail'
 /* Load-bearing. Lab.tsx imports the stylesheet and this page is not in Lab's
    tree, so without this line every service page renders with no CSS at all:
@@ -44,7 +44,7 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
 
   return (
     <div className="vl-root">
-      <SiteNav lang={lang} slug={page.slug} />
+      <SiteNav lang={lang} twin={(to) => servicePath(to, page.slug)} />
 
       <main id="main-content">
         <nav className="vl-wrap vl-crumb" aria-label="Breadcrumb">

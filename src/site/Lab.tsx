@@ -36,7 +36,7 @@ import Link from 'next/link'
 import { WORK_TYPES, money, priced } from './labPricing'
 import { SERVICE_PAGES } from './servicePages'
 import { CASE_PAGES } from './casePages'
-import { servicePath, casePath } from './routing'
+import { servicePath, casePath, pricingPath } from './routing'
 import './lab.css'
 
 /** Keyed off SOCIAL so a profile can never render with the wrong mark. */
@@ -362,6 +362,10 @@ export default function Lab({ lang }: { lang: LabLang }) {
         <div className="vl-sec-head">
           <h2>{L(CALC.label)}</h2>
           <p>{L(CALC.sub)}</p>
+          {/* The calculator answers one configuration at a time; the reader who
+              wants to compare all six needs the table, and this is the only
+              place on the home page where they are already thinking about it. */}
+          <Link className="vl-sec-go" href={pricingPath(lang)}>{L(UI.priceList)}</Link>
         </div>
         
           <Calculator lang={lang} />

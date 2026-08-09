@@ -3,40 +3,43 @@ import {
   type LabLang, tx,
   BRAND, TELEGRAM, SWIFTIN, ABOUT_URL, UI, FOOTER,
 } from './labData'
-import { localizedHref, servicePath } from './routing'
+import { localizedHref, pricingPath } from './routing'
 
 /**
- * The header and footer, shared by the home page and every service page.
+ * The header and footer, shared by the home page and every inner page.
  *
  * They used to live inside Lab.tsx, which was fine while there was one page.
- * With `/services/<slug>` × 6 × 2 arriving, a nav that exists in two places is
- * a nav that will disagree with itself, and the language switcher is the part
- * that would break first: on a service page it has to cross to the SAME service
- * in the other locale, not dump the reader on the home page.
+ * With services, cases and pricing all carrying the same nav, a nav that exists
+ * in two places is a nav that will disagree with itself, and the language
+ * switcher is the part that would break first: on an inner page it has to cross
+ * to the SAME page in the other locale, not dump the reader on the home page.
  */
 
 /**
- * `section` is the anchor set the nav can use.
+ * `twin` is what makes this nav work off the home page, and it does two jobs.
  *
- * On the home page the links are in-page anchors. On a service page there are
- * no such sections to jump to, so each one has to become an absolute link back
- * to the home page's anchor, or the nav quietly does nothing. `home` is the
- * path those anchors hang off.
+ * Its presence says "this is not the home page", which turns every in-page
+ * anchor into an absolute link back to the home page's anchor. Without that,
+ * `#services` on an inner page is a link that quietly does nothing.
+ *
+ * Its return value is the same page in the other language, which is the only
+ * correct destination for the switcher. It is a function rather than a slug
+ * because the three inner page kinds build that path differently, and the first
+ * version of this took a bare slug and assumed `/services/<slug>`, which sent
+ * every case page's switcher to a service URL that did not exist.
  */
-export function SiteNav({ lang, slug }: { lang: LabLang; slug?: string }) {
+export function SiteNav({ lang, twin }: { lang: LabLang; twin?: (to: LabLang) => string }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
   const home = localizedHref(lang)
   /** On home, `#calc`. Elsewhere, `/ru#calc`. */
-  const at = (hash: string) => (slug ? `${home}${hash}` : hash)
+  const at = (hash: string) => (twin ? `${home}${hash}` : hash)
 
-  /* The switcher crosses to the same page in the other language when there is
-     one, and to the other home page when there is not. */
-  const other = (to: LabLang) => (slug ? servicePath(to, slug) : localizedHref(to))
+  const other = (to: LabLang) => (twin ? twin(to) : localizedHref(to))
 
   return (
     <header className="vl-nav">
       <div className="vl-wrap vl-nav-in">
-        <a href={slug ? home : '#top'} className="vl-brand">
+        <a href={twin ? home : '#top'} className="vl-brand">
           <span className="vl-mark" aria-hidden="true" />
           {BRAND}
         </a>
@@ -69,6 +72,7 @@ export function SiteFooter({ lang }: { lang: LabLang }) {
     <footer className="vl-wrap vl-foot">
       <span className="vl-foot-line">{L(FOOTER.line)}</span>
       <nav className="vl-foot-nav">
+        <Link href={pricingPath(lang)}>{L(UI.navPricing)}</Link>
         {/* Absolute, not `/about`. That route lived in the Swiftin repo this
             project was split out of; here it 404s. */}
         <a href={ABOUT_URL} target="_blank" rel="noopener noreferrer">{L(UI.founderLink)}</a>

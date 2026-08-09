@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { BRAND, EMAIL, TELEGRAM, LINKEDIN, SERVICES, tx } from './labData'
-import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, type LabLang } from './routing'
+import { BRAND, EMAIL, TELEGRAM, LINKEDIN, SERVICES, UI, tx } from './labData'
+import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, type LabLang } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
 import { CASE_PAGES, type CasePage } from './casePages'
 import { CASES } from './labData'
@@ -232,3 +232,71 @@ export function caseJsonLd(lang: LabLang, page: CasePage) {
 }
 
 export const CASE_SLUGS = CASE_PAGES.map((p) => ({ slug: p.slug }))
+
+/* ---------------------------------------------------------------------------
+   Pricing page.
+   --------------------------------------------------------------------------- */
+
+export function pricingMetadata(lang: LabLang): Metadata {
+  const lowest = Math.min(...WORK_TYPES.map((w) => priced(w.from)))
+  const title = lang === 'ru'
+    ? `Цены на разработку и автоматизацию, от ${money(lowest)} — ${BRAND}`
+    : `Development and automation pricing, from ${money(lowest)} — ${BRAND}`
+  const description = lang === 'ru'
+    ? `Шесть направлений с ценой, сроком и поддержкой. Каждое число это пол, а не смета; точную цифру фиксируем после бесплатного разбора задачи.`
+    : `Six kinds of work with a floor, a timeline and a support figure. Every number is a floor rather than a quote; the binding figure is fixed after a free scoping call.`
+  return {
+    title,
+    description,
+    alternates: buildPricingAlternates(lang),
+    openGraph: { type: 'website', title, description, url: pricingUrl(lang), siteName: BRAND },
+  }
+}
+
+/**
+ * OfferCatalog + BreadcrumbList for the price list.
+ *
+ * `minPrice` throughout, never `price`, for the same reason as on the service
+ * pages: the site quotes floors and nothing else, and a `price` field would
+ * assert a fixed figure that no page on this site is willing to stand behind.
+ */
+export function pricingJsonLd(lang: LabLang) {
+  const url = pricingUrl(lang)
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'OfferCatalog',
+      name: lang === 'ru' ? `Цены — ${BRAND}` : `Pricing — ${BRAND}`,
+      url,
+      provider: { '@type': 'Organization', name: BRAND, url: localizedUrl(lang) },
+      itemListElement: WORK_TYPES.map((w, i) => {
+        const svc = SERVICES.find((x) => x.key === w.key)
+        const page = SERVICE_PAGES.find((p) => p.key === w.key)
+        return {
+          '@type': 'Offer',
+          position: i + 1,
+          ...(page ? { url: serviceUrl(lang, page.slug) } : {}),
+          itemOffered: {
+            '@type': 'Service',
+            name: tx(svc?.t ?? w.label, lang),
+            ...(svc ? { description: tx(svc.d, lang) } : {}),
+          },
+          priceSpecification: {
+            '@type': 'PriceSpecification',
+            minPrice: priced(w.from),
+            priceCurrency: 'USD',
+          },
+          availability: 'https://schema.org/InStock',
+        }
+      }),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: BRAND, item: localizedUrl(lang) },
+        { '@type': 'ListItem', position: 2, name: tx(UI.navPricing, lang), item: url },
+      ],
+    },
+  ]
+}
