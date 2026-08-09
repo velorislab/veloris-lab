@@ -138,7 +138,12 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
     on: boolean; onPick: () => void; children: string; radio?: boolean; group?: string
   }) => (
     <motion.label
-      className={`vl-opt${on ? ' vl-opt-on' : ''}`}
+      className={
+        'cursor-pointer rounded-pill border px-[18px] py-[11px] text-[15px] leading-6 transition-colors duration-200 select-none ' +
+        (on
+          ? 'border-accent bg-accent text-white'
+          : 'border-line bg-surface-muted text-ink-500 hover:bg-surface-subtle')
+      }
       /* Unconditional, and `tabIndex={-1}` alongside it, for two reasons that
          turn out to be the same reason. Motion makes anything with `whileTap`
          focusable, so the label picked up a `tabindex="0"` on top of the real
@@ -159,6 +164,9 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
       <input
         type={radio ? 'radio' : 'checkbox'} name={group}
         checked={on} onChange={onPick}
+        /* Visually hidden but focusable: the label is the whole hit area and
+           the ring is drawn against this input, not against the label. */
+        className="sr-only"
       />
       <span>{children}</span>
     </motion.label>
@@ -172,22 +180,22 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
     hydrated && reduce ? { opacity: 0 } : { opacity: 0, x: offset }
 
   return (
-    <div className="vl-calc">
+    <div className="w-full">
       {PRICING_IS_DRAFT && (
-        <p className="vl-calc-draft" role="status">{L(CALC.draftNotice)}</p>
+        <p className="mb-4 rounded-card border border-line bg-surface-tint px-4 py-3 text-[15px] text-ink-500" role="status">{L(CALC.draftNotice)}</p>
       )}
 
-      <div className="vl-calc-grid">
+      <div className="grid w-full gap-6 desktop:grid-cols-[minmax(0,1fr)_360px] desktop:items-start">
 
         {/* ---- questions ---- */}
-        <div className="vl-calc-steps">
-          <div className="vl-calc-progress">
-            <span className="vl-lbl">
+        <div data-calc-steps className="flex flex-col rounded-panel border border-line bg-surface shadow-[var(--shadow-widget-alt)] p-6 tablet:p-10">
+          <div className="mb-7 flex flex-col gap-3">
+            <span className="text-[13px] font-medium tracking-[0.08em] text-ink-200 uppercase">
               {L(CALC.stepOf)} {step} {L(CALC.stepOfMid)} {STEPS}
             </span>
-            <span className="vl-calc-bar" aria-hidden="true">
+            <span className="block h-[3px] w-full overflow-hidden rounded-pill bg-line" aria-hidden="true">
               <motion.span
-                className="vl-calc-bar-fill"
+                className="block h-full w-full origin-left rounded-pill bg-accent"
                 animate={{ scaleX: step / STEPS }}
                 initial={{ scaleX: 1 / STEPS }}
                 transition={{ type: 'spring', stiffness: 140, damping: 24 }}
@@ -198,7 +206,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
           <AnimatePresence mode="wait" initial={false} custom={dir}>
             <motion.div
               key={step}
-              className="vl-calc-fs"
+              className="flex min-h-[300px] flex-col gap-4"
               initial={slide(dir * 26)}
               animate={{ opacity: 1, x: 0 }}
               exit={slide(dir * -26)}
@@ -206,8 +214,8 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
             >
               {step === 1 && (
                 <>
-                  <span className="vl-calc-q">{L(CALC.q1)}</span>
-                  <div className="vl-opts">
+                  <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.q1)}</span>
+                  <div className="flex flex-wrap gap-[10px]">
                     {WORK_TYPES.map((t) => (
                       <Chip key={t.key} radio group="vl-type" on={type === t.key} onPick={() => setType(t.key)}>
                         {L(t.label)}
@@ -219,8 +227,8 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
 
               {step === 2 && (
                 <>
-                  <span className="vl-calc-q">{L(CALC.q2)}</span>
-                  <div className="vl-opts">
+                  <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.q2)}</span>
+                  <div className="flex flex-wrap gap-[10px]">
                     {READINESS.map((r) => (
                       <Chip key={r.key} radio group="vl-ready" on={ready === r.key} onPick={() => setReady(r.key)}>
                         {L(r.label)}
@@ -232,9 +240,9 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
 
               {step === 3 && (
                 <>
-                  <span className="vl-calc-q">{L(CALC.q3)}</span>
-                  <p className="vl-calc-hint">{L(CALC.q3hint)}</p>
-                  <div className="vl-opts">
+                  <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.q3)}</span>
+                  <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.q3hint)}</p>
+                  <div className="flex flex-wrap gap-[10px]">
                     {ADDONS.map((a) => (
                       <Chip key={a.key} on={addons.includes(a.key)} onPick={() => toggleAddon(a.key)}>
                         {L(a.label)}
@@ -246,10 +254,10 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
 
               {step === 4 && (
                 <>
-                  <label className="vl-calc-q" htmlFor="vl-desc">{L(CALC.q4)}</label>
-                  <p className="vl-calc-hint">{L(CALC.q4hint)}</p>
+                  <label className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]" htmlFor="vl-desc">{L(CALC.q4)}</label>
+                  <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.q4hint)}</p>
                   <textarea
-                    id="vl-desc" className="vl-field vl-area" rows={6}
+                    id="vl-desc" rows={6} className="w-full resize-y rounded-card border border-line bg-surface px-4 py-3 text-[16px] leading-6 text-ink-800 transition-colors placeholder:text-ink-100 focus:border-accent focus:outline-none"
                     placeholder={L(CALC.q4ph)}
                     value={desc} onChange={(e) => setDesc(e.target.value)}
                   />
@@ -258,33 +266,41 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
 
               {step === 5 && (
                 <>
-                  <span className="vl-calc-q">{L(CALC.q5)}</span>
-                  <p className="vl-calc-hint">{L(CALC.q5hint)}</p>
-                  <div className="vl-calc-fields">
+                  <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.q5)}</span>
+                  <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.q5hint)}</p>
+                  <div className="grid gap-3 tablet:grid-cols-2">
                     <input
-                      className="vl-field" type="text" aria-label={L(CALC.namePh)}
+                      type="text" aria-label={L(CALC.namePh)} className="w-full rounded-card border border-line bg-surface px-4 py-3 text-[16px] text-ink-800 transition-colors placeholder:text-ink-100 focus:border-accent focus:outline-none"
                       placeholder={L(CALC.namePh)} value={name} onChange={(e) => setName(e.target.value)}
                     />
                     <input
-                      className="vl-field" type="text" aria-label={L(CALC.contactPh)}
+                      type="text" aria-label={L(CALC.contactPh)} className="w-full rounded-card border border-line bg-surface px-4 py-3 text-[16px] text-ink-800 transition-colors placeholder:text-ink-100 focus:border-accent focus:outline-none"
                       placeholder={L(CALC.contactPh)} value={contact} onChange={(e) => setContact(e.target.value)}
                     />
                   </div>
-                  <pre className="vl-calc-brief">{brief()}</pre>
-                  <div className="vl-calc-send">
-                    <button type="button" className="vl-btn-signal" onClick={sendTelegram}>{L(CALC.sendTg)}</button>
-                    <a className="vl-btn-ghost" href={mailHref}>{L(CALC.sendMail)}</a>
+                  <pre className="max-h-[160px] overflow-auto rounded-card border border-line bg-surface-muted p-4 font-numeric text-[13px] leading-6 whitespace-pre-wrap text-ink-400">{brief()}</pre>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      className="rounded-pill bg-accent px-6 py-[13px] text-[16px] font-medium text-white transition-colors duration-200 hover:bg-accent-600"
+                      onClick={sendTelegram}
+                    >{L(CALC.sendTg)}</button>
+                    <a
+                      className="rounded-pill border border-line bg-surface px-6 py-[13px] text-[16px] font-medium text-ink-700 transition-colors duration-200 hover:bg-surface-muted"
+                      href={mailHref}
+                    >{L(CALC.sendMail)}</a>
                   </div>
-                  {sent === 'copied' && <p className="vl-calc-copied" role="status">{L(CALC.copied)}</p>}
-                  {sent === 'manual' && <p className="vl-calc-copied" role="status">{L(CALC.copyFailed)}</p>}
+                  {sent === 'copied' && <p className="text-[14px] leading-6 text-accent" role="status">{L(CALC.copied)}</p>}
+                  {sent === 'manual' && <p className="text-[14px] leading-6 text-accent" role="status">{L(CALC.copyFailed)}</p>}
                 </>
               )}
             </motion.div>
           </AnimatePresence>
 
-          <div className="vl-calc-navrow">
+          <div className="mt-8 flex items-center justify-between gap-3 border-t border-line-soft pt-6">
             <button
-              type="button" className="vl-calc-back"
+              type="button"
+              className="rounded-pill px-5 py-3 text-[15px] text-ink-300 transition-colors duration-200 hover:text-ink-800 disabled:pointer-events-none disabled:opacity-40"
               onClick={() => (step === 1 ? reset() : go(step - 1))}
               disabled={step === 1}
             >
@@ -292,40 +308,45 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
             </button>
             {step < STEPS
               ? (
-                <button type="button" className="vl-btn-solid" onClick={() => go(step + 1)} disabled={blocked}>
+                <button
+                  type="button"
+                  className="rounded-pill bg-ink-900 px-6 py-3 text-[15px] font-medium text-white transition-colors duration-200 hover:bg-ink-700 disabled:pointer-events-none disabled:opacity-40"
+                  onClick={() => go(step + 1)}
+                  disabled={blocked}
+                >
                   {L(CALC.next)}
                 </button>
               )
               : (
-                <button type="button" className="vl-calc-back" onClick={reset}>{L(CALC.restart)}</button>
+                <button type="button" className="rounded-pill px-5 py-3 text-[15px] text-ink-300 transition-colors duration-200 hover:text-ink-800" onClick={reset}>{L(CALC.restart)}</button>
               )}
           </div>
         </div>
 
         {/* ---- live estimate ---- */}
-        <aside className="vl-calc-out">
+        <aside className="order-first flex flex-col gap-4 rounded-panel border border-line bg-surface-tint p-6 shadow-[var(--shadow-widget)] desktop:order-none desktop:sticky desktop:top-[86px]">
           <div aria-live="polite">
           {est
             ? (
               <>
-                <span className="vl-lbl">{L(CALC.resultLbl)}</span>
-                <p className="vl-calc-price">
-                  <span className="vl-calc-from">{L(CALC.bfFrom)}</span>
+                <span className="text-[13px] font-medium tracking-[0.08em] text-ink-200 uppercase">{L(CALC.resultLbl)}</span>
+                <p className="flex items-baseline gap-2 font-display text-[42px] leading-none font-semibold text-ink-900 tablet:text-[48px]">
+                  <span className="text-[17px] font-medium text-ink-200">{L(CALC.bfFrom)}</span>
                   <motion.span>{priceText}</motion.span>
                 </p>
-                <div className="vl-calc-meta">
-                  <div className="vl-calc-metarow">
+                <div className="mt-1 flex flex-col">
+                  <div className="flex items-center justify-between gap-3 border-t border-line-soft py-[10px] text-[15px] text-ink-400 [&>b]:font-medium [&>b]:text-ink-800">
                     <span>{L(CALC.termLbl)}</span>
                     <b>{est.weeks[0]}&ndash;{est.weeks[1]} {L(CALC.weeksShort)}</b>
                   </div>
-                  <div className="vl-calc-metarow">
+                  <div className="flex items-center justify-between gap-3 border-t border-line-soft py-[10px] text-[15px] text-ink-400 [&>b]:font-medium [&>b]:text-ink-800">
                     <span>{L(CALC.supportLbl)}</span>
                     <b>{L(CALC.bfFrom)} {money(est.support)}{L(CALC.perMonth)}</b>
                   </div>
                 </div>
               </>
             )
-            : <p className="vl-calc-wait">{L(CALC.waiting)}</p>}
+            : <p className="text-[16px] leading-6 text-ink-300">{L(CALC.waiting)}</p>}
           </div>
 
           {/* The one moment on the site where a visitor has self-qualified,
@@ -333,16 +354,16 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
               only spans and paragraphs. It jumps to the last step rather than
               submitting anything: there is no endpoint on this site and there
               is not going to be one.
-              The scroll target is .vl-calc-steps, not #calc: below 1080px this
-              panel sits ABOVE the steps, so scrolling to the section top would
-              put the step change off-screen. */}
+              The scroll target is the [data-calc-steps] card, not #estimate: below
+              the desktop breakpoint that card is ordered BELOW the panel, so
+              scrolling to the section top would put the step change off-screen. */}
           {step < STEPS && (
             <button
               type="button"
-              className="vl-btn-signal vl-calc-go"
+              className="w-full rounded-pill bg-accent px-6 py-[14px] text-[16px] font-medium text-white transition-colors duration-200 hover:bg-accent-600"
               onClick={() => {
                 setStep([STEPS, 1])
-                document.querySelector('.vl-calc-steps')?.scrollIntoView({
+                document.querySelector('[data-calc-steps]')?.scrollIntoView({
                   behavior: reduce ? 'auto' : 'smooth', block: 'start',
                 })
               }}
@@ -351,7 +372,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
             </button>
           )}
 
-          <p className="vl-calc-note">{L(CALC.disclaimer)}</p>
+          <p className="border-t border-line-soft pt-3 text-[13px] leading-5 text-ink-200">{L(CALC.disclaimer)}</p>
         </aside>
 
       </div>

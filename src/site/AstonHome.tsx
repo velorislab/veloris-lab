@@ -2,6 +2,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { About } from '@/components/sections/About'
 import { CoreFeatures } from '@/components/sections/CoreFeatures'
+import { Estimate } from '@/components/sections/Estimate'
 import { Faq } from '@/components/sections/Faq'
 import { FinalCta } from '@/components/sections/FinalCta'
 import { Hero } from '@/components/sections/Hero'
@@ -47,6 +48,7 @@ export default function AstonHome({ lang }: { lang: LabLang }) {
         <CoreFeatures lang={lang} />
         <PlatformHighlight lang={lang} />
         <WhoCanUse lang={lang} />
+        <Estimate lang={lang} />
         <Process lang={lang} />
         <About lang={lang} />
         <Faq lang={lang} />
