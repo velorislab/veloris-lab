@@ -193,8 +193,20 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
             <h2>{L(CONTACT.h)}</h2>
             <p className="vl-contact-sub">{L(CONTACT.sub)}</p>
             <div className="vl-contact-acts">
-              <a href={TELEGRAM} target="_blank" rel="noopener noreferrer" className="vl-contact-tg">
-                {TELEGRAM_HANDLE}
+              <a
+                href={TELEGRAM}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vl-contact-tg"
+                title={TELEGRAM_HANDLE}
+              >
+                {L(UI.ctaTg)}
+              </a>
+              <a
+                className="vl-btn-ghost"
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(L(CONTACT.mailDirectSubject))}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`}
+              >
+                {L(UI.sendMailDirect)}
               </a>
               <CopyEmail email={EMAIL} copiedLabel={L(UI.copied)} hint={L(UI.copyHint)} />
             </div>

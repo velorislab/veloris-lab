@@ -45,6 +45,10 @@ export function SiteNav({ lang, twin }: { lang: LabLang; twin?: (to: LabLang) =>
         </a>
         <nav className="vl-links">
           <a href={at('#services')}>{L(UI.navServices)}</a>
+          {/* A real route, not an `at()` anchor: the price list is a page, and
+              this has to behave identically from all 22 of them. It is the only
+              nav item that is not an in-page jump, and that is correct. */}
+          <Link href={pricingPath(lang)}>{L(UI.navPricing)}</Link>
           <a href={at('#cases')}>{L(UI.navCases)}</a>
           <a href={at('#process')}>{L(UI.navProcess)}</a>
           <a href={at('#calc')}>{L(UI.navCalc)}</a>

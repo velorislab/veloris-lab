@@ -9,7 +9,8 @@ import {
 } from './labData'
 import { WORK_TYPES, money, priced } from './labPricing'
 import { CASES_BY_SERVICE, type ServicePage as SP } from './servicePages'
-import { localizedHref, servicePath } from './routing'
+import { CASE_PAGES } from './casePages'
+import { localizedHref, servicePath, casePath } from './routing'
 import CopyEmail from './CopyEmail'
 /* Load-bearing. Lab.tsx imports the stylesheet and this page is not in Lab's
    tree, so without this line every service page renders with no CSS at all:
@@ -64,7 +65,7 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
               </span>
             )}
           </h1>
-          <p className="vl-sp-lead">{L(svc?.d)}</p>
+          <p className="vl-sp-lead">{L(page.when[0])}</p>
 
           {work && (
             <dl className="vl-sp-pills">
@@ -97,7 +98,8 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
             <h2>{L(SP_LABELS.when)}</h2>
           </div>
           <ul className="vl-sp-when">
-            {page.when.map((w, i) => (
+            {/* [0] is the lead above; this list is the other two. */}
+            {page.when.slice(1).map((w, i) => (
               <li key={i}>{L(w)}</li>
             ))}
           </ul>
@@ -132,21 +134,37 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
               <h2>{L(SP_LABELS.related)}</h2>
             </div>
             <div className="vl-sp-cases">
-              {related.map((c, i) => (
-                <article className="vl-sp-case" key={i}>
-                  <div className="vl-sp-case-top">
-                    <h3>{L(c.title)}</h3>
-                    <span className={c.live ? 'vl-case-badge vl-case-badge-live' : 'vl-case-badge'}>
-                      {L(c.status)}
-                    </span>
-                  </div>
-                  <p>{L(c.sub)}</p>
-                  <dl className="vl-sp-case-res">
-                    <dt className="vl-lbl">{L(CASE_KEYS.res)}</dt>
-                    <dd>{L(c.res)}</dd>
-                  </dl>
-                </article>
-              ))}
+              {related.map((c, i) => {
+                const cp = CASE_PAGES.find((x) => x.match === tx(c.title, 'en'))
+                const Inner = (
+                  <>
+                    <div className="vl-sp-case-top">
+                      <h3>{L(c.title)}</h3>
+                      <span className={c.live ? 'vl-case-badge vl-case-badge-live' : 'vl-case-badge'}>
+                        {L(c.status)}
+                      </span>
+                    </div>
+                    <p>{L(c.sub)}</p>
+                    <dl className="vl-sp-case-res">
+                      <dt className="vl-lbl">{L(CASE_KEYS.res)}</dt>
+                      <dd>{L(c.res)}</dd>
+                    </dl>
+                  </>
+                )
+                /* A Link CARRYING the same children, never an <article> nested
+                   inside one: that would put a padded white card inside a
+                   padded white card. The plain article stays as the fallback
+                   for a join that does not resolve, which cannot happen today
+                   but would otherwise fail silently if a title changed. */
+                return cp ? (
+                  <Link href={casePath(lang, cp.slug)} className="vl-sp-case vl-sp-case-go" key={i}>
+                    {Inner}
+                    <span className="vl-sp-case-more">{L(UI.readCase)}</span>
+                  </Link>
+                ) : (
+                  <article className="vl-sp-case" key={i}>{Inner}</article>
+                )
+              })}
             </div>
           </section>
         )}
@@ -182,8 +200,20 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
             <h2>{L(CONTACT.h)}</h2>
             <p className="vl-contact-sub">{L(CONTACT.sub)}</p>
             <div className="vl-contact-acts">
-              <a href={TELEGRAM} target="_blank" rel="noopener noreferrer" className="vl-contact-tg">
-                {TELEGRAM_HANDLE}
+              <a
+                href={TELEGRAM}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vl-contact-tg"
+                title={TELEGRAM_HANDLE}
+              >
+                {L(UI.ctaTg)}
+              </a>
+              <a
+                className="vl-btn-ghost"
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(L(CONTACT.mailDirectSubject))}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`}
+              >
+                {L(UI.sendMailDirect)}
               </a>
               <CopyEmail email={EMAIL} copiedLabel={L(UI.copied)} hint={L(UI.copyHint)} />
             </div>
@@ -204,14 +234,14 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
  * two kinds in different files makes it obvious which is which.
  */
 const SP_LABELS = {
-  when: { en: 'When this is the right call', ru: 'Когда это ваш случай' },
+  when: { en: 'This may also be you', ru: 'Это тоже про вас' },
   first: { en: 'What the first version includes', ru: 'Что входит в первую версию' },
   firstSub: {
     en: 'The smallest thing that is worth running in production, not a demo.',
     ru: 'Самое маленькое, что уже имеет смысл держать в проде, а не демо.',
   },
   drivers: { en: 'What moves the price', ru: 'Что двигает цену' },
-  related: { en: 'Work of this kind', ru: 'Работы этого рода' },
+  related: { en: 'We have built this before', ru: 'Такое мы уже делали' },
   estimate: { en: 'Price it here', ru: 'Посчитайте здесь' },
   estimateSub: {
     en: 'The first question is already answered by the page you are on. Four left.',

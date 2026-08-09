@@ -91,7 +91,7 @@ export const CASE_PAGES: CasePage[] = [
   },
   {
     slug: 'dashboards',
-    match: 'Dashboards and analytics',
+    match: 'One screen instead of manual exports',
     parentService: 'dash',
     eyebrow: { en: 'Analytics · Client work', ru: 'Аналитика · Работа для клиента' },
     audience: {

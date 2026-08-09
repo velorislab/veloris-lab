@@ -28,7 +28,6 @@ import {
   CALC, HERO, FAQ_LABEL, FAQ_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB,
-  SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
   BUREAU, CONTACT, LOGOS, REVIEWS,
   SOCIAL, ABOUT_URL,
 } from './labData'
@@ -126,6 +125,85 @@ export default function Lab({ lang }: { lang: LabLang }) {
         </dl>
       </div>
 
+      {/* ------------------------------------------------------------------
+          SECTION ORDER, and why it is this one.
+
+          services, cases, entry, calc, process, stack, why, bureau, faq.
+
+          Services moved ABOVE cases. A phone reader used to get four full
+          screens of case studies before the first line describing what is
+          sold, and the strongest recognition device on the page, the «когда
+          это про вас» line on each service card, first rendered at y=5,214.
+          Evidence only persuades once the reader knows what it is evidence of.
+
+          Bureau moved to AFTER why. The named human with a real photograph is
+          the last piece of proof, not an interlude between the catalogue and
+          the entry points.
+
+          «За что вы платите отдельно» LEFT this page. It renders in full on
+          /pricing and on all six service pages, where money is the subject.
+          On the home page it was reference material parked in the middle of
+          the conversion path.
+
+          Verified before moving: no :nth-child, `section +` or `main >`
+          selector in lab.css targets a top-level section, the #bureau nav
+          anchor still resolves, and every positional phrase in labData
+          («кейса выше», «калькулятор выше», «Сетка выше») lives in the FAQ,
+          which is still last. No two .vl-sec-light blocks end up adjacent.
+          ------------------------------------------------------------------ */}
+
+      {/* SERVICES */}
+      <section id="services" className="vl-wrap vl-sec-light vl-sec--act">
+        <div className="vl-on-light">
+        <div className="vl-sec-head">
+          <h2>{L(SERVICES_LABEL)}</h2>
+          <p>{L(SERVICES_SUB)}</p>
+          {/* The six cards each carry one floor; a reader comparing all six
+              wants the table, and this is the first moment they want it. */}
+          <Link className="vl-sec-go" href={pricingPath(lang)}>{L(UI.priceList)}</Link>
+        </div>
+        {/* Each card carries its own floor, window and support figure, all read
+            from labPricing at render time. No numeral is typed here on purpose:
+            with the same figures due on service pages, a pricing page and the
+            ticker, a hand-typed one drifts the first time the table moves. */}
+        <div className="vl-grid">
+          {SERVICES.map((s, i) => {
+            const w = WORK_TYPES.find((t) => t.key === s.key)
+            const sp = SERVICE_PAGES.find((x) => x.key === s.key)
+            return (
+              <article className="vl-cell" key={s.key}>
+                <span className="vl-cell-n">{String(i + 1).padStart(2, '0')}</span>
+                <h3 className="vl-cell-t">{L(s.t)}</h3>
+                <p className="vl-cell-d">{L(s.d)}</p>
+                <p className="vl-cell-when">{L(s.when)}</p>
+                {sp && (
+                  <Link className="vl-cell-go" href={servicePath(lang, sp.slug)}>
+                    {L(UI.moreOn)}
+                  </Link>
+                )}
+                {w && (
+                  <dl className="vl-cell-stats">
+                    <div>
+                      <dt>{L(CALC.resultLbl)}</dt>
+                      <dd>{L(CALC.bfFrom)} {money(priced(w.from))}</dd>
+                    </div>
+                    <div>
+                      <dt>{L(CALC.termLbl)}</dt>
+                      <dd>{w.weeks[0]}–{w.weeks[1]} {L(CALC.weeksShort)}</dd>
+                    </div>
+                    <div>
+                      <dt>{L(CALC.supportLbl)}</dt>
+                      <dd>{L(CALC.bfFrom)} {money(priced(w.support))}{L(CALC.perMonth)}</dd>
+                    </div>
+                  </dl>
+                )}
+              </article>
+            )
+          })}
+        </div>
+        </div>
+      </section>
+
       {/* CASES */}
       <section id="cases" className="vl-wrap vl-sec">
         <div className="vl-sec-head">
@@ -207,52 +285,83 @@ export default function Lab({ lang }: { lang: LabLang }) {
         </section>
       )}
 
-      {/* SERVICES */}
-      <section id="services" className="vl-wrap vl-sec-light">
+      {/* ENTRY POINTS. Deliberately unnumbered: the reader self-selects the one
+          that matches them, so an order would be decoration, not information.
+          The process steps below keep their numbers because that IS a sequence. */}
+      <section className="vl-wrap vl-sec">
+        <div className="vl-sec-head">
+          <h2>{L(ENTRY_LABEL)}</h2>
+          <p>{L(ENTRY_SUB)}</p>
+        </div>
+        <div className="vl-entries">
+          {ENTRY.map((e, i) => (
+            <article className="vl-entry" key={i}>
+              <h3 className="vl-entry-t">{L(e.t)}</h3>
+              <p className="vl-entry-d">{L(e.d)}</p>
+              <a href="#calc" className="vl-entry-link">{L(UI.ctaCalc)}</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* CALCULATOR. The page's centre of gravity, and it now sits BEFORE the
+          process rather than after it. The old order argued that a reader should
+          see how the work runs before being shown a number; the funnel argues
+          the opposite, and the entry points immediately above already say "start
+          from wherever you are", which is the same sentence the first question
+          asks. Process, stack and pass-through costs become the reassurance tail
+          after the price instead of a preamble to it. */}
+      <section id="calc" className="vl-wrap vl-sec vl-sec--act">
+        <div className="vl-sec-head">
+          <h2>{L(CALC.label)}</h2>
+          <p>{L(CALC.sub)}</p>
+          {/* The calculator answers one configuration at a time; the reader who
+              wants to compare all six needs the table, and this is the only
+              place on the home page where they are already thinking about it. */}
+          <Link className="vl-sec-go" href={pricingPath(lang)}>{L(UI.priceList)}</Link>
+        </div>
+        
+          <Calculator lang={lang} />
+        
+      </section>
+
+      {/* PROCESS */}
+      <section id="process" className="vl-wrap vl-sec-light">
         <div className="vl-on-light">
         <div className="vl-sec-head">
-          <h2>{L(SERVICES_LABEL)}</h2>
-          <p>{L(SERVICES_SUB)}</p>
+          <h2>{L(PROCESS_LABEL)}</h2>
+          <p>{L(PROCESS_SUB)}</p>
         </div>
-        {/* Each card carries its own floor, window and support figure, all read
-            from labPricing at render time. No numeral is typed here on purpose:
-            with the same figures due on service pages, a pricing page and the
-            ticker, a hand-typed one drifts the first time the table moves. */}
-        <div className="vl-grid">
-          {SERVICES.map((s, i) => {
-            const w = WORK_TYPES.find((t) => t.key === s.key)
-            const sp = SERVICE_PAGES.find((x) => x.key === s.key)
-            return (
-              <article className="vl-cell" key={s.key}>
-                <span className="vl-cell-n">{String(i + 1).padStart(2, '0')}</span>
-                <h3 className="vl-cell-t">{L(s.t)}</h3>
-                <p className="vl-cell-d">{L(s.d)}</p>
-                <p className="vl-cell-when">{L(s.when)}</p>
-                {sp && (
-                  <Link className="vl-cell-go" href={servicePath(lang, sp.slug)}>
-                    {L(UI.moreOn)}
-                  </Link>
-                )}
-                {w && (
-                  <dl className="vl-cell-stats">
-                    <div>
-                      <dt>{L(CALC.resultLbl)}</dt>
-                      <dd>{L(CALC.bfFrom)} {money(priced(w.from))}</dd>
-                    </div>
-                    <div>
-                      <dt>{L(CALC.termLbl)}</dt>
-                      <dd>{w.weeks[0]}–{w.weeks[1]} {L(CALC.weeksShort)}</dd>
-                    </div>
-                    <div>
-                      <dt>{L(CALC.supportLbl)}</dt>
-                      <dd>{L(CALC.bfFrom)} {money(priced(w.support))}{L(CALC.perMonth)}</dd>
-                    </div>
-                  </dl>
-                )}
-              </article>
-            )
-          })}
+        <RollingSteps lang={lang} />
+        <a href="#calc" className="vl-entry-link vl-sec-cta">{L(UI.startScoping)}</a>
         </div>
+      </section>
+
+      {/* STACK */}
+      <section className="vl-wrap vl-sec">
+        <div className="vl-sec-head">
+          <h2>{L(STACK_LABEL)}</h2>
+          <p>{L(STACK_SUB)}</p>
+        </div>
+        <ToolGrid lang={lang} />
+      </section>
+
+      {/* WHY */}
+      <section className="vl-wrap vl-sec-light">
+        <div className="vl-on-light">
+        <div className="vl-sec-head">
+          <h2>{L(WHY_LABEL)}</h2>
+          <p>{L(WHY_SUB)}</p>
+        </div>
+        <div className="vl-why">
+          {WHY.map((r, i) => (
+            <article className="vl-reason" key={i}>
+              <h3 className="vl-reason-t">{L(r.t)}</h3>
+              <p className="vl-reason-d">{L(r.d)}</p>
+            </article>
+          ))}
+        </div>
+        <a href="#calc" className="vl-entry-link vl-sec-cta">{L(UI.ctaCalc)}</a>
         </div>
       </section>
 
@@ -330,103 +439,9 @@ export default function Lab({ lang }: { lang: LabLang }) {
             </div>
           ))}
         </dl>
-      </section>
-
-      {/* ENTRY POINTS. Deliberately unnumbered: the reader self-selects the one
-          that matches them, so an order would be decoration, not information.
-          The process steps below keep their numbers because that IS a sequence. */}
-      <section className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(ENTRY_LABEL)}</h2>
-          <p>{L(ENTRY_SUB)}</p>
-        </div>
-        <div className="vl-entries">
-          {ENTRY.map((e, i) => (
-            <article className="vl-entry" key={i}>
-              <h3 className="vl-entry-t">{L(e.t)}</h3>
-              <p className="vl-entry-d">{L(e.d)}</p>
-              <a href="#calc" className="vl-entry-link">{L(UI.ctaCalc)}</a>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* CALCULATOR. The page's centre of gravity, and it now sits BEFORE the
-          process rather than after it. The old order argued that a reader should
-          see how the work runs before being shown a number; the funnel argues
-          the opposite, and the entry points immediately above already say "start
-          from wherever you are", which is the same sentence the first question
-          asks. Process, stack and pass-through costs become the reassurance tail
-          after the price instead of a preamble to it. */}
-      <section id="calc" className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(CALC.label)}</h2>
-          <p>{L(CALC.sub)}</p>
-          {/* The calculator answers one configuration at a time; the reader who
-              wants to compare all six needs the table, and this is the only
-              place on the home page where they are already thinking about it. */}
-          <Link className="vl-sec-go" href={pricingPath(lang)}>{L(UI.priceList)}</Link>
-        </div>
-        
-          <Calculator lang={lang} />
-        
-      </section>
-
-      {/* PROCESS */}
-      <section id="process" className="vl-wrap vl-sec-light">
-        <div className="vl-on-light">
-        <div className="vl-sec-head">
-          <h2>{L(PROCESS_LABEL)}</h2>
-          <p>{L(PROCESS_SUB)}</p>
-        </div>
-        <RollingSteps lang={lang} />
-        </div>
-      </section>
-
-      {/* STACK */}
-      <section className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(STACK_LABEL)}</h2>
-          <p>{L(STACK_SUB)}</p>
-        </div>
-        <ToolGrid lang={lang} />
-      </section>
-
-      {/* WHAT YOU PAY FOR SEPARATELY. Their strongest trust block per line of
-          copy, and the one section of theirs that needs no material we lack.
-          Deliberately without figures: these bills come from third parties and
-          move, and a price quoted on a landing page goes stale in silence. */}
-      <section className="vl-wrap vl-sec">
-        <div className="vl-sec-head">
-          <h2>{L(SEPARATE_LABEL)}</h2>
-          <p>{L(SEPARATE_SUB)}</p>
-        </div>
-        <dl className="vl-sep">
-          {SEPARATE.map((x, i) => (
-            <div className="vl-sep-row" key={i}>
-              <dt>{L(x.k)}</dt>
-              <dd>{L(x.d)}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      {/* WHY */}
-      <section className="vl-wrap vl-sec-light">
-        <div className="vl-on-light">
-        <div className="vl-sec-head">
-          <h2>{L(WHY_LABEL)}</h2>
-          <p>{L(WHY_SUB)}</p>
-        </div>
-        <div className="vl-why">
-          {WHY.map((r, i) => (
-            <article className="vl-reason" key={i}>
-              <h3 className="vl-reason-t">{L(r.t)}</h3>
-              <p className="vl-reason-d">{L(r.d)}</p>
-            </article>
-          ))}
-        </div>
-        </div>
+        {/* .vl-sec-go, not .vl-entry-link: this one lands on the grey paper,
+            where the lighter accent measures 4.35:1. */}
+        <a href="#calc" className="vl-sec-go vl-sec-cta">{L(UI.startScoping)}</a>
       </section>
 
       {/* TESTIMONIALS, renders only once REVIEWS holds real quotes. */}
@@ -445,7 +460,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
 
       {/* FAQ. Sits last before the CTA: by here the reader has the offer, the
           proof and the price, and what is left is the objections. */}
-      <section className="vl-wrap vl-sec">
+      <section className="vl-wrap vl-sec vl-sec--act">
         <div className="vl-sec-head">
           <h2>{L(FAQ_LABEL)}</h2>
           <p>{L(FAQ_SUB)}</p>
@@ -464,9 +479,24 @@ export default function Lab({ lang }: { lang: LabLang }) {
           <h2>{L(CONTACT.h)}</h2>
           <p className="vl-contact-sub">{L(CONTACT.sub)}</p>
           <div className="vl-contact-acts">
-            <a href={TELEGRAM} target="_blank" rel="noopener noreferrer" className="vl-contact-tg">
-              {TELEGRAM_HANDLE}
+            <a
+              href={TELEGRAM}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="vl-contact-tg"
+              title={TELEGRAM_HANDLE}
+            >
+              {L(UI.ctaTg)}
             </a>
+            <a
+              className="vl-btn-ghost"
+              href={`mailto:${EMAIL}?subject=${encodeURIComponent(L(CONTACT.mailDirectSubject))}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`}
+            >
+              {L(UI.sendMailDirect)}
+            </a>
+            {/* Third and quietest on purpose. A mailto silently does nothing
+                for a webmail user with no registered handler, and that is
+                exactly the reader a copy-the-address button serves. */}
             <CopyEmail email={EMAIL} copiedLabel={L(UI.copied)} hint={L(UI.copyHint)} />
           </div>
         </div>

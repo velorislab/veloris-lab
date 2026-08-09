@@ -67,7 +67,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     ],
     priceDrivers: {
       en: 'How many steps the chain has, and whether each one can be reached programmatically. A source with a documented API is cheap; a source that only exists as a screen is the expensive part. After that it is how much of the decision is a rule and how much has to be a model, because a rule is testable and a model has to be evaluated. Volume matters less than people expect and predictability matters more.',
-      ru: 'Сколько шагов в цепочке и до каждого ли можно дотянуться программно. Источник с документированным API стоит дёшево, источник, который существует только как экран, и есть дорогая часть. Дальше — какая доля решения это правило, а какая модель: правило тестируется, модель приходится оценивать. Объём влияет меньше, чем принято думать, а предсказуемость больше.',
+      ru: 'Сколько шагов в цепочке и до каждого ли можно дотянуться программно. Источник с документированным API стоит дёшево, источник, который существует только как экран, и есть дорогая часть. Дальше вопрос в том, какая доля решения это правило, а какая модель: правило тестируется, модель приходится оценивать. Объём влияет меньше, чем принято думать, а предсказуемость больше.',
     },
     ctaLabel: { en: 'Price an automation', ru: 'Посчитать автоматизацию' },
   },
@@ -98,7 +98,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     ],
     priceDrivers: {
       en: 'The number of systems, and how well each one is documented. Two well-behaved APIs are quick; one undocumented internal system sets the price for the whole job. Then whether data merely moves or has to be reconciled, because reconciliation means deciding which side wins and that is a business question before it is a technical one. Real-time costs more than nightly, and it is worth checking you need it.',
-      ru: 'Число систем и то, насколько каждая описана. Два вменяемых API это быстро; одна недокументированная внутренняя система задаёт цену всей работе. Дальше — данные просто переносятся или их надо сверять: сверка означает решить, чья версия побеждает, а это вопрос бизнеса раньше, чем технический. Реальное время дороже ночной выгрузки, и стоит проверить, нужно ли оно.',
+      ru: 'Число систем и то, насколько каждая описана. Два вменяемых API это быстро; одна недокументированная внутренняя система задаёт цену всей работе. Дальше вопрос в том, данные просто переносятся или их надо сверять. Сверка означает решить, чья версия побеждает, а это вопрос бизнеса раньше, чем технический. Реальное время дороже ночной выгрузки, и стоит проверить, нужно ли оно.',
     },
     ctaLabel: { en: 'Price an integration', ru: 'Посчитать интеграцию' },
   },
@@ -128,7 +128,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     ],
     priceDrivers: {
       en: 'Whether the source wants to be read. A public page with stable markup is straightforward; a source behind a login, a rate limit or a bot check is a different job. The second factor is how often it changes, because that decides whether you are buying a script or a thing that has to be maintained, and we would rather say that out loud than discover it together in month two. Volume and schedule come last.',
-      ru: 'Хочет ли источник, чтобы его читали. Публичная страница со стабильной вёрсткой это просто; источник за логином, лимитом запросов или проверкой на робота это другая работа. Второй фактор — как часто он меняется, потому что это решает, покупаете вы скрипт или вещь, которую придётся сопровождать; лучше сказать это вслух, чем выяснить вместе на втором месяце. Объём и расписание идут последними.',
+      ru: 'Хочет ли источник, чтобы его читали. Публичная страница со стабильной вёрсткой это просто; источник за логином, лимитом запросов или проверкой на робота это другая работа. Второй фактор это то, как часто он меняется, потому что это решает, покупаете вы скрипт или вещь, которую придётся сопровождать; лучше сказать это вслух, чем выяснить вместе на втором месяце. Объём и расписание идут последними.',
     },
     ctaLabel: { en: 'Price a parser', ru: 'Посчитать парсер' },
   },
@@ -158,7 +158,7 @@ export const SERVICE_PAGES: ServicePage[] = [
     ],
     priceDrivers: {
       en: 'Whether the metrics are already agreed. If three people define «active client» three ways, that conversation is the project and the charts are the easy part. After that: how many sources feed it, whether any of them need a parser first, and whether history has to be backfilled, which is often the single largest line and the one nobody budgets for.',
-      ru: 'Согласованы ли метрики. Если «активный клиент» у трёх человек означает три разных вещи, то этот разговор и есть проект, а графики — лёгкая часть. Дальше: сколько источников её питает, нужен ли кому-то из них сначала парсер, и надо ли поднимать историю за прошлые периоды — это часто самая крупная строка и та, которую не закладывают.',
+      ru: 'Согласованы ли метрики. Если «активный клиент» у трёх человек означает три разных вещи, то этот разговор и есть проект, а графики это лёгкая часть. Дальше: сколько источников её питает, нужен ли кому-то из них сначала парсер, и надо ли поднимать историю за прошлые периоды. Это часто самая крупная строка и та, которую не закладывают.',
     },
     ctaLabel: { en: 'Price a dashboard', ru: 'Посчитать дашборд' },
   },
@@ -236,8 +236,8 @@ export const SERVICE_PAGES: ServicePage[] = [
 export const CASES_BY_SERVICE: Record<string, string[]> = {
   agent: ['20+ automations on BAS'],
   integr: ['Swiftin', 'Cowee'],
-  parsing: ['20+ automations on BAS', 'Dashboards and analytics'],
-  dash: ['Dashboards and analytics'],
+  parsing: ['20+ automations on BAS', 'One screen instead of manual exports'],
+  dash: ['One screen instead of manual exports'],
   mvp: ['Swiftin', 'Cowee'],
   billing: ['Swiftin'],
 }

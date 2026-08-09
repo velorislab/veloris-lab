@@ -122,6 +122,9 @@
 .vl-root * { margin: 0; padding: 0; box-sizing: border-box; }
 .vl-root ::selection { background: var(--accent); color: #fff; }
 .vl-root :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.vl-heroband :focus-visible,
+.vl-calc-out :focus-visible,
+.vl-contact :focus-visible { outline-color: var(--on-dark); }
 .vl-root [id] { scroll-margin-top: 88px; }
 
 /* ============ MOTION ============
@@ -137,6 +140,25 @@
 
 @media (prefers-reduced-motion: reduce) {
   .vl-root .vl-ticker-track { animation: none !important; }
+  /* Stopping the marquee is not enough on its own. The track is
+     `width: max-content` over a doubled pass that is itself `flex: none` and
+     `min-width: 100vw`, so frozen it showed one or two of the six prices and
+     hid the rest off the side of a `overflow: hidden` strip, permanently, at
+     every screen size. Whoever needs reduced motion needs the prices most.
+     One pass, one copy of the six, wrapped and centred. The wrap has to go on
+     the PASS: that is the flex container the items actually live in. */
+  .vl-root .vl-ticker-track { width: auto; }
+  .vl-root .vl-ticker-pass + .vl-ticker-pass { display: none; }
+  .vl-root .vl-ticker-pass {
+    flex: 1 1 auto; min-width: 0;
+    flex-wrap: wrap; justify-content: center; row-gap: 4px;
+  }
+  /* The pass holds the six twice over, for the loop's benefit. Frozen, the
+     second copy is just the list said again. */
+  .vl-root .vl-ticker-pass > .vl-ticker-item:nth-child(n+7) { display: none; }
+  /* A single item is wider than a phone, and nowrap would push it off the
+     side again, which is the bug this block exists to fix. */
+  .vl-root .vl-ticker-word { white-space: normal; padding: 0 12px; text-align: center; }
   /* The sweep stops and the wiring stays. Nothing is lost: the lines, the hub
      and the labels are the diagram; the beam was only ever the life in it. */
   .vl-root .vl-beam { display: none; }
@@ -165,6 +187,18 @@
   /* The radio itself is a 1px visually-hidden input, so the label is the whole
      hit area and has to carry the target size on its own. */
   .vl-root .vl-opt { min-height: 44px; }
+  /* The two classes that carry the home page's entire internal navigation were
+     the two this block missed: 74x17 and 159x18. A pseudo-element overlay, not
+     min-height: growing the box detaches the accent border-bottom from the text
+     by 15px and leaves seven links with a floating underline under their own
+     words. Both are already wider than 44px, so only the vertical axis needs
+     work, and nothing interactive sits within 13.5px above or below either. */
+  .vl-root .vl-cell-go, .vl-root .vl-sec-go { position: relative; }
+  .vl-root .vl-cell-go::after, .vl-root .vl-sec-go::after {
+    content: ''; position: absolute; left: 0; right: 0;
+    top: 50%; height: 44px; transform: translateY(-50%);
+  }
+  .vl-root .vl-foot-nav a { min-width: 44px; justify-content: center; }
 }
 
 /* ============ TYPE ============
@@ -219,15 +253,17 @@
 .vl-btn-solid:hover { background: #2a3330; border-color: #2a3330; }
 
 /* On the dark band the buttons invert: bright fill, and a hairline ghost. */
-.vl-heroband .vl-btn-signal, .vl-contact .vl-contact-tg {
+.vl-heroband .vl-btn-signal, .vl-calc-out .vl-btn-signal, .vl-contact .vl-contact-tg {
   color: var(--dark); background: var(--accent-bright); border-color: var(--accent-bright);
   box-shadow: none;
 }
-.vl-heroband .vl-btn-signal:hover, .vl-contact .vl-contact-tg:hover { background: #55e6c8; border-color: #55e6c8; }
-.vl-heroband .vl-btn-ghost {
+.vl-heroband .vl-btn-signal:hover, .vl-calc-out .vl-btn-signal:hover, .vl-contact .vl-contact-tg:hover { background: #55e6c8; border-color: #55e6c8; }
+/* .vl-btn-ghost is a solid WHITE fill by default, so any ghost landing on a
+   dark slab has to be re-stated here. The close now carries one. */
+.vl-heroband .vl-btn-ghost, .vl-contact .vl-btn-ghost {
   color: var(--on-dark); background: transparent; border-color: var(--rule-dark-strong);
 }
-.vl-heroband .vl-btn-ghost:hover { border-color: var(--on-dark); background: rgba(255, 255, 255, 0.06); }
+.vl-heroband .vl-btn-ghost:hover, .vl-contact .vl-btn-ghost:hover { border-color: var(--on-dark); background: rgba(255, 255, 255, 0.06); }
 
 /* ============ NAV ============ */
 
@@ -247,7 +283,7 @@
 
 .vl-nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
 
-.vl-langsw { display: inline-flex; align-items: center; border: 1px solid var(--rule); border-radius: var(--r-2); overflow: hidden; }
+.vl-langsw { display: inline-flex; flex: none; align-items: center; border: 1px solid var(--rule); border-radius: var(--r-2); overflow: hidden; }
 .vl-langsw a, .vl-langsw span {
   font-family: var(--font-vl-mono), ui-monospace, monospace;
   font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
@@ -318,6 +354,16 @@
 .vl-h1 { font-size: 48px; font-weight: 600; line-height: 1.06; letter-spacing: -0.03em; text-wrap: balance; max-width: 22ch; }
 .vl-hero-sub { font-size: 17px; line-height: 1.5; color: var(--on-dark-mute); max-width: 56ch; text-wrap: pretty; }
 .vl-hero-acts { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin-top: 6px; }
+/* The price and the clock, under the buttons rather than beside them: this is
+   microcopy for the CTA, and it has to survive a phone without competing with
+   the buttons for the row. No green. The band already spends its three-signal
+   budget on the CTA fill, the beam head and the hub core. */
+.vl-hero-floor {
+  flex-basis: 100%; text-align: center; margin-top: 2px;
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 13px; letter-spacing: 0.04em; color: var(--on-dark-mute);
+}
+.vl-hero-floor-sep { padding: 0 8px; color: var(--on-dark-faint); }
 
 /* The plaque on the headline's last word. `box-decoration-break: clone` so that
    if the word ever wraps, both fragments get their own plaque instead of one
@@ -448,10 +494,27 @@
 /* `padding-top`, never the `padding` shorthand. Every one of these sections is
    also a `.vl-wrap`, and the shorthand silently zeroed the 28px side padding
    the wrap sets, so on a 1200px display the page ran edge to edge. */
-.vl-sec, .vl-sec-light { padding-top: 72px; }
+.vl-root { --sec-gap: 72px; }
+.vl-sec, .vl-sec-light { padding-top: var(--sec-gap); }
+/* Three sections open an act: services (the argument starts), the calculator
+   (the conversion event) and the FAQ (the last objection before the close).
+   Must stay after the rule above to win on source order. */
+.vl-sec--act { padding-top: calc(var(--sec-gap) * 1.6); }
 .vl-sec-head { display: flex; flex-direction: column; gap: 12px; padding-bottom: 32px; }
 .vl-sec-head h2 { font-size: 34px; font-weight: 600; line-height: 1.12; letter-spacing: -0.03em; max-width: 22ch; text-wrap: balance; }
 .vl-sec-head p { font-size: 16px; line-height: 1.55; color: var(--ink-mute); max-width: 62ch; }
+
+/* The pitch opens up with the viewport instead of staying at one volume. */
+@media (min-width: 1080px) {
+  .vl-root { --sec-gap: 96px; }
+  .vl-sec-head { gap: 14px; padding-bottom: 40px; }
+}
+@media (min-width: 1400px) { .vl-root { --sec-gap: 120px; } }
+
+/* A door out of the objection-handling half of the page. Lands inside
+   .vl-on-light, which is white, so --accent is the right token here; .vl-sec-go
+   is the deeper green reserved for the grey ground. */
+.vl-sec-cta { display: inline-block; margin-top: 28px; }
 
 /* A grouped band on the grey ground. */
 .vl-on-light { background: var(--surface); border: 1px solid var(--rule-soft); border-radius: var(--r-5); box-shadow: var(--sh-2); padding: 48px 40px; }
@@ -478,6 +541,7 @@
 }
 .vl-cell-t { font-size: 16px; font-weight: 600; letter-spacing: -0.015em; }
 .vl-cell-d { font-size: 14px; line-height: 1.5; color: var(--ink-mute); }
+@media (min-width: 721px) { .vl-cell-d { min-height: 3lh; } }
 
 /* The recognition line. Set apart from the description by a rule rather than by
    a colour, because it is a different KIND of sentence: the description says
@@ -549,7 +613,7 @@
 .vl-tags { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 26px 20px; }
 .vl-tag { font-family: var(--font-vl-mono), ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-faint); background: var(--surface-2); border: 1px solid var(--rule-soft); padding: 4px 8px; border-radius: var(--r-1); white-space: nowrap; }
 
-.vl-psr { display: flex; flex-direction: column; gap: 16px; padding: 22px 26px; flex: 1; border-top: 1px solid var(--rule-soft); background: var(--surface-2); }
+.vl-psr { display: flex; flex-direction: column; gap: 16px; padding: 22px 26px; margin-bottom: auto; border-top: 1px solid var(--rule-soft); background: var(--surface-2); }
 .vl-psr-item { display: flex; flex-direction: column; gap: 5px; }
 .vl-psr-item p { font-size: 14px; line-height: 1.5; color: var(--ink-mute); }
 .vl-psr-res p { color: var(--ink); }
@@ -583,6 +647,7 @@
   display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px; background: var(--rule);
   border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  box-shadow: -50vw 0 0 var(--surface), 50vw 0 0 var(--surface);
 }
 
 /* The top and bottom rules run past the container so the grid reads as a band.
@@ -687,7 +752,7 @@
    one face, so the stack is exactly twice it and -50% lands on the second face
    with no drift; changing the font size means changing this too. */
 
-.vl-roll { --roll-h: 68px; list-style: none; border-top: 1px solid var(--rule); }
+.vl-roll { --roll-h: 60px; list-style: none; border-top: 1px solid var(--rule); }
 
 .vl-roll-row {
   position: relative;
@@ -717,7 +782,7 @@
 
 .vl-roll-face {
   display: flex; align-items: center; height: var(--roll-h);
-  font-size: clamp(26px, 3.4vw, 44px); font-weight: 600;
+  font-size: clamp(26px, 3vw, 38px); font-weight: 600;
   line-height: 1.05; letter-spacing: -0.035em; white-space: nowrap;
   color: var(--ink);
 }
@@ -877,7 +942,7 @@
 .vl-crumb a { color: var(--ink-faint); text-decoration: none; transition: color 0.16s ease; }
 .vl-crumb a:hover { color: var(--ink); }
 
-.vl-sp-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 40px 0 8px; }
+.vl-sp-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding-top: 40px; padding-bottom: 8px; }
 /* The price is a line of the heading, not a detail below it: these pages exist
    to answer "what does X cost", and the answer belongs in the h1. */
 .vl-sp-h1 {
@@ -887,7 +952,7 @@
 }
 .vl-sp-price {
   font-family: var(--font-vl-mono), ui-monospace, monospace;
-  font-size: clamp(24px, 3vw, 34px); letter-spacing: -0.01em; color: var(--accent);
+  font-size: clamp(24px, 3vw, 34px); letter-spacing: -0.01em; color: var(--accent-hover);
 }
 .vl-sp-lead { font-size: 17px; line-height: 1.55; color: var(--ink-mute); max-width: 58ch; }
 
@@ -946,7 +1011,7 @@
    Narrative column plus a sidebar that carries the stack and the one number on
    the page. Same surfaces as everywhere else; only the layout is new. */
 
-.vl-cp-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding: 40px 0 6px; }
+.vl-cp-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; padding-top: 40px; padding-bottom: 6px; }
 .vl-cp-title { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
 .vl-cp-title h1 { font-size: clamp(34px, 4.2vw, 48px); font-weight: 600; line-height: 1.06; letter-spacing: -0.03em; }
 .vl-cp-lead { font-size: 17px; line-height: 1.55; color: var(--ink-mute); max-width: 58ch; }
@@ -1111,7 +1176,6 @@
   height: 78vh; min-height: 520px; max-height: 720px;
   margin-top: 56px;
   pointer-events: none;
-  opacity: 0.5;
 }
 .vl-runway svg { width: 100%; height: 100%; display: block; }
 
@@ -1128,7 +1192,7 @@
 
 /* ============ FOOTER ============ */
 
-.vl-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 72px; padding: 26px 0 48px; border-top: 1px solid var(--rule); }
+.vl-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 28px; margin-top: 72px; padding-top: 26px; padding-bottom: 48px; border-top: 1px solid var(--rule); }
 /* Sans, not mono. This is a sentence, and monospace on prose is a costume:
    the mono voice belongs to things that are measured. */
 .vl-foot-line { font-size: 13px; line-height: 1.5; color: var(--ink-faint); }
@@ -1143,7 +1207,7 @@
    genuinely tabular thing on this site, so it gets a real <table>; everything
    else here is the ruled-row idiom already used by the service and case pages. */
 
-.vl-pr-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 40px 0 8px; }
+.vl-pr-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding-top: 40px; padding-bottom: 8px; }
 .vl-pr-hero h1 {
   font-size: clamp(34px, 4.2vw, 48px); font-weight: 600;
   line-height: 1.06; letter-spacing: -0.03em; max-width: 20ch;
@@ -1231,6 +1295,38 @@
 .vl-pr-faq dd { margin: 0; font-size: 15px; line-height: 1.65; color: var(--ink-mute); }
 
 
+
+/* ============ ADDED WITH THE SELLING PASS ============
+   Everything below exists because a reader could see something and not act on
+   it. Same tokens, same ladder, no new surfaces. */
+
+/* The estimate panel used to hold only spans and paragraphs, at the one moment
+   on the site where a visitor has self-qualified and self-priced. */
+.vl-calc-go { align-self: flex-start; }
+
+/* Step 5 shows the brief rather than asserting it exists. It is what the
+   clipboard fallback points at, and it is the visible proof of the claim that
+   nothing leaves this page without the reader. */
+.vl-calc-brief {
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 12.5px; line-height: 1.5; white-space: pre-wrap;
+  max-height: 160px; overflow: auto;
+  background: var(--surface-2); border: 1px solid var(--rule);
+  border-radius: var(--r-3); padding: 14px 16px; color: var(--ink-mute);
+}
+
+/* The related-case cards on a service page are links now. A bare Link inherits
+   the UA blue underline, because lab.css's header forbids a `.vl-root a` rule,
+   so the colour has to be stated. This is also the second container-level hover
+   on the site, and it is legitimate for the same reason .vl-cp-other's is: the
+   element is an anchor, not an article. */
+.vl-sp-case-go { text-decoration: none; color: var(--ink); transition: background 0.16s ease; }
+.vl-sp-case-go:hover { background: var(--surface-2); }
+.vl-sp-case-more {
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 12px; color: var(--accent);
+}
+
 @media (max-width: 1080px) {
   .vl-pr-addons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .vl-hero { padding: 56px 0 52px; }
@@ -1266,12 +1362,16 @@
   .vl-links { display: none; }
   .vl-h1 { font-size: 46px; }
   .vl-calc-grid { grid-template-columns: 1fr; }
-  .vl-calc-out { position: static; order: -1; }
+  /* 68 = the 60px nav bar plus a breath, mirroring the desktop 76. The z-index
+     is load-bearing: .vl-calc-steps is later in the DOM and would paint over
+     the pinned card. It stays under the nav's 20. */
+  .vl-calc-out { position: sticky; top: 68px; z-index: 10; order: -1; }
 }
 
 @media (max-width: 720px) {
-  .vl-wrap { padding: 0 18px; }
+  .vl-wrap { padding-left: 18px; padding-right: 18px; }
   .vl-sec, .vl-sec-light { padding-top: 48px; }
+  .vl-sec--act { padding-top: 72px; }
   .vl-on-light { padding: 28px 20px; }
   .vl-h1 { font-size: 32px; letter-spacing: -0.03em; max-width: none; }
   .vl-hero { padding: 40px 0 44px; }
@@ -1319,12 +1419,31 @@
   .vl-calc-q { font-size: 19px; }
   .vl-calc-fs { min-height: 0; }
   .vl-calc-fields { grid-template-columns: 1fr; }
-  .vl-calc-out { padding: 24px 20px; }
-  .vl-calc-price { font-size: 34px; }
+  .vl-calc-out { padding: 14px 18px; gap: 8px; }
+  .vl-calc-price { font-size: 28px; }
+  .vl-calc-metarow { padding: 6px 0; font-size: 12.5px; }
+  .vl-calc-note { padding-top: 10px; font-size: 12px; }
+  .vl-calc-go { width: 100%; padding: 11px 16px; font-size: 14px; }
   .vl-calc-send { flex-direction: column; align-items: stretch; }
   .vl-contact { padding: 40px 22px; }
   .vl-contact h2 { font-size: 28px; }
   .vl-foot-nav { margin-left: 0; }
+
+  /* ~96 text runs sat under 12px at 390, all of them uppercase tracked mono,
+     including the ЗАДАЧА / РЕШЕНИЕ / РЕЗУЛЬТАТ labels that make a case
+     scannable in ten seconds. Every letter-spacing is left exactly as declared:
+     .vl-tag is already the tightest at 0.04em, so loosening here would undo it. */
+  .vl-tag, .vl-case-badge, .vl-cp-stack li,
+  .vl-cell-stats dt, .vl-sp-pills dt { font-size: 11.5px; }
+  .vl-lbl, .vl-cloud-note { font-size: 12px; }
+  .vl-pr-table tbody td[data-l]::before { font-size: 11.5px; flex-basis: 98px; }
+
+  /* The stroke ran 658px plus 56px of margin at 390, which is 0.85 of a phone
+     viewport of decoration sitting between the last objection and the close.
+     Not display:none: preserveAspectRatio="none" maps the whole viewBox onto
+     whatever height resolves, so nothing is clipped, and the narrow rendering
+     was already reviewed and accepted. 340px stays above the documented floor. */
+  .vl-runway { height: 52vh; min-height: 340px; max-height: 460px; margin-top: 40px; }
 
   /* The price table stops being a table below 720px. A five-column grid at
      390px is a horizontal scrollbar, and a horizontal scrollbar on the one page

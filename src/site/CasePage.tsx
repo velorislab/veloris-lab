@@ -130,7 +130,7 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
             {parent && parentWork && (
               <div className="vl-cp-card">
                 <span className="vl-lbl">{L(CP_LABELS.similar)}</span>
-                <Link href={servicePath(lang, serviceSlug(parentSlugFor))} className="vl-cp-similar">
+                <Link href={`${servicePath(lang, serviceSlug(parentSlugFor))}#estimate`} className="vl-cp-similar">
                   {L(parent.t)}
                 </Link>
                 <span className="vl-cp-from">
@@ -168,8 +168,20 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
             <h2>{L(page.cta)}</h2>
             <p className="vl-contact-sub">{L(CONTACT.sub)}</p>
             <div className="vl-contact-acts">
-              <a href={TELEGRAM} target="_blank" rel="noopener noreferrer" className="vl-contact-tg">
-                {TELEGRAM_HANDLE}
+              <a
+                href={TELEGRAM}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vl-contact-tg"
+                title={TELEGRAM_HANDLE}
+              >
+                {L(UI.ctaTg)}
+              </a>
+              <a
+                className="vl-btn-ghost"
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(L(CONTACT.mailDirectSubject))}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`}
+              >
+                {L(UI.sendMailDirect)}
               </a>
               <CopyEmail email={EMAIL} copiedLabel={L(UI.copied)} hint={L(UI.copyHint)} />
             </div>

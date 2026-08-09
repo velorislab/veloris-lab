@@ -2,7 +2,9 @@
 
 import { Fragment } from 'react'
 import { motion } from 'motion/react'
-import { type LabLang, tx, UI, HERO } from './labData'
+import { type LabLang, tx, UI, HERO, CALC } from './labData'
+import { WORK_TYPES, money, priced } from './labPricing'
+import { pricingPath } from './routing'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -76,7 +78,24 @@ export default function HeroCopy({ lang }: { lang: LabLang }) {
         transition={{ duration: 0.5, ease: EASE, delay: tail + 0.09 }}
       >
         <a href="#calc" className="vl-btn-signal">{L(UI.ctaCalc)}</a>
-        <a href="#cases" className="vl-btn-ghost">{L(UI.viewCases)}</a>
+        {/* The secondary used to be an in-page jump to #cases, which the nav,
+            the section itself and four card links already reach. It now leaves
+            for the price list, which had exactly two links on the whole home
+            page, at y=5,503 and y=10,863 of a 10,937px document. This is the
+            only route to it that is in the first fold at every viewport. */}
+        <a href={pricingPath(lang)} className="vl-btn-ghost">{L(UI.priceList)}</a>
+
+        {/* THE FOLD CARRIES A NUMBER AND A CLOCK.
+            Both are floors read straight out of labPricing: the cheapest of the
+            six starting figures, and the shortest first-version window on the
+            table. Nothing here is typed, so repricing moves the hero with
+            everything else, and neither figure can drift from the calculator
+            three screens down. */}
+        <span className="vl-hero-floor">
+          {L(UI.heroFloor)} {money(priced(Math.min(...WORK_TYPES.map((t) => t.from))))}{' '}
+          <span className="vl-hero-floor-sep" aria-hidden="true">·</span>{' '}
+          {L(UI.heroSpeed)} {Math.min(...WORK_TYPES.map((t) => t.weeks[0]))} {L(CALC.weeksShort)}
+        </span>
       </motion.div>
     </motion.div>
   )

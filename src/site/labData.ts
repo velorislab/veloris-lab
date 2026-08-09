@@ -67,12 +67,26 @@ export const UI: Record<string, LS> = {
   navCalc: { en: 'Estimate', ru: 'Расчёт' },
   navBureau: { en: 'Bureau', ru: 'О бюро' },
   ctaCalc: { en: 'Price your project', ru: 'Рассчитать проект' },
-  cta: { en: 'Discuss your task', ru: 'Обсудить задачу' },
-  // The strong CTA names the free thing instead of asking for a generic contact.
-  // It is honest: step 01 of PROCESS really is a free costing call that can end
-  // the project, so the button only says out loud what already happens.
-  ctaFree: { en: 'Get your task scoped free', ru: 'Разобрать задачу бесплатно' },
-  viewCases: { en: 'See cases', ru: 'Смотреть кейсы' },
+  /**
+   * The one button on all 22 routes, and it now names the free thing instead
+   * of asking for a generic sales call.
+   *
+   * There used to be a second string here, `ctaFree`, carrying exactly this
+   * idea under a three-line comment about why it was the strong CTA. It was
+   * referenced nowhere: `grep -rn ctaFree src/` returned its own definition and
+   * nothing else. The unique offer of the whole business existed as dead code.
+   * Rather than wire up a second button, this one absorbed it.
+   */
+  cta: { en: 'Free scoping call', ru: 'Бесплатный разбор' },
+  ctaTg: { en: 'Message on Telegram', ru: 'Написать в Telegram' },
+  sendMailDirect: { en: 'Write by email', ru: 'Написать на почту' },
+  /* Mid-page anchors back to the calculator, so the objection-handling half of
+     the page stops being a corridor with no doors. */
+  startScoping: { en: 'Start with the scoping. It is free.', ru: 'Начните с разбора. Он бесплатный.' },
+  /* The two halves of the hero's mono line. Both figures are read from
+     labPricing at render time; neither is typed anywhere. */
+  heroFloor: { en: 'Projects from', ru: 'Проекты от' },
+  heroSpeed: { en: 'first version from', ru: 'первая версия от' },
   copied: { en: 'copied', ru: 'скопировано' },
   copyHint: { en: 'Click to copy', ru: 'Нажмите, чтобы скопировать' },
   moreOn: { en: 'More on this', ru: 'Подробнее' },
@@ -83,13 +97,30 @@ export const UI: Record<string, LS> = {
 }
 
 export const HERO = {
+  /**
+   * The headline states the OFFER, not the category.
+   *
+   * It used to be «Снимаем с команды рутину, которую можно отдать машине»,
+   * which describes one of the six things sold here and excludes the two
+   * dearest: an MVP and a payments system are not routine coming off a team,
+   * and a founder with no team cannot be its subject.
+   *
+   * What it says now is the one claim this bureau can make that the market
+   * leader cannot make better, and it is already true everywhere else on the
+   * site: PROCESS[1] fixes the figure «до того как написана первая строка»,
+   * the calculator performs it, and /pricing publishes the estimator's own
+   * multipliers rather than only its totals.
+   *
+   * The LAST WORD carries the plaque (see HeroCopy.tsx), so both locales are
+   * written to end on a word worth marking.
+   */
   h1: {
-    en: 'We take the routine off your team and hand it to machines',
-    ru: 'Снимаем с команды рутину, которую можно отдать машине',
+    en: 'You know the price before the first line of code',
+    ru: 'Цену вы узнаете до первой строки кода',
   },
   sub: {
-    en: 'AI agents, integrations and data pipelines. We build the system, ship it to production and keep it running, instead of leaving you with a prototype.',
-    ru: 'AI-агенты, интеграции и пайплайны данных. Собираем систему, доводим до прода и поддерживаем, а не оставляем вас с прототипом.',
+    en: 'AI agents, integrations, dashboards, parsing, payments and whole products. The scoping is free, and it can end with us telling you not to build it.',
+    ru: 'AI-агенты, интеграции, дашборды, парсинг, платежи и продукты под ключ. Разбор задачи бесплатный, и он может закончиться советом не делать.',
   },
   /**
    * The facts strip, directly under the dark band. Every row is checkable
@@ -129,10 +160,13 @@ export interface Service {
    says "what we take off your team", not "Services". Nav items stay short, since
    a nav is a set of labels by nature. */
 
-export const SERVICES_LABEL = { en: 'What we take off your team', ru: 'Что снимаем с вашей команды' }
+/* The old heading, «Что снимаем с вашей команды», echoed the old hero almost
+   verbatim AND mislabelled its own grid: dashboards, MVPs and billing are not
+   routine coming off a team. */
+export const SERVICES_LABEL = { en: 'Six kinds of work, each taken to production', ru: 'Шесть направлений, каждое доводим до прода' }
 export const SERVICES_SUB = {
-  en: 'Six things we do end to end, from the first call to a system your team uses every day.',
-  ru: 'Шесть направлений, которые закрываем целиком: от первого звонка до системы, которой команда пользуется каждый день.',
+  en: 'Each card says when this is you, what it starts at and how long the first version takes.',
+  ru: 'На каждой карточке написано, когда это про вас, с чего начинается цена и сколько занимает первая версия.',
 }
 
 /*
@@ -291,7 +325,7 @@ export const CASES: Case[] = [
     ],
   },
   {
-    title: { en: 'Dashboards and analytics', ru: 'Дашборды и аналитика' },
+    title: { en: 'One screen instead of manual exports', ru: 'Один экран вместо ручных выгрузок' },
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
@@ -308,8 +342,8 @@ export const CASES: Case[] = [
       ru: 'Дашборды, которые собирают данные из API, баз и парсеров в одно место, с метриками, графиками и фильтрами под этот бизнес.',
     },
     res: {
-      en: 'The team sees key metrics in real time and decides on data instead of guesswork.',
-      ru: 'Команда видит ключевые метрики в реальном времени и принимает решения по данным, а не на глаз.',
+      en: 'The metrics assemble themselves from APIs, databases and parsers on a schedule, and land on one screen.',
+      ru: 'Метрики собираются из API, баз и парсеров сами, по расписанию, и сходятся на одном экране.',
     },
     links: [],
   },
@@ -372,7 +406,11 @@ export interface Step {
   d: LS
 }
 
-export const PROCESS_LABEL = { en: 'How the work actually goes, step by step', ru: 'Как идёт работа, шаг за шагом' }
+/* Drops «шаг за шагом», which the sub directly below already carries, and
+   names the two real ends instead. That is information rather than filler:
+   support being the far end of the process, not an upsell after it, is the
+   thing this section is quietly proving. */
+export const PROCESS_LABEL = { en: 'How the work runs, from the scoping call to support', ru: 'Как идёт работа, от разбора задачи до поддержки' }
 export const PROCESS_SUB = {
   en: 'Five steps, in this order. The first one can end the project, and that is the point of it.',
   ru: 'Пять шагов, именно в таком порядке. Первый может закончить проект, и в этом его смысл.',
@@ -421,10 +459,21 @@ export interface Reason {
   d: LS
 }
 
-export const WHY_LABEL = { en: 'Why this is safe to hand us', ru: 'Почему это можно доверить нам' }
+/**
+ * The heading used to be «Почему это можно доверить нам», the only line on the
+ * page that begged rather than spoke, and two of the five claims under it were
+ * about character rather than about work: «Доводим до конца» and «Честно про
+ * риски» are word for word what the agency that already burned this reader had
+ * on its own site. A claim about what kind of people we are cannot be checked,
+ * so it cannot do the job this block exists to do.
+ *
+ * The count lives in the sub rather than in the heading, so a sixth entry
+ * breaks one string instead of two.
+ */
+export const WHY_LABEL = { en: 'What you can check without asking us', ru: 'Что можно проверить, не спрашивая нас' }
 export const WHY_SUB = {
-  en: 'Five claims, all of them checkable.',
-  ru: 'Пять утверждений, и все можно проверить.',
+  en: 'Five claims about what is already done, not about what we are like.',
+  ru: 'Пять утверждений о том, что уже сделано, а не о том, какие мы.',
 }
 
 export const WHY: Reason[] = [
@@ -450,17 +499,21 @@ export const WHY: Reason[] = [
     },
   },
   {
-    t: { en: 'We finish what we start', ru: 'Доводим до конца' },
+    t: { en: 'Four cases out of four are still running', ru: 'Четыре кейса из четырёх до сих пор работают' },
     d: {
-      en: 'No quitting halfway. We ship it and then we keep it alive.',
-      ru: 'Не бросаем на полпути. Запускаем и потом поддерживаем.',
+      en: 'Swiftin in the Chrome Web Store, Cowee in Telegram, the dashboards and the BAS automations at their clients. Every case above carries its own status.',
+      ru: 'Swiftin в Chrome Web Store, Cowee в Telegram, дашборды и автоматизации на BAS у клиентов. У каждого кейса выше стоит свой статус.',
     },
   },
   {
-    t: { en: 'Straight about risks', ru: 'Честно про риски' },
+    /* Deliberately NOT the free-scoping sentence, which by now appears in the
+       hero sub, PROCESS_SUB, PROCESS[0].d, the FAQ, CALC.disclaimer and
+       CONTACT.h. A seventh copy of one promise is not a fifth reason. This
+       claim appears nowhere else and takes one click to verify. */
+    t: { en: 'The calculator’s own multipliers are published', ru: 'Коэффициенты калькулятора опубликованы' },
     d: {
-      en: 'If a task will not fit the deadline or will not pay for itself, you hear that before the work starts, not after.',
-      ru: 'Если задача не влезает в срок или не окупается, вы услышите это до начала работ, а не после.',
+      en: 'The pricing page shows the estimator’s own multipliers, not just the totals. They are the same numbers the calculator above runs on, and checking that takes a minute.',
+      ru: 'На странице цен лежат сами множители оценки, а не только итоговые суммы. Это те же числа, по которым считает калькулятор выше, и проверить это занимает минуту.',
     },
   },
 ]
@@ -579,9 +632,20 @@ export const CONTACT = {
     en: 'We will cost your task free and tell you straight whether it pays off',
     ru: 'Посчитаем вашу задачу бесплатно и честно скажем, окупится ли она',
   },
+  /* "Describe the task in two sentences" is the highest-leverage instruction
+     available on a site that deliberately has no form: it replaces the blank
+     page a reader faces when they open a chat with a stranger. */
   sub: {
-    en: 'Write on Telegram or by email. We usually reply the same working day, timezone UTC+4.',
-    ru: 'Напишите в Telegram или на почту. Обычно отвечаем в тот же рабочий день, часовой пояс UTC+4.',
+    en: 'Write on Telegram or by email and describe the task in two sentences. We usually reply the same working day, timezone UTC+4.',
+    ru: 'Напишите в Telegram или на почту и опишите задачу в двух предложениях. Обычно отвечаем в тот же рабочий день, часовой пояс UTC+4.',
+  },
+  /* The close handed out a bare address while the calculator two screens up
+     had a properly prefilled mailto. Same treatment now, and the body is three
+     prompts rather than an empty window. */
+  mailDirectSubject: { en: 'Veloris Lab, a task to look at', ru: 'Veloris Lab, задача на разбор' },
+  mailDirectBody: {
+    en: 'What I need:\n\nWhat we do by hand today:\n\nWhen I need it:',
+    ru: 'Что нужно:\n\nЧто сейчас делаем руками:\n\nК какому сроку:',
   },
 }
 
@@ -807,9 +871,21 @@ export const CALC = {
     ru: 'Например: каждое утро менеджер вручную переносит заказы из почты в таблицу, а потом в CRM.',
   },
   q4hint: { en: 'Optional, but it makes the first reply far more useful.', ru: 'Необязательно, но с ним первый ответ будет куда полезнее.' },
-  q5: { en: 'Where should we send the estimate?', ru: 'Куда прислать расчёт?' },
+  q5: { en: 'Add yourself to the brief, if you like', ru: 'Добавьте себя в бриф, если хотите' },
+  q5hint: {
+    en: 'The name and the contact are just added to the text you send yourself. Nothing is stored here and nothing goes anywhere without you.',
+    ru: 'Имя и контакт просто добавятся в текст, который вы отправите сами. Здесь ничего не сохраняется и ничего не уходит без вас.',
+  },
   namePh: { en: 'Your name', ru: 'Как вас зовут' },
   contactPh: { en: 'Telegram or email', ru: 'Telegram или почта' },
+
+  /* The estimate panel used to contain no interactive node at all: the reader
+     self-qualified, self-priced, formed intent, and hit a dead end. */
+  jumpSend: { en: 'Send this estimate', ru: 'Отправить этот расчёт' },
+  copyFailed: {
+    en: 'Copy did not work. Select the text above and copy it.',
+    ru: 'Скопировать не вышло. Выделите текст выше и скопируйте.',
+  },
 
   back: { en: 'Back', ru: 'Назад' },
   next: { en: 'Next', ru: 'Дальше' },

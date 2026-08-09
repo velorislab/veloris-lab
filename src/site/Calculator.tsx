@@ -61,7 +61,9 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
   const [desc, setDesc] = useState('')
   const [name, setName] = useState('')
   const [contact, setContact] = useState('')
-  const [copied, setCopied] = useState(false)
+  /* Three states, not a boolean: the clipboard can fail, and a reader told
+     «Бриф скопирован» over an empty clipboard loses everything they typed. */
+  const [sent, setSent] = useState<null | 'copied' | 'manual'>(null)
 
   const est = useMemo(() => estimate(type, ready, addons), [type, ready, addons])
 
@@ -83,7 +85,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
 
   const reset = () => {
     setStep([1, -1]); setType(opening); setReady(DEFAULT_READY); setAddons([])
-    setDesc(''); setName(''); setContact(''); setCopied(false)
+    setDesc(''); setName(''); setContact(''); setSent(null)
     priceMv.jump(0)
   }
 
@@ -115,10 +117,17 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
   }
 
   const sendTelegram = () => {
-    // Fire the copy without awaiting so window.open stays inside the user
-    // gesture and is not treated as a popup.
-    try { void navigator.clipboard?.writeText(brief()) } catch { /* clipboard unavailable */ }
-    setCopied(true)
+    const text = brief()
+    // Resolve the copy asynchronously but do NOT await it: window.open has to
+    // stay on the synchronous gesture path or the browser treats it as a popup.
+    // The optional chain stays: without it, calling writeText in an insecure or
+    // restricted context throws a TypeError, which is the very case being
+    // handled here.
+    try {
+      const wrote = navigator.clipboard?.writeText(text)
+      if (wrote) wrote.then(() => setSent('copied'), () => setSent('manual'))
+      else setSent('manual')
+    } catch { setSent('manual') }
     window.open(TELEGRAM, '_blank', 'noopener,noreferrer')
   }
 
@@ -250,6 +259,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
               {step === 5 && (
                 <>
                   <span className="vl-calc-q">{L(CALC.q5)}</span>
+                  <p className="vl-calc-hint">{L(CALC.q5hint)}</p>
                   <div className="vl-calc-fields">
                     <input
                       className="vl-field" type="text" aria-label={L(CALC.namePh)}
@@ -260,11 +270,13 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
                       placeholder={L(CALC.contactPh)} value={contact} onChange={(e) => setContact(e.target.value)}
                     />
                   </div>
+                  <pre className="vl-calc-brief">{brief()}</pre>
                   <div className="vl-calc-send">
                     <button type="button" className="vl-btn-signal" onClick={sendTelegram}>{L(CALC.sendTg)}</button>
                     <a className="vl-btn-ghost" href={mailHref}>{L(CALC.sendMail)}</a>
                   </div>
-                  {copied && <p className="vl-calc-copied" role="status">{L(CALC.copied)}</p>}
+                  {sent === 'copied' && <p className="vl-calc-copied" role="status">{L(CALC.copied)}</p>}
+                  {sent === 'manual' && <p className="vl-calc-copied" role="status">{L(CALC.copyFailed)}</p>}
                 </>
               )}
             </motion.div>
@@ -291,7 +303,8 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
         </div>
 
         {/* ---- live estimate ---- */}
-        <aside className="vl-calc-out" aria-live="polite">
+        <aside className="vl-calc-out">
+          <div aria-live="polite">
           {est
             ? (
               <>
@@ -313,6 +326,31 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
               </>
             )
             : <p className="vl-calc-wait">{L(CALC.waiting)}</p>}
+          </div>
+
+          {/* The one moment on the site where a visitor has self-qualified,
+              self-priced and formed an intent, and until now this panel held
+              only spans and paragraphs. It jumps to the last step rather than
+              submitting anything: there is no endpoint on this site and there
+              is not going to be one.
+              The scroll target is .vl-calc-steps, not #calc: below 1080px this
+              panel sits ABOVE the steps, so scrolling to the section top would
+              put the step change off-screen. */}
+          {step < STEPS && (
+            <button
+              type="button"
+              className="vl-btn-signal vl-calc-go"
+              onClick={() => {
+                setStep([STEPS, 1])
+                document.querySelector('.vl-calc-steps')?.scrollIntoView({
+                  behavior: reduce ? 'auto' : 'smooth', block: 'start',
+                })
+              }}
+            >
+              {L(CALC.jumpSend)}
+            </button>
+          )}
+
           <p className="vl-calc-note">{L(CALC.disclaimer)}</p>
         </aside>
 
