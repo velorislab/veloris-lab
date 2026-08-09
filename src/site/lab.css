@@ -837,6 +837,24 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ============ PAID SEPARATELY ============
+   A ruled two-column ledger rather than cards. Six short pairs do not want six
+   boxes, and the register matters: this is a list of facts about who invoices
+   whom, which is what the page's hairline tables are for. */
+
+.vl-sep {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--rule);
+}
+.vl-sep-row {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 20px 0 22px; border-top: 1px solid var(--rule);
+}
+.vl-sep-row:nth-child(even) { border-left: 1px solid var(--rule); padding-left: 36px; }
+.vl-sep-row:nth-child(odd) { padding-right: 36px; }
+.vl-sep dt { font-size: 16px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); }
+.vl-sep dd { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink-mute); max-width: 46ch; }
+
 /* ============ CALCULATOR ============ */
 
 .vl-calc { display: flex; flex-direction: column; gap: 12px; }
@@ -996,6 +1014,9 @@
   .vl-sec-head h2 { font-size: 26px; }
   .vl-hero-sub, .vl-contact-sub { font-size: 15px; }
   .vl-grid, .vl-entries, .vl-why { grid-template-columns: 1fr; }
+  .vl-sep { grid-template-columns: 1fr; }
+  .vl-sep-row:nth-child(even) { border-left: 0; padding-left: 0; }
+  .vl-sep-row:nth-child(odd) { padding-right: 0; }
   /* A 64px indent at this width is a sliver, not a composition. Full width, and
      the overlap reads purely as the band the card cuts across the photo's foot. */
   .vl-founder-shot { max-width: none; }

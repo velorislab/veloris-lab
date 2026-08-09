@@ -29,6 +29,7 @@ import {
   CALC, HERO, FAQ_LABEL, FAQ_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB,
+  SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
   BUREAU, CONTACT, FOOTER, LOGOS, REVIEWS,
   SOCIAL, ABOUT_URL,
 } from './labData'
@@ -310,6 +311,25 @@ export default function Lab({ lang }: { lang: LabLang }) {
         
           <Calculator lang={lang} />
         
+      </section>
+
+      {/* WHAT YOU PAY FOR SEPARATELY. Their strongest trust block per line of
+          copy, and the one section of theirs that needs no material we lack.
+          Deliberately without figures: these bills come from third parties and
+          move, and a price quoted on a landing page goes stale in silence. */}
+      <section className="vl-wrap vl-sec">
+        <div className="vl-sec-head">
+          <h2>{L(SEPARATE_LABEL)}</h2>
+          <p>{L(SEPARATE_SUB)}</p>
+        </div>
+        <dl className="vl-sep">
+          {SEPARATE.map((x, i) => (
+            <div className="vl-sep-row" key={i}>
+              <dt>{L(x.k)}</dt>
+              <dd>{L(x.d)}</dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       {/* WHY */}

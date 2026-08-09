@@ -501,6 +501,72 @@ export const BUREAU = {
   ],
 }
 
+/**
+ * Pass-through costs, stated plainly.
+ *
+ * Their homepage runs this as «Расходники не прячем в цену разработки» and it is
+ * the highest-trust thing on their site per line of copy. Nothing here is a
+ * number: these bills come from third parties, they move, and a figure quoted on
+ * a landing page is a figure that goes stale silently. What matters is WHO the
+ * invoice comes from, which is the part people get burned by.
+ *
+ * The domain line is the one worth keeping even if the section is ever cut. A
+ * business that does not own its own domain is the single most common way an
+ * agency relationship goes wrong.
+ */
+export const SEPARATE_LABEL = {
+  en: 'What you pay for separately',
+  ru: 'За что вы платите отдельно',
+}
+export const SEPARATE_SUB = {
+  en: 'These are billed to you by the provider, not by us, and never with a margin on top. The estimate covers the work, not somebody else’s subscription.',
+  ru: 'Это счета от провайдеров, а не от нас, и без наценки сверху. Смета покрывает работу, а не чужую подписку.',
+}
+export const SEPARATE: { k: LS; d: LS }[] = [
+  {
+    k: { en: 'Hosting and servers', ru: 'Хостинг и серверы' },
+    d: {
+      en: 'The provider invoices you directly. We do not resell capacity.',
+      ru: 'Счёт приходит вам напрямую от провайдера. Мы не перепродаём мощности.',
+    },
+  },
+  {
+    k: { en: 'Domain', ru: 'Домен' },
+    d: {
+      en: 'Registered to your business, not to us. This one matters more than it looks.',
+      ru: 'Оформляется на ваш бизнес, а не на нас. Это важнее, чем кажется.',
+    },
+  },
+  {
+    k: { en: 'AI model usage', ru: 'Обращения к AI-моделям' },
+    d: {
+      en: 'Paid per use at the provider’s published rate. We size it before we build.',
+      ru: 'Оплата по факту использования, по публичному тарифу провайдера. Объём считаем до сборки.',
+    },
+  },
+  {
+    k: { en: 'Payment provider fees', ru: 'Комиссии платёжных систем' },
+    d: {
+      en: 'A percentage of each transaction, taken by the provider or the network.',
+      ru: 'Процент с каждой операции забирает платёжная система или сеть.',
+    },
+  },
+  {
+    k: { en: 'Store accounts', ru: 'Аккаунты магазинов' },
+    d: {
+      en: 'Chrome Web Store, App Store and Google Play each charge a developer fee.',
+      ru: 'Chrome Web Store, App Store и Google Play берут свой взнос с разработчика.',
+    },
+  },
+  {
+    k: { en: 'Mail and messaging', ru: 'Письма и сообщения' },
+    d: {
+      en: 'Delivery services bill by volume once you outgrow their free tier.',
+      ru: 'Сервисы доставки считают по объёму, как только перерастаете бесплатный лимит.',
+    },
+  },
+]
+
 export const CONTACT = {
   label: { en: 'Contact', ru: 'Контакты' },
   // Names the free deliverable AND the possible negative verdict. Backed by

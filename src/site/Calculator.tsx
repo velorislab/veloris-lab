@@ -25,6 +25,17 @@ const EASE = [0.16, 1, 0.3, 1] as const
  * Telegram or mail client. That is why there is no consent checkbox here, we
  * never receive the field values unless the person chooses to send them.
  */
+/**
+ * What the calculator opens on.
+ *
+ * `agent` because AI agents are the headline service and the first card on the
+ * page, and `spec` because its readiness factor is 1.0, so the opening figure is
+ * the service's own floor with nothing added or discounted. Opening on `idea`
+ * (x1.2) would inflate the first number the reader ever sees.
+ */
+const DEFAULT_TYPE = 'agent'
+const DEFAULT_READY = 'spec'
+
 export default function Calculator({ lang }: { lang: LabLang }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
   const reduce = useReducedMotion()
@@ -33,8 +44,14 @@ export default function Calculator({ lang }: { lang: LabLang }) {
   // Direction rides along with the step so the panel can slide the way the
   // visitor is actually moving.
   const [[step, dir], setStep] = useState<[number, number]>([1, 1])
-  const [type, setType] = useState<string | null>(null)
-  const [ready, setReady] = useState<string | null>(null)
+  /* Answered, not empty. The calculator used to open on two blank questions and
+     a "pick the kind of work to see a number" placeholder, which asks the reader
+     to work before it gives them anything. It now opens on the headline service
+     and the neutral readiness, so a real figure is on screen before a single
+     click. Both are ordinary radio selections the reader can change, the price
+     says "from", and the disclaimer sits right under it. */
+  const [type, setType] = useState<string | null>(DEFAULT_TYPE)
+  const [ready, setReady] = useState<string | null>(DEFAULT_READY)
   const [addons, setAddons] = useState<string[]>([])
   const [desc, setDesc] = useState('')
   const [name, setName] = useState('')
@@ -60,12 +77,14 @@ export default function Calculator({ lang }: { lang: LabLang }) {
     setAddons((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]))
 
   const reset = () => {
-    setStep([1, -1]); setType(null); setReady(null); setAddons([])
+    setStep([1, -1]); setType(DEFAULT_TYPE); setReady(DEFAULT_READY); setAddons([])
     setDesc(''); setName(''); setContact(''); setCopied(false)
     priceMv.jump(0)
   }
 
-  // Steps 1 and 2 are the only ones that gate progress; 3 to 5 are all optional.
+  /* Nothing gates progress any more: steps 1 and 2 arrive answered and 3 to 5
+     were always optional. Kept as an expression rather than deleted because it
+     is the one place that would need to know, if a future step ever does. */
   const blocked = (step === 1 && !type) || (step === 2 && !ready)
 
   const labelOf = (list: { key: string; label: Parameters<typeof tx>[0] }[], key: string | null) => {
