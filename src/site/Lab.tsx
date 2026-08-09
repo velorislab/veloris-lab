@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import Link from 'next/link'
 // The `/ssr` submodule, because this file is a Server Component: those variants
 // render without React Context. One family, one weight, never hand-drawn.
 import {
@@ -7,7 +6,7 @@ import {
   TelegramLogoIcon,
   LinkedinLogoIcon,
 } from '@phosphor-icons/react/ssr'
-import { localizedHref } from './routing'
+import { SiteNav, SiteFooter } from './SiteChrome'
 import CopyEmail from './CopyEmail'
 import Calculator from './Calculator'
 import HeroCopy from './HeroCopy'
@@ -21,7 +20,7 @@ import ScrollStroke from './ScrollStroke'
 import {
   type LabLang,
   tx,
-  BRAND, EMAIL, TELEGRAM, TELEGRAM_HANDLE, SWIFTIN,
+  EMAIL, TELEGRAM, TELEGRAM_HANDLE,
   UI, SERVICES, SERVICES_LABEL, SERVICES_SUB,
   CASES, CASES_LABEL, CASES_SUB, CASE_KEYS,
   PROCESS_LABEL, PROCESS_SUB,
@@ -30,7 +29,7 @@ import {
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB,
   SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
-  BUREAU, CONTACT, FOOTER, LOGOS, REVIEWS,
+  BUREAU, CONTACT, LOGOS, REVIEWS,
   SOCIAL, ABOUT_URL,
 } from './labData'
 import { WORK_TYPES, money, priced } from './labPricing'
@@ -58,33 +57,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
   return (
     <div className="vl-root">
 
-      {/* NAV */}
-      <header className="vl-nav">
-        <div className="vl-wrap vl-nav-in">
-          <a href="#top" className="vl-brand">
-            <span className="vl-mark" aria-hidden="true" />
-            {BRAND}
-          </a>
-          <nav className="vl-links">
-            <a href="#services">{L(UI.navServices)}</a>
-            <a href="#cases">{L(UI.navCases)}</a>
-            <a href="#process">{L(UI.navProcess)}</a>
-            <a href="#calc">{L(UI.navCalc)}</a>
-            <a href="#bureau">{L(UI.navBureau)}</a>
-          </nav>
-          <div className="vl-nav-right">
-            <div className="vl-langsw">
-              {lang === 'en'
-                ? <span className="vl-lang-on">en</span>
-                : <Link href={localizedHref('en')} hrefLang="en">en</Link>}
-              {lang === 'ru'
-                ? <span className="vl-lang-on">ru</span>
-                : <Link href={localizedHref('ru')} hrefLang="ru">ru</Link>}
-            </div>
-            <a href="#contact" className="vl-nav-cta">{L(UI.cta)}</a>
-          </div>
-        </div>
-      </header>
+      <SiteNav lang={lang} />
 
       {/* `main-content` is the target of the site-wide skip link in RootBody. */}
       <main id="main-content">
@@ -475,17 +448,7 @@ export default function Lab({ lang }: { lang: LabLang }) {
 
       </main>
 
-      {/* FOOTER */}
-      <footer className="vl-wrap vl-foot">
-        <span className="vl-foot-line">{L(FOOTER.line)}</span>
-        <nav className="vl-foot-nav">
-          {/* Absolute, not `/about`. That route lived in the Swiftin repo this
-              project was split out of; here it 404s. */}
-          <a href={ABOUT_URL} target="_blank" rel="noopener noreferrer">{L(UI.founderLink)}</a>
-          <a href={SWIFTIN} target="_blank" rel="noopener noreferrer">{L(UI.productLink)}</a>
-          <a href={TELEGRAM} target="_blank" rel="noopener noreferrer">Telegram</a>
-        </nav>
-      </footer>
+      <SiteFooter lang={lang} />
 
     </div>
   )

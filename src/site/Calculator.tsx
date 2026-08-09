@@ -36,7 +36,7 @@ const EASE = [0.16, 1, 0.3, 1] as const
 const DEFAULT_TYPE = 'agent'
 const DEFAULT_READY = 'spec'
 
-export default function Calculator({ lang }: { lang: LabLang }) {
+export default function Calculator({ lang, seedType }: { lang: LabLang; seedType?: string }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
   const reduce = useReducedMotion()
   const hydrated = useHydrated()
@@ -50,7 +50,12 @@ export default function Calculator({ lang }: { lang: LabLang }) {
      and the neutral readiness, so a real figure is on screen before a single
      click. Both are ordinary radio selections the reader can change, the price
      says "from", and the disclaimer sits right under it. */
-  const [type, setType] = useState<string | null>(DEFAULT_TYPE)
+  /* On a service page the first question is already answered by the page the
+     reader is standing on, so it arrives seeded. Asking somebody what kind of
+     work they want directly under a heading naming that work is a question with
+     one obvious answer, which is a question worth not asking. */
+  const opening = seedType ?? DEFAULT_TYPE
+  const [type, setType] = useState<string | null>(opening)
   const [ready, setReady] = useState<string | null>(DEFAULT_READY)
   const [addons, setAddons] = useState<string[]>([])
   const [desc, setDesc] = useState('')
@@ -77,7 +82,7 @@ export default function Calculator({ lang }: { lang: LabLang }) {
     setAddons((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]))
 
   const reset = () => {
-    setStep([1, -1]); setType(DEFAULT_TYPE); setReady(DEFAULT_READY); setAddons([])
+    setStep([1, -1]); setType(opening); setReady(DEFAULT_READY); setAddons([])
     setDesc(''); setName(''); setContact(''); setCopied(false)
     priceMv.jump(0)
   }

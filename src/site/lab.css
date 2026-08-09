@@ -837,6 +837,86 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ============ SERVICE PAGE ============
+   Twelve of these. Everything here is layout only: the page's surfaces, cards
+   and rules are the ones the home page already defines, because a service page
+   that invents its own is a second design system with one maintainer. */
+
+.vl-crumb {
+  display: flex; align-items: center; gap: 10px;
+  padding-top: 26px;
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.vl-crumb a { color: var(--ink-faint); text-decoration: none; transition: color 0.16s ease; }
+.vl-crumb a:hover { color: var(--ink); }
+
+.vl-sp-hero { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 40px 0 8px; }
+/* The price is a line of the heading, not a detail below it: these pages exist
+   to answer "what does X cost", and the answer belongs in the h1. */
+.vl-sp-h1 {
+  display: flex; flex-direction: column; gap: 6px;
+  font-size: clamp(34px, 4.2vw, 48px); font-weight: 600;
+  line-height: 1.06; letter-spacing: -0.03em; max-width: 18ch;
+}
+.vl-sp-price {
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: clamp(24px, 3vw, 34px); letter-spacing: -0.01em; color: var(--accent);
+}
+.vl-sp-lead { font-size: 17px; line-height: 1.55; color: var(--ink-mute); max-width: 58ch; }
+
+.vl-sp-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.vl-sp-pills > div {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 9px 14px; background: var(--surface);
+  border: 1px solid var(--rule); border-radius: var(--r-3);
+}
+.vl-sp-pills dt {
+  font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint);
+}
+.vl-sp-pills dd {
+  margin: 0; font-family: var(--font-vl-mono), ui-monospace, monospace;
+  font-size: 13px; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+.vl-sp-acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+
+/* Three lines, ruled apart. A bulleted list would make them look like features;
+   they are alternative descriptions of one situation, and only one has to land. */
+.vl-sp-when { list-style: none; border-top: 1px solid var(--rule); }
+.vl-sp-when li {
+  padding: 18px 0; border-bottom: 1px solid var(--rule);
+  font-size: 18px; line-height: 1.45; color: var(--ink); max-width: 62ch;
+}
+
+.vl-sp-scope { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+.vl-sp-scope li {
+  padding: 10px 15px; background: var(--surface);
+  border: 1px solid var(--rule); border-radius: var(--r-3);
+  font-size: 14px; color: var(--ink);
+}
+
+.vl-sp-drivers { display: flex; flex-direction: column; gap: 14px; }
+.vl-sp-drivers h2 { font-size: 26px; font-weight: 600; letter-spacing: -0.025em; }
+.vl-sp-drivers p { font-size: 16px; line-height: 1.6; color: var(--ink-mute); max-width: 68ch; }
+.vl-sp-note {
+  padding-top: 14px; border-top: 1px solid var(--rule-soft);
+  font-size: 13.5px; color: var(--ink-faint);
+}
+
+.vl-sp-cases {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+  border-radius: var(--r-5); overflow: hidden; box-shadow: var(--sh-2);
+}
+.vl-sp-case { display: flex; flex-direction: column; gap: 10px; padding: 24px 24px 26px; background: var(--surface); }
+.vl-sp-case-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.vl-sp-case h3 { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+.vl-sp-case > p { font-size: 14px; line-height: 1.5; color: var(--ink-mute); }
+.vl-sp-case-res { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--rule-soft); }
+.vl-sp-case-res dd { margin: 0; margin-top: 6px; font-size: 14px; line-height: 1.5; color: var(--ink); }
+
 /* ============ PAID SEPARATELY ============
    A ruled two-column ledger rather than cards. Six short pairs do not want six
    boxes, and the register matters: this is a list of facts about who invoices
@@ -1015,6 +1095,8 @@
   .vl-hero-sub, .vl-contact-sub { font-size: 15px; }
   .vl-grid, .vl-entries, .vl-why { grid-template-columns: 1fr; }
   .vl-sep { grid-template-columns: 1fr; }
+  .vl-sp-cases { grid-template-columns: 1fr; }
+  .vl-sp-h1 { max-width: none; }
   .vl-sep-row:nth-child(even) { border-left: 0; padding-left: 0; }
   .vl-sep-row:nth-child(odd) { padding-right: 0; }
   /* A 64px indent at this width is a sliver, not a composition. Full width, and

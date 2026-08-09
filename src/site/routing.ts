@@ -44,3 +44,29 @@ export function buildAlternates(lang: LabLang) {
     },
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Service pages. English keeps the bare root, so `/services/<slug>`; Russian
+   keeps its prefix, so `/ru/services/<slug>`. Same rule as the home route, and
+   this file stays the only place that knows it.
+   --------------------------------------------------------------------------- */
+
+export function servicePath(lang: LabLang, slug: string): string {
+  return lang === 'en' ? `/services/${slug}` : `/${lang}/services/${slug}`
+}
+
+export function serviceUrl(lang: LabLang, slug: string): string {
+  return `${SITE_URL}${servicePath(lang, slug)}`
+}
+
+/** hreflang map for one service page, plus x-default on English. */
+export function buildServiceAlternates(lang: LabLang, slug: string) {
+  return {
+    canonical: serviceUrl(lang, slug),
+    languages: {
+      en: serviceUrl('en', slug),
+      ru: serviceUrl('ru', slug),
+      'x-default': serviceUrl('en', slug),
+    },
+  }
+}

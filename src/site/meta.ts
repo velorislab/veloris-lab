@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { BRAND, EMAIL, TELEGRAM, LINKEDIN, SERVICES, tx } from './labData'
-import { buildAlternates, localizedUrl, type LabLang } from './routing'
+import { buildAlternates, buildServiceAlternates, localizedUrl, serviceUrl, type LabLang } from './routing'
+import { SERVICE_PAGES, type ServicePage } from './servicePages'
+import { WORK_TYPES, money, priced } from './labPricing'
 
 /**
  * Everything both language routes share: metadata, JSON-LD, and the two raw
@@ -103,3 +105,78 @@ export const NOSCRIPT_CSS = `
 .vl-root [style*="opacity:0"], .vl-root [style*="opacity: 0"],
 .vl-word > span { opacity: 1 !important; transform: none !important; }
 `
+
+/* ---------------------------------------------------------------------------
+   Service pages.
+   --------------------------------------------------------------------------- */
+
+/**
+ * Title and description for one service page.
+ *
+ * The price goes in both, because these pages exist to be found by somebody
+ * typing "how much does X cost". It is read from labPricing rather than written
+ * here, so a repricing cannot leave twelve `<title>` tags behind saying the old
+ * figure while the page under them says the new one.
+ */
+export function serviceMetadata(lang: LabLang, page: ServicePage): Metadata {
+  const svc = SERVICES.find((x) => x.key === page.key)
+  const work = WORK_TYPES.find((w) => w.key === page.key)
+  const name = tx(svc?.t, lang)
+  const from = work ? money(priced(work.from)) : ''
+  const title = lang === 'ru'
+    ? `${name} на заказ, от ${from} — ${BRAND}`
+    : `${name}, from ${from} — ${BRAND}`
+  const description = `${tx(svc?.d, lang)} ${tx(page.priceDrivers, lang)}`.slice(0, 300)
+  const url = serviceUrl(lang, page.slug)
+  return {
+    title,
+    description,
+    alternates: buildServiceAlternates(lang, page.slug),
+    openGraph: { type: 'article', title, description, url, siteName: BRAND },
+  }
+}
+
+/** Service + Offer + BreadcrumbList for one service page. */
+export function serviceJsonLd(lang: LabLang, page: ServicePage) {
+  const svc = SERVICES.find((x) => x.key === page.key)
+  const work = WORK_TYPES.find((w) => w.key === page.key)
+  const url = serviceUrl(lang, page.slug)
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: tx(svc?.t, lang),
+      description: tx(svc?.d, lang),
+      url,
+      provider: { '@type': 'Organization', name: BRAND, url: localizedUrl(lang) },
+      areaServed: 'Worldwide',
+      ...(work
+        ? {
+            offers: {
+              '@type': 'Offer',
+              // `price` here is a floor, which is exactly what lowPrice means.
+              // Publishing it as `price` would assert a fixed figure we do not
+              // quote anywhere else on the site.
+              priceSpecification: {
+                '@type': 'PriceSpecification',
+                minPrice: priced(work.from),
+                priceCurrency: 'USD',
+              },
+              availability: 'https://schema.org/InStock',
+            },
+          }
+        : {}),
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: BRAND, item: localizedUrl(lang) },
+        { '@type': 'ListItem', position: 2, name: tx(svc?.t, lang), item: url },
+      ],
+    },
+  ]
+}
+
+/** Every service slug, for generateStaticParams on both locales. */
+export const SERVICE_SLUGS = SERVICE_PAGES.map((p) => ({ slug: p.slug }))
