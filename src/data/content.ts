@@ -25,7 +25,7 @@ import {
   PROCESS, PROCESS_LABEL, PROCESS_SUB,
   WHY, WHY_LABEL, WHY_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
-  STACK_LABEL, STACK_SUB, TOOLS, STACK_GROUPS,
+  STACK_LABEL, STACK_SUB, TOOLS, STACK_GROUPS, WORK_MODEL, WORK_MODEL_LABEL,
   FAQ, FAQ_LABEL,
   BUREAU, CONTACT, CASES, CASES_LABEL, CASES_SUB, EYEBROW, UI, MOTTO_TITLE, CALC,
 } from '@/site/labData'
@@ -197,6 +197,16 @@ export function getHome(lang: LabLang) {
          not used, which no studio's stack page does, including the one this is
          modelled on. The claim this section makes is capability; the claim the
          case cards make is history, and those stay specific. */
+      /* The three facts that close this section. The support figure is read from
+         the cheapest tier on the ladder rather than typed, so it cannot drift
+         from /pricing. */
+      modelLabel: L(WORK_MODEL_LABEL),
+      model: WORK_MODEL.map((m) => ({
+        k: L(m.k),
+        v: L(m.v) === '__SUPPORT__'
+          ? `${L({ en: 'from', ru: 'от' })} ${money(monthly(SUPPORT_TIERS[0].perMonth))}${L(CALC.perMonth)}`
+          : L(m.v),
+      })),
       groups: STACK_GROUPS.map((g) => ({
         key: g.key,
         kicker: L(g.kicker),
@@ -271,7 +281,16 @@ export function getHome(lang: LabLang) {
       badge: { icon: `${ICON}/who-can-use.svg`, label: L(EYEBROW.entry) },
       title: L(ENTRY_LABEL),
       description: L(ENTRY_SUB),
-      items: ENTRY.map((e) => ({ title: L(e.t), description: L(e.d) })),
+      items: ENTRY.map((e, i) => ({
+        /* «01 / Есть идея», the reader's own situation as the label. Numbered
+           because three states read as a sequence otherwise, and they are not
+           one: they are three doors. */
+        marker: `${String(i + 1).padStart(2, '0')} / ${L(e.state)}`,
+        title: L(e.t),
+        description: L(e.d),
+        ctaLabel: L(e.cta),
+        ctaHref: e.href,
+      })),
       panel: {
         kicker: L(EYEBROW.calc),
         title: L(CONTACT.h),

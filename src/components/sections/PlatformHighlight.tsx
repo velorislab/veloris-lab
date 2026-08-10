@@ -43,7 +43,7 @@ function rotate<T>(items: T[], by: number): T[] {
  */
 export function PlatformHighlight({ lang }: { lang: LabLang }) {
   const { platformHighlight } = getHome(lang);
-  const { tags, groups } = platformHighlight;
+  const { tags, groups, model } = platformHighlight;
   const step = Math.ceil(tags.length / 3);
   const rows = [0, 1, 2].map((index) => rotate(tags, index * step));
 
@@ -180,6 +180,38 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
               </ul>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* THE MODEL OF WORK, closing the section.
+          A competitor ends their stack block on exactly these three and the
+          placement is right: a reader who has just been shown a hundred and
+          sixty technologies is one step away from wondering what any of it costs
+          to be tied to. Two of the three are read from the price table so they
+          cannot drift; the third is a contract term. */}
+      {model.length > 0 && (
+        <div className="relative flex w-full flex-col items-center gap-6 border-t border-line-soft pt-8">
+          <p className="max-w-[720px] text-center font-display text-[20px] leading-[30px] text-ink-800 tablet:text-[24px] tablet:leading-9">
+            {platformHighlight.modelLabel}
+          </p>
+          <ul className="flex w-full flex-col items-stretch gap-4 tablet:flex-row tablet:justify-center tablet:gap-0">
+            {model.map((m, i) => (
+              <li
+                key={m.k}
+                className={
+                  "flex flex-1 flex-col items-center gap-1 text-center tablet:px-8 " +
+                  (i > 0 ? "tablet:border-l tablet:border-line-soft" : "")
+                }
+              >
+                <span className="text-[12px] font-medium tracking-[0.08em] text-ink-200 uppercase">
+                  {String(i + 1).padStart(2, "0")} / {m.k}
+                </span>
+                <span className="font-display text-[20px] leading-8 font-semibold text-ink-900 tablet:text-[22px]">
+                  {m.v}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </section>

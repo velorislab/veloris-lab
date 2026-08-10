@@ -332,9 +332,12 @@ export const MOTTO_TITLE = {
    verbatim AND mislabelled its own grid: dashboards, MVPs and billing are not
    routine coming off a team. */
 export const SERVICES_LABEL = { en: 'Six kinds of work. Yours is one of them', ru: 'Шесть направлений. Ваша задача в одном из них' }
+/* This described the interface rather than the work: «на каждой карточке то-то и
+   то-то» is a caption for a table of contents. A reader who has got this far
+   wants to know whether we have done the thing, not how to read the row. */
 export const SERVICES_SUB = {
-  en: 'Every card says when this is you, where the price starts and how long the first version runs.',
-  ru: 'На каждой карточке: когда это про вас, с чего начинается цена и сколько идёт первая версия.',
+  en: 'Not a price-list line each: every one of these we have taken all the way to production. The card says what people arrive with, what ships, where the price starts and how long the first version runs.',
+  ru: 'Это не строчки в прайсе: каждое направление мы доводили до прода. На карточке то, с чем к нам приходят, что в итоге уезжает в прод, с чего начинается цена и сколько идёт первая версия.',
 }
 
 
@@ -839,19 +842,51 @@ export const ENTRY_SUB = {
   en: 'An idea will do, or a process still done by hand, or a system that already runs. That is what we work from.',
   ru: 'Подойдёт идея, процесс, который пока делают руками, или система, которая уже работает. От этого и пойдём.',
 }
-export const ENTRY: { t: LS; d: LS }[] = [
+/* THREE FUNNELS, NOT ONE, which is the change here.
+   Each of these used to be a title and a paragraph, and the whole section ended
+   on the single CTA in the panel beside it. A reader who recognises themselves
+   in the third card has to scroll past the other two to act. Each now carries
+   the situation it answers, as a numbered label, and its own button. Two point
+   at the calculator and one at the conversation, because a running system is not
+   something a calculator can price and saying otherwise would waste the click. */
+export const ENTRY: { state: LS; t: LS; d: LS; cta: LS; href: string }[] = [
   {
+    state: { en: 'You have an idea', ru: 'Есть идея' },
     t: { en: 'We turn the idea into an estimate', ru: 'Соберём смету прямо из идеи' },
     d: { en: 'So far there is only an idea. One short call, and you have one scenario for the first version, its price and its window.', ru: 'Пока есть только идея. Короткий созвон, и у вас на руках один сценарий первой версии, его цена и срок.' },
+    cta: { en: 'Price the first version', ru: 'Посчитать первую версию' },
+    href: '#estimate',
   },
   {
+    state: { en: 'You have a process', ru: 'Есть процесс' },
     t: { en: 'We work out whether it pays for itself', ru: 'Посчитаем, окупится ли автоматизация' },
     d: { en: 'The process already runs, but by hand. We turn the hours into money and say plainly when automating is not worth it.', ru: 'Процесс уже идёт, но руками. Переводим часы в деньги и прямо говорим, когда автоматизировать не стоит.' },
+    cta: { en: 'Work out the payback', ru: 'Посчитать окупаемость' },
+    href: '#estimate',
   },
   {
+    state: { en: 'You have a product', ru: 'Есть продукт' },
     t: { en: 'We plan the next release, no rewrite', ru: 'Предложим релиз без переписывания' },
     d: { en: 'The system already runs. We read the code and the architecture, find where it hits a ceiling, and plan what ships next.', ru: 'Система уже работает. Читаем код и архитектуру, находим, во что она упирается, и планируем следующий релиз.' },
+    cta: { en: 'Have the code looked at', ru: 'Показать код на разбор' },
+    href: '#contact',
   },
+]
+
+/* THE MODEL OF WORK, three facts under the stack.
+   A competitor closes their stack section on exactly this and it is the right
+   place for it: a reader who has just been shown a hundred and sixty
+   technologies is one step from wondering what any of it costs to be tied to.
+   Two of these are published elsewhere on the site and read from the price
+   table. The third is a contract term, not a figure. */
+export const WORK_MODEL_LABEL = {
+  en: 'We do not sell an unknown number of hours',
+  ru: 'Мы не продаём неизвестное количество часов',
+}
+export const WORK_MODEL: { k: LS; v: LS }[] = [
+  { k: { en: 'Budget', ru: 'Бюджет' }, v: { en: 'before we start', ru: 'до старта работ' } },
+  { k: { en: 'Support', ru: 'Поддержка' }, v: { en: '__SUPPORT__', ru: '__SUPPORT__' } },
+  { k: { en: 'Code and accounts', ru: 'Код и аккаунты' }, v: { en: '100% yours', ru: '100% ваши' } },
 ]
 
 /** Stack, grouped. Same set as the founder page, so the two never disagree. */

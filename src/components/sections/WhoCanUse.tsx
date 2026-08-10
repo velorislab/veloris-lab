@@ -1,4 +1,3 @@
-import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
 import { SectionBadge } from "@/components/ui/SectionBadge";
 import { getHome } from "@/data/content";
@@ -43,13 +42,41 @@ export function WhoCanUse({ lang }: { lang: LabLang }) {
           </div>
         </div>
 
+        {/* CARDS, NOT AN ACCORDION, and the reason is the buttons.
+            These three are not a sequence, they are three doors: a reader
+            arrives already knowing which of the three they are. An accordion
+            shows one and hides the other two behind a click, and it has nowhere
+            to put a call to action, so the whole section used to funnel into the
+            single button in the panel beside it. Someone who recognises
+            themselves in the third door had to scroll past the other two to act.
+            Each card now names the situation it answers and ends on its own
+            button: two at the calculator, one at the conversation, because a
+            running system is not something a calculator can price. */}
         {whoCanUse.items.length > 0 && (
-          <Accordion
-            items={whoCanUse.items.map((item) => ({
-              title: item.title,
-              body: item.description,
-            }))}
-          />
+          <ul className="flex w-full flex-col gap-[14px]">
+            {whoCanUse.items.map((item) => (
+              <li
+                key={item.title}
+                className="flex flex-col gap-2 rounded-panel bg-surface p-5 shadow-[0_0_0_1px_var(--color-line-soft),0_2px_6px_0_rgba(182,182,182,0.1)] tablet:p-6"
+              >
+                <span className="text-[12px] font-medium tracking-[0.08em] text-ink-200 uppercase">
+                  {item.marker}
+                </span>
+                <h3 className="text-[19px] leading-7 text-ink-900 tablet:text-[21px] tablet:leading-8">
+                  {item.title}
+                </h3>
+                <p className="text-[15px] leading-[22px] text-ink-300 tablet:text-[16px] tablet:leading-6">
+                  {item.description}
+                </p>
+                <a
+                  href={item.ctaHref}
+                  className="mt-1 self-start text-[15px] leading-6 font-medium text-accent underline decoration-accent/30 underline-offset-4 transition-colors duration-200 hover:decoration-accent"
+                >
+                  {item.ctaLabel}
+                </a>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
 
