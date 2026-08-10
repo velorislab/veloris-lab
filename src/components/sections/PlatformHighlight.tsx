@@ -117,9 +117,20 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
         )}
       </div>
 
+      {/* ONE ROW, AND aria-hidden, and both are corrections to the change that
+          put seventy-one names in here.
+
+          Three rows, each duplicated by the marquee so the loop has no seam, put
+          426 tool names into the page text in a row. On screen that is a ticker;
+          in the accessibility tree, in a text extraction and to a search engine
+          it is a wall of nouns that buries everything after it. The grouped cards
+          directly below carry every one of those names in a real list with a
+          heading and a sentence, so the ticker owes the reader nothing: it is
+          decoration and now declares itself as such. One row instead of three
+          for the same reason, plus it no longer competes with the cards. */}
       {tags.length > 0 && (
-        <div className="relative flex w-full flex-col items-start gap-3">
-          {rows.map((row, index) => (
+        <div aria-hidden className="relative flex w-full flex-col items-start gap-3">
+          {rows.slice(0, 1).map((row, index) => (
             <Marquee
               key={index}
               gap={18}

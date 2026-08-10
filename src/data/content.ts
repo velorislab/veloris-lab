@@ -27,11 +27,12 @@ import {
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB, TOOLS, STACK_GROUPS,
   FAQ, FAQ_LABEL,
-  BUREAU, CONTACT, CASES, EYEBROW, UI, MOTTO_TITLE, CALC,
+  BUREAU, CONTACT, CASES, CASES_LABEL, CASES_SUB, EYEBROW, UI, MOTTO_TITLE, CALC,
 } from '@/site/labData'
 import { WORK_TYPES, SUPPORT_TIERS, money, priced, monthly } from '@/site/labPricing'
 import { SERVICE_PAGES } from '@/site/servicePages'
-import { pricingPath, servicePath, localizedHref } from '@/site/routing'
+import { CASE_PAGES } from '@/site/casePages'
+import { pricingPath, servicePath, casePath, localizedHref } from '@/site/routing'
 
 const ICON = '/images/icons/badge'
 
@@ -101,6 +102,38 @@ export function getHome(lang: LabLang) {
       ],
     },
 
+    /* THE CASES, ON THE HOME PAGE, WITH THEIR FIGURES.
+       Until now four real projects reached the reader as the digit in «4 живых
+       кейса» and nothing else, while the task, the solution, the result, the
+       status and the links all sat in CASES unused. Proof was the strongest
+       thing the page had and the only thing it did not show. */
+    cases: {
+      badge: { icon: `${ICON}/who-can-use.svg`, label: L(EYEBROW.cases) },
+      title: L(CASES_LABEL),
+      description: L(CASES_SUB),
+      items: CASES.map((c) => {
+        /* `match` is documented as the English title, so the join has to ask
+           for the English form explicitly rather than the reader's. */
+        const en = tx(c.title, 'en')
+        const page = CASE_PAGES.find((x) => x.match === en)
+        return {
+          slug: page?.slug ?? en.toLowerCase(),
+          /* Their cards open on a two-token domain marker. Ours is the first two
+             of the case's own tags, which are already the truthful shorthand for
+             what the thing is. */
+          marker: c.tags.slice(0, 2).join(' · '),
+          title: L(c.title),
+          sub: L(c.sub),
+          status: L(c.status),
+          live: c.live,
+          result: L(c.res),
+          href: page ? casePath(lang, page.slug) : pricingPath(lang),
+          readLabel: L(UI.readCase),
+          links: c.links.filter((l) => /^https?:/.test(l.href)),
+        }
+      }),
+    },
+
     /* ------------------------------------------------- the six, as cards */
     whatsIn: {
       title: L(SERVICES_LABEL),
@@ -130,6 +163,16 @@ export function getHome(lang: LabLang) {
       }),
       orbitLogos: [] as string[],
     },
+
+    /* THE PRICE TICKER under the first screen. A competitor runs five
+       product-and-price pairs there and it is the strongest thing on their fold:
+       a claim made in numbers that the rest of the page then has to keep. Ours
+       is every work type and its floor, read from the table, so it cannot drift
+       from the calculator sitting further down the same page. */
+    priceTicker: WORK_TYPES.map((w) => ({
+      label: L(w.label),
+      price: `${L({ en: 'from', ru: 'от' })} ${money(priced(w.from))}`,
+    })),
 
     /* ------------------------------------------------------------- stack */
     platformHighlight: {
