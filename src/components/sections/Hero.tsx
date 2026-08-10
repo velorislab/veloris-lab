@@ -120,17 +120,14 @@ export function Hero({ lang }: { lang: LabLang }) {
       <div className="relative flex w-full max-w-[1101px] flex-col items-center gap-[50px]">
         <div className="relative flex w-full flex-col items-center gap-10 desktop:px-20">
           <div className="relative flex w-full max-w-[941px] flex-col items-center gap-4">
-            <motion.div
-              variants={heroVariants.badge}
-              initial={initial}
-              animate={animate}
-              transition={transitions.badge}
-              className="flex items-center overflow-hidden rounded-pill bg-surface px-[14px] py-2 shadow-[var(--shadow-badge)]"
-            >
-              <span className="text-center text-[16px] leading-6 text-ink-600">
-                {hero.badge.text}
-              </span>
-            </motion.div>
+            {/* The credential pill that used to open the fold is gone, at the
+                founder's call. What it said now opens the sub instead, as a
+                sentence rather than a chip, and the first screen carries one
+                fewer object above the headline.
+
+                `heroVariants.badge` and `transitions.badge` stay in the motion
+                config: they are the template's, shared, and not ours to prune
+                from here. */}
 
             <div className="flex w-full flex-col items-center justify-center gap-5 text-center">
               <motion.h1

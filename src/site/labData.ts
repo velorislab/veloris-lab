@@ -157,18 +157,28 @@ export const HERO = {
     },
   },
   /**
-   * The sub carries the offer now, and it has to.
+   * The sub carries PROOF first and the offer second, in that order.
    *
-   * It used to list the six services, which is exactly what the rotating word
-   * above says, so keeping it would have been the same sentence twice. More
-   * importantly the headline stopped being an offer and became a category, and
-   * price certainty is the one claim this business has that the market leader
-   * cannot make better. If it is not in the h1 it has to be in the line under
-   * it, or the fold stops selling anything.
+   * It used to list the six services, which is what the rotating word above
+   * already says. It then carried the offer alone. The reach figure goes first
+   * now because the fold has nothing else standing for competence since the
+   * credential badge came out of it, and a number a stranger can weigh does
+   * more work in that position than a promise does. The offer still follows in
+   * the same breath, because price certainty is the one claim this business can
+   * make that the market leader cannot make better, and dropping it would leave
+   * the fold selling nothing.
+   *
+   * THE FIGURE IS THE FOUNDER'S AND IS NOT DERIVED FROM ANYTHING IN THIS REPO.
+   * Site data holds one user count, Swiftin's 1000+; ten thousand is the total
+   * across everything built here, confirmed by the founder on 2026-08-10. It is
+   * the kind of claim a prospect can ask about, so it moves only on their word.
+   *
+   * The gap in «10 000» is a non-breaking space, so the number cannot be split
+   * across two lines.
    */
   sub: {
-    en: 'You know the price and the timeline before we start. The scoping is free, and it can end with us telling you not to build it.',
-    ru: 'Цену и срок вы знаете до старта. Разбор задачи бесплатный, и он может закончиться советом этого не делать.',
+    en: 'More than 10,000 people use the products we have built. You know the price and the timeline before we start, and the scoping is free.',
+    ru: 'Продуктами, которые мы собрали, пользуются больше 10 000 человек. Цену и срок вы узнаете до старта, разбор задачи бесплатный.',
   },
   /**
    * The facts strip, directly under the dark band. Every row is checkable
@@ -188,6 +198,11 @@ export const HERO = {
     { k: { en: 'First reply', ru: 'Первый ответ' }, v: { en: 'same working day', ru: 'в тот же рабочий день' }, hot: false },
     { k: { en: 'Projects shipped', ru: 'Проектов сдано' }, v: '15+', hot: false },
     { k: { en: 'Automations built', ru: 'Автоматизаций' }, v: '20+', hot: false },
+    /* NOTHING RENDERS THIS ONE any more. It was the hero's credential badge and
+       that badge is gone; the claim itself still reaches the reader from the
+       Swiftin case page and the services copy. Kept because the indices above
+       are referenced positionally and because the fact is true and may want a
+       home again, not because it is on screen. */
     { k: { en: 'Own product', ru: 'Свой продукт' }, v: { en: 'Swiftin, 1000+ users', ru: 'Swiftin, 1000+ пользователей' }, hot: true },
   ] as { k: LS; v: LS; hot: boolean }[],
 }

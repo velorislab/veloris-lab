@@ -43,10 +43,12 @@ export function getHome(lang: LabLang) {
   return {
     /* ---------------------------------------------------------------- hero */
     hero: {
-      /* The badge slot held "3,500+ Pro Users" over three stock portraits. It
-         carries our single strongest credential instead, and no faces: the
-         people in those avatars are not our customers. */
-      badge: { text: `${L(HERO.facts[5].k)}: ${L(HERO.facts[5].v)}`, avatars: [] as string[] },
+      /* NO BADGE. The template's slot held "3,500+ Pro Users" over three stock
+         portraits; it then held our Swiftin credential with the faces removed,
+         because the people in those avatars are not our customers. It is out
+         altogether now at the founder's call: the reach figure moved into the
+         sub, where it is a sentence rather than a chip, and the first screen
+         reads with one less thing in it. */
       title: L(HERO.h1),
       /* The plain sentence stays in `title` for metadata and for a reader with
          no JavaScript; these two drive the cycling version. */
