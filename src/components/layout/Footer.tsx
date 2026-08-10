@@ -49,7 +49,7 @@ export function Footer({ lang }: { lang: LabLang }) {
           <Link
             href={home}
             aria-label={homeAria}
-            className="vl-logo flex items-center gap-3 font-display text-[26px] leading-[54px] font-medium text-ink-700 transition-colors duration-200 hover:text-ink-500"
+            className="flex items-center gap-3 font-display text-[26px] leading-[54px] font-medium text-ink-700 transition-colors duration-200 hover:text-ink-500"
           >
             <Mark size={28} />
             {name}

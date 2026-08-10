@@ -186,13 +186,10 @@ export function Header({ lang }: { lang: LabLang }) {
         className="relative flex h-[94px] w-full items-center justify-center overflow-visible px-4 pt-6 tablet:px-10 desktop:px-0"
       >
         <div className="flex h-[70px] w-full max-w-[450px] items-center justify-between rounded-pill bg-surface-dark py-3 pr-3 pl-4 tablet:max-w-[800px] desktop:max-w-[810px]">
-          {/* `vl-logo` is what the mark's hover morph listens for, so the
-              prompt resolves into the initials from anywhere on the pair, the
-              wordmark included. */}
           <Link
             href={site.home}
             aria-label={site.homeAria}
-            className="vl-logo flex shrink-0 items-center gap-[10px] font-display text-[22px] leading-10 font-medium text-surface transition-colors duration-200 hover:text-ink-50"
+            className="flex shrink-0 items-center gap-[10px] font-display text-[22px] leading-10 font-medium text-surface transition-colors duration-200 hover:text-ink-50"
           >
             <Mark size={26} />
             {site.name}

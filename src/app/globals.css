@@ -333,30 +333,16 @@
 }
 
 /* =============================================================================
-   Brand mark. The geometry lives here rather than in the component because the
-   two states are a CSS transition on `d`, and both states of a shape must carry
-   the same command sequence or the morph snaps instead of interpolating.
+   Brand mark. Three colours, and they are the mark's own rather than the page's:
+   the disc has to read identically on the dark nav pill and on the white footer,
+   so it cannot inherit `currentColor` the way the previous outline mark did.
 
-   Rest is the command prompt, hover resolves it into the initials. The hover is
-   claimed by the mark's own container, so it fires from anywhere on the logo,
-   wordmark included.
+   Coral against a blue accent is a deliberate tension to resolve, not an
+   accident: see the note in DESIGN.md.
    ========================================================================== */
 
-.vl-mark-a { d: path("M 135 175 L 235 225 L 135 275"); }
-.vl-mark-b { d: path("M 265 275 L 365 275"); }
-
-.vl-mark-a,
-.vl-mark-b { transition: d 420ms cubic-bezier(0.65, 0, 0.35, 1); }
-
-.vl-logo:hover .vl-mark-a,
-.vl-logo:focus-visible .vl-mark-a { d: path("M 150 150 L 200 350 L 250 150"); }
-.vl-logo:hover .vl-mark-b,
-.vl-logo:focus-visible .vl-mark-b { d: path("M 300 150 L 300 350"); }
-
-/* Firefox only shipped `d` interpolation recently; where it is not supported
-   the shapes still swap, just without the morph, which is the correct
-   degradation for a logo. */
-@media (prefers-reduced-motion: reduce) {
-  .vl-mark-a,
-  .vl-mark-b { transition: none; }
+:root {
+  --mark-rim: #f4f4f5;
+  --mark-ink: #21232b;
+  --mark-wave: #f0584c;
 }

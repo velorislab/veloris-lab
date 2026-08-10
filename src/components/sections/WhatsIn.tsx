@@ -1,4 +1,6 @@
 import Image from "next/image";
+
+import { Mark } from "@/components/ui/Mark";
 import Link from "next/link";
 
 import { getHome, type HomeContent } from "@/data/content";
@@ -174,35 +176,12 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
         <div className="relative flex size-[150px] items-center justify-center">
           <OrbitBackdrop />
 
-          <div className="relative z-10 flex size-[150px] items-center justify-center overflow-hidden rounded-pill">
-            <Image
-              src="/images/backgrounds/whats-in-logo-glow.svg"
-              alt=""
-              fill
-              sizes="150px"
-              className="rounded-pill object-cover"
-            />
-            <div className="relative z-10 flex size-[78px] items-center justify-center overflow-hidden rounded-pill p-[14px]">
-              <Image
-                src="/images/backgrounds/whats-in-logo-ring.svg"
-                alt=""
-                fill
-                sizes="78px"
-                className="rounded-pill object-cover"
-              />
-              <span
-                aria-hidden
-                className="absolute inset-0 rounded-pill shadow-[inset_0_2.6px_2.6px_0_#81b1fb,inset_2.6px_0_2.6px_0_#81b1fb,0_7.8px_10.4px_0_rgba(131,124,124,0.06)]"
-              />
-              <Image
-                src="/images/logos/aston-mark.svg"
-                alt=""
-                width={50}
-                height={50}
-                className="relative size-[50px]"
-              />
-            </div>
-          </div>
+          {/* Two nested plates and a 14px inset used to sit between the halo and
+              the template's letterform, which is what a letterform needs and a
+              disc does not: our mark arrived at 50 visual pixels inside a 150px
+              halo and read as lost. The halo stays, the plates go, and the mark
+              is the crest at its own size. */}
+          <Mark size={94} className="relative z-10" />
         </div>
 
         <div className="relative z-10 flex w-full flex-col items-center gap-[14px] text-center">

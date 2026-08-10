@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { Mark } from "@/components/ui/Mark";
+
 import { Button } from "@/components/ui/Button";
 import { getHome } from "@/data/content";
 import {
@@ -101,22 +103,10 @@ export function FinalCta({ lang }: { lang: LabLang }) {
                 className="object-cover"
               />
             </span>
-            <div className="relative z-[2] flex size-[72px] items-center rounded-pill p-4 shadow-[0_6px_8px_0_rgba(131,124,124,0.06),inset_0_2px_2px_0_#81b1fb,inset_2px_0_2px_0_#81b1fb]">
-              <Image
-                src="/images/backgrounds/cta-icon-plate.svg"
-                alt=""
-                fill
-                sizes="72px"
-                className="rounded-pill object-cover"
-              />
-              <Image
-                src="/images/logos/aston-mark-cta.svg"
-                alt=""
-                width={40}
-                height={40}
-                className="relative size-10"
-              />
-            </div>
+            {/* Same as the WhatsIn crest: the 16px inset and the blue inner
+                glow existed to seat somebody else's letterform, and both fight a
+                disc that brings its own rim. */}
+            <Mark size={72} className="relative z-[2]" />
           </div>
 
           <div className="flex w-full max-w-[740px] flex-col items-center justify-center gap-[10px] text-center">

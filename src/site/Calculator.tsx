@@ -61,9 +61,6 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
   const [desc, setDesc] = useState('')
   const [name, setName] = useState('')
   const [contact, setContact] = useState('')
-  /* Three states, not a boolean: the clipboard can fail, and a reader told
-     «Бриф скопирован» over an empty clipboard loses everything they typed. */
-  const [sent, setSent] = useState<null | 'copied' | 'manual'>(null)
 
   const est = useMemo(() => estimate(type, ready, addons), [type, ready, addons])
 
@@ -85,7 +82,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
 
   const reset = () => {
     setStep([1, -1]); setType(opening); setReady(DEFAULT_READY); setAddons([])
-    setDesc(''); setName(''); setContact(''); setSent(null)
+    setDesc(''); setName(''); setContact('')
     priceMv.jump(0)
   }
 
@@ -116,21 +113,14 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
     return `${L(CALC.mailSubject)}\n\n${lines.join('\n')}`
   }
 
-  const sendTelegram = () => {
-    const text = brief()
-    // Resolve the copy asynchronously but do NOT await it: window.open has to
-    // stay on the synchronous gesture path or the browser treats it as a popup.
-    // The optional chain stays: without it, calling writeText in an insecure or
-    // restricted context throws a TypeError, which is the very case being
-    // handled here.
-    try {
-      const wrote = navigator.clipboard?.writeText(text)
-      if (wrote) wrote.then(() => setSent('copied'), () => setSent('manual'))
-      else setSent('manual')
-    } catch { setSent('manual') }
-    window.open(TELEGRAM, '_blank', 'noopener,noreferrer')
-  }
+  /* Both handoffs carry the whole brief in the URL, so neither needs a click
+     handler, a clipboard permission or a popup that a browser might block.
 
+     Telegram's deep-link format for a public username pre-enters the text into
+     the input bar with the recipient already resolved, which is what makes the
+     old copy-and-paste dance unnecessary. TELEGRAM is the full
+     `https://t.me/<handle>` URL, so the parameter appends to it directly. */
+  const tgHref = `${TELEGRAM}?text=${encodeURIComponent(brief())}`
   const mailHref = `mailto:${EMAIL}?subject=${encodeURIComponent(L(CALC.mailSubject))}&body=${encodeURIComponent(brief())}`
 
   /** Selectable chip. Radio or checkbox underneath, spring on press. */
@@ -280,18 +270,17 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
                   </div>
                   <pre className="max-h-[160px] overflow-auto rounded-card border border-line bg-surface-muted p-4 font-numeric text-[13px] leading-6 whitespace-pre-wrap text-ink-400">{brief()}</pre>
                   <div className="flex flex-wrap gap-3">
-                    <button
-                      type="button"
+                    <a
                       className="rounded-pill bg-accent px-6 py-[13px] text-[16px] font-medium text-white transition-colors duration-200 hover:bg-accent-600"
-                      onClick={sendTelegram}
-                    >{L(CALC.sendTg)}</button>
+                      href={tgHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >{L(CALC.sendTg)}</a>
                     <a
                       className="rounded-pill border border-line bg-surface px-6 py-[13px] text-[16px] font-medium text-ink-700 transition-colors duration-200 hover:bg-surface-muted"
                       href={mailHref}
                     >{L(CALC.sendMail)}</a>
                   </div>
-                  {sent === 'copied' && <p className="text-[14px] leading-6 text-accent" role="status">{L(CALC.copied)}</p>}
-                  {sent === 'manual' && <p className="text-[14px] leading-6 text-accent" role="status">{L(CALC.copyFailed)}</p>}
                 </>
               )}
             </motion.div>

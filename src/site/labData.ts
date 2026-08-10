@@ -87,8 +87,6 @@ export const UI: Record<string, LS> = {
      labPricing at render time; neither is typed anywhere. */
   heroFloor: { en: 'Projects from', ru: 'Проекты от' },
   heroSpeed: { en: 'first version from', ru: 'первая версия от' },
-  copied: { en: 'copied', ru: 'скопировано' },
-  copyHint: { en: 'Click to copy', ru: 'Нажмите, чтобы скопировать' },
   moreOn: { en: 'What is included', ru: 'Что входит' },
   readCase: { en: 'How it was built', ru: 'Как это устроено' },
   priceList: { en: 'Open the full price list', ru: 'Открыть полный прайс' },
@@ -96,25 +94,13 @@ export const UI: Record<string, LS> = {
   productLink: { en: 'Our product', ru: 'Наш продукт' },
 }
 
-/**
- * The capability ticker, restored on the founder's call.
- *
- * It was swapped for the six services with their price floors, on the argument
- * that a list of adjectives says what we know while a price ladder says what it
- * costs. The argument was not wrong, but the strip stopped reading as a ribbon:
- * six sentences of roughly forty characters each move slowly and are read
- * rather than glanced at, and the price ladder is now carried in three better
- * places anyway. The hero's own mono line prints the lowest floor and the
- * shortest window, all six cards print their own figure, and /pricing prints
- * the table.
- *
- * So this goes back to what a ticker is for: thirteen short words, glanceable
- * at speed, telling a reader in one pass what kind of shop this is.
- */
-export const MARQUEE: Record<LabLang, string[]> = {
-  en: ['AI agents', 'Automation', 'Integrations', 'Data pipelines', 'Parsing', 'Reverse engineering', 'Dashboards', 'SQL', 'Webhooks', 'Payments', 'MVP', 'Architecture', 'Support'],
-  ru: ['AI-агенты', 'Автоматизация', 'Интеграции', 'Пайплайны данных', 'Парсинг', 'Реверс-инжиниринг', 'Дашборды', 'SQL', 'Вебхуки', 'Платежи', 'MVP', 'Архитектура', 'Поддержка'],
-}
+/* The capability word ticker that used to sit under the old hero is not here.
+   The template runs its own marquee and PlatformHighlight already drives it with
+   our stack, so the strip exists; a second one listing «AI-агенты,
+   Автоматизация, Интеграции…» would sit directly above six cards that say the
+   same six things with a price and a window attached. Restoring it is a
+   thirteen-word array and two lines in AstonHome if that trade ever looks worth
+   making. */
 
 export const HERO = {
   /**
@@ -131,8 +117,9 @@ export const HERO = {
    * the calculator performs it, and /pricing publishes the estimator's own
    * multipliers rather than only its totals.
    *
-   * The LAST WORD carries the plaque (see HeroCopy.tsx), so both locales are
-   * written to end on a word worth marking.
+   * The last word used to carry a plaque, which is why both locales are written
+   * to end on a word worth marking. That component went with the old design;
+   * the sentences are better for the constraint and were left alone.
    */
   h1: {
     en: 'Not a line of code until you know the price',
@@ -941,10 +928,6 @@ export const CALC = {
   /* The estimate panel used to contain no interactive node at all: the reader
      self-qualified, self-priced, formed intent, and hit a dead end. */
   jumpSend: { en: 'Send this estimate', ru: 'Отправить этот расчёт' },
-  copyFailed: {
-    en: 'Copy did not work. Select the text above and copy it.',
-    ru: 'Скопировать не вышло. Выделите текст выше и скопируйте.',
-  },
 
   back: { en: 'Back', ru: 'Назад' },
   next: { en: 'Next', ru: 'Дальше' },
@@ -970,7 +953,6 @@ export const CALC = {
 
   sendTg: { en: 'Send on Telegram', ru: 'Отправить в Telegram' },
   sendMail: { en: 'Send by email', ru: 'Отправить почтой' },
-  copied: { en: 'Brief copied. Paste it into the chat.', ru: 'Бриф скопирован. Вставьте его в чат.' },
   mailSubject: { en: 'Veloris Lab, project estimate', ru: 'Veloris Lab, расчёт проекта' },
 
   // Labels used to assemble the brief that goes into Telegram or the mail body.
