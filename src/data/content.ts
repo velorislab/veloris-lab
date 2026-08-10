@@ -110,10 +110,22 @@ export function getHome(lang: LabLang) {
         const page = SERVICE_PAGES.find((p) => p.key === s.key)
         return {
           title: L(s.t),
+          /* TWO LINES, and the second one was already written and going nowhere.
+             `when` is the recognition line, the reader's own morning described
+             back to them, and on its own it left the card saying what is wrong
+             without ever saying what arrives. `d` is the deliverable and has
+             existed in SERVICES since the first draft; it was only ever used on
+             the service pages. Showing both doubles what the card carries and
+             invents not one word. */
           description: L(s.when),
+          outcome: L(s.d),
           price: w ? money(priced(w.from)) : '',
           weeks: w ? `${w.weeks[0]}–${w.weeks[1]}` : '',
           href: page ? servicePath(lang, page.slug) : pricingPath(lang),
+          /* Their cards name the link rather than leaving an arrow to imply it,
+             and an arrow alone does not say whether it goes to a page or opens
+             something. UI.moreOn is the label the pricing cards already use. */
+          hrefLabel: L(UI.moreOn),
         }
       }),
       orbitLogos: [] as string[],

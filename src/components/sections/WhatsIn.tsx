@@ -1,40 +1,26 @@
 import Image from "next/image";
 
 import { Mark } from "@/components/ui/Mark";
-import { OrbitGlyphs } from "@/components/ui/OrbitGlyphs";
 import { StarSurge } from "@/components/backgrounds/StarSurge";
 import Link from "next/link";
 
 import { getHome, type HomeContent } from "@/data/content";
 import { tx, type LabLang } from "@/site/labData";
 
-/**
- * The faint grid behind the crest. Geometry matches the source's 1380x360
- * backdrop.
+/* THE CREST IS THE MARK, AND NOTHING ELSE.
  *
- * What used to be here as well: two beams of light, and a column of partner
- * logos drifting through them. The logos were six companies we have no
- * relationship with, so `orbitLogos` is empty in content.ts. The beams were a
- * 4.6 MB looping mp4, replaced by gradients, then dropped entirely once
- * StarSurge took over the panel: two decorations doing the same job is one
- * decoration too many.
+ * Three things have been peeled off this spot in turn, each one added for the
+ * same reason and each one removed for the same reason. Two beams of light and
+ * a column of partner logos went first: the logos were six companies we have no
+ * relationship with, and the beams were a 4.6 MB looping mp4. A ring of stack
+ * glyphs replaced them and a faint 379x331 grid sat behind the whole thing.
+ *
+ * Both are now gone at the founder's call, and he is right. The glyphs repeated
+ * a stack the site already lists with the project each tool was used on, so they
+ * were the same claim with the evidence removed, and the grid was a second
+ * texture over a panel that already has a star field on it. What is left is one
+ * mark on one background, which is what the crest of a section is for.
  */
-function OrbitBackdrop() {
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute top-[-134px] left-1/2 hidden h-[360px] w-[1380px] -translate-x-1/2 overflow-hidden tablet:block"
-    >
-      <Image
-        src="/images/backgrounds/whats-in-grid.svg"
-        alt=""
-        width={379}
-        height={331}
-        className="absolute top-[-43px] left-1/2 -translate-x-1/2"
-      />
-    </div>
-  );
-}
 
 type ServiceCard = HomeContent["whatsIn"]["cards"][number];
 
@@ -78,13 +64,24 @@ function Card({ card, labels }: CardProps) {
         />
       </div>
 
-      <div className="flex w-full flex-col items-center gap-1">
+      <div className="flex w-full flex-col items-center gap-[10px]">
         <h3 className="text-[20px] leading-[30px] text-white tablet:text-[22px] tablet:leading-[33px]">
           {card.title}
         </h3>
+        {/* THE PAIN, THEN WHAT ARRIVES, in that order and at two weights. The
+            card used to stop after the first line, which left six cards each
+            describing something wrong with the reader's week and none of them
+            saying what they would get for the figure underneath. The second line
+            is `d` from SERVICES, written long ago and used only on the service
+            pages until now. */}
         {card.description && (
-          <p className="text-[16px] leading-6 text-ink-100 tablet:text-[18px] tablet:leading-[27px]">
+          <p className="text-[15px] leading-[22px] text-ink-100/70 tablet:text-[16px] tablet:leading-6">
             {card.description}
+          </p>
+        )}
+        {card.outcome && (
+          <p className="text-[16px] leading-6 text-white/85 tablet:text-[17px] tablet:leading-[26px]">
+            {card.outcome}
           </p>
         )}
       </div>
@@ -107,6 +104,16 @@ function Card({ card, labels }: CardProps) {
             </span>
           )}
         </div>
+      )}
+      {/* The card was already the link and the only thing saying so was a 24px
+          arrow in the corner. Naming the destination is the difference between a
+          card a reader might click and a card a reader knows leads somewhere
+          longer. Not a nested <a>: this is text inside the Link that wraps the
+          whole card. */}
+      {card.hrefLabel && (
+        <span className="mt-3 text-[15px] leading-6 text-white/45 underline decoration-white/25 underline-offset-4 transition-colors duration-200 group-hover:text-white group-hover:decoration-white/60">
+          {card.hrefLabel}
+        </span>
       )}
     </Link>
   );
@@ -147,14 +154,11 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
       <div className="relative flex w-full flex-col items-center gap-5">
         {/* ---- badge, on its beam-lit backdrop ---- */}
         <div className="relative flex size-[150px] items-center justify-center">
-          <OrbitBackdrop />
-
           {/* Two nested plates and a 14px inset used to sit between the halo and
               the template's letterform, which is what a letterform needs and a
               disc does not: our mark arrived at 50 visual pixels inside a 150px
               halo and read as lost. The halo stays, the plates go, and the mark
               is the crest at its own size. */}
-          <OrbitGlyphs />
           <Mark size={94} className="relative z-10" />
         </div>
 

@@ -360,11 +360,6 @@
 /* Each glyph floats on its own delay. A rotating ring was tried first and put
    two glyphs on top of the heading; an arc that breathes cannot reach the type
    at all. */
-@keyframes vl-orbit-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-7px); }
-}
-.vl-orbit-glyph { animation: vl-orbit-bob 6s ease-in-out infinite; }
 
 @keyframes vl-beam-sweep {
   0%   { opacity: 0; transform: translateX(-18%); }
@@ -411,9 +406,8 @@ button:hover .vl-logo {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* The arc holds still, which is what it is in a screenshot regardless, and
-     the beams hold at their brightest. */
-  .vl-orbit-glyph { animation: none; }
+  /* The beams hold at their brightest. The arc of stack glyphs that used to be
+     listed here went with the ring itself. */
   .vl-beam { animation: none; opacity: 1; }
   /* And the mark does not turn at all. A spin on hover is decoration by
      definition, so there is nothing to preserve in a reduced form. */
