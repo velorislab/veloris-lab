@@ -48,6 +48,10 @@ export function getHome(lang: LabLang) {
          people in those avatars are not our customers. */
       badge: { text: `${L(HERO.facts[5].k)}: ${L(HERO.facts[5].v)}`, avatars: [] as string[] },
       title: L(HERO.h1),
+      /* The plain sentence stays in `title` for metadata and for a reader with
+         no JavaScript; these two drive the cycling version. */
+      rotatorLead: L(HERO.rotator.lead),
+      rotatorWords: HERO.rotator.words[lang],
       description: L(HERO.sub),
       /* The template's note advertised a Figma file. Ours states the floor and
          the shortest window, both read from the price table. */

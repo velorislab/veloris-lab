@@ -18,6 +18,11 @@
    The previous mark, `>_` morphing to `Vl` on hover, is gone with this. Its
    geometry and the CSS that drove it are in the history if it is ever wanted
    back.
+
+   `vl-logo` carries the hover spin, and it is on the mark itself rather than on
+   each of the four call sites so every instance behaves the same and a fifth one
+   inherits it for free. The rule is in `globals.css`; it also fires when the
+   surrounding link is hovered, which is what you actually point at in the header.
    ========================================================================== */
 
 export function Mark({ size = 28, className = '' }: { size?: number; className?: string }) {
@@ -26,7 +31,7 @@ export function Mark({ size = 28, className = '' }: { size?: number; className?:
       viewBox="0 0 100 100"
       width={size}
       height={size}
-      className={className}
+      className={`vl-logo ${className}`}
       role="img"
       aria-label="Veloris Lab"
       xmlns="http://www.w3.org/2000/svg"

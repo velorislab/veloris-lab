@@ -65,7 +65,7 @@ export const UI: Record<string, LS> = {
   navCases: { en: 'Cases', ru: 'Кейсы' },
   navProcess: { en: 'Process', ru: 'Как работаем' },
   navCalc: { en: 'Estimate', ru: 'Расчёт' },
-  navBureau: { en: 'Bureau', ru: 'О бюро' },
+  navBureau: { en: 'Studio', ru: 'О студии' },
   ctaCalc: { en: 'Get the price in a minute', ru: 'Узнать цену за минуту' },
   /**
    * The one button on all 22 routes, and it now names the free thing instead
@@ -121,13 +121,54 @@ export const HERO = {
    * to end on a word worth marking. That component went with the old design;
    * the sentences are better for the constraint and were left alone.
    */
+  /**
+   * A fixed phrase with one word cycling inside it.
+   *
+   * `h1` stays as the plain sentence: it is what search engines, the OG tag and
+   * a reader with JavaScript disabled get, and it has to be a complete, true
+   * sentence on its own. `rotator` is what the hero renders instead when it can.
+   *
+   * The list is the founder's, with two corrections. Every entry is genitive
+   * plural, because «Студия полного цикла мобильное приложение» does not agree;
+   * and the English is not a translation of the Russian, it is the phrase an
+   * English buyer would search for.
+   */
   h1: {
-    en: 'Not a line of code until you know the price',
-    ru: 'Ни строки кода, пока вы не знаете цену',
+    en: 'Full-cycle studio for startups',
+    ru: 'Студия полного цикла: стартапы',
   },
+  rotator: {
+    /**
+     * A COLON AND THE NOMINATIVE in Russian, and that is a grammar decision.
+     *
+     * «Студия разработки полного цикла» is the correct standing phrase, but a
+     * rotating noun after it chains three genitives: разработки, цикла,
+     * стартапов. The colon breaks the chain, so the word stands in the
+     * nominative and reads as itself. It also puts the accent word alone on the
+     * second line, which is where the eye goes.
+     *
+     * English takes «for» instead: the two are not translations of each other,
+     * they are each the phrase a buyer in that language would search for.
+     */
+    lead: { en: 'Full-cycle studio for', ru: 'Студия полного цикла:' },
+    words: {
+      en: ['startups', 'SaaS', 'AI tools', 'web apps', 'mobile apps', 'CRMs'],
+      ru: ['стартапы', 'SaaS', 'AI-инструменты', 'веб-приложения', 'мобильные приложения', 'CRM'],
+    },
+  },
+  /**
+   * The sub carries the offer now, and it has to.
+   *
+   * It used to list the six services, which is exactly what the rotating word
+   * above says, so keeping it would have been the same sentence twice. More
+   * importantly the headline stopped being an offer and became a category, and
+   * price certainty is the one claim this business has that the market leader
+   * cannot make better. If it is not in the h1 it has to be in the line under
+   * it, or the fold stops selling anything.
+   */
   sub: {
-    en: 'AI agents, integrations, parsing, dashboards, payments and whole products. The scoping is free, and it can end with us telling you not to build it.',
-    ru: 'AI-агенты, интеграции, парсинг, дашборды, платежи и продукты под ключ. Разбор задачи бесплатный, и он может закончиться советом этого не делать.',
+    en: 'You know the price and the timeline before we start. The scoping is free, and it can end with us telling you not to build it.',
+    ru: 'Цену и срок вы знаете до старта. Разбор задачи бесплатный, и он может закончиться советом этого не делать.',
   },
   /**
    * The facts strip, directly under the dark band. Every row is checkable
@@ -202,7 +243,7 @@ export const EYEBROW: Record<string, LS> = {
   process: { en: 'Process', ru: 'Процесс' },
   stack: { en: 'Tools', ru: 'Инструменты' },
   why: { en: 'Proof', ru: 'Доказательства' },
-  bureau: { en: 'Bureau', ru: 'Бюро' },
+  bureau: { en: 'Studio', ru: 'Студия' },
   faq: { en: 'Questions', ru: 'Вопросы' },
 }
 
@@ -571,8 +612,8 @@ export const BUREAU = {
   // lets the card hold only what a person card should: a name, a role, one
   // paragraph, a row of ways to reach him.
   lead: {
-    en: 'Veloris Lab is a small engineering bureau. Small on purpose: there is nobody standing between you and the work.',
-    ru: 'Veloris Lab, небольшое инженерное бюро. И это намеренно: между вами и работой нет ни одного посредника.',
+    en: 'Veloris Lab is a small engineering studio. Small on purpose: there is nobody standing between you and the work.',
+    ru: 'Veloris Lab, небольшая инженерная студия. И это намеренно: между вами и работой нет ни одного посредника.',
   },
   name: { en: 'Denys Kandyba', ru: 'Денис Кандыба' },
   // One string for both locales: the Russian copy uses the English term as-is,
@@ -840,8 +881,8 @@ export const FAQ: FaqItem[][] = [
     {
       q: { en: 'Who actually does the work?', ru: 'Кто именно будет делать?' },
       a: {
-        en: 'A small bureau. The task is not handed between teams: whoever scoped it takes it to production and stays for support.',
-        ru: 'Небольшое бюро. Задача не передаётся между командами: кто её разбирал, тот доводит до прода и остаётся на поддержке.',
+        en: 'A small studio. The task is not handed between teams: whoever scoped it takes it to production and stays for support.',
+        ru: 'Небольшая студия. Задача не передаётся между командами: кто её разбирал, тот доводит до прода и остаётся на поддержке.',
       },
     },
     {
@@ -974,8 +1015,8 @@ export const CALC = {
 
 export const FOOTER = {
   line: {
-    en: 'Veloris Lab, an engineering bureau. The number comes first, then the work.',
-    ru: 'Veloris Lab, инженерное бюро. Сначала цифра, потом работа.',
+    en: 'Veloris Lab, an engineering studio. The number comes first, then the work.',
+    ru: 'Veloris Lab, инженерная студия. Сначала цифра, потом работа.',
   },
 }
 

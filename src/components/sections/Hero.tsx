@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 
 import { HorizonGrid } from "@/components/backgrounds/HorizonGrid";
 import { Button } from "@/components/ui/Button";
+import { RotatingWord } from "@/components/ui/RotatingWord";
 import { getSite } from "@/config/site";
 import { getHome } from "@/data/content";
 import { heroVariants, transitions } from "@/lib/motion";
@@ -66,7 +67,26 @@ export function Hero({ lang }: { lang: LabLang }) {
   return (
     <section
       id="hero"
-      className="relative flex w-full flex-col items-center gap-[50px] overflow-hidden px-4 pt-[160px] pb-[10px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
+      /* ONE SCREEN, EXACTLY, at every width.
+       *
+       * `100svh` and not `100vh`: on a phone `vh` is the height with the browser
+       * chrome retracted, so a `100vh` hero is taller than what you can actually
+       * see and the next section peeks under the address bar — the precise thing
+       * this is here to stop. `svh` is the small viewport, chrome showing, which
+       * is what you get on arrival.
+       *
+       * `min-h` and not `h`: where the copy is taller than the screen — a narrow
+       * phone in Russian, where the headline runs to four lines — the section
+       * grows instead of clipping.
+       *
+       * `justify-center` is the other half. Left top-aligned the block just sat
+       * under its 160px of padding and the slack all piled up underneath, which
+       * looks like a page that failed to load rather than like a full screen.
+       * The padding now only sets the minimum clearance from the fixed 94px
+       * header; the slightly larger top value pushes the optical centre down a
+       * touch, which is what compensates for that header.
+       */
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center gap-[50px] overflow-hidden px-4 pt-[110px] pb-[40px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
     >
       {/* The horizon runs the full height of the first screen, with its
           vanishing point just under the headline: 0.6 of the hero height, measured
@@ -118,9 +138,20 @@ export function Hero({ lang }: { lang: LabLang }) {
                 initial={initial}
                 animate={animate}
                 transition={transitions.heading}
-                className="text-[36px] leading-[1.2] font-semibold text-ink-800 tablet:text-[48px] desktop:text-[64px] desktop:leading-[76.8px]"
+                className="w-full text-[36px] leading-[1.2] font-semibold text-ink-800 tablet:text-[48px] desktop:text-[64px] desktop:leading-[76.8px]"
               >
-                {hero.title}
+                {/* The lead is fixed and one word cycles inside it, in the
+                    accent, which is the whole point of the device. The plain
+                    `hero.title` is still what metadata and a no-JS reader get.
+
+                    `w-full` on the h1 is load-bearing. This column is
+                    `items-center`, so without it the heading shrink-wraps to its
+                    own text and its width follows whichever word is showing —
+                    which then feeds the rotator's box and makes it breathe. A
+                    definite width breaks that loop; the text stays centred
+                    because the column already sets `text-center`. */}
+                {hero.rotatorLead}{" "}
+                <RotatingWord words={hero.rotatorWords} className="text-accent" />
               </motion.h1>
               <motion.p
                 variants={heroVariants.riseIn}

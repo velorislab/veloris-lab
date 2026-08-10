@@ -31,6 +31,7 @@ export function HorizonGrid({
   background = "transparent",
   speed = 0.5,
   horizon = 0.46,
+  fadeOut = 0.34,
   columns = 26,
   rows = 16,
   className = "",
@@ -40,6 +41,8 @@ export function HorizonGrid({
   speed?: number;
   /** Where the vanishing point sits, as a fraction of the height. */
   horizon?: number;
+  /** How much of the near plane dissolves into the bottom edge, 0..1 of depth. */
+  fadeOut?: number;
   columns?: number;
   rows?: number;
   className?: string;
@@ -128,6 +131,28 @@ export function HorizonGrid({
       fade.addColorStop(1, "rgba(0,0,0,0)");
       ctx.fillStyle = fade;
       ctx.fillRect(0, hy, w, depth);
+
+      /* AND DISSOLVE THE BOTTOM EDGE TOO.
+         With only the fade above, the plane is at full strength exactly where
+         the canvas stops, so the hero ended on a ruled line across the whole
+         width — the nearest horizontal happening to land on the boundary, plus
+         every vertical cut off mid-stroke. It read as a border someone forgot to
+         remove. This second erase runs the other way, from nothing at the start
+         of the band to complete at the last pixel, so the grid thins out into
+         the page instead of being sliced by it.
+
+         `fadeOut` is a fraction of the depth rather than of the height: it is
+         the near edge of the receding plane that needs dissolving, and how much
+         of the canvas that is depends on where the horizon sits. */
+      const band = depth * fadeOut;
+      if (band > 0) {
+        const near = ctx.createLinearGradient(0, h - band, 0, h);
+        near.addColorStop(0, "rgba(0,0,0,0)");
+        near.addColorStop(0.55, "rgba(0,0,0,0.35)");
+        near.addColorStop(1, "rgba(0,0,0,1)");
+        ctx.fillStyle = near;
+        ctx.fillRect(0, h - band, w, band);
+      }
       ctx.globalCompositeOperation = "source-over";
     };
 
@@ -152,7 +177,7 @@ export function HorizonGrid({
       cancelAnimationFrame(raf);
       ro.disconnect();
     };
-  }, [color, background, speed, horizon, columns, rows, reduce]);
+  }, [color, background, speed, horizon, fadeOut, columns, rows, reduce]);
 
   return (
     <canvas

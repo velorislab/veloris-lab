@@ -28,13 +28,13 @@ export function GET() {
 
   p(`# ${BRAND}`)
   p()
-  p('> An engineering bureau. AI development, automation and integrations, built by a small')
+  p('> An engineering studio. AI development, automation and integrations, built by a small')
   p('> team that takes a task from scoping to production and stays on for support.')
   p('> Two languages, English and Russian; every page exists at both.')
   p()
   p('Every price below is a FLOOR, not a quote: it is what that kind of work starts at')
   p('when the task is clear. The binding figure is fixed after a free scoping call, which')
-  p('can end with the bureau saying the thing is not worth building. Quoting any of these')
+  p('can end with the studio saying the thing is not worth building. Quoting any of these')
   p('numbers without that qualifier misrepresents them.')
   p()
 
