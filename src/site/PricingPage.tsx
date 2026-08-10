@@ -16,7 +16,7 @@ import {
   SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
   TELEGRAM, TELEGRAM_HANDLE, BRAND,
 } from '@/site/labData'
-import { WORK_TYPES, READINESS, ADDONS, money, priced } from '@/site/labPricing'
+import { WORK_TYPES, DESIGN_STATES, SUPPORT_TIERS, ADDONS, money, priced, monthly } from '@/site/labPricing'
 import { PRICING } from '@/site/pricingCopy'
 import { SERVICE_PAGES } from '@/site/servicePages'
 import { localizedHref, servicePath } from '@/site/routing'
@@ -32,7 +32,7 @@ import { localizedHref, servicePath } from '@/site/routing'
  * It is the lede of the hero, not a footnote under the table.
  *
  * THE MULTIPLIERS ARE PUBLISHED. The readiness section prints the calculator's
- * own factors, x1.2 / x1.0 / x0.8, with a sentence each on why. Nobody
+ * own design additions, one per state, with a sentence each on why. Nobody
  * publishes the inside of their estimator, which is most of the reason to do
  * it: a reader who can reproduce the number stops wondering what it hides. The
  * framing is deliberate and load-bearing, though. These are inputs to an
@@ -229,7 +229,7 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
                         {w.weeks[0]}–{w.weeks[1]} {L(CALC.weeksShort)}
                       </Cell>
                       <Cell label={L(PRICING.colSupport)}>
-                        {L(CALC.bfFrom)} {money(priced(w.support))}
+                        {L(CALC.bfFrom)} {money(monthly(w.support))}
                         {L(CALC.perMonth)}
                       </Cell>
                     </tr>
@@ -245,7 +245,7 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
             one thing on this card that is not a claim but an input the reader
             can apply themselves. It is NOT aria-hidden the way the numbered
             plate on the home page is: there the digit is decoration, here the
-            multiplier is the content. */}
+            figure is the content. */}
         <section className="flex w-full max-w-[1080px] flex-col items-center gap-10 desktop:gap-20">
           <SectionHeading
             badge={{ icon: `${BADGE}/who-can-use.svg`, label: L(EYEBROW.entry) }}
@@ -254,7 +254,7 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
             textWidth={800}
           />
           <ol className="flex w-full flex-wrap justify-center gap-[30px]">
-            {READINESS.map((r) => (
+            {DESIGN_STATES.map((r) => (
               <li
                 key={r.key}
                 className="relative flex flex-col items-center gap-[30px] overflow-hidden hairline rounded-panel px-[30px] py-10 text-center shadow-[var(--shadow-ring)] tablet:w-[calc((100%-30px)/2)] desktop:w-[calc((100%-60px)/3)]"
@@ -274,8 +274,11 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
                     height={66}
                     className="absolute inset-0 size-[66px] rounded-pill"
                   />
-                  <span className="absolute inset-0 flex items-center justify-center font-display text-[20px] leading-none text-white">
-                    ×{r.factor.toFixed(1)}
+                  {/* The largest this state ever adds, read across every work
+                      type rather than typed. On `ready` that maximum is zero on
+                      all fifteen, so the plate says $0 and means it. */}
+                  <span className="absolute inset-0 flex items-center justify-center font-display text-[18px] leading-none text-white">
+                    +{money(priced(Math.max(...WORK_TYPES.map((w) => w.design[r.key]))))}
                   </span>
                   <span
                     aria-hidden
@@ -315,6 +318,42 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
                 <span className="shrink-0 font-display text-[18px] leading-[27px] text-ink-800">
                   +{money(priced(a.add))}
                 </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ------------------------------------------------- support ladder */}
+        {/* Four tiers, and the price follows what has to be watched rather than
+            what the project cost. NO NUMERAL IS TYPED: every figure comes from
+            SUPPORT_TIERS through `monthly()`, the same rounding the calculator
+            uses, so the ladder can never drift from the estimate beside it. */}
+        <section className="section-shell gap-10 desktop:gap-[60px]">
+          <SectionHeading
+            title={L(PRICING.supportLadderLabel)}
+            description={L(PRICING.supportLadderSub)}
+            textWidth={860}
+          />
+          <ul className="grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2 desktop:grid-cols-4">
+            {SUPPORT_TIERS.map((t) => (
+              <li
+                key={t.key}
+                className="flex flex-col gap-4 rounded-panel bg-surface p-6 shadow-[0_0_0_1px_var(--color-line-soft),0_2px_6px_0_rgba(182,182,182,0.1)]"
+              >
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-[20px] leading-[30px] text-ink-800">{L(t.label)}</h3>
+                  <p className="flex items-baseline gap-1">
+                    <span className="font-display text-[28px] leading-none font-semibold text-ink-900">
+                      {money(monthly(t.perMonth))}
+                    </span>
+                    <span className="text-[15px] text-ink-200">{L(CALC.perMonth)}</span>
+                  </p>
+                </div>
+                <ul className="flex flex-col gap-2 border-t border-line-soft pt-4">
+                  {t.includes.map((line, i) => (
+                    <li key={i} className="text-[15px] leading-6 text-ink-400">{L(line)}</li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
@@ -424,10 +463,10 @@ const PRICING_OWN_FAQ: FaqItem[] = [
     },
   },
   {
-    q: { en: 'Do the add-ons get multiplied too?', ru: 'Надбавки тоже умножаются?' },
+    q: { en: 'Does anything here get multiplied?', ru: 'Здесь что-нибудь умножается?' },
     a: {
-      en: 'No. The multiplier applies to the base only, then the add-ons are added on top of the result. Two add-ons cost the same whether you arrive with an idea or with a running system, because the work inside them does not change.',
-      ru: 'Нет. Коэффициент применяется только к базе, а надбавки прибавляются к результату. Две надбавки стоят одинаково и с идеей, и с работающей системой, потому что работа внутри них не меняется.',
+      en: 'No. Every line is an addition: the floor for the kind of work, then finishing the design, then a server if that kind of work does not already need one, then each feature, then a bump if what you described is a heavier product. The calculator shows each line separately, so the total is arithmetic you can check rather than a figure you have to accept.',
+      ru: 'Нет. Каждая строка это слагаемое: нижняя граница по типу работы, потом доделка дизайна, потом сервер, если этот тип работы его ещё не требует, потом каждая функция, потом надбавка, если описанный продукт тяжелее обычного. Калькулятор показывает каждую строку отдельно, поэтому итог это арифметика, которую можно проверить, а не цифра, которую надо принять.',
     },
   },
 ]

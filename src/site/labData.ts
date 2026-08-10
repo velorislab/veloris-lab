@@ -86,6 +86,9 @@ export const UI: Record<string, LS> = {
   /* The two halves of the hero's mono line. Both figures are read from
      labPricing at render time; neither is typed anywhere. */
   heroFloor: { en: 'Projects from', ru: 'Проекты от' },
+  /** Just the preposition, for the hero cards where the noun is in the caption
+   *  underneath rather than in the figure. */
+  heroFloorShort: { en: 'from', ru: 'от' },
   heroSpeed: { en: 'first version from', ru: 'первая версия от' },
   moreOn: { en: 'What is included', ru: 'Что входит' },
   readCase: { en: 'How it was built', ru: 'Как это устроено' },
@@ -114,8 +117,8 @@ export const HERO = {
    * What it says now is the one claim this bureau can make that the market
    * leader cannot make better, and it is already true everywhere else on the
    * site: PROCESS[1] fixes the figure «до того как написана первая строка»,
-   * the calculator performs it, and /pricing publishes the estimator's own
-   * multipliers rather than only its totals.
+   * the calculator performs it, and /pricing publishes every line the estimator
+   * adds rather than only its totals.
    *
    * The last word used to carry a plaque, which is why both locales are written
    * to end on a word worth marking. That component went with the old design;
@@ -204,6 +207,28 @@ export const HERO = {
    * The gap in «10 000» is a non-breaking space, so the number cannot be split
    * across two lines.
    */
+  /**
+   * The three cards under the buttons.
+   *
+   * They replace a single mono line, «Проекты от $250 · первая версия от 1 нед.»,
+   * which said two of these three things in half the space and none of them
+   * loudly. Three plates give the fold what a first screen has to answer: what
+   * it costs to start (nothing), what it costs to build (the floor), and what it
+   * costs to keep (the cheapest support tier).
+   *
+   * NOT ONE FIGURE IS TYPED HERE. `content.ts` reads all three out of
+   * labPricing, so a repricing moves the fold with everything else. Only the
+   * words are here.
+   */
+  marks: {
+    freeValue:   { en: 'Free',    ru: 'Бесплатно' },
+    freeCap:     { en: 'Scoping the task, with the price and the timeline before we start',
+                   ru: 'Разбор задачи, цена и срок до старта' },
+    priceCap:    { en: 'Projects end to end, first version in',
+                   ru: 'Проекты под ключ, первая версия от' },
+    supportCap:  { en: 'Support after launch, for as long as you want it',
+                   ru: 'Сопровождение после запуска, сколько нужно' },
+  },
   sub: {
     en: 'More than 10,000 people use the products we have built. You know the price and the timeline before we start, and the scoping is free.',
     ru: 'Продуктами, которые мы собрали, пользуются больше 10 000 человек. Цену и срок вы узнаете до старта, разбор задачи бесплатный.',
@@ -640,10 +665,10 @@ export const WHY: Reason[] = [
        hero sub, PROCESS_SUB, PROCESS[0].d, the FAQ, CALC.disclaimer and
        CONTACT.h. A seventh copy of one promise is not a fifth reason. This
        claim appears nowhere else and takes one click to verify. */
-    t: { en: 'The calculator’s multipliers are public', ru: 'Коэффициенты калькулятора открыты' },
+    t: { en: 'The calculator’s own arithmetic is public', ru: 'Арифметика калькулятора открыта' },
     d: {
-      en: 'The pricing page shows the multipliers themselves, not just the totals. They are exactly what the calculator above runs on, so anyone can check it.',
-      ru: 'На странице цен лежат сами множители, а не только итоговые суммы. По ним и считает калькулятор выше, так что сверить может любой.',
+      en: 'The pricing page shows every line the calculator adds, not just the totals: the floor per kind of work, what finishing the design costs on each, the price of a server and of each feature. It is exactly what the calculator above runs on, so anyone can check it.',
+      ru: 'На странице цен лежит каждая строка, которую прибавляет калькулятор, а не только итоговые суммы: нижняя граница по типу работы, цена доделки дизайна на каждом, цена сервера и каждой функции. По ним и считает калькулятор выше, так что сверить может любой.',
     },
   },
 ]
@@ -992,7 +1017,29 @@ export const CALC = {
   stepOfMid: { en: 'of', ru: 'из' },
 
   q1: { en: 'What needs building?', ru: 'Что нужно сделать?' },
-  q2: { en: 'What do you already have?', ru: 'Что у вас уже есть?' },
+  /* Step 2 asks about the DESIGN now, not about readiness in general.
+     «Что у вас уже есть?» went with the x1.2/x1.0/x0.8 multiplier it fed. The
+     replacement is narrower on purpose: finishing a design is a specific,
+     costable piece of work, and the number it adds depends on the product. */
+  qDesign: { en: 'What state is the design in?', ru: 'В каком состоянии дизайн?' },
+  qDesignHint: {
+    en: 'A finished design adds nothing. Anything unfinished is a line in the estimate.',
+    ru: 'Готовый дизайн не добавляет ничего. Всё незаконченное становится строкой в смете.',
+  },
+  /* Step 3. Only asked when the chosen type does not already imply a server;
+     when it does, `serverIncluded` says so instead of offering a choice that
+     would charge twice for the same thing. */
+  qServer: { en: 'Does it need a server of its own?', ru: 'Нужен свой сервер?' },
+  qServerHint: {
+    en: 'Accounts, saved data, an API of your own, anything that has to keep running.',
+    ru: 'Аккаунты, сохранённые данные, свой API, всё, что должно работать постоянно.',
+  },
+  serverYes: { en: 'Yes, it needs one', ru: 'Да, нужен' },
+  serverNo: { en: 'No, front end only', ru: 'Нет, только интерфейс' },
+  serverIncluded: {
+    en: 'This kind of work is server work, so it is already in the figure.',
+    ru: 'Эта работа и есть серверная, так что сервер уже в цифре.',
+  },
   q3: { en: 'What will it need inside?', ru: 'Что понадобится внутри?' },
   q3hint: { en: 'Pick any that apply, or none.', ru: 'Отметьте, что подходит, или ничего.' },
   q4: { en: 'Describe the task in your own words', ru: 'Опишите задачу своими словами' },
@@ -1040,8 +1087,25 @@ export const CALC = {
   mailSubject: { en: 'Veloris Lab, project estimate', ru: 'Veloris Lab, расчёт проекта' },
 
   // Labels used to assemble the brief that goes into Telegram or the mail body.
+  /* The breakdown under the figure. `labPricing.estimate()` returns the shape of
+     each line and no words, because that file is imported by the metadata
+     builder and by llms.txt and has no business knowing the locale. */
+  fxDesign: { en: 'design to finish', ru: 'доделать дизайн' },
+  fxServer: { en: 'server and database', ru: 'сервер и база данных' },
+  fxFeatures: { en: 'features chosen', ru: 'выбранные функции' },
+  fxHigh: { en: 'heavier product scenarios', ru: 'повышенная сложность сценариев' },
+  fxSome: { en: 'extra product complexity', ru: 'дополнительная сложность' },
+  breakdownLbl: { en: "What is in the figure", ru: 'Из чего цифра' },
+  /* Their calculator downgrades its own confidence until the reader has written
+     something, which is a good way of asking for detail without a required
+     field. Eighty characters is their threshold too. */
+  roughLbl: { en: 'preliminary, describe the task to firm it up', ru: 'предварительно, опишите задачу и станет точнее' },
+  firmLbl: { en: 'based on what you described', ru: 'с учётом вашего описания' },
   bfTask: { en: 'Task', ru: 'Задача' },
-  bfHave: { en: 'Already have', ru: 'Уже есть' },
+  bfHave: { en: 'Design', ru: 'Дизайн' },
+  bfServer: { en: 'Own server', ru: 'Свой сервер' },
+  bfYes: { en: 'yes', ru: 'да' },
+  bfNo: { en: 'no', ru: 'нет' },
   bfNeeds: { en: 'Needs inside', ru: 'Нужно внутри' },
   bfDesc: { en: 'Description', ru: 'Описание' },
   bfEstimate: { en: 'Calculator estimate', ru: 'Расчёт калькулятора' },

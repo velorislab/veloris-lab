@@ -262,9 +262,12 @@ export function pricingMetadata(lang: LabLang): Metadata {
      reader parses it as the floor of a room before they parse it as a minimum.
      The page copy was corrected; this string is served to search results, so it
      has to match. */
+  /* THE ROW COUNT IS READ, NOT TYPED. This said «Шесть направлений» while the
+     table had six rows; the table has fifteen since the product categories were
+     added, and a search result promising six is a search result that lies. */
   const description = lang === 'ru'
-    ? `Шесть направлений с ценой, сроком и поддержкой. Каждое число это нижняя граница, а не смета: точную цифру фиксируем после бесплатного разбора задачи.`
-    : `Six kinds of work with a starting figure, a timeline and a support figure. Every number is where the work starts, not a quote; the binding figure is fixed after a free scoping call.`
+    ? `${WORK_TYPES.length} направлений с ценой, сроком и поддержкой. Каждое число это нижняя граница, а не смета: точную цифру фиксируем после бесплатного разбора задачи.`
+    : `${WORK_TYPES.length} kinds of work, each with a starting figure, a timeline and a support figure. Every number is where the work starts, not a quote; the binding figure is fixed after a free scoping call.`
   return {
     title,
     description,

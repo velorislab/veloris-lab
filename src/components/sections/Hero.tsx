@@ -186,20 +186,39 @@ export function Hero({ lang }: { lang: LabLang }) {
                 {secondaryCta.label}
               </Button>
             </motion.div>
-            {/* The note kept its place and its type, and lost the Figma glyph
-                that used to sit in front of it: the line now states our price
-                floor and shortest window, and a Figma mark beside that reads as
-                an offer of a file we do not ship. */}
+            {/* THREE PLATES instead of the one mono line that used to close the
+                fold. The line said the floor and the window; these say what it
+                costs to start, to build and to keep, which is the whole shape of
+                the offer and the three things a stranger wants before they scroll.
+
+                THREE COLUMNS AT EVERY WIDTH, including 360px, and that is the
+                load-bearing decision. Stacked they add about 240px and push the
+                next section back above the fold, which is the one thing this
+                hero was explicitly built not to do. Side by side they cost 90px.
+                The type steps down rather than the layout breaking up: 13px
+                figures and 11px captions on a phone, which is small but is a
+                figure and a label, not prose.
+
+                No border and no shadow. Four objects with outlines stacked under
+                two buttons reads as a toolbar; a hairline between them is enough
+                to say they are three of a kind. */}
             <motion.div
               variants={heroVariants.riseIn}
               initial={initial}
               animate={animate}
               transition={transitions.note}
-              className="flex items-center justify-center gap-1"
+              className="mt-1 grid w-full max-w-[680px] grid-cols-3 divide-x divide-line-soft"
             >
-              <span className="text-center text-[16px] leading-6 text-ink-250">
-                {hero.note}
-              </span>
+              {hero.marks.map((m) => (
+                <div key={m.caption} className="flex flex-col items-center gap-[2px] px-2 text-center tablet:px-4">
+                  <span className="font-display text-[13px] leading-5 font-semibold whitespace-nowrap text-ink-800 tablet:text-[18px] tablet:leading-7">
+                    {m.value}
+                  </span>
+                  <span className="text-[11px] leading-[15px] text-ink-250 tablet:text-[14px] tablet:leading-5">
+                    {m.caption}
+                  </span>
+                </div>
+              ))}
             </motion.div>
           </div>
         </div>

@@ -7,8 +7,8 @@ import {
 import { type LabLang, tx, CALC, EMAIL, TELEGRAM } from './labData'
 import { useHydrated } from './useHydrated'
 import {
-  PRICING_IS_DRAFT, WORK_TYPES, READINESS, ADDONS,
-  estimate, money,
+  PRICING_IS_DRAFT, WORK_TYPES, DESIGN_STATES, ADDONS,
+  estimate, money, type DesignKey, type EstimateFactor,
 } from './labPricing'
 
 const STEPS = 5
@@ -29,12 +29,18 @@ const EASE = [0.16, 1, 0.3, 1] as const
  * What the calculator opens on.
  *
  * `agent` because AI agents are the headline service and the first card on the
- * page, and `spec` because its readiness factor is 1.0, so the opening figure is
- * the service's own floor with nothing added or discounted. Opening on `idea`
- * (x1.2) would inflate the first number the reader ever sees.
+ * page. `ready` because it is the one design state that adds nothing on every
+ * single product type, so the opening figure is the service's own floor with
+ * nothing added: opening on `needed` would inflate the first number the reader
+ * ever sees by up to $500. Same reasoning as before, different mechanism, now
+ * that design is a line rather than a multiplier.
+ *
+ * The server question opens unanswered rather than on `false`, because on the
+ * types where it is asked at all it is a real fork worth $1 850 and guessing it
+ * either way would be putting words in the reader's mouth.
  */
 const DEFAULT_TYPE = 'agent'
-const DEFAULT_READY = 'spec'
+const DEFAULT_DESIGN: DesignKey = 'ready'
 
 export default function Calculator({ lang, seedType }: { lang: LabLang; seedType?: string }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
@@ -56,13 +62,25 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
      one obvious answer, which is a question worth not asking. */
   const opening = seedType ?? DEFAULT_TYPE
   const [type, setType] = useState<string | null>(opening)
-  const [ready, setReady] = useState<string | null>(DEFAULT_READY)
+  const [design, setDesign] = useState<DesignKey>(DEFAULT_DESIGN)
+  const [server, setServer] = useState<boolean | null>(null)
   const [addons, setAddons] = useState<string[]>([])
   const [desc, setDesc] = useState('')
   const [name, setName] = useState('')
   const [contact, setContact] = useState('')
 
-  const est = useMemo(() => estimate(type, ready, addons), [type, ready, addons])
+  /** The chosen type, so the step machine can ask about a server only where one
+   *  is not already implied. */
+  const work = WORK_TYPES.find((t) => t.key === type)
+  const serverAsked = Boolean(work) && !work!.serverIncluded
+
+  /* `desc` is in the dependency list because the complexity bump is read out of
+     it, so the figure moves as the reader types. That is the whole point of
+     their heuristic and it is worth keeping live. */
+  const est = useMemo(
+    () => estimate({ typeKey: type, designKey: design, server: Boolean(server), addonKeys: addons, description: desc }),
+    [type, design, server, addons, desc],
+  )
 
   // The price is the one number people screenshot, so it counts up on a spring
   // instead of snapping. Mid-flight values are rounded to 50 to stay readable;
@@ -81,7 +99,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
     setAddons((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]))
 
   const reset = () => {
-    setStep([1, -1]); setType(opening); setReady(DEFAULT_READY); setAddons([])
+    setStep([1, -1]); setType(opening); setDesign(DEFAULT_DESIGN); setServer(null); setAddons([])
     setDesc(''); setName(''); setContact('')
     priceMv.jump(0)
   }
@@ -89,17 +107,27 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
   /* Nothing gates progress any more: steps 1 and 2 arrive answered and 3 to 5
      were always optional. Kept as an expression rather than deleted because it
      is the one place that would need to know, if a future step ever does. */
-  const blocked = (step === 1 && !type) || (step === 2 && !ready)
+  const blocked = step === 1 && !type
 
   const labelOf = (list: { key: string; label: Parameters<typeof tx>[0] }[], key: string | null) => {
     const hit = list.find((x) => x.key === key)
     return hit ? L(hit.label) : ''
   }
 
+  /** One breakdown line's wording. The shape comes from `estimate()`, which is
+   *  locale-blind on purpose; the words belong here. */
+  const factorLabel = (f: EstimateFactor) => {
+    if (f.kind === 'design') return L(CALC.fxDesign)
+    if (f.kind === 'server') return L(CALC.fxServer)
+    if (f.kind === 'features') return `${f.count} ${L(CALC.fxFeatures)}`
+    return L(f.level === 'high' ? CALC.fxHigh : CALC.fxSome)
+  }
+
   const brief = () => {
     const lines = [
       `${L(CALC.bfTask)}: ${labelOf(WORK_TYPES, type)}`,
-      `${L(CALC.bfHave)}: ${labelOf(READINESS, ready)}`,
+      `${L(CALC.bfHave)}: ${labelOf(DESIGN_STATES, design)}`,
+      ...(serverAsked ? [`${L(CALC.bfServer)}: ${L(server ? CALC.bfYes : CALC.bfNo)}`] : []),
       `${L(CALC.bfNeeds)}: ${addons.length
         ? ADDONS.filter((a) => addons.includes(a.key)).map((a) => L(a.label)).join(', ')
         : L(CALC.bfNone)}`,
@@ -217,11 +245,12 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
 
               {step === 2 && (
                 <>
-                  <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.q2)}</span>
+                  <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.qDesign)}</span>
+                  <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.qDesignHint)}</p>
                   <div className="flex flex-wrap gap-[10px]">
-                    {READINESS.map((r) => (
-                      <Chip key={r.key} radio group="vl-ready" on={ready === r.key} onPick={() => setReady(r.key)}>
-                        {L(r.label)}
+                    {DESIGN_STATES.map((d) => (
+                      <Chip key={d.key} radio group="vl-design" on={design === d.key} onPick={() => setDesign(d.key)}>
+                        {L(d.label)}
                       </Chip>
                     ))}
                   </div>
@@ -229,6 +258,34 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
               )}
 
               {step === 3 && (
+                <>
+                  <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.qServer)}</span>
+                  {/* ASKED ONLY WHERE IT IS A REAL QUESTION. On an integration, a
+                      parser, a dashboard, a CRM or an agent the server IS the
+                      work, so its cost is already inside the floor; offering the
+                      choice there would charge for the same thing twice. The step
+                      still exists on those types rather than being skipped,
+                      because a five-step bar that sometimes has four steps is
+                      worse than a step that explains itself. */}
+                  {serverAsked
+                    ? (
+                      <>
+                        <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.qServerHint)}</p>
+                        <div className="flex flex-wrap gap-[10px]">
+                          <Chip radio group="vl-server" on={server === true} onPick={() => setServer(true)}>
+                            {L(CALC.serverYes)}
+                          </Chip>
+                          <Chip radio group="vl-server" on={server === false} onPick={() => setServer(false)}>
+                            {L(CALC.serverNo)}
+                          </Chip>
+                        </div>
+                      </>
+                    )
+                    : <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.serverIncluded)}</p>}
+                </>
+              )}
+
+              {step === 4 && (
                 <>
                   <span className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]">{L(CALC.q3)}</span>
                   <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.q3hint)}</p>
@@ -239,15 +296,14 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
                       </Chip>
                     ))}
                   </div>
-                </>
-              )}
-
-              {step === 4 && (
-                <>
-                  <label className="font-display text-[24px] leading-[1.25] font-semibold text-ink-800 tablet:text-[28px]" htmlFor="vl-desc">{L(CALC.q4)}</label>
-                  <p className="-mt-1 text-[15px] leading-6 text-ink-300">{L(CALC.q4hint)}</p>
+                  {/* The description shares this step rather than owning one of
+                      its own, which is what freed a step for the server question.
+                      It also belongs here: the figure moves as it is typed, so
+                      seeing it beside the checkboxes makes that connection. */}
+                  <label className="mt-2 text-[15px] font-medium text-ink-700" htmlFor="vl-desc">{L(CALC.q4)}</label>
+                  <p className="-mt-2 text-[15px] leading-6 text-ink-300">{L(CALC.q4hint)}</p>
                   <textarea
-                    id="vl-desc" rows={6} className="w-full resize-y rounded-card border border-line bg-surface px-4 py-3 text-[16px] leading-6 text-ink-800 transition-colors placeholder:text-ink-100 focus:border-accent focus:outline-none"
+                    id="vl-desc" rows={4} className="w-full resize-y rounded-card border border-line bg-surface px-4 py-3 text-[16px] leading-6 text-ink-800 transition-colors placeholder:text-ink-100 focus:border-accent focus:outline-none"
                     placeholder={L(CALC.q4ph)}
                     value={desc} onChange={(e) => setDesc(e.target.value)}
                   />
@@ -333,6 +389,31 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
                     <b>{L(CALC.bfFrom)} {money(est.support)}{L(CALC.perMonth)}</b>
                   </div>
                 </div>
+
+                {/* WHAT IS IN THE FIGURE, itemised. Their result screen does this
+                    and it is the best thing in their calculator: the same number
+                    reads as arithmetic rather than as an assertion, and a reader
+                    who disagrees with one line can see which line to argue about.
+                    Only the lines that actually added money appear, so on a bare
+                    landing page the block is absent instead of empty. */}
+                {est.factors.length > 0 && (
+                  <div className="mt-3 flex flex-col gap-1 border-t border-line-soft pt-3">
+                    <span className="text-[13px] font-medium tracking-[0.08em] text-ink-200 uppercase">{L(CALC.breakdownLbl)}</span>
+                    {est.factors.map((f) => (
+                      <div key={f.kind} className="flex items-baseline justify-between gap-3 text-[14px] leading-6 text-ink-400">
+                        <span>{factorLabel(f)}</span>
+                        <span className="font-numeric text-ink-700">+{money(f.add)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Their confidence line, «предварительная» until the reader has
+                    written something. It asks for detail without a required
+                    field, and costs nothing to ignore. */}
+                <p className="mt-2 text-[13px] leading-5 text-ink-200">
+                  {L(est.described ? CALC.firmLbl : CALC.roughLbl)}
+                </p>
               </>
             )
             : <p className="text-[16px] leading-6 text-ink-300">{L(CALC.waiting)}</p>}

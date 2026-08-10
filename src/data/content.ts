@@ -27,9 +27,9 @@ import {
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB, TOOLS,
   FAQ, FAQ_LABEL,
-  BUREAU, CONTACT, CASES, EYEBROW, UI, MOTTO_TITLE,
+  BUREAU, CONTACT, CASES, EYEBROW, UI, MOTTO_TITLE, CALC,
 } from '@/site/labData'
-import { WORK_TYPES, money, priced } from '@/site/labPricing'
+import { WORK_TYPES, SUPPORT_TIERS, money, priced, monthly } from '@/site/labPricing'
 import { SERVICE_PAGES } from '@/site/servicePages'
 import { pricingPath, servicePath, localizedHref } from '@/site/routing'
 
@@ -55,9 +55,28 @@ export function getHome(lang: LabLang) {
       rotatorLead: L(HERO.rotator.lead),
       rotatorWords: HERO.rotator.words[lang],
       description: L(HERO.sub),
-      /* The template's note advertised a Figma file. Ours states the floor and
-         the shortest window, both read from the price table. */
-      note: `${L(UI.heroFloor)} ${money(priced(floor))} · ${L(UI.heroSpeed)} ${fastest} ${L({ en: fastest === 1 ? 'week' : 'weeks', ru: 'нед.' })}`,
+      /* THREE CARDS, not the one mono line that used to be here. The line read
+         «Проекты от $250 · первая версия от 1 нед.» and buried the free scoping
+         entirely; these say what it costs to start, to build and to keep, which
+         is the whole commercial shape of the offer in three plates.
+
+         Every figure is read, not written: the floor and the shortest window
+         from WORK_TYPES, the support price from the cheapest tier on the ladder.
+         Reprice labPricing and the first screen follows. */
+      marks: [
+        {
+          value: L(HERO.marks.freeValue),
+          caption: L(HERO.marks.freeCap),
+        },
+        {
+          value: `${L(UI.heroFloorShort)} ${money(priced(floor))}`,
+          caption: `${L(HERO.marks.priceCap)} ${fastest} ${L(fastest === 1 ? CALC.weekShortOne : CALC.weeksShort)}`,
+        },
+        {
+          value: `${L(UI.heroFloorShort)} ${money(monthly(SUPPORT_TIERS[0].perMonth))}${L(CALC.perMonth)}`,
+          caption: L(HERO.marks.supportCap),
+        },
+      ],
       visual: '',
       /* Emptied on purpose, not forgotten. `trustedText` was "Trusted by over
          14,540 businesses", `logos` were six invented companies and `ratings`
@@ -140,7 +159,7 @@ export function getHome(lang: LabLang) {
           name: L(svc?.t ?? w.label),
           audience: L(svc?.when ?? ''),
           price: `${L({ en: 'from', ru: 'от' })} ${money(priced(w.from))}`,
-          billingNote: `${w.weeks[0]}–${w.weeks[1]} ${L({ en: 'weeks', ru: 'нед.' })} · ${L({ en: 'support from', ru: 'поддержка от' })} ${money(priced(w.support))}${L({ en: '/mo', ru: '/мес' })}`,
+          billingNote: `${w.weeks[0]}–${w.weeks[1]} ${L({ en: 'weeks', ru: 'нед.' })} · ${L({ en: 'support from', ru: 'поддержка от' })} ${money(monthly(w.support))}${L({ en: '/mo', ru: '/мес' })}`,
           ctaLabel: L(UI.moreOn),
           ctaHref: page ? servicePath(lang, page.slug) : pricingPath(lang),
         }

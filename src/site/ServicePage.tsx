@@ -13,7 +13,7 @@ import {
   SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
   TELEGRAM, TELEGRAM_HANDLE, EMAIL, BRAND,
 } from './labData'
-import { WORK_TYPES, money, priced } from './labPricing'
+import { WORK_TYPES, money, priced, monthly } from './labPricing'
 import { CASES_BY_SERVICE, type ServicePage as SP } from './servicePages'
 import { CASE_PAGES } from './casePages'
 import { localizedHref, casePath } from './routing'
@@ -458,7 +458,7 @@ function ServiceHero({
                 <div className="flex items-center justify-between gap-4 border-t border-line-soft pt-3">
                   <dt className="text-[16px] leading-6 text-ink-300">{L(CALC.supportLbl)}</dt>
                   <dd className="text-[16px] leading-6 font-semibold text-ink-700">
-                    {L(CALC.bfFrom)} {money(priced(work.support))}
+                    {L(CALC.bfFrom)} {money(monthly(work.support))}
                     {L(CALC.perMonth)}
                   </dd>
                 </div>
