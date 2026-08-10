@@ -850,9 +850,15 @@ export const ENTRY: { t: LS; d: LS }[] = [
 
 /** Stack, grouped. Same set as the founder page, so the two never disagree. */
 export const STACK_LABEL = { en: 'Every tool here has shipped something', ru: 'Каждый инструмент здесь уже был в проде' }
+/* The lead has to carry the framing, because the list is long enough that a
+   reader will otherwise assume half of it is decoration. Two claims, both true:
+   every entry is running in Swiftin, Cowee or this site, and the list is not a
+   fence. The second half is the same position a competitor's stack page opens
+   on, and it is the right one: a studio that only builds in its favourite
+   framework is choosing for itself, not for the product. */
 export const STACK_SUB = {
-  en: 'Under each one is where we run it: Swiftin, Cowee or this site. The list is not closed, and the task picks the stack.',
-  ru: 'Под каждым написано, где он у нас работает: Swiftin, Cowee или этот сайт. Список не закрыт, стек выбирает задача.',
+  en: 'Seventy-odd tools, and every one of them is running in Swiftin, Cowee or this site rather than sitting on a list. Grouped below by what each group is for. The list is not a fence: the task picks the stack, and an existing codebase is something to continue rather than to replace.',
+  ru: 'Больше семидесяти инструментов, и каждый работает в Swiftin, Cowee или на этом сайте, а не лежит списком. Ниже сгруппированы по тому, зачем каждая группа нужна. Список не забор: стек выбирает задача, а существующий код мы продолжаем, а не переписываем.',
 }
 /* There is no STACK array any more.
  *
@@ -886,6 +892,161 @@ export interface Tool {
   note: LS
   logo?: string
 }
+
+/* =============================================================================
+   THE STACK, GROUPED. Modelled on how a competitor presents theirs, and the
+   thing worth copying was the framing rather than the list.
+
+   Their page opens «Не заставляем продукт жить в любимом фреймворке студии.
+   Продолжаем ваш код или выбираем технологии по сроку, нагрузке, команде и
+   стоимости поддержки.» That is a page about WHAT WE WILL WORK WITH, not about
+   what has already shipped, which is why a hundred and fifty entries fit on it
+   without any of them being a lie.
+
+   THIS LIST IS THE OTHER KIND. Every entry below is in a repository that exists:
+   Swiftin (web, backend, browser extension), Cowee (Telegram product) or this
+   site. Nothing here is aspirational, and that is deliberate, because a case
+   page and a stack list get read together and the first thing a buyer does on a
+   call is ask about one of them.
+
+   TO ADD SOMETHING YOU HAVE NOT SHIPPED YET: each group ends with an `also`
+   array, which renders in the same row but is described in the section lead as
+   what we work with rather than what has shipped. Redis, Cloudflare Workers,
+   Hetzner, DigitalOcean, Terraform, Kubernetes all belong there the moment you
+   are willing to defend them in a conversation. That is a call about your own
+   skills and it is not mine to make, so the arrays ship empty.
+
+   The twelve-name TOOLS list this replaces is kept below it: it carries the
+   project each tool was used on, and that attribution is the strongest thing on
+   this page, so the marquee still runs from it.
+   ========================================================================== */
+
+export interface StackGroup {
+  key: string
+  /** The small label above the title. Ours, in Russian, unlike the source's
+   *  English kickers over Russian headings. */
+  kicker: LS
+  title: LS
+  /** One sentence on why this group exists, not what is in it. */
+  lead: LS
+  /** Shipped. Every one of these is in a repository. */
+  items: string[]
+  /** Worked with but not yet shipped by us. Empty until the founder fills it. */
+  also: string[]
+}
+
+export const STACK_GROUPS: StackGroup[] = [
+  {
+    key: 'ui',
+    kicker: { en: 'Interfaces', ru: 'Интерфейсы' },
+    title: { en: 'What the user actually touches', ru: 'То, чего касается пользователь' },
+    lead: {
+      en: 'Marketing pages, product interfaces and the document tooling inside them, all of it typed end to end.',
+      ru: 'Маркетинговые страницы, продуктовые интерфейсы и работа с документами внутри них, всё сквозь типы.',
+    },
+    items: [
+      'TypeScript', 'React', 'Next.js', 'Preact', 'Tailwind CSS', 'Motion',
+      'Radix UI', 'Zustand', 'Recharts', 'MDX', 'PDF.js', 'pdf-lib', 'mammoth',
+      'JSZip', 'DOMPurify',
+    ],
+    also: [],
+  },
+  {
+    key: 'api',
+    kicker: { en: 'Server and API', ru: 'Сервер и API' },
+    title: { en: 'Everything that has to keep running', ru: 'Всё, что должно работать постоянно' },
+    lead: {
+      en: 'Request validation, auth, rate limiting and structured logs are the default here, not a later hardening pass.',
+      ru: 'Валидация запросов, авторизация, лимиты и структурные логи стоят сразу, а не докручиваются потом.',
+    },
+    items: [
+      'Node.js', 'Express', 'Python', 'aiogram', 'Prisma', 'Zod', 'JWT',
+      'bcrypt', 'Helmet', 'rate limiting', 'pino', 'REST', 'вебхуки', 'cron',
+    ],
+    also: [],
+  },
+  {
+    key: 'data',
+    kicker: { en: 'Data', ru: 'Данные' },
+    title: { en: 'Where it lives and how it moves', ru: 'Где живут и как двигаются' },
+    lead: {
+      en: 'Schema in version control, migrations that run forward, and row-level rules so a leak is not one query away.',
+      ru: 'Схема под контролем версий, миграции, которые накатываются вперёд, и правила на уровне строк, чтобы утечка не оказалась в одном запросе.',
+    },
+    items: [
+      'PostgreSQL', 'SQL', 'Supabase', 'Row Level Security', 'миграции',
+      'SQLAlchemy', 'Alembic', 'pg_cron', 'IndexedDB',
+    ],
+    also: [],
+  },
+  {
+    key: 'ext',
+    kicker: { en: 'Browser extensions', ru: 'Расширения браузера' },
+    title: { en: 'The part most studios turn down', ru: 'То, от чего обычно отказываются' },
+    lead: {
+      en: 'A published extension in two stores, on the current manifest, with the injection and permission model that goes with it.',
+      ru: 'Опубликованное расширение в двух магазинах, на актуальном манифесте, со всей моделью внедрения и разрешений.',
+    },
+    items: [
+      'Chrome Manifest V3', 'WebExtensions', 'service worker', 'content scripts',
+      'MAIN world', 'Chrome Web Store', 'Firefox Add-ons', 'Vite', 'crxjs',
+    ],
+    also: [],
+  },
+  {
+    key: 'ai',
+    kicker: { en: 'AI in production', ru: 'AI в проде' },
+    title: { en: 'Models inside a product, not in a demo', ru: 'Модели внутри продукта, а не в демо' },
+    lead: {
+      en: 'Several providers behind one interface, with the token accounting, retries and fallbacks that a paid product needs.',
+      ru: 'Несколько провайдеров за одним интерфейсом, с учётом токенов, повторами и запасными маршрутами, без которых платный продукт не живёт.',
+    },
+    items: [
+      'OpenAI API', 'Anthropic API', 'Google Gemini API', 'OpenRouter',
+      'стриминг', 'учёт токенов', 'запасные маршруты',
+    ],
+    also: [],
+  },
+  {
+    key: 'pay',
+    kicker: { en: 'Money', ru: 'Деньги' },
+    title: { en: 'Card and crypto, both in production', ru: 'Карты и крипта, обе в проде' },
+    lead: {
+      en: 'Subscriptions, plan changes with proration and webhooks written to be replayed without charging anyone twice.',
+      ru: 'Подписки, смена плана с пересчётом и вебхуки, написанные так, чтобы повторная доставка не списала дважды.',
+    },
+    items: [
+      'Paddle Billing', 'NOWPayments', 'подписки', 'идемпотентные вебхуки',
+      'проверка подписи', 'защита от повторов',
+    ],
+    also: [],
+  },
+  {
+    key: 'ops',
+    kicker: { en: 'Delivery and watching', ru: 'Доставка и присмотр' },
+    title: { en: 'Knowing it broke before the client does', ru: 'Узнать о поломке раньше клиента' },
+    lead: {
+      en: 'Errors, product analytics and transactional mail wired from the first release rather than after the first incident.',
+      ru: 'Ошибки, продуктовая аналитика и транзакционная почта подключены с первого релиза, а не после первого инцидента.',
+    },
+    items: [
+      'Docker', 'Vercel', 'Railway', 'Cloudflare Turnstile', 'Sentry',
+      'PostHog', 'Resend', 'GitHub',
+    ],
+    also: [],
+  },
+  {
+    key: 'qa',
+    kicker: { en: 'Proof it works', ru: 'Доказательство, что работает' },
+    title: { en: 'Tests, and enough of them to trust', ru: 'Тесты, и их достаточно, чтобы верить' },
+    lead: {
+      en: 'A suite that has to stay green before anything reaches a store, and a real browser driving the parts a unit test cannot reach.',
+      ru: 'Набор, который обязан быть зелёным до выкладки в магазин, и настоящий браузер там, куда юнит-тест не дотягивается.',
+    },
+    items: ['Vitest', 'Playwright', 'TypeScript strict'],
+    also: [],
+  },
+]
 
 export const TOOLS: Tool[] = [
   { name: 'TypeScript', note: { en: 'Swiftin, this site', ru: 'Swiftin, этот сайт' } },

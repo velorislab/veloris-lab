@@ -25,7 +25,7 @@ import {
   PROCESS, PROCESS_LABEL, PROCESS_SUB,
   WHY, WHY_LABEL, WHY_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
-  STACK_LABEL, STACK_SUB, TOOLS,
+  STACK_LABEL, STACK_SUB, TOOLS, STACK_GROUPS,
   FAQ, FAQ_LABEL,
   BUREAU, CONTACT, CASES, EYEBROW, UI, MOTTO_TITLE, CALC,
 } from '@/site/labData'
@@ -138,7 +138,28 @@ export function getHome(lang: LabLang) {
       badge: { icon: `${ICON}/whats-inside.svg`, label: L(EYEBROW.stack) },
       title: L(STACK_LABEL),
       description: L(STACK_SUB),
-      tags: TOOLS.map((t) => t.name),
+      /* THE TICKER RUNS ON EVERYTHING NOW, seventy-one names instead of twelve.
+         Three rows of twelve meant each row was the same short list rotated and
+         you could watch a name come round again inside one screen width. The
+         full stack fills the track properly and, more to the point, breadth is
+         the thing this section is for. */
+      tags: STACK_GROUPS.flatMap((g) => [...g.items, ...g.also]),
+      /* And the same stack again, grouped, with a sentence per group saying why
+         that group exists. The ticker shows how much there is; the groups say
+         what it is for. `also` is empty everywhere until the founder decides
+         what to claim beyond what has shipped. */
+      groups: STACK_GROUPS.map((g) => ({
+        key: g.key,
+        kicker: L(g.kicker),
+        title: L(g.title),
+        lead: L(g.lead),
+        items: g.items,
+        also: g.also,
+      })),
+      /* Kept, and it is the strongest thing on this section: twelve tools with
+         the project each one was used on. A stack list anybody can write; a
+         stack list with «Swiftin, этот сайт» beside each entry is checkable. */
+      used: TOOLS.map((t) => ({ name: t.name, note: L(t.note) })),
     },
 
     /* --------------------------------------- what a reader can check */

@@ -43,7 +43,7 @@ function rotate<T>(items: T[], by: number): T[] {
  */
 export function PlatformHighlight({ lang }: { lang: LabLang }) {
   const { platformHighlight } = getHome(lang);
-  const { tags } = platformHighlight;
+  const { tags, groups } = platformHighlight;
   const step = Math.ceil(tags.length / 3);
   const rows = [0, 1, 2].map((index) => rotate(tags, index * step));
 
@@ -106,6 +106,15 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
         <h2 className="text-center text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
           {platformHighlight.title}
         </h2>
+        {/* The lead was written and never rendered: this section showed a badge,
+            a heading and a ticker, and the sentence that says the list is not a
+            fence sat in content.ts going nowhere. It is the framing the whole
+            section needs, so it goes under the heading where a lead belongs. */}
+        {platformHighlight.description && (
+          <p className="max-w-[820px] text-center text-[16px] leading-6 text-ink-300 tablet:text-[18px] tablet:leading-[27px]">
+            {platformHighlight.description}
+          </p>
+        )}
       </div>
 
       {tags.length > 0 && (
@@ -122,6 +131,54 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
                 <Tag key={label} label={label} />
               ))}
             </Marquee>
+          ))}
+        </div>
+      )}
+
+      {/* THE SAME STACK, GROUPED AND EXPLAINED.
+          A ticker of names says how much there is and nothing about what any of
+          it is for, which is the whole weakness of a logo wall. Each group here
+          leads with one sentence about why the group exists, then lists what is
+          in it. The structure is borrowed from how a competitor lays their stack
+          page out; every entry is ours. */}
+      {groups.length > 0 && (
+        <div className="relative grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2">
+          {groups.map((g) => (
+            <div
+              key={g.key}
+              className="flex flex-col gap-3 rounded-panel bg-surface/80 p-5 backdrop-blur-[2px] shadow-[0_0_0_1px_var(--color-line-soft),0_2px_6px_0_rgba(182,182,182,0.1)] tablet:p-6"
+            >
+              <div className="flex flex-col gap-1">
+                <span className="text-[12px] font-medium tracking-[0.08em] text-ink-200 uppercase">
+                  {g.kicker}
+                </span>
+                <h3 className="text-[18px] leading-7 text-ink-800 tablet:text-[20px] tablet:leading-[30px]">
+                  {g.title}
+                </h3>
+                <p className="text-[15px] leading-[22px] text-ink-300">{g.lead}</p>
+              </div>
+              <ul className="flex flex-wrap gap-[6px]">
+                {g.items.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded-pill bg-surface-muted px-[10px] py-[5px] text-[13px] leading-5 text-ink-500"
+                  >
+                    {t}
+                  </li>
+                ))}
+                {/* Held apart on purpose. Anything in `also` is something we work
+                    with rather than something already shipped, and the two must
+                    not read as one list. */}
+                {g.also.map((t) => (
+                  <li
+                    key={t}
+                    className="rounded-pill bg-surface px-[10px] py-[5px] text-[13px] leading-5 text-ink-300 shadow-[0_0_0_1px_var(--color-line)]"
+                  >
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       )}
