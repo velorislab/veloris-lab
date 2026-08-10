@@ -2,20 +2,22 @@ import Image from "next/image";
 
 import { Mark } from "@/components/ui/Mark";
 import { OrbitGlyphs } from "@/components/ui/OrbitGlyphs";
-import { TechCursor } from "@/components/ui/TechCursor";
+import { StarSurge } from "@/components/backgrounds/StarSurge";
 import Link from "next/link";
 
 import { getHome, type HomeContent } from "@/data/content";
 import { tx, type LabLang } from "@/site/labData";
 
 /**
- * The composition behind the badge: a grid and two dark beams angled at ±30°.
- * Geometry matches the source's 1380×360 backdrop.
+ * The faint grid behind the crest. Geometry matches the source's 1380x360
+ * backdrop.
  *
- * The source also drifted a column of partner logos down through this. Those
- * logos were six companies we have no relationship with, so `orbitLogos` is
- * empty in content.ts and the column is gone with it — the grid and the beams
- * are the part of this composition that carries no claim.
+ * What used to be here as well: two beams of light, and a column of partner
+ * logos drifting through them. The logos were six companies we have no
+ * relationship with, so `orbitLogos` is empty in content.ts. The beams were a
+ * 4.6 MB looping mp4, replaced by gradients, then dropped entirely once
+ * StarSurge took over the panel: two decorations doing the same job is one
+ * decoration too many.
  */
 function OrbitBackdrop() {
   return (
@@ -30,46 +32,6 @@ function OrbitBackdrop() {
         height={331}
         className="absolute top-[-43px] left-1/2 -translate-x-1/2"
       />
-
-      {/* Two beams of streaking light. Each is the same looping clip: rotated
-          ±30°, tinted navy by a `mix-blend-mode: color` fill, then faded on all
-          four edges so it dissolves into the panel. */}
-      {(["left", "right"] as const).map((side) => {
-        const isLeft = side === "left";
-        return (
-          <div
-            key={side}
-            className="absolute top-0 h-[293px] w-[675px] overflow-hidden"
-            style={{ left: isLeft ? 0 : 705 }}
-          >
-            {/* The template ran a 4.6 MB looping mp4 through this slot, tinted
-                and masked into a beam. Two gradients sweeping in and out read
-                the same and cost nothing; see globals.css for the keyframes. */}
-            <div
-              className={`vl-beam absolute inset-0 ${isLeft ? "" : "vl-beam-b"}`}
-              style={{ transform: isLeft ? "rotate(30deg)" : "rotate(-30deg)" }}
-            />
-
-            {/* Shell-level fades that blend the beam into the section. */}
-            <div
-              className="absolute top-[95px] h-[198px] w-[536px] bg-[linear-gradient(0.16deg,#110f20_0%,rgba(17,15,32,0)_100%)]"
-              style={{ left: isLeft ? 139 : 0 }}
-            />
-            <div
-              className="absolute top-[70px] h-[167px] w-[283px]"
-              style={{
-                left: isLeft ? 392 : 0,
-                transform: isLeft
-                  ? "matrix(-0.866025, -0.5, 0.5, -0.866025, 0, 0)"
-                  : "matrix(-0.866025, 0.5, -0.5, -0.866025, 0, 0)",
-                backgroundImage: isLeft
-                  ? "linear-gradient(59.8967deg, #110f20 1.5%, rgba(17,15,32,0) 100%)"
-                  : "linear-gradient(59.8967deg, rgba(17,15,32,0) 1.5%, #110f20 100%)",
-              }}
-            />
-          </div>
-        );
-      })}
     </div>
   );
 }
@@ -177,10 +139,11 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
       id="what-in"
       className="relative flex w-full scroll-mt-[110px] flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 pt-20 pb-10 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:pt-24 tablet:pb-16 desktop:gap-20 desktop:px-20 desktop:pt-[130px] desktop:pb-20"
     >
-      {/* Scoped to this slab and nowhere else: the canvas is absolute inside a
-          section that already clips, and the listener sits on this element
-          rather than on the window. */}
-      <TechCursor />
+      {/* One background instead of the three overlays this slab used to carry.
+          The pointer trail that used to be here piled glyphs into the corner
+          whenever the pointer rested there, and the 50px radius sliced them; a
+          background has no relationship to the pointer and cannot do that. */}
+      <StarSurge color="#c9cfe6" speed={0.9} count={240} className="z-0" />
       <div className="relative flex w-full flex-col items-center gap-5">
         {/* ---- badge, on its beam-lit backdrop ---- */}
         <div className="relative flex size-[150px] items-center justify-center">

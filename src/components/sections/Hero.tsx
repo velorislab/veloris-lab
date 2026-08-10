@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 
+import { HorizonGrid } from "@/components/backgrounds/HorizonGrid";
 import { Button } from "@/components/ui/Button";
 import { getSite } from "@/config/site";
 import { getHome } from "@/data/content";
@@ -67,6 +68,13 @@ export function Hero({ lang }: { lang: LabLang }) {
       id="hero"
       className="relative flex w-full flex-col items-center gap-[50px] overflow-hidden px-4 pt-[160px] pb-[10px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
     >
+      {/* The horizon runs the full height of the first screen, with its
+          vanishing point just under the headline: 0.6 of the hero height, measured
+          against where the h1 actually ends rather than guessed. It replaces a static
+          `hero-grid.svg` that was 223px tall and pinned 256px down, so the
+          perspective started below the copy and ran out well before the fold. */}
+      <HorizonGrid color="#c0c5cd" speed={0.5} horizon={0.6} className="z-0" />
+
       {/* -------------------------------------------------- decorative layer */}
       {/* GONE, and this is why, because the markup looked harmless.
 
@@ -91,23 +99,6 @@ export function Hero({ lang }: { lang: LabLang }) {
       {/* ------------------------------------------------------------ content */}
       <div className="relative flex w-full max-w-[1101px] flex-col items-center gap-[50px]">
         <div className="relative flex w-full flex-col items-center gap-10 desktop:px-20">
-          <motion.div
-            aria-hidden
-            variants={heroVariants.riseIn}
-            initial={initial}
-            animate={animate}
-            transition={transitions.grid}
-            className="pointer-events-none absolute top-[256px] left-1/2 z-0 h-[85px] w-[549px] -translate-x-1/2 tablet:h-[223px] tablet:w-[1441px]"
-          >
-            <Image
-              src="/images/backgrounds/hero-grid.svg"
-              alt=""
-              fill
-              sizes="(min-width: 810px) 1441px, 549px"
-              className="object-cover"
-            />
-          </motion.div>
-
           <div className="relative flex w-full max-w-[941px] flex-col items-center gap-4">
             <motion.div
               variants={heroVariants.badge}
