@@ -32,7 +32,7 @@ import {
 import { WORK_TYPES, SUPPORT_TIERS, money, priced, monthly } from '@/site/labPricing'
 import { SERVICE_PAGES } from '@/site/servicePages'
 import { CASE_PAGES } from '@/site/casePages'
-import { pricingPath, servicePath, casePath, localizedHref } from '@/site/routing'
+import { pricingPath, servicePath, casePath, solutionsPath, localizedHref } from '@/site/routing'
 
 const ICON = '/images/icons/badge'
 
@@ -143,15 +143,21 @@ export function getHome(lang: LabLang) {
         const page = SERVICE_PAGES.find((p) => p.key === s.key)
         return {
           title: L(s.t),
-          /* TWO LINES, and the second one was already written and going nowhere.
-             `when` is the recognition line, the reader's own morning described
-             back to them, and on its own it left the card saying what is wrong
-             without ever saying what arrives. `d` is the deliverable and has
-             existed in SERVICES since the first draft; it was only ever used on
-             the service pages. Showing both doubles what the card carries and
-             invents not one word. */
-          description: L(s.when),
-          outcome: L(s.d),
+          /* THE PAIN LINE IS OFF THE CARD, and this reverses a change made
+             earlier the same week.
+
+             `when` describes the reader's own bad morning back to them, and it
+             is good writing, but six cards in a row each opening on something
+             wrong with your week reads as a lecture before it reads as an offer.
+             A competitor's equivalent cards never do this: they open on what the
+             thing is and what it costs, and the difficulty only appears deep
+             inside the detail page, numbered, framed as engineering rather than
+             as the client's suffering.
+
+             So the card leads on the deliverable now. `when` is not deleted; it
+             still carries the service pages, which is where a reader has already
+             decided they are interested and recognition is worth paying for. */
+          description: L(s.d),
           price: w ? money(priced(w.from)) : '',
           weeks: w ? `${w.weeks[0]}–${w.weeks[1]}` : '',
           href: page ? servicePath(lang, page.slug) : pricingPath(lang),
@@ -281,6 +287,12 @@ export function getHome(lang: LabLang) {
       badge: { icon: `${ICON}/who-can-use.svg`, label: L(EYEBROW.entry) },
       title: L(ENTRY_LABEL),
       description: L(ENTRY_SUB),
+      /* A competitor puts «Смотреть все решения →» in this section's header, and
+         it is the right place for it: a reader who has just recognised their own
+         situation in one of the three doors is the reader most likely to want the
+         scenario list. */
+      allHref: solutionsPath(lang),
+      allLabel: L(UI.solutionAll),
       items: ENTRY.map((e, i) => ({
         /* «01 / Есть идея», the reader's own situation as the label. Numbered
            because three states read as a sequence otherwise, and they are not

@@ -66,6 +66,7 @@ export const UI: Record<string, LS> = {
   navProcess: { en: 'Process', ru: 'Как работаем' },
   navCalc: { en: 'Estimate', ru: 'Расчёт' },
   navBureau: { en: 'Studio', ru: 'О студии' },
+  navSolutions: { en: 'Solutions', ru: 'Решения' },
   ctaCalc: { en: 'Get the price in a minute', ru: 'Узнать цену за минуту' },
   /**
    * The one button on all 22 routes, and it now names the free thing instead
@@ -91,6 +92,26 @@ export const UI: Record<string, LS> = {
   heroFloorShort: { en: 'from', ru: 'от' },
   heroSpeed: { en: 'first version from', ru: 'первая версия от' },
   moreOn: { en: 'What is included', ru: 'Что входит' },
+  /* Solution pages. Every heading on one is a spoken phrase rather than a
+     category, same rule as the rest of the site. */
+  solutionFor: { en: 'Who this suits:', ru: 'Кому подходит:' },
+  solutionComposition: { en: 'What is in the first version', ru: 'Состав первой версии' },
+  solutionBase: { en: 'The figures above are the package this sits on:', ru: 'Цифры выше это пакет, на котором это стоит:' },
+  solutionBaseTail: {
+    en: 'Anything past its edges the calculator adds before the work starts, not after.',
+    ru: 'Всё, что выходит за его границы, калькулятор добавит до начала работ, а не после.',
+  },
+  solutionFlow: { en: 'How the path goes', ru: 'Как проходит путь' },
+  solutionWatch: { en: 'What decides whether this works or annoys people', ru: 'Что решает, будет это работать или раздражать' },
+  solutionMetrics: { en: 'What to measure once it is live', ru: 'Что мерить после запуска' },
+  solutionFaq: { en: 'Asked before the first call', ru: 'Спрашивают до первого созвона' },
+  solutionNear: { en: 'Close to this', ru: 'Рядом с этим' },
+  solutionAll: { en: 'All solutions', ru: 'Все решения' },
+  solutionsLabel: { en: 'We already know this scenario', ru: 'Этот сценарий нам уже знаком' },
+  solutionsSub: {
+    en: 'Each of these is a thing we build, with what goes into the first version, what it costs and how long it runs. Not a portfolio: the proof of work is on the case pages, and these are the offers.',
+    ru: 'Каждое из них это то, что мы собираем, с составом первой версии, ценой и сроком. Это не портфолио: доказательства работы лежат в кейсах, а здесь предложения.',
+  },
   readCase: { en: 'How it was built', ru: 'Как это устроено' },
   priceList: { en: 'Open the full price list', ru: 'Открыть полный прайс' },
   founderLink: { en: 'About the founder', ru: 'Об основателе' },

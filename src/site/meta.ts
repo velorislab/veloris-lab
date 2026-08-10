@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { BRAND, EMAIL, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx } from './labData'
-import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, type LabLang } from './routing'
+import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
 import { CASE_PAGES, type CasePage } from './casePages'
 import { CASES } from './labData'
 import { WORK_TYPES, money, priced } from './labPricing'
+import { SOLUTIONS, type Solution } from './solutions'
 
 /**
  * Everything both language routes share: metadata, JSON-LD, and the two raw
@@ -248,6 +249,43 @@ export function caseJsonLd(lang: LabLang, page: CasePage) {
 }
 
 export const CASE_SLUGS = CASE_PAGES.map((p) => ({ slug: p.slug }))
+
+/* ---------------------------------------------------------------- solutions */
+/* A solution page's description is its own lead sentence, trimmed. It is written
+   to be one, so there is nothing to compose and nothing to invent. */
+export function solutionMetadata(lang: LabLang, page: Solution): Metadata {
+  const t = (v: Parameters<typeof tx>[0]) => tx(v, lang)
+  const work = WORK_TYPES.find((w) => w.key === page.base)
+  const from = work ? `${t({ en: 'from', ru: 'от' })} ${money(priced(work.from))}` : ''
+  const title = `${t(page.title)}${from ? ` ${from}` : ''} · ${BRAND}`
+  const description = t(page.lead)
+  return {
+    title,
+    description,
+    alternates: buildSolutionAlternates(lang, page.slug),
+    openGraph: {
+      type: 'website',
+      title,
+      description,
+      url: solutionUrl(lang, page.slug),
+      siteName: BRAND,
+    },
+  }
+}
+
+export function solutionsMetadata(lang: LabLang): Metadata {
+  const t = (v: Parameters<typeof tx>[0]) => tx(v, lang)
+  const title = `${t(UI.solutionsLabel)} · ${BRAND}`
+  const description = t(UI.solutionsSub)
+  return {
+    title,
+    description,
+    alternates: buildSolutionsAlternates(lang),
+    openGraph: { type: 'website', title, description, url: solutionsUrl(lang), siteName: BRAND },
+  }
+}
+
+export const SOLUTION_SLUGS = SOLUTIONS.map((p) => ({ slug: p.slug }))
 
 /* ---------------------------------------------------------------------------
    Pricing page.

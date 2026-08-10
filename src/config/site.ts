@@ -37,7 +37,7 @@ import {
 } from '@/site/labData'
 import { CASE_PAGES } from '@/site/casePages'
 import { SERVICE_PAGES } from '@/site/servicePages'
-import { SITE_URL, localizedHref, pricingPath, servicePath, casePath } from '@/site/routing'
+import { SITE_URL, localizedHref, pricingPath, servicePath, casePath, solutionsPath } from '@/site/routing'
 
 export interface NavLink {
   label: string
@@ -158,6 +158,11 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
      */
     nav: [
       { label: L(UI.navServices), href: at(ANCHORS.services) },
+      /* The solutions hub is a real route with eight pages under it and, on a
+         competitor's site, the shape that carries most of the search traffic. It
+         is in the desktop pill rather than in `navRest` because it is the only
+         entry here that is not an anchor on the page the reader is already on. */
+      { label: L(UI.navSolutions), href: solutionsPath(lang) },
       { label: L(UI.navPricing), href: pricingPath(lang) },
     ] satisfies NavLink[],
 
@@ -211,7 +216,7 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
       columns: [
         {
           title: L(UI.navServices),
-          links: [...serviceLinks, { label: L(UI.priceList), href: pricingPath(lang) }],
+          links: [...serviceLinks, { label: L(UI.solutionAll), href: solutionsPath(lang) }, { label: L(UI.priceList), href: pricingPath(lang) }],
         },
         { title: L(UI.navCases), links: caseLinks },
       ] satisfies FooterColumn[],

@@ -39,6 +39,14 @@ export function WhoCanUse({ lang }: { lang: LabLang }) {
                 {whoCanUse.description}
               </p>
             )}
+            {whoCanUse.allHref && (
+              <a
+                href={whoCanUse.allHref}
+                className="text-[15px] leading-6 font-medium text-accent underline decoration-accent/30 underline-offset-4 transition-colors duration-200 hover:decoration-accent"
+              >
+                {whoCanUse.allLabel}
+              </a>
+            )}
           </div>
         </div>
 

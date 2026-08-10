@@ -68,20 +68,9 @@ function Card({ card, labels }: CardProps) {
         <h3 className="text-[20px] leading-[30px] text-white tablet:text-[22px] tablet:leading-[33px]">
           {card.title}
         </h3>
-        {/* THE PAIN, THEN WHAT ARRIVES, in that order and at two weights. The
-            card used to stop after the first line, which left six cards each
-            describing something wrong with the reader's week and none of them
-            saying what they would get for the figure underneath. The second line
-            is `d` from SERVICES, written long ago and used only on the service
-            pages until now. */}
         {card.description && (
-          <p className="text-[15px] leading-[22px] text-ink-100/70 tablet:text-[16px] tablet:leading-6">
+          <p className="text-[16px] leading-6 text-ink-100 tablet:text-[17px] tablet:leading-[26px]">
             {card.description}
-          </p>
-        )}
-        {card.outcome && (
-          <p className="text-[16px] leading-6 text-white/85 tablet:text-[17px] tablet:leading-[26px]">
-            {card.outcome}
           </p>
         )}
       </div>

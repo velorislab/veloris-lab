@@ -71,6 +71,47 @@ export function buildServiceAlternates(lang: LabLang, slug: string) {
   }
 }
 
+/* Solution pages, same shape as the service ones. The hub has its own pair
+   because it is a real page rather than an index of slugs. */
+
+export function solutionsPath(lang: LabLang): string {
+  return lang === 'en' ? '/solutions' : `/${lang}/solutions`
+}
+
+export function solutionsUrl(lang: LabLang): string {
+  return `${SITE_URL}${solutionsPath(lang)}`
+}
+
+export function buildSolutionsAlternates(lang: LabLang) {
+  return {
+    canonical: solutionsUrl(lang),
+    languages: {
+      en: solutionsUrl('en'),
+      ru: solutionsUrl('ru'),
+      'x-default': solutionsUrl('en'),
+    },
+  }
+}
+
+export function solutionPath(lang: LabLang, slug: string): string {
+  return lang === 'en' ? `/solutions/${slug}` : `/${lang}/solutions/${slug}`
+}
+
+export function solutionUrl(lang: LabLang, slug: string): string {
+  return `${SITE_URL}${solutionPath(lang, slug)}`
+}
+
+export function buildSolutionAlternates(lang: LabLang, slug: string) {
+  return {
+    canonical: solutionUrl(lang, slug),
+    languages: {
+      en: solutionUrl('en', slug),
+      ru: solutionUrl('ru', slug),
+      'x-default': solutionUrl('en', slug),
+    },
+  }
+}
+
 /* Case pages, same shape as the service ones. */
 
 export function casePath(lang: LabLang, slug: string): string {

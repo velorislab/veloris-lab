@@ -1,7 +1,8 @@
 import type { MetadataRoute } from 'next'
-import { LANGS, localizedUrl, serviceUrl, caseUrl, pricingUrl } from '../site/routing'
+import { LANGS, localizedUrl, serviceUrl, caseUrl, pricingUrl, solutionUrl, solutionsUrl } from '../site/routing'
 import { SERVICE_PAGES } from '../site/servicePages'
 import { CASE_PAGES } from '../site/casePages'
+import { SOLUTIONS } from '../site/solutions'
 
 /**
  * Every URL the site has, both locales, each carrying its own hreflang set.
@@ -40,6 +41,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
         changeFrequency: 'monthly',
         priority: 0.8,
         alternates: alt((l) => serviceUrl(l, p.slug)),
+      })
+    }
+    /* The solutions hub and every scenario under it. Priority sits between the
+       service pages and the cases: these are the pages a search actually lands
+       on, and there are more of them than of anything else here. */
+    entries.push({
+      url: solutionsUrl(lang),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+      alternates: alt(solutionsUrl),
+    })
+    for (const s of SOLUTIONS) {
+      entries.push({
+        url: solutionUrl(lang, s.slug),
+        changeFrequency: 'monthly',
+        priority: 0.8,
+        alternates: alt((l) => solutionUrl(l, s.slug)),
       })
     }
     for (const c of CASE_PAGES) {
