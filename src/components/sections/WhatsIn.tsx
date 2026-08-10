@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { Mark } from "@/components/ui/Mark";
+import { OrbitGlyphs } from "@/components/ui/OrbitGlyphs";
 import { TechCursor } from "@/components/ui/TechCursor";
 import Link from "next/link";
 
@@ -41,10 +42,14 @@ function OrbitBackdrop() {
             className="absolute top-0 h-[293px] w-[675px] overflow-hidden"
             style={{ left: isLeft ? 0 : 705 }}
           >
-            {/* The template ran a looping video of its own product through
-                this slot, masked into a light beam. The file was not copied and
-                the footage is not ours, so the beam is gone and the shell fades
-                below keep the panel's edges soft on their own. */}
+            {/* The template ran a 4.6 MB looping mp4 through this slot, tinted
+                and masked into a beam. Two gradients sweeping in and out read
+                the same and cost nothing; see globals.css for the keyframes. */}
+            <div
+              className={`vl-beam absolute inset-0 ${isLeft ? "" : "vl-beam-b"}`}
+              style={{ transform: isLeft ? "rotate(30deg)" : "rotate(-30deg)" }}
+            />
+
             {/* Shell-level fades that blend the beam into the section. */}
             <div
               className="absolute top-[95px] h-[198px] w-[536px] bg-[linear-gradient(0.16deg,#110f20_0%,rgba(17,15,32,0)_100%)]"
@@ -170,7 +175,7 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
   return (
     <section
       id="what-in"
-      className="relative flex w-full flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 pt-20 pb-10 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:pt-24 tablet:pb-16 desktop:gap-20 desktop:px-20 desktop:pt-[130px] desktop:pb-20"
+      className="relative flex w-full scroll-mt-[110px] flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 pt-20 pb-10 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:pt-24 tablet:pb-16 desktop:gap-20 desktop:px-20 desktop:pt-[130px] desktop:pb-20"
     >
       {/* Scoped to this slab and nowhere else: the canvas is absolute inside a
           section that already clips, and the listener sits on this element
@@ -186,6 +191,7 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
               disc does not: our mark arrived at 50 visual pixels inside a 150px
               halo and read as lost. The halo stays, the plates go, and the mark
               is the crest at its own size. */}
+          <OrbitGlyphs />
           <Mark size={94} className="relative z-10" />
         </div>
 

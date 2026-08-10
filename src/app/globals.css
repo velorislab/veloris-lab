@@ -346,3 +346,47 @@
   --mark-ink: #21232b;
   --mark-wave: #f0584c;
 }
+
+/* =============================================================================
+   The dark slab's motion: a slowly turning ring of stack glyphs, and two beams
+   of light sweeping across behind it.
+
+   The template did the beams with a 4.6 MB looping mp4, tinted and masked. That
+   file is not in this repo and is not coming: four and a half megabytes for two
+   light streaks is the heaviest asset on the site by a wide margin, spent on
+   decoration. Two gradients and a translate read the same at no bytes.
+   ========================================================================== */
+
+/* Each glyph floats on its own delay. A rotating ring was tried first and put
+   two glyphs on top of the heading; an arc that breathes cannot reach the type
+   at all. */
+@keyframes vl-orbit-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+.vl-orbit-glyph { animation: vl-orbit-bob 6s ease-in-out infinite; }
+
+@keyframes vl-beam-sweep {
+  0%   { opacity: 0; transform: translateX(-18%); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(18%); }
+}
+.vl-beam {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(120, 150, 255, 0.05) 22%,
+    rgba(160, 190, 255, 0.16) 50%,
+    rgba(120, 150, 255, 0.05) 78%,
+    transparent 100%
+  );
+  animation: vl-beam-sweep 9s ease-in-out infinite;
+}
+.vl-beam-b { animation-delay: 4.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* The arc holds still, which is what it is in a screenshot regardless, and
+     the beams hold at their brightest. */
+  .vl-orbit-glyph { animation: none; }
+  .vl-beam { animation: none; opacity: 1; }
+}

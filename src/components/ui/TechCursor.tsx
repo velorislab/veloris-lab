@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  siDocker, siNextdotjs, siNodedotjs, siPostgresql, siPython, siRailway,
-  siReact, siSupabase, siTelegram, siTypescript, siVercel,
-} from "simple-icons";
+import { STACK_GLYPHS, onSlab } from "@/lib/stackGlyphs";
 import { useReducedMotion } from "motion/react";
 
 /* =============================================================================
@@ -35,33 +32,6 @@ import { useReducedMotion } from "motion/react";
    invisible particles out of eleven if their own colour is used blindly.
    ========================================================================== */
 
-/**
- * The stack, as glyphs. Playwright has no icon in this set and is left out
- * rather than substituted with something that is not Playwright.
- *
- * STATIC NAMED IMPORTS, not `import * as si` with a lookup by string. The
- * namespace form defeats tree shaking: simple-icons carries some three thousand
- * icons and indexing it dynamically means the bundler cannot prove which eleven
- * are used, so it ships all of them.
- */
-const GLYPHS = [
-  siTypescript, siReact, siNextdotjs, siNodedotjs, siPython, siPostgresql,
-  siSupabase, siDocker, siVercel, siRailway, siTelegram,
-].map((icon) => ({ path: icon.path, hex: icon.hex }));
-
-/** Relative luminance, for deciding whether a brand colour survives the slab. */
-function lum(hex: string) {
-  const n = parseInt(hex, 16);
-  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
-    const c = v / 255;
-    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
-}
-const SLAB = lum("110f20");
-const readable = (hex: string) =>
-  (Math.max(lum(hex), SLAB) + 0.05) / (Math.min(lum(hex), SLAB) + 0.05) >= 2.5;
-
 type Particle = { x: number; y: number; alpha: number; size: number; glyph: number };
 
 export function TechCursor() {
@@ -84,9 +54,9 @@ export function TechCursor() {
 
     /* Path2D is browser-only, so the glyphs are compiled here rather than at
        module scope, once, and reused for every particle. */
-    const paths = GLYPHS.map((g) => ({
+    const paths = STACK_GLYPHS.map((g) => ({
       path: new Path2D(g.path),
-      fill: readable(g.hex) ? `#${g.hex}` : "#ffffff",
+      fill: onSlab(g.hex),
     }));
 
     let dpr = 1;
