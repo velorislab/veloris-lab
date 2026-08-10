@@ -169,21 +169,10 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
                 <p className="text-[15px] leading-[22px] text-ink-300">{g.lead}</p>
               </div>
               <ul className="flex flex-wrap gap-[6px]">
-                {g.items.map((t) => (
+                {g.items.map((t: string) => (
                   <li
                     key={t}
                     className="rounded-pill bg-surface-muted px-[10px] py-[5px] text-[13px] leading-5 text-ink-500"
-                  >
-                    {t}
-                  </li>
-                ))}
-                {/* Held apart on purpose. Anything in `also` is something we work
-                    with rather than something already shipped, and the two must
-                    not read as one list. */}
-                {g.also.map((t) => (
-                  <li
-                    key={t}
-                    className="rounded-pill bg-surface px-[10px] py-[5px] text-[13px] leading-5 text-ink-300 shadow-[0_0_0_1px_var(--color-line)]"
                   >
                     {t}
                   </li>

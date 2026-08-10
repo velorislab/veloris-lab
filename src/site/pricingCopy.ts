@@ -70,8 +70,8 @@ export const PRICING = {
      reused here. */
   supportLadderLabel: { en: 'After launch, if you want it', ru: 'После запуска, если нужно' },
   supportLadderSub: {
-    en: 'The price follows what has to be watched. A page that only has to load costs less to keep alive than a server other people depend on. Every line is one person\'s promise, so there are no lines here about a team.',
-    ru: 'Цена идёт за тем, что нужно держать под присмотром. Страница, которой достаточно открываться, стоит дешевле сервера, от которого зависят люди. Каждый пункт это обещание одного человека, поэтому здесь нет пунктов про команду.',
+    en: 'The price follows what has to be watched. A page that only has to load costs less to keep alive than a server other people depend on. Every line here is one we will hold to on a bad week, which is why none of them promise a number of nines.',
+    ru: 'Цена идёт за тем, что нужно держать под присмотром. Страница, которой достаточно открываться, стоит дешевле сервера, от которого зависят люди. Каждый пункт здесь мы выполним и в плохую неделю, поэтому ни в одном не обещаны девятки после запятой.',
   },
 
   addonsLabel: { en: 'What gets added on top, never multiplied', ru: 'Что прибавляется сверху, а не умножается' },

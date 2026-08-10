@@ -186,18 +186,23 @@ export function getHome(lang: LabLang) {
          you could watch a name come round again inside one screen width. The
          full stack fills the track properly and, more to the point, breadth is
          the thing this section is for. */
-      tags: STACK_GROUPS.flatMap((g) => [...g.items, ...g.also]),
-      /* And the same stack again, grouped, with a sentence per group saying why
-         that group exists. The ticker shows how much there is; the groups say
-         what it is for. `also` is empty everywhere until the founder decides
-         what to claim beyond what has shipped. */
+      tags: STACK_GROUPS.flatMap((g) => g.items),
+      /* And the same stack again, grouped, with a sentence per group saying
+         what we do with it. The ticker shows how much there is; the groups say
+         what it is for.
+
+         ONE LIST PER GROUP, which is a change. There used to be two, shipped
+         and worked-with, rendered as different chips. That split is honest and
+         it is also a page telling a buyer which half of its own stack it has
+         not used, which no studio's stack page does, including the one this is
+         modelled on. The claim this section makes is capability; the claim the
+         case cards make is history, and those stay specific. */
       groups: STACK_GROUPS.map((g) => ({
         key: g.key,
         kicker: L(g.kicker),
         title: L(g.title),
         lead: L(g.lead),
         items: g.items,
-        also: g.also,
       })),
       /* Kept, and it is the strongest thing on this section: twelve tools with
          the project each one was used on. A stack list anybody can write; a
