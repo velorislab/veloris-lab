@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { Mark } from "@/components/ui/Mark";
+import { SectionCursor } from "@/components/ui/SectionCursor";
 import Link from "next/link";
 
 import { getHome, type HomeContent } from "@/data/content";
@@ -171,6 +172,10 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
       id="what-in"
       className="relative flex w-full flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 pt-20 pb-10 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:pt-24 tablet:pb-16 desktop:gap-20 desktop:px-20 desktop:pt-[130px] desktop:pb-20"
     >
+      {/* Scoped to this slab and nowhere else: the overlay is absolute inside a
+          section that already clips, and the listeners sit on this element
+          rather than on the window. */}
+      <SectionCursor />
       <div className="relative flex w-full flex-col items-center gap-5">
         {/* ---- badge, on its beam-lit backdrop ---- */}
         <div className="relative flex size-[150px] items-center justify-center">
