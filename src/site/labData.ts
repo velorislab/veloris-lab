@@ -134,26 +134,54 @@ export const HERO = {
    * English buyer would search for.
    */
   h1: {
-    en: 'Full-cycle studio for startups',
-    ru: 'Студия полного цикла: стартапы',
+    en: 'Full-cycle development studio for startups',
+    ru: 'Студия разработки полного цикла стартапов',
   },
   rotator: {
     /**
-     * A COLON AND THE NOMINATIVE in Russian, and that is a grammar decision.
+     * «Студия разработки полного цикла» plus the GENITIVE, which reverses an
+     * earlier call of mine.
      *
-     * «Студия разработки полного цикла» is the correct standing phrase, but a
-     * rotating noun after it chains three genitives: разработки, цикла,
-     * стартапов. The colon breaks the chain, so the word stands in the
-     * nominative and reads as itself. It also puts the accent word alone on the
-     * second line, which is where the eye goes.
+     * I had argued that a genitive after this lead chains three of them,
+     * разработки / цикла / приложений, and broke the chain with a colon and the
+     * nominative. That was over-cautious. «Разработки полного цикла» behaves as
+     * one fixed attributive block, and the genitive that follows attaches to
+     * «разработки», not to «цикла», which is how the phrase is actually used in
+     * the market. The founder asked for it twice; he was right and the colon is
+     * gone.
      *
-     * English takes «for» instead: the two are not translations of each other,
-     * they are each the phrase a buyer in that language would search for.
+     * Every entry is genitive plural so it agrees with «разработки», and every
+     * entry is something this studio actually sells: the six priced WORK_TYPES
+     * in labPricing.ts (agent, integr, dash, mvp, billing) plus mobile apps,
+     * which are not in the price table but which the founder confirmed we do.
+     * Do not add a line here that the price table and the services pages cannot
+     * back.
+     *
+     * English is not a translation, it is the phrase an English buyer searches.
      */
-    lead: { en: 'Full-cycle studio for', ru: 'Студия полного цикла:' },
+    lead: {
+      en: 'Full-cycle development studio for',
+      ru: 'Студия разработки полного цикла',
+    },
     words: {
-      en: ['startups', 'SaaS', 'AI tools', 'web apps', 'mobile apps', 'CRMs'],
-      ru: ['стартапы', 'SaaS', 'AI-инструменты', 'веб-приложения', 'мобильные приложения', 'CRM'],
+      en: [
+        'startups',
+        'SaaS products',
+        'AI agents',
+        'mobile apps',
+        'backend systems',
+        'dashboards and analytics',
+        'payment systems',
+      ],
+      ru: [
+        'стартапов',
+        'SaaS-продуктов',
+        'AI-агентов',
+        'мобильных приложений',
+        'серверных систем',
+        'дашбордов и аналитики',
+        'платёжных систем',
+      ],
     },
   },
   /**

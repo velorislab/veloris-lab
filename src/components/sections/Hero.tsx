@@ -135,7 +135,7 @@ export function Hero({ lang }: { lang: LabLang }) {
                 initial={initial}
                 animate={animate}
                 transition={transitions.heading}
-                className="w-full text-[36px] leading-[1.2] font-semibold text-ink-800 tablet:text-[48px] desktop:text-[64px] desktop:leading-[76.8px]"
+                className="w-full text-balance text-[36px] leading-[1.2] font-semibold text-ink-800 tablet:text-[48px] desktop:text-[64px] desktop:leading-[76.8px]"
               >
                 {/* The lead is fixed and one word cycles inside it, in the
                     accent, which is the whole point of the device. The plain
