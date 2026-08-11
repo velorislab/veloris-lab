@@ -14,8 +14,8 @@ import { type LabLang } from "@/site/labData";
  * digit in «4 живых кейса». Proof was the one thing the page had and the one
  * thing it did not show.
  *
- * A competitor opens their home on fourteen of these directly under the hero,
- * and that placement is right for a reason that has nothing to do with taste: a
+ * Directly under the hero is the right place for them, for a reason that has
+ * nothing to do with taste: a
  * stranger deciding whether to keep reading is asking whether this is real, and
  * a case card answers that question in the time it takes to glance at it. So the
  * cards go here, immediately after the figures panel, before the service list.

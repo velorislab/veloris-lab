@@ -158,10 +158,10 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
      */
     nav: [
       { label: L(UI.navServices), href: at(ANCHORS.services) },
-      /* The solutions hub is a real route with eight pages under it and, on a
-         competitor's site, the shape that carries most of the search traffic. It
-         is in the desktop pill rather than in `navRest` because it is the only
-         entry here that is not an anchor on the page the reader is already on. */
+      /* The solutions hub is a real route with eight pages under it, and the
+         shape of the site most likely to be landed on from a search. It is in the
+         desktop pill rather than in `navRest` because it is the only entry here
+         that is not an anchor on the page the reader is already on. */
       { label: L(UI.navSolutions), href: solutionsPath(lang) },
       { label: L(UI.navPricing), href: pricingPath(lang) },
     ] satisfies NavLink[],

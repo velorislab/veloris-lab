@@ -150,8 +150,8 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
           A ticker of names says how much there is and nothing about what any of
           it is for, which is the whole weakness of a logo wall. Each group here
           leads with one sentence about why the group exists, then lists what is
-          in it. The structure is borrowed from how a competitor lays their stack
-          page out; every entry is ours. */}
+          in it. A group with a reason attached is worth more than a longer list
+          without one. */}
       {groups.length > 0 && (
         <div className="relative grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2">
           {groups.map((g) => (
@@ -184,8 +184,7 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
       )}
 
       {/* THE MODEL OF WORK, closing the section.
-          A competitor ends their stack block on exactly these three and the
-          placement is right: a reader who has just been shown a hundred and
+          This is where it belongs: a reader who has just been shown a hundred and
           sixty technologies is one step away from wondering what any of it costs
           to be tied to. Two of the three are read from the price table so they
           cannot drift; the third is a contract term. */}

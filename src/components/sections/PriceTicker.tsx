@@ -6,11 +6,10 @@ import { type LabLang } from "@/site/labData";
 /**
  * The price ticker that closes the first screen.
  *
- * A competitor runs one directly under their hero buttons: five product-and-price
- * pairs in caps, travelling slowly. It is the best thing on their fold, because
- * it makes one claim the rest of the page then has to keep, and it makes it with
- * numbers rather than adjectives. Somebody who reads nothing else leaves knowing
- * roughly what this costs.
+ * Product-and-price pairs in caps, travelling slowly. It earns its place on the
+ * fold because it makes one claim the rest of the page then has to keep, and it
+ * makes it with numbers rather than adjectives. Somebody who reads nothing else
+ * leaves knowing roughly what this costs.
  *
  * BELOW THE HERO, NOT INSIDE IT, and that is the one deliberate difference.
  * Theirs sits inside a hero that scrolls; ours is pinned to exactly one viewport

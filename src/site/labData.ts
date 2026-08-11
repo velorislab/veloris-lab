@@ -914,9 +914,9 @@ export const ENTRY: { state: LS; t: LS; d: LS; cta: LS; href: string }[] = [
 ]
 
 /* THE MODEL OF WORK, three facts under the stack.
-   A competitor closes their stack section on exactly this and it is the right
-   place for it: a reader who has just been shown a hundred and sixty
-   technologies is one step from wondering what any of it costs to be tied to.
+   Under the stack is the right place for them: a reader who has just been shown a
+   hundred and sixty technologies is one step from wondering what any of it costs
+   to be tied to.
    Two of these are published elsewhere on the site and read from the price
    table. The third is a contract term, not a figure. */
 export const WORK_MODEL_LABEL = {
@@ -938,9 +938,9 @@ export const STACK_LABEL = { en: 'We do not sell one stack for every job', ru: '
 /* The lead has to carry the framing, because the list is long enough that a
    reader will otherwise assume half of it is decoration. Two claims, both true:
    every entry is running in Swiftin, Cowee or this site, and the list is not a
-   fence. The second half is the same position a competitor's stack page opens
-   on, and it is the right one: a studio that only builds in its favourite
-   framework is choosing for itself, not for the product. */
+   fence. The second half is the position worth holding: a studio that only
+   builds in its favourite framework is choosing for itself, not for the
+   product. */
 export const STACK_SUB = {
   en: 'Full cycle, and that is meant literally: a landing page one week and a product with a server, payments and two mobile platforms the next. We choose by deadline, by load, by what your team can maintain and by what it costs to keep alive in a year. If you already have a codebase, we continue it rather than quoting you a rewrite.',
   ru: 'Полный цикл, и это буквально: на одной неделе лендинг, на другой продукт с сервером, платежами и двумя мобильными платформами. Выбираем по сроку, по нагрузке, по тому, что сможет поддерживать ваша команда, и по тому, сколько это будет стоить держать живым через год. Если код уже есть, мы его продолжаем, а не продаём вам переписывание с нуля.',
@@ -948,9 +948,8 @@ export const STACK_SUB = {
 /* There is no STACK array any more.
  *
  * It held six groups and twenty-eight chips, was exported, and was imported by
- * nothing: ToolGrid renders TOOLS instead. The plan drawn from the competitor
- * teardown proposed reviving it and retiring the grid, and reading the two side
- * by side says the opposite. Every one of the twelve entries in TOOLS carries a
+ * nothing: ToolGrid renders TOOLS instead. A plan once proposed reviving it and
+ * retiring the grid, and reading the two side by side says the opposite. Every one of the twelve entries in TOOLS carries a
  * note saying where we actually used it; not one of the twenty-eight chips
  * carried anything, and several were capabilities rather than tools.
  *
@@ -986,11 +985,11 @@ export interface Tool {
 
    A case page says «we built this, here is the result» and is answerable to a
    repository. This list says «this is what we work with and choose from», which
-   is a claim about capability. Every studio's stack page is that second kind,
-   including the competitor this one is modelled on, whose page opens by saying
-   they do not force a product to live in the studio's favourite framework and
-   will either continue your code or pick by deadline, load, team and cost of
-   ownership. That framing is what lets such a list be long.
+   is a claim about capability. Every studio's stack page is that second kind: it
+   says the product is not made to live in the studio's favourite framework, and
+   that an existing codebase gets continued rather than replaced, with the choice
+   made on deadline, load, team and cost of ownership. That framing is what lets
+   such a list be long.
 
    So: the lists below are what we take on. The proof that we ship rather than
    list is elsewhere on the site and stays specific — a browser extension in two

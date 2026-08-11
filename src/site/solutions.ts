@@ -5,19 +5,18 @@ import type { LS } from './labData'
 
    WHAT THIS IS AND, MORE IMPORTANTLY, WHAT IT IS NOT.
 
-   A competitor runs fifty-seven of these and fourteen case pages, and the two
-   are different documents doing different jobs. A case says «we built this, for
-   these people, and here is what came of it», and every sentence in it is
-   answerable to a repository. A solution page says «here is a thing we build,
-   here is what goes in the first version, here is what it costs», and claims
-   nothing about history at all. Read one of theirs and you will not find a
-   single past-tense sentence about a client: it is «бот принимает», «кому
-   подходит», «состав первой версии», «возможный стек».
+   A solution page and a case page are different documents doing different jobs.
+   A case says «we built this, for these people, and here is what came of it», and
+   every sentence in it is answerable to a repository. A solution page says «here
+   is a thing we build, here is what goes in the first version, here is what it
+   costs», and claims nothing about history at all. Not one past-tense sentence
+   about a client appears on one: it is «бот принимает», «кому подходит», «состав
+   первой версии», «возможный стек».
 
-   That is why fifty-seven of them can exist without a word of invention, and it
-   is the honest way to have the volume a small studio otherwise cannot show. It
-   is also, on their site, plainly the main source of search traffic: one page
-   per scenario somebody actually types into Google.
+   That is why any number of them can exist without a word of invention, and it is
+   the honest way to have the volume a small studio otherwise cannot show. It is
+   also the shape a search most often lands on: one page per scenario somebody
+   actually types into Google.
 
    SO THE RULE FOR THIS FILE, and it is the only one that matters: nothing here
    may be written in the past tense about a client, and nothing here may imply a

@@ -13,12 +13,11 @@ import { solutionPath, solutionsPath, pricingPath } from './routing'
 /* =============================================================================
    One solution page.
 
-   THE SHAPE IS BORROWED AND THE TENSE IS THE POINT. A competitor's equivalent
-   pages run: what it is and what it costs, who it suits, what is in the first
-   version, how the path through it goes, what has to be got right, what to
-   measure, the pass-through costs, the questions. That order works because it
-   answers a reader's questions in the order they occur to them, so it is the
-   order here too.
+   THE ORDER IS THE ARGUMENT, AND THE TENSE IS THE POINT. What it is and what it
+   costs, who it suits, what is in the first version, how the path through it
+   goes, what has to be got right, what to measure, the pass-through costs, the
+   questions. That order works because it answers a reader's questions in the
+   order they occur to them.
 
    What is NOT borrowed is any suggestion that these have been built for a named
    client. Every sentence on this page is present tense about a thing we build.
