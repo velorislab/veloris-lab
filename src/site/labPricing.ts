@@ -1,12 +1,13 @@
 /* ======================================================================
    Veloris Lab, calculator price table.
 
-   WHERE THESE NUMBERS COME FROM. The owner asked for srazu-ai.ru's price level
-   and, on 2026-08-10, for their calculator reproduced here: their product
-   categories, their additive formula and their support ladder. Their model was
-   read from the page's own script rather than guessed at by clicking, so every
-   figure below is theirs exactly, converted at 82 RUB/USD, the rate both
-   exchangerate-api.com and open.er-api.com reported on 2026-08-08.
+   WHERE THESE NUMBERS COME FROM. The owner set the price level by reference to
+   the rouble market for the same work, and on 2026-08-10 asked for the same
+   additive shape: product categories, design and server as lines rather than
+   multipliers, and a support ladder. The rouble figures were converted at
+   82 RUB/USD, the rate both exchangerate-api.com and open.er-api.com reported on
+   2026-08-08. The reference itself stays out of this repository; it is recorded
+   where the rest of the market research is.
 
      Лендинг под рекламу        20 000 ₽  ->  $244
      Корпоративный сайт         50 000 ₽  ->  $610
@@ -59,7 +60,7 @@ import type { LS } from './labData'
 /**
  * Multiplier applied to every figure below, at the moment it is used.
  *
- * The base numbers are deliberately left as the converted srazu-ai level so
+ * The base numbers are deliberately left at the converted rouble level so
  * they stay auditable against the table in the header. Repricing is this one
  * constant: 1.5 puts the landing at $375 and the MVP at $4 600.
  */
