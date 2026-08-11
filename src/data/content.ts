@@ -21,7 +21,7 @@
 
 import { type LabLang, tx } from '@/site/labData'
 import {
-  HERO, SERVICES, SERVICES_LABEL, SERVICES_SUB,
+  HERO, SERVICES, SERVICES_LABEL_TAIL, SERVICES_SUB, SERVICES_MORE_LABEL,
   PROCESS, PROCESS_LABEL, PROCESS_SUB,
   WHY, WHY_LABEL, WHY_SUB,
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
@@ -136,7 +136,7 @@ export function getHome(lang: LabLang) {
 
     /* ------------------------------------------------- the six, as cards */
     whatsIn: {
-      title: L(SERVICES_LABEL),
+      title: `${WORK_TYPES.length} ${L(SERVICES_LABEL_TAIL)}`,
       description: L(SERVICES_SUB),
       cards: SERVICES.map((s) => {
         const w = WORK_TYPES.find((t) => t.key === s.key)
@@ -167,6 +167,21 @@ export function getHome(lang: LabLang) {
           hrefLabel: L(UI.moreOn),
         }
       }),
+      /* EVERYTHING THE SIX CARDS DO NOT COVER, as one compact row.
+         Nine of the fifteen work types arrived with the calculator rewrite and
+         have no card and no page: a landing, a site, a shop, two mobile
+         platforms, a backend, a Telegram product, a CRM. Leaving them off the
+         home page means the page says we do six things while the price list says
+         fifteen and the heading right above now counts the fifteen. They get
+         their label, their floor and a link to the row they live on, which is
+         all there is to say about them until one earns a page. */
+      moreLabel: L(SERVICES_MORE_LABEL),
+      more: WORK_TYPES.filter((w) => !SERVICES.some((x) => x.key === w.key)).map((w) => ({
+        key: w.key,
+        label: L(w.label),
+        price: `${L({ en: 'from', ru: 'от' })} ${money(priced(w.from))}`,
+      })),
+      moreHref: pricingPath(lang),
       orbitLogos: [] as string[],
     },
 
@@ -247,7 +262,7 @@ export function getHome(lang: LabLang) {
     /* ------------------------------------------------------------ pricing */
     pricing: {
       badge: { icon: `${ICON}/pricing.svg`, label: L(EYEBROW.services) },
-      title: L(SERVICES_LABEL),
+      title: `${WORK_TYPES.length} ${L(SERVICES_LABEL_TAIL)}`,
       description: L(SERVICES_SUB),
       plans: WORK_TYPES.map((w) => {
         const svc = SERVICES.find((s) => s.key === w.key)

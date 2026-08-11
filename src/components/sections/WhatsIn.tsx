@@ -170,6 +170,34 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
           ))}
         </div>
       )}
+
+      {/* The nine work types with no card of their own, as one row of chips.
+          Without them the page says we do six things directly under a heading
+          that counts fifteen. With them the count is honest and the reader can
+          see the whole shape of the offer in one glance, with the price on each
+          and the table one click away. */}
+      {whatsIn.more.length > 0 && (
+        <div className="relative flex w-full flex-col items-center gap-4">
+          <span className="text-[13px] font-medium tracking-[0.08em] text-white/40 uppercase">
+            {whatsIn.moreLabel}
+          </span>
+          <ul className="flex flex-wrap justify-center gap-[10px]">
+            {whatsIn.more.map((m) => (
+              <li key={m.key}>
+                <Link
+                  href={whatsIn.moreHref}
+                  className="flex items-center gap-2 rounded-pill bg-white/[0.06] px-4 py-2 transition-colors duration-200 hover:bg-white/[0.12]"
+                >
+                  <span className="text-[15px] leading-6 text-white/80">{m.label}</span>
+                  <span className="font-display text-[15px] leading-6 whitespace-nowrap text-white/45">
+                    {m.price}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   );
 }

@@ -352,13 +352,32 @@ export const MOTTO_TITLE = {
 /* The old heading, «Что снимаем с вашей команды», echoed the old hero almost
    verbatim AND mislabelled its own grid: dashboards, MVPs and billing are not
    routine coming off a team. */
-export const SERVICES_LABEL = { en: 'Six kinds of work. Yours is one of them', ru: 'Шесть направлений. Ваша задача в одном из них' }
-/* This described the interface rather than the work: «на каждой карточке то-то и
-   то-то» is a caption for a table of contents. A reader who has got this far
-   wants to know whether we have done the thing, not how to read the row. */
+/* THE COUNT IS DERIVED, NOT WRITTEN, and that is the whole point of splitting
+   this string in two. It said «Шесть направлений» while the price table held six
+   rows; the table holds fifteen now and the heading was quietly lying about the
+   size of the studio in the wrong direction. `content.ts` puts
+   `WORK_TYPES.length` in front of this tail, so the next row added to the price
+   table moves the heading with it and nobody has to remember. */
+export const SERVICES_LABEL_TAIL = {
+  en: 'kinds of work. Yours is one of them',
+  ru: 'видов работ. Ваша задача в одном из них',
+}
+/* TWO CORRECTIONS IN ONE SENTENCE, and the second one matters more.
+   It used to describe the interface («на каждой карточке то-то и то-то»), which
+   is a caption for a table of contents rather than a reason to keep reading. And
+   it then claimed every direction had been taken to production, which was true of
+   the original six and is not true of the nine product types added with the
+   calculator rewrite: nothing has shipped from here as an online store or a
+   native iOS app. The claim is now scoped to the six that carry it. */
 export const SERVICES_SUB = {
-  en: 'Not a price-list line each: every one of these we have taken all the way to production. The card says what people arrive with, what ships, where the price starts and how long the first version runs.',
-  ru: 'Это не строчки в прайсе: каждое направление мы доводили до прода. На карточке то, с чем к нам приходят, что в итоге уезжает в прод, с чего начинается цена и сколько идёт первая версия.',
+  en: 'The six below have been taken all the way to production and have a page each: what people arrive with, what ships, where the price starts and how long the first version runs. The rest are on the price list at the same fixed floors.',
+  ru: 'Шесть ниже мы довели до прода, и у каждого своя страница: с чем к нам приходят, что в итоге уезжает в прод, с чего начинается цена и сколько идёт первая версия. Остальные лежат в прайсе с такими же фиксированными порогами.',
+}
+
+/** The heading over the compact row of everything that has no page of its own. */
+export const SERVICES_MORE_LABEL = {
+  en: 'Also priced, on the same table',
+  ru: 'Тоже в прайсе, в той же таблице',
 }
 
 
