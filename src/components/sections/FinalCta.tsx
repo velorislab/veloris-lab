@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import { getHome } from "@/data/content";
 import {
   CONTACT,
-  EMAIL,
   TELEGRAM,
   TELEGRAM_HANDLE,
   UI,
@@ -37,22 +36,24 @@ const SECTION_ID = "contact";
  * `aria-hidden` layer), so dropping them costs no layout, where keeping them
  * would cost two 404s on every render. The four SVG decorations stay.
  *
- * ONE BUTTON BECAME A ROW. The template ends on a single CTA; this business
- * ends on a choice of two channels, which the template has no slot for, so the
- * lone `Button` is now a `flex-wrap` row of the same buttons in the same two
- * template variants. Neither one prints an address: the label names the
- * action, and the handle rides along as the Telegram button's tooltip, which
- * is what lets a reader see where they are going before they click.
+ * THE ROW IS BACK DOWN TO ONE CHANNEL. It briefly held two, Telegram and a
+ * prefilled mailto, and the mail half is gone; it stays a `flex-wrap` row
+ * because `showOwnCta` can still put a second button beside it. The button
+ * prints no address: the label names the action, and the handle rides along as
+ * the tooltip, which is what lets a reader see where they are going before they
+ * click.
  */
 export function FinalCta({ lang }: { lang: LabLang }) {
   const { finalCta } = getHome(lang);
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang);
 
-  /* Prefilled, exactly as the calculator and the service pages do it: a mail
-     client that opens on an empty window gets the same three prompts here. */
-  const mailHref = `mailto:${EMAIL}?subject=${encodeURIComponent(
-    L(CONTACT.mailDirectSubject),
-  )}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`;
+  /* Prefilled, exactly as the calculator and the service pages do it: a chat
+     that opens on an empty input gets the same three prompts here. Telegram's
+     deep link resolves the recipient and drops the text into the input bar, so
+     the reader edits a draft instead of composing one. */
+  const tgHref = `${TELEGRAM}?text=${encodeURIComponent(
+    L(CONTACT.tgDirectText),
+  )}`;
 
   /* `content.ts` sends the close's own CTA to `#contact`, which is now this
      section: a button that scrolls you to the block you are already reading.
@@ -155,13 +156,10 @@ export function FinalCta({ lang }: { lang: LabLang }) {
             no `title` prop, and a tooltip set on an ancestor still answers for
             the link inside it. */}
         <span className="inline-flex" title={TELEGRAM_HANDLE}>
-          <Button href={TELEGRAM} variant="secondary">
+          <Button href={tgHref} variant="secondary">
             {L(UI.ctaTg)}
           </Button>
         </span>
-        <Button href={mailHref} variant="muted">
-          {L(UI.sendMailDirect)}
-        </Button>
       </div>
     </section>
   );

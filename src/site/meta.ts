@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { BRAND, EMAIL, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx } from './labData'
+import { BRAND, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx } from './labData'
 import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
 import { CASE_PAGES, type CasePage } from './casePages'
@@ -57,7 +57,9 @@ export function orgJsonLd(lang: LabLang) {
     name: BRAND,
     url,
     description: DESC[lang],
-    email: EMAIL,
+    /* No `email`. Structured data is a promise to a machine that will publish
+       it, and the page no longer offers that channel anywhere a human can see
+       it; `sameAs` below carries the one that is answered. */
     owns: {
       '@type': 'SoftwareApplication',
       name: 'Swiftin',

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   AnimatePresence, motion, useReducedMotion, useSpring, useTransform,
 } from 'motion/react'
-import { type LabLang, tx, CALC, EMAIL, TELEGRAM } from './labData'
+import { type LabLang, tx, CALC, TELEGRAM } from './labData'
 import { useHydrated } from './useHydrated'
 import {
   PRICING_IS_DRAFT, WORK_TYPES, DESIGN_STATES, ADDONS,
@@ -138,18 +138,21 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
     }
     if (name.trim()) lines.push(`${L(CALC.bfName)}: ${name.trim()}`)
     if (contact.trim()) lines.push(`${L(CALC.bfContact)}: ${contact.trim()}`)
-    return `${L(CALC.mailSubject)}\n\n${lines.join('\n')}`
+    return `${L(CALC.briefTitle)}\n\n${lines.join('\n')}`
   }
 
-  /* Both handoffs carry the whole brief in the URL, so neither needs a click
-     handler, a clipboard permission or a popup that a browser might block.
+  /* The handoff carries the whole brief in the URL, so it needs no click
+     handler, no clipboard permission and no popup that a browser might block.
 
      Telegram's deep-link format for a public username pre-enters the text into
      the input bar with the recipient already resolved, which is what makes the
      old copy-and-paste dance unnecessary. TELEGRAM is the full
-     `https://t.me/<handle>` URL, so the parameter appends to it directly. */
+     `https://t.me/<handle>` URL, so the parameter appends to it directly.
+
+     There was a mailto beside this doing the same job for the other channel.
+     The site answers on Telegram, and a second button offering a slower way to
+     reach the same inbox is a fork with a wrong branch in it. */
   const tgHref = `${TELEGRAM}?text=${encodeURIComponent(brief())}`
-  const mailHref = `mailto:${EMAIL}?subject=${encodeURIComponent(L(CALC.mailSubject))}&body=${encodeURIComponent(brief())}`
 
   /** Selectable chip. Radio or checkbox underneath, spring on press. */
   const Chip = ({ on, onPick, children, radio, group }: {
@@ -332,10 +335,6 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
                       target="_blank"
                       rel="noopener noreferrer"
                     >{L(CALC.sendTg)}</a>
-                    <a
-                      className="rounded-pill border border-line bg-surface px-6 py-[13px] text-[16px] font-medium text-ink-700 transition-colors duration-200 hover:bg-surface-muted"
-                      href={mailHref}
-                    >{L(CALC.sendMail)}</a>
                   </div>
                 </>
               )}

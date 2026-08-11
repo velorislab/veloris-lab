@@ -27,7 +27,8 @@ import {
   ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB, TOOLS, STACK_GROUPS, WORK_MODEL, WORK_MODEL_LABEL,
   FAQ, FAQ_LABEL,
-  BUREAU, CONTACT, CASES, CASES_LABEL, CASES_SUB, EYEBROW, UI, MOTTO_TITLE, CALC,
+  BUREAU, CONTACT, CASES, CASES_LABEL, CASES_COUNT_NOUN, pluralForm,
+  EYEBROW, UI, MOTTO_TITLE, CALC, MARQUEE,
 } from '@/site/labData'
 import { WORK_TYPES, SUPPORT_TIERS, money, priced, monthly } from '@/site/labPricing'
 import { SERVICE_PAGES } from '@/site/servicePages'
@@ -40,6 +41,16 @@ export function getHome(lang: LabLang) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
   const floor = Math.min(...WORK_TYPES.map((w) => w.from))
   const fastest = Math.min(...WORK_TYPES.map((w) => w.weeks[0]))
+
+  /* The motto's third figure, rounded down to a ten and carrying a «+» like the
+     two beside it. Two things make that better than the exact `CASES.length`:
+     the count moves every time a case lands, and a precise number invites the
+     reader to go and count the cards. Under ten there is no ten to round down
+     to, so it shows the exact figure and drops the plus rather than printing
+     «0+». Still derived, so twenty cases print «20+» without anyone editing a
+     string. */
+  const caseShown = CASES.length >= 10 ? Math.floor(CASES.length / 10) * 10 : CASES.length
+  const caseSuffix = CASES.length >= 10 ? '+' : ''
 
   return {
     /* ---------------------------------------------------------------- hero */
@@ -98,7 +109,10 @@ export function getHome(lang: LabLang) {
       stats: [
         { value: '15', suffix: '+', label: L(HERO.facts[3].k), from: 15, to: 15 },
         { value: '20', suffix: '+', label: L(HERO.facts[4].k), from: 20, to: 20 },
-        { value: String(CASES.length), suffix: '', label: L({ en: 'live cases', ru: 'живых кейса' }), from: CASES.length, to: CASES.length },
+        /* The noun agrees with the number ON SCREEN and not with the array: at
+           eleven cases those are 10 and 11, and Russian gives them different
+           forms. Reading the length here would print «10+ живых кейса». */
+        { value: String(caseShown), suffix: caseSuffix, label: L(CASES_COUNT_NOUN[pluralForm(caseShown)]), from: caseShown, to: caseShown },
       ],
     },
 
@@ -110,7 +124,11 @@ export function getHome(lang: LabLang) {
     cases: {
       badge: { icon: `${ICON}/who-can-use.svg`, label: L(EYEBROW.cases) },
       title: L(CASES_LABEL),
-      description: L(CASES_SUB),
+      /* Empty on purpose. The cards are the argument; a sentence counting them
+         is a caption on something the reader is already looking at. `Cases.tsx`
+         drops the paragraph and its gap when this is empty, so a standfirst
+         comes back by filling this string and nothing else. */
+      description: '',
       items: CASES.map((c) => {
         /* `match` is documented as the English title, so the join has to ask
            for the English form explicitly rather than the reader's. */
@@ -184,15 +202,11 @@ export function getHome(lang: LabLang) {
       orbitLogos: [] as string[],
     },
 
-    /* THE PRICE TICKER under the first screen. Product-and-price pairs are the
-       strongest thing that can sit on a fold: a claim made in numbers that the
-       rest of the page then has to keep. Every work type and its floor, read from
-       the table, so it cannot drift from the calculator further down the same
-       page. */
-    priceTicker: WORK_TYPES.map((w) => ({
-      label: L(w.label),
-      price: `${L({ en: 'from', ru: 'от' })} ${money(priced(w.from))}`,
-    })),
+    /* THE TICKER under the first screen. Capability words, not the price ladder:
+       see MARQUEE in labData for why the floors were tried here twice and left
+       twice. Already a flat array of strings in the reader's language, so there
+       is nothing to map. */
+    ticker: MARQUEE[lang],
 
     /* ------------------------------------------------------------- stack */
     platformHighlight: {

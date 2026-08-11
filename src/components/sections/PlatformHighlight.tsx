@@ -138,8 +138,17 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
               direction={index === 1 ? "right" : "left"}
               className="h-[70px] items-center"
             >
-              {row.map((label) => (
-                <Tag key={label} label={label} />
+              {/* Keyed by position, not by name. A few tools belong to two
+                  groups honestly — TypeScript is a backend language and a
+                  frontend one, Kotlin is backend and mobile — and this row is
+                  every group flattened, so keying by `label` collided and React
+                  warned that it may drop or duplicate children. The row is a
+                  static list in a fixed order and nothing reorders or filters
+                  it, which is exactly the case where an index key is the right
+                  one. The name stays in the key so the DevTools tree is still
+                  readable. */}
+              {row.map((label, i) => (
+                <Tag key={`${index}-${i}-${label}`} label={label} />
               ))}
             </Marquee>
           ))}

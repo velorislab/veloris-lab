@@ -41,9 +41,15 @@ export function Cases({ lang }: { lang: LabLang }) {
         <h2 className="max-w-[900px] text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
           {cases.title}
         </h2>
-        <p className="max-w-[760px] text-[16px] leading-6 text-ink-300 tablet:text-[18px] tablet:leading-[27px]">
-          {cases.description}
-        </p>
+        {/* Rendered only when there is something to say. Empty, this printed an
+            empty paragraph and the wrapper's `gap-4` under the heading anyway,
+            which reads as a missing line rather than as a heading that needs
+            none. */}
+        {cases.description && (
+          <p className="max-w-[760px] text-[16px] leading-6 text-ink-300 tablet:text-[18px] tablet:leading-[27px]">
+            {cases.description}
+          </p>
+        )}
       </div>
 
       <ul className="grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2">

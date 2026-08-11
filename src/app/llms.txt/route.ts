@@ -1,7 +1,7 @@
 import { LANGS, localizedUrl, serviceUrl, caseUrl, pricingUrl, SITE_URL } from '../../site/routing'
 import { SERVICE_PAGES } from '../../site/servicePages'
 import { CASE_PAGES } from '../../site/casePages'
-import { SERVICES, CASES, BRAND, EMAIL, TELEGRAM, tx } from '../../site/labData'
+import { SERVICES, CASES, BRAND, TELEGRAM, tx } from '../../site/labData'
 import { WORK_TYPES, money, priced, monthly } from '../../site/labPricing'
 
 /**
@@ -97,8 +97,9 @@ export function GET() {
 
   p('## Contact')
   p()
+  /* One channel, because this file is read by things that quote it back. An
+     address listed here outlives the page that stopped offering it. */
   p(`- Telegram: ${TELEGRAM}`)
-  p(`- Email: ${EMAIL}`)
   p(`- Languages worked in: Russian, Ukrainian, English. Timezone UTC+4.`)
   p()
   p(`## Machine-readable`)

@@ -11,7 +11,7 @@ import {
   type LabLang, tx,
   SERVICES, CASES, CASE_KEYS, CALC, UI, CONTACT,
   SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
-  TELEGRAM, TELEGRAM_HANDLE, EMAIL, BRAND,
+  TELEGRAM, TELEGRAM_HANDLE, BRAND,
 } from './labData'
 import { WORK_TYPES, money, priced, monthly } from './labPricing'
 import { CASES_BY_SERVICE, type ServicePage as SP } from './servicePages'
@@ -63,11 +63,9 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
   const wanted = CASES_BY_SERVICE[page.key] ?? []
   const related = CASES.filter((c) => wanted.includes(tx(c.title, 'en')))
 
-  /* Prefilled, exactly as the close on the home page does it: a mail client
-     that opens on an empty window gets the same three prompts here. */
-  const mailHref = `mailto:${EMAIL}?subject=${encodeURIComponent(
-    L(CONTACT.mailDirectSubject),
-  )}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`
+  /* Prefilled, exactly as the close on the home page does it: a chat that opens
+     on an empty input gets the same three prompts here. */
+  const tgHref = `${TELEGRAM}?text=${encodeURIComponent(L(CONTACT.tgDirectText))}`
 
   return (
     <>
@@ -327,13 +325,10 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
 
             <div className="relative flex flex-wrap items-center justify-center gap-3">
               <span className="inline-flex" title={TELEGRAM_HANDLE}>
-                <Button href={TELEGRAM} variant="secondary">
+                <Button href={tgHref} variant="secondary">
                   {L(UI.ctaTg)}
                 </Button>
               </span>
-              <Button href={mailHref} variant="muted">
-                {L(UI.sendMailDirect)}
-              </Button>
             </div>
           </section>
         </div>

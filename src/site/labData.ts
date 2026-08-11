@@ -29,7 +29,10 @@ export function pickLabLang(lang: string): LabLang {
 }
 
 export const BRAND = 'Veloris Lab'
-export const EMAIL = 'velorislab@gmail.com'
+/* There is no EMAIL here on purpose, and a new one should not appear. The site
+   answers on one channel and says so in one voice: a second address in the
+   footer, in the closing button row and in the JSON-LD splits the reader
+   between a channel that is watched and one that is not. */
 export const TELEGRAM = 'https://t.me/samweyd'
 export const TELEGRAM_HANDLE = 't.me/samweyd'
 /** Copied from the founder's own portfolio data, where it is also published in
@@ -80,7 +83,6 @@ export const UI: Record<string, LS> = {
    */
   cta: { en: 'Free scoping call', ru: 'Бесплатный разбор' },
   ctaTg: { en: 'Message on Telegram', ru: 'Написать в Telegram' },
-  sendMailDirect: { en: 'Write by email', ru: 'Написать на почту' },
   /* Mid-page anchors back to the calculator, so the objection-handling half of
      the page stops being a corridor with no doors. */
   startScoping: { en: 'See the number without sending anything', ru: 'Посмотреть цифру, ничего не отправляя' },
@@ -195,7 +197,6 @@ export const HERO = {
         'mobile apps',
         'backend systems',
         'dashboards and analytics',
-        'payment systems',
       ],
       ru: [
         'стартапов',
@@ -204,21 +205,23 @@ export const HERO = {
         'мобильных приложений',
         'серверных систем',
         'дашбордов и аналитики',
-        'платёжных систем',
       ],
     },
   },
   /**
-   * The sub carries PROOF first and the offer second, in that order.
+   * The sub is one sentence of proof, and nothing else.
    *
    * It used to list the six services, which is what the rotating word above
-   * already says. It then carried the offer alone. The reach figure goes first
-   * now because the fold has nothing else standing for competence since the
-   * credential badge came out of it, and a number a stranger can weigh does
-   * more work in that position than a promise does. The offer still follows in
-   * the same breath, because price certainty is the one claim this business can
-   * make that the market leader cannot make better, and dropping it would leave
-   * the fold selling nothing.
+   * already says. Then it carried the offer alone. Then the reach figure went in
+   * front of the offer, because the fold has nothing else standing for
+   * competence since the credential badge came out of it, and a number a
+   * stranger can weigh does more work in that position than a promise does.
+   *
+   * The offer half is gone now too, and the fold has not stopped selling: the
+   * first of the three plates under the buttons is «Бесплатно / Разбор задачи,
+   * цена и срок до старта», which is the same promise on the same screen, set
+   * as a figure rather than as the tail of a sentence. Saying one claim twice
+   * inside 200px costs it its force instead of doubling it.
    *
    * THE FIGURE IS THE FOUNDER'S AND IS NOT DERIVED FROM ANYTHING IN THIS REPO.
    * Site data holds one user count, Swiftin's 1000+; ten thousand is the total
@@ -251,8 +254,8 @@ export const HERO = {
                    ru: 'Сопровождение после запуска, сколько нужно' },
   },
   sub: {
-    en: 'More than 10,000 people use the products we have built. You know the price and the timeline before we start, and the scoping is free.',
-    ru: 'Продуктами, которые мы собрали, пользуются больше 10 000 человек. Цену и срок вы узнаете до старта, разбор задачи бесплатный.',
+    en: 'More than 10,000 people use the products we have built.',
+    ru: 'Продуктами, которые мы собрали, пользуются больше 10 000 человек.',
   },
   /**
    * The facts strip, directly under the dark band. Every row is checkable
@@ -342,11 +345,15 @@ export const EYEBROW: Record<string, LS> = {
  * It first reused CONTACT.h, which put «Разберём бесплатно и скажем как есть»
  * at the top of the page and again at the bottom of it. This line is written
  * for the slot instead, and the three figures underneath are what back it:
- * fifteen projects shipped, twenty automations, four cases still running.
+ * projects shipped, automations built, cases still running.
+ *
+ * WAS «Мы это уже делали, и оно до сих пор работает», which looked backwards, at
+ * a record. This one looks forwards, at what the buyer gets, and the figures
+ * below still carry the record.
  */
 export const MOTTO_TITLE = {
-  en: 'We have done this before, and it is still running',
-  ru: 'Мы это уже делали, и оно до сих пор работает',
+  en: 'We build what keeps delivering after launch',
+  ru: 'Мы строим то, что продолжает приносить результат после запуска',
 }
 
 /* The old heading, «Что снимаем с вашей команды», echoed the old hero almost
@@ -381,10 +388,31 @@ export const SERVICES_MORE_LABEL = {
 }
 
 
-/* The ticker under the hero used to be MARQUEE, thirteen capability words kept
-   by hand in two languages. It now derives from WORK_TYPES so it carries the six
-   floors instead, and a hand-kept list that could disagree with the price table
-   is one fewer thing to forget. */
+/**
+ * The ticker under the hero. Thirteen capability words, kept by hand.
+ *
+ * IT HAS BEEN SWAPPED FOR PRICES TWICE AND CAME BACK BOTH TIMES, so the argument
+ * is worth writing down rather than rediscovering. The case for the price ladder
+ * is real: a hand-kept list can disagree with the price table, and a figure on
+ * the fold is a claim the rest of the page has to keep. What sinks it in
+ * practice is length. Six work types with their floors are six phrases of about
+ * forty characters, and at ticker speed a forty-character phrase is read rather
+ * than glanced at, which is not what a ribbon is for. Thirteen single words are
+ * taken in at a pass.
+ *
+ * Nothing is lost by keeping the floors out: the hero's own mono line prints the
+ * lowest floor and the shortest window, every service card prints its own
+ * figure, and /pricing prints the whole table.
+ *
+ * Hand-kept on purpose, and this is the one list here that is. It is broader
+ * than WORK_TYPES by design: SQL, webhooks and architecture are things this shop
+ * does and none of them is a line you buy. Anything added here has to be
+ * something the site can back somewhere.
+ */
+export const MARQUEE: Record<LabLang, string[]> = {
+  en: ['AI agents', 'Automation', 'Integrations', 'Data pipelines', 'Parsing', 'Reverse engineering', 'Dashboards', 'SQL', 'Webhooks', 'Payments', 'MVP', 'Architecture', 'Support'],
+  ru: ['AI-агенты', 'Автоматизация', 'Интеграции', 'Пайплайны данных', 'Парсинг', 'Реверс-инжиниринг', 'Дашборды', 'SQL', 'Вебхуки', 'Платежи', 'MVP', 'Архитектура', 'Поддержка'],
+}
 
 export const SERVICES: Service[] = [
   {
@@ -481,18 +509,72 @@ export interface Case {
   links: CaseLink[]
 }
 
-// All four are shipped, so the heading can say so. Each card still carries its
-// own status badge; if anything unlaunched is ever added here, soften this line
-// back to "built" rather than letting one card make the heading lie.
-export const CASES_LABEL = { en: 'Three we built for clients, one for ourselves', ru: 'Три сделали для клиентов, один для себя' }
-export const CASES_SUB = {
-  en: 'Four projects we can talk about openly. Work under NDA is discussed on a call.',
-  ru: 'Четыре проекта, о которых можем говорить открыто. Работы под NDA обсуждаем на созвоне.',
+/**
+ * The cases section's heading. Two words, and no standfirst under it.
+ *
+ * WHAT WENT, and why the slot is better empty. The heading was «Три сделали для
+ * клиентов, один для себя» over «Четыре проекта, о которых можем говорить
+ * открыто. Работы под NDA обсуждаем на созвоне.» Both counted a four-entry array
+ * by hand and both were wrong the moment it grew, so the standfirst was made to
+ * derive its figure through `casesSub()`. That function is gone with the
+ * sentence it built: eleven cards below the heading are their own argument, and
+ * a line telling the reader how many there are is a caption on something they
+ * can already see. The NDA clause it also carried is in the FAQ.
+ *
+ * `Cases.tsx` renders the standfirst only when `description` is non-empty, so
+ * putting a sentence back here is one string in `content.ts` and no markup.
+ */
+export const CASES_LABEL = {
+  en: 'Our cases',
+  ru: 'Наши кейсы',
 }
 export const CASE_KEYS = {
   task: { en: 'Task', ru: 'Задача' },
   sol: { en: 'What we actually built', ru: 'Что собрали в итоге' },
   res: { en: 'What came of it', ru: 'Что из этого вышло' },
+}
+
+/**
+ * The motto counter's noun, in all three forms Russian needs.
+ *
+ * The digit beside it is `CASES.length` and not a constant, and the word used to
+ * be the single string «живых кейса». That form agrees with four and with
+ * nothing above it: a fifth case would have printed «5 живых кейса», and any
+ * count from five up prints the same mistake. A number the page derives has to
+ * carry a noun the page derives too, or the two drift the first time this array
+ * grows.
+ *
+ * English collapses `few` and `many` onto one string, so `pluralForm` serves
+ * both languages and neither needs a branch at the call site.
+ */
+export const CASES_COUNT_NOUN: Record<'one' | 'few' | 'many', LS> = {
+  one: { en: 'live case', ru: 'живой кейс' },
+  few: { en: 'live cases', ru: 'живых кейса' },
+  many: { en: 'live cases', ru: 'живых кейсов' },
+}
+
+/** The bare noun, for a sentence that brings no adjective of its own. Separate
+ *  from the pair above rather than derived by stripping «живых» off it: gluing
+ *  and trimming prefixes is how the wrong case ends up shipped. */
+export const CASE_WORD: Record<'one' | 'few' | 'many', string> = {
+  one: 'кейс',
+  few: 'кейса',
+  many: 'кейсов',
+}
+
+/**
+ * Which of the three Russian forms a count takes: 1 and 21 take `one`, 2 to 4
+ * and 22 to 24 take `few`, everything else takes `many`. The teens are the
+ * exception the rule is written around, which is why 11 to 14 are checked
+ * against the last two digits rather than the last one.
+ */
+export function pluralForm(n: number): 'one' | 'few' | 'many' {
+  const last = Math.abs(n) % 10
+  const lastTwo = Math.abs(n) % 100
+  if (lastTwo >= 11 && lastTwo <= 14) return 'many'
+  if (last === 1) return 'one'
+  if (last >= 2 && last <= 4) return 'few'
+  return 'many'
 }
 
 export const CASES: Case[] = [
@@ -596,6 +678,188 @@ export const CASES: Case[] = [
     links: [
       { label: 't.me/cowee_focus_bot', href: 'https://t.me/cowee_focus_bot', primary: true },
     ],
+  },
+
+  /* THE FOUR BELOW HAVE NO CASE PAGE AND NO PUBLIC LINK, and both are handled
+     rather than missing. `content.ts` sends a case with no matching entry in
+     CASE_PAGES to the pricing page instead of a dead route, and it filters
+     `links` for `http`, so an empty array renders no link row. Give one of them
+     a page by adding a `casePages.ts` entry whose `match` is the English title
+     spelled exactly as it is here.
+
+     None of them names its client, in the same way the BAS and dashboard cases
+     do not. Every figure in `res` is the client's own reported number, so it is
+     the kind of claim a prospect can ask about: move one only on the founder's
+     word. The timeline is in `res` because it is proof of the same kind; the
+     price is not, because this site quotes in dollars and these were sold in
+     roubles, and one card carrying a second currency would read against the
+     calculator two screens up. */
+  {
+    title: { en: 'Telegram bot and CRM for B2B sales', ru: 'Telegram-бот + CRM для B2B-продаж' },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'A bot that takes and qualifies leads for a construction company: the lead lands in the CRM, the manager gets a notification and the client gets a status.',
+      ru: 'Бот принимает и квалифицирует заявки строительной компании: заявка сразу падает в CRM, менеджер получает уведомление, а клиент — статус.',
+    },
+    tags: ['Telegram', 'CRM', 'aiogram', 'PostgreSQL', 'amoCRM', 'Bitrix24', 'Redis', 'Webhooks'],
+    task: {
+      en: 'Leads arrived in DMs and on WhatsApp, went missing there, and managers answered them when they happened to remember.',
+      ru: 'Заявки приходили в личку и WhatsApp, там же терялись, а менеджеры отвечали, когда вспоминали.',
+    },
+    sol: {
+      en: 'Qualification scripts with scoring, a deal opened in the CRM automatically and with its context intact, notifications to the manager, and an admin panel.',
+      ru: 'Сценарии квалификации со скорингом, автоматическое создание сделки в CRM без потери контекста, уведомления менеджеру и админка.',
+    },
+    res: {
+      en: '68% of leads clear the first stage without a manager, average time to first response 4 minutes. Built in 9 days.',
+      ru: '68% заявок проходят первый этап без участия менеджера, среднее время реакции — 4 минуты. Собрано за 9 дней.',
+    },
+    links: [],
+  },
+  {
+    title: { en: 'Automated onboarding and nurture', ru: 'Автоматизация онбординга и прогрева клиентов' },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'After payment the system walks the client through onboarding itself, hands out access, collects feedback and warms them up for the next product.',
+      ru: 'После оплаты система сама проводит клиента по онбордингу, выдаёт доступы, собирает обратную связь и прогревает к следующему продукту.',
+    },
+    tags: ['Onboarding', 'Telegram', 'aiogram', 'n8n', 'PostgreSQL', 'CRM', 'Payments'],
+    task: {
+      en: 'Curators ran onboarding by hand, so every new client meant the same sequence of messages typed again.',
+      ru: 'Онбординг вели кураторы руками, и каждый новый клиент означал ту же переписку заново.',
+    },
+    sol: {
+      en: 'Scripts that branch on what the client actually does: a lesson left unopened gets a different message. The whole cycle, from the payment to the repeat sale.',
+      ru: 'Сценарии ветвятся по поведению клиента: не открыл урок — придёт другое сообщение. Полный цикл, от оплаты до повторной продажи.',
+    },
+    res: {
+      en: '83% of clients finish onboarding, repeat sales up 27%. Built in 14 days.',
+      ru: '83% клиентов проходят онбординг полностью, повторные продажи выросли на 27%. Собрано за 14 дней.',
+    },
+    links: [],
+  },
+  {
+    title: { en: 'An internal tool for a sales team', ru: 'Внутренний инструмент для команды продаж' },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'A custom tool instead of spreadsheets and chat threads: deals, tasks, conversation history and the next step, in one place.',
+      ru: 'Кастомный инструмент вместо таблиц и хаоса в мессенджерах: сделки, задачи, история общения и следующий шаг в одном месте.',
+    },
+    tags: ['CRM', 'Internal tool', 'Next.js', 'PostgreSQL', 'Telegram', 'Telephony'],
+    task: {
+      en: 'The team worked out of four separate spreadsheets and a chat thread, and the next step on a deal lived in whichever manager owned it.',
+      ru: 'Команда работала в четырёх разных таблицах и переписке в чатах, а следующий шаг по сделке держался в голове менеджера.',
+    },
+    sol: {
+      en: 'No off-the-shelf CRM rolled out: exactly what this team needed, with a Telegram bot as the interface, a Next.js web side and the phone system wired in.',
+      ru: 'Не внедряли готовую CRM, а сделали ровно то, что нужно этой команде: Telegram-бот как интерфейс, веб-часть на Next.js и интеграция с телефонией.',
+    },
+    res: {
+      en: 'Managers close 19% more deals on the same lead flow, and the four spreadsheets and the chat thread are gone. Built in three weeks.',
+      ru: 'Менеджеры закрывают на 19% больше сделок при том же числе лидов, четыре таблицы и переписка в чатах ушли. Собрано за 3 недели.',
+    },
+    links: [],
+  },
+  {
+    title: { en: 'Lead qualification and routing', ru: 'Система квалификации и распределения лидов' },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'Leads from the site, from ads and from bots qualify and score themselves, then route to managers by rule.',
+      ru: 'Заявки с сайта, из рекламы и от ботов сами квалифицируются, скорятся и распределяются между менеджерами по правилам.',
+    },
+    tags: ['Lead routing', 'FastAPI', 'PostgreSQL', 'CRM', 'Telegram', 'Webhooks'],
+    task: {
+      en: 'Leads went cold while a manager got to them, and the one who got there first took them.',
+      ru: 'Лиды горели, пока менеджер до них дойдёт, а доставались они тому, кто первый встал.',
+    },
+    sol: {
+      en: 'Webhooks from the ad accounts, scoring, routing rules anyone can read, and a trail from where a lead came from to who took it and how it ended.',
+      ru: 'Приём вебхуков из рекламных кабинетов, скоринг, прозрачные правила распределения и полная прослеживаемость: откуда лид, кто взял, чем закончилось.',
+    },
+    res: {
+      en: 'Time to first response down from 40+ minutes to 90 seconds, cold leads down 2.4×. Built in 11 days.',
+      ru: 'Скорость реакции на лид сократилась с 40+ минут до 90 секунд, доля остывших заявок упала в 2,4 раза. Собрано за 11 дней.',
+    },
+    links: [],
+  },
+  {
+    title: {
+      en: 'RAG knowledge base and AI assistant for a board-game retail chain',
+      ru: 'RAG-система + AI-консультант для сети магазинов настольных игр',
+    },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'A company knowledge base with an AI assistant that knows the catalogue, the suppliers, the stock, the promotions, the order history and the internal rules.',
+      ru: 'Корпоративная база знаний и AI-консультант, который знает ассортимент, поставщиков, остатки, акции, историю заказов и внутренние регламенты.',
+    },
+    tags: ['AI', 'RAG', 'LLM', 'Hybrid search', 'Internal tool', '1C', 'MoySklad', 'Telegram'],
+    task: {
+      en: 'The answer to any working question sat in a chat thread or a spreadsheet, and whoever needed it went looking for it themselves.',
+      ru: 'Ответ на любой рабочий вопрос лежал в чатах и таблицах, и сотрудник искал его сам.',
+    },
+    sol: {
+      en: 'RAG over a vector store with hybrid search, an admin panel, and 1C and MoySklad wired in. It does not just answer: it cites the document and the date behind the answer, when a price was changed, when a delivery arrived, what terms a supplier is on.',
+      ru: 'RAG на векторной базе с гибридным поиском, админ-панель и интеграции с 1С и МойСклад. Система не просто отвечает, а ссылается на конкретный документ и дату: когда обновили цену, когда была поставка, какие условия у поставщика.',
+    },
+    res: {
+      en: 'Finding information got 8 to 10 times faster, and staff stopped chasing it through chats and spreadsheets. Built in three to four weeks.',
+      ru: 'Время на поиск информации сократилось в 8–10 раз, сотрудники перестали бегать по чатам и таблицам. Собрано за 3–4 недели.',
+    },
+    links: [],
+  },
+  {
+    title: { en: 'AI agent for importing cars from the US', ru: 'AI-агент для выкупа автомобилей из США' },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'The system takes part in buying cars at US auctions: it pulls the lot data, prepares and fills the declarations, works out the duties, assembles the document pack and tracks the deal.',
+      ru: 'Система участвует в выкупе авто на американских аукционах: собирает данные лота, готовит и заполняет декларации, считает пошлины, формирует пакет документов и ведёт статус сделки.',
+    },
+    tags: ['AI agent', 'Documents', 'Python', 'LLM', 'Structured output', 'PDF', 'Telegram'],
+    task: {
+      en: 'A person assembled the document pack for every car, which took three to four hours, and a mistake in a declaration cost more than the time did.',
+      ru: 'Пакет документов на каждую машину собирал человек, это занимало 3–4 часа, а ошибка в декларации стоила дороже потраченного времени.',
+    },
+    sol: {
+      en: 'The agent does the broker routine rather than assisting with it: it pulls lot data from the auctions and the brokers, fills declarations through structured output, works out the duties, generates the PDFs and pushes the deal status to Telegram.',
+      ru: 'Агент выполняет саму рутину брокера, а не помогает с ней: забирает данные лота у аукционов и брокеров, заполняет декларации через structured output, считает пошлины, генерирует PDF и шлёт статус сделки в Telegram.',
+    },
+    res: {
+      en: 'The document pack went from three or four hours to twelve or fifteen minutes per car, and errors in declarations all but disappeared. Built in four to five weeks.',
+      ru: 'Подготовка пакета документов сократилась с 3–4 часов до 12–15 минут на машину, ошибки в декларациях практически исчезли. Собрано за 4–5 недель.',
+    },
+    links: [],
+  },
+  {
+    title: {
+      en: 'One knowledge base that answers for the whole company',
+      ru: 'Система «всё знает о компании» для консультанта и агентства',
+    },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'One company knowledge base and an AI that answers questions about projects, clients, agreements, decisions and what changed when. All of it with dates and sources.',
+      ru: 'Единая база знаний компании и AI, который отвечает на вопросы по проектам, клиентам, договорённостям, решениям и истории изменений. Всё с датами и источниками.',
+    },
+    tags: ['RAG', 'Knowledge base', 'Document parsing', 'Access control', 'Audit', 'Telegram'],
+    task: {
+      en: 'What the company knew lived in two or three people, and every new hire had to go through them to reach it.',
+      ru: 'Знание компании жило в головах двух-трёх человек, и каждый новый сотрудник выходил на работу через них.',
+    },
+    sol: {
+      en: 'Advanced RAG with document parsing, access rights and an audit trail on every query, reachable from Telegram and from the web. Each answer arrives with a date and a link to the source it came from.',
+      ru: 'Advanced RAG с разбором документов, права доступа и аудит запросов, интерфейс в Telegram и в вебе. Каждый ответ приходит с датой и ссылкой на источник.',
+    },
+    res: {
+      en: 'New hires get up to speed several times faster, and the knowledge no longer rests on two or three people. Built in three weeks.',
+      ru: 'Новые сотрудники выходят на работу в разы быстрее, а знание компании перестало держаться на двух-трёх людях. Собрано за 3 недели.',
+    },
+    links: [],
   },
 ]
 
@@ -840,16 +1104,18 @@ export const CONTACT = {
      available on a site that deliberately has no form: it replaces the blank
      page a reader faces when they open a chat with a stranger. */
   sub: {
-    en: 'Write on Telegram or by email and describe the task in two sentences. There is no form here on purpose. We usually reply the same working day, timezone UTC+4.',
-    ru: 'Напишите в Telegram или на почту и опишите задачу в двух предложениях. Формы здесь нет специально. Обычно отвечаем в тот же рабочий день, часовой пояс UTC+4.',
+    en: 'Write on Telegram and describe the task in two sentences. There is no form here on purpose. We usually reply the same working day, timezone UTC+4.',
+    ru: 'Напишите в Telegram и опишите задачу в двух предложениях. Формы здесь нет специально. Обычно отвечаем в тот же рабочий день, часовой пояс UTC+4.',
   },
-  /* The close handed out a bare address while the calculator two screens up
-     had a properly prefilled mailto. Same treatment now, and the body is three
-     prompts rather than an empty window. */
-  mailDirectSubject: { en: 'Veloris Lab, a task to look at', ru: 'Veloris Lab, задача на разбор' },
-  mailDirectBody: {
-    en: 'What I need:\n\nWhat we do by hand today:\n\nWhen I need it:',
-    ru: 'Что нужно:\n\nЧто сейчас делаем руками:\n\nК какому сроку:',
+  /* WAS a subject and a body for a prefilled mailto, and the prompts are the
+     reason it existed: a chat opened on a stranger is the same blank page a
+     mail client is, and three questions beat an empty window. The mail channel
+     went, so the prompts moved onto the Telegram deep link, which takes one
+     `?text=` string where mailto took two fields. The calculator has always
+     handed its brief over the same way. */
+  tgDirectText: {
+    en: 'Veloris Lab, a task to look at\n\nWhat I need:\n\nWhat we do by hand today:\n\nWhen I need it:',
+    ru: 'Veloris Lab, задача на разбор\n\nЧто нужно:\n\nЧто сейчас делаем руками:\n\nК какому сроку:',
   },
 }
 
@@ -1252,9 +1518,14 @@ export const FAQ: FaqItem[][] = [
     },
     {
       q: { en: 'Can we see what you have built?', ru: 'Можно посмотреть, что вы делали?' },
+      /* WAS «Четыре кейса выше», typed against a four-entry array and false the
+         day a fifth landed. `CASES` is declared above this point, so the count
+         and its noun both come from it. This is the third place that counted
+         the same array by hand; the other two are the motto figure and the
+         section standfirst, and both derive now too. */
       a: {
-        en: 'Four cases above, each with the task, the solution and the result. Work under NDA is discussed on a call.',
-        ru: 'Четыре кейса выше, у каждого задача, решение и результат. Работы под NDA обсуждаем на созвоне.',
+        en: `${CASES.length} ${CASES.length === 1 ? 'case' : 'cases'} above, each with the task, the solution and the result. Work under NDA is discussed on a call.`,
+        ru: `${CASES.length} ${CASE_WORD[pluralForm(CASES.length)]} выше, у каждого задача, решение и результат. Работы под NDA обсуждаем на созвоне.`,
       },
     },
     {
@@ -1267,8 +1538,8 @@ export const FAQ: FaqItem[][] = [
     {
       q: { en: 'How do we start?', ru: 'С чего начать?' },
       a: {
-        en: 'Write on Telegram or by email, or run the calculator and send the brief it assembles. Either way the first step is the free scoping.',
-        ru: 'Напишите в Telegram или на почту, либо пройдите калькулятор и отправьте собранный им бриф. В любом случае начнём с бесплатного разбора.',
+        en: 'Write on Telegram, or run the calculator and send the brief it assembles. Either way the first step is the free scoping.',
+        ru: 'Напишите в Telegram либо пройдите калькулятор и отправьте собранный им бриф. В любом случае начнём с бесплатного разбора.',
       },
     },
   ],
@@ -1328,7 +1599,10 @@ export const CALC = {
     ru: 'Имя и контакт просто добавятся в текст, который вы отправите сами. Здесь ничего не сохраняется и ничего не уходит без вас.',
   },
   namePh: { en: 'Your name', ru: 'Как вас зовут' },
-  contactPh: { en: 'Telegram or email', ru: 'Telegram или почта' },
+  /* Names the one channel rather than offering a choice. This field writes a
+     line into a brief the reader sends themselves, and a reply address on a
+     channel nobody watches is worse than no address: they would be waiting. */
+  contactPh: { en: 'Telegram to reply to', ru: 'Telegram для ответа' },
 
   /* The estimate panel used to contain no interactive node at all: the reader
      self-qualified, self-priced, formed intent, and hit a dead end. */
@@ -1357,10 +1631,12 @@ export const CALC = {
   },
 
   sendTg: { en: 'Send on Telegram', ru: 'Отправить в Telegram' },
-  sendMail: { en: 'Send by email', ru: 'Отправить почтой' },
-  mailSubject: { en: 'Veloris Lab, project estimate', ru: 'Veloris Lab, расчёт проекта' },
+  /* WAS `mailSubject`, and it was never only a subject: it is the first line of
+     the brief itself, which the Telegram handoff carries too. The mail button
+     beside it is gone, so the name no longer promises a channel that exists. */
+  briefTitle: { en: 'Veloris Lab, project estimate', ru: 'Veloris Lab, расчёт проекта' },
 
-  // Labels used to assemble the brief that goes into Telegram or the mail body.
+  // Labels used to assemble the brief that goes into Telegram.
   /* The breakdown under the figure. `labPricing.estimate()` returns the shape of
      each line and no words, because that file is imported by the metadata
      builder and by llms.txt and has no business knowing the locale. */
@@ -1395,9 +1671,19 @@ export const CALC = {
 }
 
 export const FOOTER = {
+  /* WAS «Veloris Lab, инженерная студия. Сначала цифра, потом работа», a promise
+     the calculator two screens up actually keeps. What stands here now names the
+     category instead, so the footer no longer speaks in the studio's voice and
+     the quotation marks that used to frame it went with the sentence: you quote
+     a motto, not a job description. The promise still runs on the page, in the
+     hero's mono line and in the calculator's disclaimer.
+
+     The brand name is not in this string either, and putting it back prints it
+     twice: the footer sets this line directly beside the wordmark, so the two
+     read as one phrase and the wordmark is the subject of it. */
   line: {
-    en: 'Veloris Lab, an engineering studio. The number comes first, then the work.',
-    ru: 'Veloris Lab, инженерная студия. Сначала цифра, потом работа.',
+    en: 'a full-cycle engineering studio',
+    ru: 'инженерная студия разработки полного цикла',
   },
 }
 

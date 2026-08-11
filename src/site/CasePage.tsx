@@ -9,7 +9,7 @@ import { SectionHeading } from '@/components/ui/SectionHeading'
 import {
   type LabLang, type LS, tx,
   CASES, SERVICES, CALC, UI, CONTACT,
-  TELEGRAM, TELEGRAM_HANDLE, EMAIL, BRAND,
+  TELEGRAM, TELEGRAM_HANDLE, BRAND,
 } from '@/site/labData'
 import { WORK_TYPES, money, priced } from '@/site/labPricing'
 import { CASE_PAGES, CP_LABELS, type CasePage as CP } from '@/site/casePages'
@@ -113,11 +113,9 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
   /** Two tokens, "domain · kind". One token if a future entry carries one. */
   const tokens = L(page.eyebrow).split('·').map((t) => t.trim()).filter(Boolean)
 
-  /* Prefilled exactly as the close on the home page does it, so a mail client
-     never opens on an empty window. */
-  const mailHref = `mailto:${EMAIL}?subject=${encodeURIComponent(
-    L(CONTACT.mailDirectSubject),
-  )}&body=${encodeURIComponent(L(CONTACT.mailDirectBody))}`
+  /* Prefilled exactly as the close on the home page does it, so the chat never
+     opens on an empty input. */
+  const tgHref = `${TELEGRAM}?text=${encodeURIComponent(L(CONTACT.tgDirectText))}`
 
   return (
     <>
@@ -413,13 +411,10 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
               tooltip on an ancestor still answers for the link inside it. */}
           <div className="relative flex flex-wrap items-center justify-center gap-3">
             <span className="inline-flex" title={TELEGRAM_HANDLE}>
-              <Button href={TELEGRAM} variant="secondary">
+              <Button href={tgHref} variant="secondary">
                 {L(UI.ctaTg)}
               </Button>
             </span>
-            <Button href={mailHref} variant="muted">
-              {L(UI.sendMailDirect)}
-            </Button>
           </div>
         </section>
       </main>

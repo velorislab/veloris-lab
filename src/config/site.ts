@@ -32,12 +32,12 @@
  */
 
 import {
-  BRAND, EMAIL, TELEGRAM, SOCIAL, UI, FOOTER, SERVICES, CASES,
+  BRAND, SOCIAL, UI, FOOTER, CASES,
   tx, type LabLang, type LS,
 } from '@/site/labData'
 import { CASE_PAGES } from '@/site/casePages'
-import { SERVICE_PAGES } from '@/site/servicePages'
-import { SITE_URL, localizedHref, pricingPath, servicePath, casePath, solutionsPath } from '@/site/routing'
+import { SITE_URL, localizedHref, pricingPath, casePath, solutionsPath } from '@/site/routing'
+import type { SocialKey } from '@/components/ui/SocialGlyph'
 
 export interface NavLink {
   label: string
@@ -47,13 +47,8 @@ export interface NavLink {
 export interface SocialLink {
   label: string
   href: string
-  /** Empty where the template shipped no glyph for this network; see SOCIAL_ICON. */
-  icon: string
-}
-
-export interface FooterColumn {
-  title: string
-  links: NavLink[]
+  /** Which mark to draw. Every network in SOCIAL has one; see `SocialGlyph`. */
+  key: SocialKey
 }
 
 /**
@@ -81,19 +76,6 @@ export const ANCHORS = {
 } as const
 
 /**
- * Glyphs for the footer's social row.
- *
- * The template shipped X, Meta, Instagram and LinkedIn. Two of those are
- * accounts we have; Telegram, which is the channel this business actually
- * answers on, has no glyph in `public/` and is not getting an invented path, so
- * it has no entry here and the footer renders its name instead of an icon.
- */
-const SOCIAL_ICON: Record<string, string> = {
-  instagram: '/images/icons/social-instagram.svg',
-  linkedin: '/images/icons/social-linkedin.svg',
-}
-
-/**
  * Chrome-only strings with no home in `labData`: the two menu labels, the
  * switcher's group name and three landmark names. They are here rather than in
  * `labData` because nothing outside the header and footer says them, and both
@@ -102,7 +84,6 @@ const SOCIAL_ICON: Record<string, string> = {
 const CHROME: Record<string, LS> = {
   homeAria: { en: `${BRAND}, home`, ru: `${BRAND}, на главную` },
   mainNav: { en: 'Main', ru: 'Основная навигация' },
-  footerNav: { en: 'Footer', ru: 'Навигация в подвале' },
   language: { en: 'Language', ru: 'Язык' },
   menuOpen: { en: 'Open menu', ru: 'Открыть меню' },
   menuClose: { en: 'Close menu', ru: 'Закрыть меню' },
@@ -128,14 +109,10 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
     href: casePath(lang, p.slug),
   }))
 
-  const serviceLinks: NavLink[] = SERVICE_PAGES.map((p) => ({
-    label: L(SERVICES.find((s) => s.key === p.key)?.t) || p.slug,
-    href: servicePath(lang, p.slug),
-  }))
-
   return {
     name: BRAND,
-    /** The footer's quoted line. The only positioning sentence on the site. */
+    /** The line beside the footer wordmark. A descriptor, not a claim: what the
+     *  studio promises is said where the page can back it. */
     tagline: L(FOOTER.line),
     url: SITE_URL,
 
@@ -194,38 +171,30 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
     /** Read by the hero's primary button. */
     heroCta: { label: L(UI.ctaCalc), href: at(ANCHORS.estimate) },
 
-    contact: { email: EMAIL, telegram: TELEGRAM },
-
+    /* No `contact` block any more. It carried an address pair, the footer read
+       only the mail half of it, and that pill is gone. Telegram reaches the
+       footer through SOCIAL, which is the row that renders it. */
     social: SOCIAL.map((s) => ({
       label: s.label,
       href: s.url,
-      icon: SOCIAL_ICON[s.key] ?? '',
+      key: s.key,
     })) satisfies SocialLink[],
 
+    /**
+     * The copyright, and nothing else. There were two link columns here, the
+     * six service pages plus /solutions and /pricing beside the four cases, and
+     * they were the only site-wide links those inner pages had. The cases keep
+     * theirs in `navMenu`, and /solutions and /pricing are in `nav`; the six
+     * service pages now hang off the home page's service cards alone. Paste the
+     * columns back if that shows up in the numbers.
+     */
     footer: {
       copyright: `© ${new Date().getFullYear()} ${BRAND}`,
-      /**
-       * Two columns, not the template's three, and both hold real routes only.
-       *
-       * Our service and case titles are sentences where Aston's were single
-       * words, so three columns of them would touch each other inside the 652px
-       * the footer gives this block. The home-page anchors are not repeated
-       * here: the header has all six, and what the footer is for is the ten
-       * inner pages that are otherwise only reachable from one card each.
-       */
-      columns: [
-        {
-          title: L(UI.navServices),
-          links: [...serviceLinks, { label: L(UI.solutionAll), href: solutionsPath(lang) }, { label: L(UI.priceList), href: pricingPath(lang) }],
-        },
-        { title: L(UI.navCases), links: caseLinks },
-      ] satisfies FooterColumn[],
     },
 
     /** Landmark and control names, so neither component types an English word. */
     labels: {
       mainNav: L(CHROME.mainNav),
-      footerNav: L(CHROME.footerNav),
       language: L(CHROME.language),
       menuOpen: L(CHROME.menuOpen),
       menuClose: L(CHROME.menuClose),

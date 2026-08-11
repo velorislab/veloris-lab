@@ -188,7 +188,15 @@
   /* Framer centres this wrapper inside a flex column; <body> is a block box
      here, so the auto margins are what keep every section on the page axis. */
   margin-inline: auto;
-  padding: 200px 0 0;
+  /* The bottom value is not Framer's, because Framer's was zero and that is
+     what put the last section flush against the footer. The footer is white and
+     the page is #f6f7f9, so with no space between them the seam lands on the
+     bottom edge of whatever section ends the page: on the home page that is the
+     blue CTA panel, and the panel reads as sitting on the footer rather than on
+     the page. 80/96/120 is not invented either, it is the bottom padding
+     `CasePage` already writes out for its own main, so the five pages on this
+     utility now end the way the four case pages always did. */
+  padding: 200px 0 120px;
   gap: 200px;
   /* `clip`, not `hidden`: both contain the sections that bleed past the page
      axis, but `hidden` would make this a scroll container and break the
@@ -199,14 +207,14 @@
   @media (min-width: 810px) and (max-width: 1319px) {
     width: 100%;
     max-width: 800px;
-    padding: 150px 30px 0;
+    padding: 150px 30px 96px;
     gap: 150px;
   }
 
   @media (max-width: 809px) {
     width: 100%;
     max-width: 450px;
-    padding: 80px 16px 0;
+    padding: 80px 16px 80px;
     gap: 80px;
   }
 }

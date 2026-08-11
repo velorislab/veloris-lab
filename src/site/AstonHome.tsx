@@ -6,7 +6,6 @@ import { Estimate } from '@/components/sections/Estimate'
 import { Faq } from '@/components/sections/Faq'
 import { FinalCta } from '@/components/sections/FinalCta'
 import { Hero } from '@/components/sections/Hero'
-import { PriceTicker } from "@/components/sections/PriceTicker";
 import { Motto } from '@/components/sections/Motto'
 import { Cases } from "@/components/sections/Cases";
 import { PlatformHighlight } from '@/components/sections/PlatformHighlight'
@@ -44,7 +43,6 @@ export default function AstonHome({ lang }: { lang: LabLang }) {
     <>
       <Header lang={lang} />
       <Hero lang={lang} />
-      <PriceTicker lang={lang} />
       <main id="main-content" className="page-main">
         <Motto lang={lang} />
         <Cases lang={lang} />
