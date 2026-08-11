@@ -4,6 +4,11 @@ import { SERVICE_PAGES } from '../site/servicePages'
 import { CASE_PAGES } from '../site/casePages'
 import { SOLUTIONS } from '../site/solutions'
 
+/* Required by `output: 'export'`, which refuses to collect a metadata route
+   without it, and a no-op on the server build. `llms.txt` next door already
+   carried the same line for the same reason. */
+export const dynamic = 'force-static'
+
 /**
  * Every URL the site has, both locales, each carrying its own hreflang set.
  *

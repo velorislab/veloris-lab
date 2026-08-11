@@ -1,0 +1,69 @@
+name: Deploy to GitHub Pages
+
+# Manual only, on purpose. This is a temporary public copy of the site and not
+# the production deployment, so it should go out when somebody decides it
+# should, not on every push to main.
+on:
+  workflow_dispatch:
+
+# One at a time. A second run started while the first is publishing would race
+# it, and Pages has a single live artifact.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build the static export
+        env:
+          # Turns on output: 'export', unoptimised images, trailing slashes and
+          # the subpath. See the comment block in next.config.ts for why each one
+          # is needed; none of them affect the normal build.
+          PAGES_BUILD: '1'
+          # The repo is velorislab/veloris-lab, so Pages serves it from
+          # /veloris-lab rather than from the root. Drop both of these the day it
+          # moves to a custom domain or to a velorislab.github.io repo.
+          NEXT_PUBLIC_BASE_PATH: /veloris-lab
+          NEXT_PUBLIC_SITE_URL: https://velorislab.github.io/veloris-lab
+        run: pnpm build
+
+      # Jekyll is what Pages runs by default on a plain branch deploy, and it
+      # drops every directory whose name starts with an underscore. That is
+      # _next, which is the entire application. The Pages action does not run
+      # Jekyll, but this file costs nothing and removes the failure mode
+      # permanently.
+      - run: touch out/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
