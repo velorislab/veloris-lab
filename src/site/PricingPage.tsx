@@ -347,6 +347,10 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
                     <span className="text-[15px] text-ink-200">{L(CALC.perMonth)}</span>
                   </p>
                 </div>
+                {/* Who it is for, before what is in it. A reader comparing four
+                    columns is answering «which one is mine» first, and that
+                    question has its own line rather than a place in the list. */}
+                <p className="text-[15px] leading-6 text-ink-600">{L(t.who)}</p>
                 <ul className="flex flex-col gap-2 border-t border-line-soft pt-4">
                   {t.includes.map((line, i) => (
                     <li key={i} className="text-[15px] leading-6 text-ink-400">{L(line)}</li>

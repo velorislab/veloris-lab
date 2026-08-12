@@ -397,6 +397,18 @@ export interface SupportTier {
   key: string
   label: LS
   perMonth: number
+  /**
+   * Who the tier is for, on its own line under the price.
+   *
+   * IT USED TO BE THE FIRST BULLET, and on the two lower tiers it was the only
+   * bullet that answered a different question from the rest: «для сайтов без
+   * серверной логики» is not a thing you get, it is whether you are in the right
+   * column. Buried in a list of four it was read last, after the reader had
+   * already worked out the answer from the other three. The two upper tiers had
+   * no such line at all and opened on «всё из тарифа ниже», which tells a reader
+   * comparing four columns nothing about which one is theirs.
+   */
+  who: LS
   includes: LS[]
 }
 
@@ -415,8 +427,8 @@ export const SUPPORT_TIERS: SupportTier[] = [
     key: 'watch',
     label: { en: 'Kept running', ru: 'Присмотр' },
     perMonth: 96,
+    who: { en: 'For sites and interfaces with no server logic', ru: 'Для сайтов и интерфейсов без серверной логики' },
     includes: [
-      { en: 'For sites and interfaces with no server logic', ru: 'Для сайтов и интерфейсов без серверной логики' },
       { en: 'Dependency and security updates',               ru: 'Обновления зависимостей и безопасности' },
       { en: 'Uptime checks',                                 ru: 'Проверка доступности' },
       { en: 'Up to 3 hours of changes',                       ru: 'До 3 часов правок' },
@@ -427,8 +439,8 @@ export const SUPPORT_TIERS: SupportTier[] = [
     key: 'duty',
     label: { en: 'On call', ru: 'Дежурство' },
     perMonth: 365,
+    who: { en: 'For apps, APIs, bots and databases', ru: 'Для приложений, API, ботов и баз данных' },
     includes: [
-      { en: 'For apps, APIs, bots and databases',   ru: 'Для приложений, API, ботов и баз данных' },
       { en: 'Monitoring with alerts to a phone',    ru: 'Мониторинг с оповещением на телефон' },
       { en: 'Backups, checked by restoring them',   ru: 'Резервные копии с проверкой восстановления' },
       { en: 'Up to 8 hours of changes',             ru: 'До 8 часов правок' },
@@ -439,6 +451,7 @@ export const SUPPORT_TIERS: SupportTier[] = [
     key: 'grow',
     label: { en: 'Kept growing', ru: 'Развитие' },
     perMonth: 731,
+    who: { en: 'For a product that gets worked on every month', ru: 'Для продукта, над которым работают каждый месяц' },
     includes: [
       { en: 'Everything in On call',        ru: 'Всё из «Дежурства»' },
       { en: 'Up to 20 hours of development', ru: 'До 20 часов разработки' },
@@ -450,6 +463,10 @@ export const SUPPORT_TIERS: SupportTier[] = [
     key: 'stream',
     label: { en: 'Reserved capacity', ru: 'Выделенный поток' },
     perMonth: 1463,
+    /* Theirs says «приоритетная команда» here, which describes a company with
+       staff on a rota. Ours says what one person can actually hold to: time
+       booked in advance, and yours going first. */
+    who: { en: 'For something growing faster than one release a month', ru: 'Для того, что растёт быстрее одного релиза в месяц' },
     includes: [
       { en: 'Everything in Kept growing',        ru: 'Всё из «Развития»' },
       { en: 'Up to 50 hours, booked in advance', ru: 'До 50 часов, забронированных заранее' },
