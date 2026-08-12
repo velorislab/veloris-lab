@@ -33,9 +33,10 @@
 
    WHAT IS OURS AND NOT THEIRS:
 
-   - The five categories they have no line for: integration, parsing,
-     dashboards, payments, MVP. Priced against the nearest thing on their table,
-     noted per line.
+   - The six categories they have no line for: integration, parsing, dashboards,
+     payments, MVP and browser extensions. Priced against the nearest thing on
+     their table, noted per line. The extension is the one that was our own
+     omission rather than an inherited one: the studio's own product is one.
    - Every delivery window. Their longest quote is "3-5 недель" for a
      two-platform app with a backend, and a week count is a promise somebody has
      to keep. The windows here are ours and are deliberately longer.
@@ -185,7 +186,7 @@ export interface WorkType {
 }
 
 /**
- * Step 1. Their eleven product categories, in their order, then the five of ours
+ * Step 1. Their eleven product categories, in their order, then the six of ours
  * they have no line for.
  *
  * Eleven and not ten because their calculator offers ten and their published
@@ -290,6 +291,25 @@ export const WORK_TYPES: WorkType[] = [
   { key: 'billing',  label: { en: 'Payments and billing',            ru: 'Платежи и биллинг' },
     from: 2439, support: 487, weeks: [3, 5],
     design: { ready: 0, prototype: 183, needed: 366 }, serverIncluded: true },
+
+  // NOTHING ON THEIR LIST, AND THE ONE OMISSION THAT WAS OURS RATHER THAN
+  // INHERITED: the studio's own product is a browser extension with a Chrome Web
+  // Store listing, and the price table had no row for the thing it is best known
+  // for. Anyone asking for one had to be quoted off a table that did not contain
+  // it.
+  //
+  // Priced between their one-platform app (100 000 ₽) and their two-platform one
+  // (150 000 ₽), and the argument is the review cycle rather than the code: an
+  // extension is one target, which is their lower figure, plus a store listing
+  // and a rejection-and-resubmit loop that a web build never has. 1 650 is that
+  // midpoint, and it is ours, so it carries no rouble figure of theirs.
+  //
+  // No server by default. An extension that only rewrites the page it is on
+  // needs none, and the ones that do need one are asked the question like
+  // everything else on this table.
+  { key: 'extension', label: { en: 'Browser extension',              ru: 'Браузерное расширение' },
+    from: 1650, support: 121, weeks: [2, 4],
+    design: { ready: 0, prototype: 122, needed: 244 }, serverIncluded: false },
 ]
 
 export interface DesignState {
