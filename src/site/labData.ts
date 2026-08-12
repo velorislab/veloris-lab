@@ -166,6 +166,29 @@ export const UI: Record<string, LS> = {
      carry their line of the price table and go to it. */
   solutionKinds: { en: 'Or start from the kind of work', ru: 'Или начните с вида работы' },
   solutionKindOwn: { en: 'a page of its own', ru: 'есть отдельная страница' },
+
+  /* THE TWO HUBS. Both headings name the thing rather than sell it, for the
+     same reason the solution titles do: these are pages a search has to be able
+     to land on. */
+  servicesHubLabel: { en: 'Services, and where each one starts', ru: 'Услуги, и с чего каждая начинается' },
+  servicesHubSub: {
+    en: 'Six directions we take end to end. Each carries the floor it starts at, the window for a first version and what moves the number, and each opens onto the scenarios priced from it.',
+    ru: 'Шесть направлений, которые мы ведём от начала до конца. У каждого свой пол, срок первой версии и то, что двигает цифру, и от каждого можно перейти к сценариям, которые считаются от него.',
+  },
+  servicesHubCases: { en: 'Shipped in this direction', ru: 'Запущено по этому направлению' },
+  servicesHubNoCases: { en: 'No public case yet', ru: 'Публичного кейса пока нет' },
+
+  casesHubLabel: { en: 'What is already running', ru: 'Что уже работает' },
+  /* THE SENTENCE THAT MAKES THIS PAGE DIFFERENT FROM /solutions, and it has to
+     be here rather than implied: those pages describe what we build, this one
+     is answerable to a repository. Without it a visitor arriving from a search
+     reads two catalogues and cannot tell which one is a claim. */
+  casesHubSub: {
+    en: 'Every line on this page is about work that shipped, not work we offer. Where a case has a page, it opens on what the task was, what fought back and what came of it. The offers live on the solutions page instead.',
+    ru: 'Каждая строка здесь про то, что уже запущено, а не про то, что мы предлагаем. Если у кейса есть страница, на ней задача, что сопротивлялось и что из этого вышло. Предложения живут на странице решений.',
+  },
+  casesHubOpen: { en: 'Open the case', ru: 'Открыть кейс' },
+  casesHubNoPage: { en: 'No write-up yet', ru: 'Разбора пока нет' },
   solutionKindsSub: {
     en: 'The whole price table, as the thing each scenario below is priced from. Where there is a page about the work, the card opens it.',
     ru: 'Весь прайс целиком, тем, от чего считается каждый сценарий ниже. Если про эту работу есть отдельная страница, карточка её и откроет.',

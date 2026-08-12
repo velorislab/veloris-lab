@@ -48,9 +48,15 @@ import { type LabLang } from "@/site/labData";
  * nobody can see, and it needs a `max-height` in pixels that has to be re-guessed
  * every time a card's height changes. Rendering fewer needs neither.
  */
-export function Cases({ lang }: { lang: LabLang }) {
+/**
+ * `all` is for the /cases hub, which is the whole page rather than a section of
+ * one. Opening on six and fading the rest is right where this is one stop on a
+ * scroll downwards; on a page a visitor arrived at to browse cases, it hides the
+ * thing they came for behind a click.
+ */
+export function Cases({ lang, all = false }: { lang: LabLang; all?: boolean }) {
   const { cases } = getHome(lang);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(all);
   if (cases.items.length === 0) return null;
 
   /* Six collapsed, and below the tablet breakpoint the last three of those are
@@ -59,7 +65,7 @@ export function Cases({ lang }: { lang: LabLang }) {
      the server without the client disagreeing with it. */
   const COLLAPSED = 6;
   const shown = open ? cases.items : cases.items.slice(0, COLLAPSED);
-  const collapsible = cases.items.length > COLLAPSED;
+  const collapsible = !all && cases.items.length > COLLAPSED;
 
   return (
     <section id="cases" className="section-shell scroll-mt-[110px] gap-10 desktop:gap-[60px]">

@@ -32,11 +32,10 @@
  */
 
 import {
-  BRAND, SOCIAL, UI, FOOTER, CASES,
+  BRAND, SOCIAL, UI, FOOTER,
   tx, type LabLang, type LS,
 } from '@/site/labData'
-import { CASE_PAGES } from '@/site/casePages'
-import { SITE_URL, localizedHref, pricingPath, casePath, solutionsPath } from '@/site/routing'
+import { SITE_URL, localizedHref, pricingPath, solutionsPath, servicesPath, casesPath } from '@/site/routing'
 import type { SocialKey } from '@/components/ui/SocialGlyph'
 
 export interface NavLink {
@@ -101,14 +100,6 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
   const home = localizedHref(lang)
   const at = (hash: string) => (opts.offHome ? `${home}${hash}` : hash)
 
-  /* Both link lists are joined on the page tables rather than retyped: the
-     label is the localized title the rest of the site shows, and the path comes
-     from `routing`, so neither can drift from the page it opens. */
-  const caseLinks: NavLink[] = CASE_PAGES.map((p) => ({
-    label: L(CASES.find((c) => tx(c.title, 'en') === p.match)?.title) || p.match,
-    href: casePath(lang, p.slug),
-  }))
-
   return {
     name: BRAND,
     /** The line beside the footer wordmark. A descriptor, not a claim: what the
@@ -121,25 +112,23 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
     homeAria: L(CHROME.homeAria),
 
     /**
-     * The two links the pill can actually hold, beside the case menu.
+     * The four links the bar holds, and all four are routes.
      *
-     * THIS IS ARITHMETIC, NOT TASTE. The desktop pill is `max-w-[810px]`. The
-     * wordmark takes 114, the language switcher 77, the Russian CTA 197, the
-     * padding and two gaps 56: 366px is left for links. Services, Pricing and
-     * the Cases button are 271 of it. «Как работаем» alone is 145 more, which
-     * is 50 over the edge, and an overflowing pill is a broken pill.
+     * THE WIDTH ARITHMETIC THAT USED TO GOVERN THIS IS GONE WITH THE PILL. It
+     * budgeted 366px of a `max-w-[810px]` capsule and is why two entries were
+     * exiled to `navRest`; the header is a full-width bar now, so the constraint
+     * it described no longer exists. `navRest` stays because what is in it is
+     * genuinely secondary, not because it does not fit.
      *
-     * Widening it, shrinking the CTA or tightening the link padding would each
-     * be a change to the design rather than to the content, so the two anchors
-     * that did not fit are in `navRest` instead.
+     * «Услуги» used to be `#what-in`, an anchor into whatever page the reader
+     * was already on, which on a case or a solution page scrolled to nothing.
+     * Cases used to be a dropdown, for want of an index. Both have a hub now and
+     * both are plain links, so every entry here goes to a page.
      */
     nav: [
-      { label: L(UI.navServices), href: at(ANCHORS.services) },
-      /* The solutions hub is a real route with eight pages under it, and the
-         shape of the site most likely to be landed on from a search. It is in the
-         desktop pill rather than in `navRest` because it is the only entry here
-         that is not an anchor on the page the reader is already on. */
+      { label: L(UI.navServices), href: servicesPath(lang) },
       { label: L(UI.navSolutions), href: solutionsPath(lang) },
+      { label: L(UI.navCases), href: casesPath(lang) },
       { label: L(UI.navPricing), href: pricingPath(lang) },
     ] satisfies NavLink[],
 
@@ -160,11 +149,17 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
     /**
      * The header menu, where the template kept "All Pages".
      *
-     * Cases are the one part of the site with no home-page section to anchor
-     * to, and four real routes to reach, so the dropdown carries them. That is
-     * also why it is a menu and not a link: there is no /cases index.
+     * IT USED TO CARRY THE CASES, and the reason given here was that there was
+     * no /cases index. There is one now, cases are a plain link in `nav`, and a
+     * dropdown listing seven of them was the wrong shape long before it got a
+     * hub: a menu that opens onto a list of names asks a reader to choose before
+     * they know what any of them are.
+     *
+     * The menu is empty, which the header reads as «render no menu button». It
+     * stays declared because the header still supports one and the next thing
+     * with more entries than a nav slot will want it.
      */
-    navMenu: { label: L(UI.navCases), links: caseLinks },
+    navMenu: { label: L(UI.navCases), links: [] as NavLink[] },
 
     /** The single conversion action, on all 24 routes of each language. */
     cta: { label: L(UI.cta), href: at(ANCHORS.contact) },

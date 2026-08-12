@@ -112,6 +112,42 @@ export function buildSolutionAlternates(lang: LabLang, slug: string) {
   }
 }
 
+/* THE TWO HUBS THAT WERE MISSING, and their absence was the reason the header
+   carried a dropdown of case links instead of a link. Thirteen pages, six
+   services and seven cases, existed with nowhere to browse them: every solution
+   page says its proof lives on a case page and then offered no way to see them
+   all, which is the one page a buyer opens before writing to anybody. */
+
+export function servicesPath(lang: LabLang): string {
+  return lang === 'en' ? '/services' : `/${lang}/services`
+}
+
+export function servicesUrl(lang: LabLang): string {
+  return `${SITE_URL}${servicesPath(lang)}`
+}
+
+export function buildServicesAlternates(lang: LabLang) {
+  return {
+    canonical: servicesUrl(lang),
+    languages: { en: servicesUrl('en'), ru: servicesUrl('ru'), 'x-default': servicesUrl('en') },
+  }
+}
+
+export function casesPath(lang: LabLang): string {
+  return lang === 'en' ? '/cases' : `/${lang}/cases`
+}
+
+export function casesUrl(lang: LabLang): string {
+  return `${SITE_URL}${casesPath(lang)}`
+}
+
+export function buildCasesAlternates(lang: LabLang) {
+  return {
+    canonical: casesUrl(lang),
+    languages: { en: casesUrl('en'), ru: casesUrl('ru'), 'x-default': casesUrl('en') },
+  }
+}
+
 /* Case pages, same shape as the service ones. */
 
 export function casePath(lang: LabLang, slug: string): string {

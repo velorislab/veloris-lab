@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { BRAND, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx } from './labData'
-import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang } from './routing'
+import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang , buildServicesAlternates, servicesUrl, buildCasesAlternates, casesUrl } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
 import { CASE_PAGES, type CasePage } from './casePages'
 import { CASES } from './labData'
@@ -362,4 +362,35 @@ export function pricingJsonLd(lang: LabLang) {
       ],
     },
   ]
+}
+
+/* ---------------------------------------------------------------------------
+   The two hubs. Both describe a collection rather than one thing, so both are
+   `website` rather than `article`, and both take their words from the same UI
+   strings the pages render: a description that restated them here would be a
+   second place to keep them true.
+   --------------------------------------------------------------------------- */
+
+export function servicesMetadata(lang: LabLang): Metadata {
+  const t = (v: Parameters<typeof tx>[0]) => tx(v, lang)
+  const title = `${t(UI.servicesHubLabel)} · ${BRAND}`
+  const description = t(UI.servicesHubSub)
+  return {
+    title,
+    description,
+    alternates: buildServicesAlternates(lang),
+    openGraph: { type: 'website', title, description, url: servicesUrl(lang), siteName: BRAND },
+  }
+}
+
+export function casesMetadata(lang: LabLang): Metadata {
+  const t = (v: Parameters<typeof tx>[0]) => tx(v, lang)
+  const title = `${t(UI.casesHubLabel)} · ${BRAND}`
+  const description = t(UI.casesHubSub)
+  return {
+    title,
+    description,
+    alternates: buildCasesAlternates(lang),
+    openGraph: { type: 'website', title, description, url: casesUrl(lang), siteName: BRAND },
+  }
 }

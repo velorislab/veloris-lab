@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { LANGS, localizedUrl, serviceUrl, caseUrl, pricingUrl, solutionUrl, solutionsUrl } from '../site/routing'
+import { LANGS, localizedUrl, serviceUrl, caseUrl, pricingUrl, solutionUrl, solutionsUrl, servicesUrl, casesUrl } from '../site/routing'
 import { SERVICE_PAGES } from '../site/servicePages'
 import { CASE_PAGES } from '../site/casePages'
 import { SOLUTIONS } from '../site/solutions'
@@ -33,6 +33,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 1,
       alternates: alt(localizedUrl),
+    })
+    entries.push({
+      url: servicesUrl(lang),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+      alternates: alt(servicesUrl),
+    })
+    entries.push({
+      url: casesUrl(lang),
+      changeFrequency: 'monthly',
+      priority: 0.9,
+      alternates: alt(casesUrl),
     })
     entries.push({
       url: pricingUrl(lang),
