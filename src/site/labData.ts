@@ -72,8 +72,8 @@ export const UI: Record<string, LS> = {
   navSolutions: { en: 'Solutions', ru: 'Решения' },
   ctaCalc: { en: 'Get the price in a minute', ru: 'Узнать цену за минуту' },
   /**
-   * The one button on all 22 routes, and it now names the free thing instead
-   * of asking for a generic sales call.
+   * The one button on all 24 routes of each language, and it now names the free
+   * thing instead of asking for a generic sales call.
    *
    * There used to be a second string here, `ctaFree`, carrying exactly this
    * idea under a three-line comment about why it was the strong CTA. It was

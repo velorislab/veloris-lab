@@ -22,8 +22,8 @@
  *              /privacy-policy and /404, none of which are routes here. The
  *              header menu carries our case pages instead, which are.
  *   seo, ogImage `src/site/meta.ts` already owns titles, descriptions, OG and
- *              hreflang for all 22 routes. A second set of defaults here would
- *              be a second answer to the same question.
+ *              hreflang for all 24 routes per language. A second set of
+ *              defaults here would be a second answer to the same question.
  *   credit     the template's attribution block, whose two images (a Framer
  *              avatar and a Figma badge) are .png files that were never copied
  *              into this repo. Nothing rendered it. Licence attribution, if the
@@ -166,7 +166,7 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
      */
     navMenu: { label: L(UI.navCases), links: caseLinks },
 
-    /** The single conversion action, on all 22 routes. */
+    /** The single conversion action, on all 24 routes of each language. */
     cta: { label: L(UI.cta), href: at(ANCHORS.contact) },
     /** Read by the hero's primary button. */
     heroCta: { label: L(UI.ctaCalc), href: at(ANCHORS.estimate) },

@@ -19,7 +19,10 @@
   --color-surface-subtle: #eff1f4;
   --color-surface-alt: #edeff3;
   --color-surface-tint: #f1f7fc;
-  --color-surface-dark: #2d2d2d; /* nav pill */
+  /* Was the floating nav pill's ground. The header is a full-width bar on the
+     page's own surface now, so nothing reads this token; kept because the dark
+     slab treatments are still on the table and the value is the template's. */
+  --color-surface-dark: #2d2d2d;
 
   /* ---- Ink ------------------------------------------------------------- */
   --color-ink-900: #0c0c0c;
@@ -94,12 +97,15 @@
 
    The template self-hosted Clash Grotesk here and pulled Instrument Sans from
    next/font/google. Neither carries Cyrillic, and this site is Russian first,
-   so both were replaced in src/aston/lib/fonts.ts. The three @font-face rules
-   that used to sit here are gone with the woff2 files they loaded.
+   so both were replaced in src/lib/fonts.ts. The three @font-face rules that
+   used to sit here are gone with the woff2 files they loaded.
 
-   The token names below are deliberately unchanged. Forty-three components
-   reference --font-display and --font-sans, and renaming them would be a
-   rename with no benefit; what each one resolves to is what changed.
+   The token names below are deliberately unchanged. --font-display and
+   --font-sans are referenced 47 times across 16 files, and renaming them would
+   be a rename with no benefit; what each one resolves to is what changed. The
+   --font-clash-grotesk and --font-instrument-sans they point at are next/font
+   variable names that now resolve to Onest and Manrope; src/lib/fonts.ts is the
+   one place where the old names still mean anything.
    ========================================================================== */
 
 /* =============================================================================
