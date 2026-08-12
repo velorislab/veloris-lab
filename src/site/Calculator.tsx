@@ -7,7 +7,7 @@ import {
 import { type LabLang, tx, CALC, TELEGRAM } from './labData'
 import { useHydrated } from './useHydrated'
 import {
-  PRICING_IS_DRAFT, WORK_TYPES, DESIGN_STATES, ADDONS,
+  PRICING_IS_DRAFT, WORK_TYPES, DESIGN_STATES, ADDONS, STEP_LINE,
   estimate, money, type DesignKey, type EstimateFactor,
 } from './labPricing'
 
@@ -83,10 +83,11 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
   )
 
   // The price is the one number people screenshot, so it counts up on a spring
-  // instead of snapping. Mid-flight values are rounded to 50 to stay readable;
-  // every real total is a multiple of 100, so it still lands exactly.
+  // instead of snapping. Mid-flight values are rounded to the same grid the
+  // totals sit on, so the readout lands on the figure the breakdown adds up to
+  // rather than near it. See STEP_LINE for what a coarser grid here cost.
   const priceMv = useSpring(0, { stiffness: 90, damping: 20, restDelta: 1 })
-  const priceText = useTransform(priceMv, (v) => money(Math.round(v / 50) * 50))
+  const priceText = useTransform(priceMv, (v) => money(Math.round(v / STEP_LINE) * STEP_LINE))
   useEffect(() => {
     if (!est) return
     if (reduce) priceMv.jump(est.total)

@@ -75,9 +75,14 @@ export const PRICING = {
   },
 
   addonsLabel: { en: 'What gets added on top, never multiplied', ru: 'Что прибавляется сверху, а не умножается' },
+  /* THE OLD RULE HERE WAS CHECKABLE AND FALSE. It said an add-on is never worth
+     more than about a third of its base, which the table underneath contradicts
+     the moment the base is a landing page: every one of the twelve is at least
+     half of it, and scraping is more than twice. The figure was never a share of
+     anything, which is the actual point, so the rule now says what is true. */
   addonsSub: {
-    en: 'Independent of the kind of work. Anything worth more than about a third of its base is not an add-on and gets a line of its own.',
-    ru: 'Надбавки не зависят от типа работы. Всё, что дороже примерно трети своей базы, уже не надбавка и получает отдельную строку.',
+    en: 'A fixed line, not a share of the project: the same feature costs the same whether it goes on a landing page or an MVP. Anything big enough to carry its own timeline is a kind of work and sits in the table above instead.',
+    ru: 'Надбавка это фиксированная строка, а не доля от проекта: функция стоит одинаково и на лендинге, и на MVP. Всё, что тянет на собственный срок, это уже отдельная работа и стоит в таблице выше.',
   },
 
   estimateLabel: { en: 'Build the number for your own task', ru: 'Соберите цифру под свою задачу' },

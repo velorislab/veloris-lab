@@ -46,11 +46,27 @@
    - Three add-ons they do not sell: a database, scraping, deploy and
      monitoring.
 
-   ONE CAVEAT, RECORDED RATHER THAN ARGUED. This is a rouble-market price list
-   read in dollars, and reproducing their calculator has pulled the entry point
-   down from $1 200 to $250. That is what was asked for. `SCALE` is the lever if
-   it ever needs lifting: raise that one number and the whole table moves,
-   calculator, price page, service cards and llms.txt together.
+   RE-VERIFIED 2026-08-12, against the source rather than against the screen.
+   Their published list at /ceny/ and the price table inside their calculator
+   bundle both still carry the figures above, so nothing here has drifted. Two
+   rows of theirs were not in the table when it was first read:
+
+     Telegram Mini App        100 000 ₽    twice their bot, and we had one row
+                                           covering both at the bot's price
+     Две платформы с backend  300 000 ₽    above our own ceiling; no row added,
+                                           `mvp` remains the top of this table
+
+   The rate was checked the same day: 82.55 RUB/USD against the 82 the figures
+   above were converted at, a drift of 0.7%. Below the rounding step, so the
+   base numbers stay as they are.
+
+   WE ARE DELIBERATELY DEARER THAN THEM, and `SCALE` is where that lives. The
+   owner asked for 15-20% above their level, so the multiplier is 1.15 rather
+   than 1.20: `priced()` only ever rounds up, which adds about three points on
+   top of whatever the multiplier does. Measured across all sixteen rows, 1.15
+   lands at a mean of +18%, 1.20 lands at +22% and is outside what was asked
+   for. The three rows that still read +23% at 1.15 are the small ones, where a
+   $50 step is a bigger share of the number than the multiplier is.
 
    This is the only file that has to change to reprice anything.
    ====================================================================== */
@@ -60,11 +76,17 @@ import type { LS } from './labData'
 /**
  * Multiplier applied to every figure below, at the moment it is used.
  *
- * The base numbers are deliberately left at the converted rouble level so
- * they stay auditable against the table in the header. Repricing is this one
- * constant: 1.5 puts the landing at $375 and the MVP at $4 600.
+ * The base numbers are deliberately left at the converted rouble level so they
+ * stay auditable against the table in the header: every one of them is a figure
+ * the reference publishes, and none of them is a figure we charge. What we
+ * charge is that level plus this multiplier, and keeping the two apart is what
+ * makes the comparison checkable a year from now.
+ *
+ * 1.15, for the reason argued in the header: the rounding is one-directional,
+ * so the multiplier has to sit at the bottom of the 15-20% band for the printed
+ * prices to land inside it.
  */
-export const SCALE = 1
+export const SCALE = 1.15
 
 /**
  * False now that the numbers are a decision rather than a placeholder. While it
@@ -79,13 +101,32 @@ export const CURRENCY = { symbol: '$', position: 'before' as const }
 const STEP = 50
 
 /**
- * TWO ROUNDING STEPS, because one of them was wrong for monthly figures.
+ * THREE ROUNDING STEPS, because a $50 step is only right for one of the three
+ * kinds of figure on this site, and each of the other two was measurably wrong
+ * under it.
  *
  * A $50 step is right for a project total: nobody quotes $1 463. Applied to
  * support it turned their cheapest tier, 4 900 ₽ = $60, into $100 — a 67% rise
  * invented by a rounding rule. Monthly money rounds to $10.
+ *
+ * The third came out of the repricing. An individual line of an estimate is
+ * small money, and on small money a $50 step swamps the multiplier: at SCALE
+ * 1.15 the payments add-on went from $183 to $250, a 37% rise where 15-20% was
+ * asked for, and the admin panel and the AI line both landed on +31%. On a $10
+ * step the same three come out at +20%, +18% and +18%. The step has to be
+ * smaller than the decision it is rounding.
+ *
+ * STEP_LINE and STEP_MONTHLY are the same number today and are still two
+ * constants, because they answer different questions: one is "how precise is a
+ * component of a quote", the other is "how precise is a subscription".
  */
 const STEP_MONTHLY = 10
+/** Exported because the calculator's count-up has to round mid-flight values on
+ *  the same grid the total sits on. It rounded to 50 while every total was a
+ *  multiple of 50, and the readout stayed exact by accident; the moment totals
+ *  moved onto this finer grid, a $1,640 estimate would have settled reading
+ *  $1,650 over a breakdown that summed to $1,640. */
+export const STEP_LINE = 10
 
 /** SCALE applied and rounded up to STEP. Every one-off figure the reader sees
  *  goes through here, so the scale can never be applied to some of them and not
@@ -97,6 +138,21 @@ export function priced(n: number): number {
 /** The same, for anything charged per month. */
 export function monthly(n: number): number {
   return Math.ceil((n * SCALE) / STEP_MONTHLY) * STEP_MONTHLY
+}
+
+/**
+ * The same, for one line of an estimate: an add-on, the design line, the server,
+ * the complexity bump.
+ *
+ * EVERY PUBLISHED LINE GOES THROUGH HERE AND SO DOES THE TOTAL, which is what
+ * makes the breakdown add up. It did not before: each line was rounded up to $50
+ * on its own and the total was rounded up to $50 separately, so a bot with three
+ * features printed «from $1,350» over lines that summed to $1,450 against a
+ * published floor of $650. The result screen is the one place on this site that
+ * asks to be checked with a pencil, so it has to survive being checked.
+ */
+export function line(n: number): number {
+  return Math.ceil((n * SCALE) / STEP_LINE) * STEP_LINE
 }
 
 /** What the client already has drawn, which is a real cost difference and is
@@ -129,8 +185,12 @@ export interface WorkType {
 }
 
 /**
- * Step 1. Their ten product categories, in their order, then the five of ours
+ * Step 1. Their eleven product categories, in their order, then the five of ours
  * they have no line for.
+ *
+ * Eleven and not ten because their calculator offers ten and their published
+ * list at /ceny/ carries fourteen; the Mini App is on the list and not in the
+ * calculator, and it is a thing this studio actually sells.
  *
  * Their «ИИ-ассистент» is not repeated: it is the same work as our `agent`, at
  * within $40 of the same price, so the two are one row carrying our label and
@@ -171,9 +231,24 @@ export const WORK_TYPES: WorkType[] = [
     from: 1829, support: 365, weeks: [3, 5],
     design: { ready: 0, prototype: 0, needed: 0 }, serverIncluded: true },
 
-  { key: 'telegram', label: { en: 'Telegram bot or Mini App',      ru: 'Telegram-бот или Mini App' },
+  { key: 'telegram', label: { en: 'Telegram bot',                   ru: 'Telegram-бот' },
     from: 610,  support: 243, weeks: [1, 3],
     design: { ready: 0, prototype: 61, needed: 122 }, serverIncluded: true },
+
+  // SPLIT OUT OF THE ROW ABOVE, because merging them was underpricing the half
+  // of it we sell most. This row used to read «Telegram bot or Mini App» and
+  // charge 50 000 ₽, the bot's price, for both. Their list prices the Mini App
+  // at 100 000 ₽, twice the bot, and it is the honest figure: a Mini App is an
+  // interface with states and a store listing, a bot is a conversation. One row
+  // meant quoting a Mini App at 39% BELOW the reference on a table that is
+  // supposed to sit 15-20% above it.
+  //
+  // The design line is theirs for a corporate site, 10 000 / 20 000 ₽, not
+  // theirs for a bot: what has to be drawn here is screens, and the bot's
+  // 5 000 / 10 000 ₽ is priced for a message flow.
+  { key: 'miniapp',  label: { en: 'Telegram Mini App',              ru: 'Telegram Mini App' },
+    from: 1220, support: 243, weeks: [3, 6],
+    design: { ready: 0, prototype: 122, needed: 244 }, serverIncluded: true },
 
   { key: 'crm',      label: { en: 'CRM or client portal',          ru: 'CRM или личный кабинет' },
     from: 2439, support: 487, weeks: [4, 7],
@@ -429,33 +504,42 @@ export function estimate(input: EstimateInput): Estimate | null {
   const description = input.description ?? ''
   const factors: EstimateFactor[] = []
 
-  let total = type.from
+  /* THE TOTAL IS BUILT OUT OF THE FIGURES THAT GET PRINTED, not out of the raw
+     ones with a single rounding at the end. Same arithmetic, one difference
+     that matters: what the result screen itemises now sums to what it announces.
+     See `line()` for the defect this replaces. */
+  let total = priced(type.from)
   let weeks: [number, number] = [type.weeks[0], type.weeks[1]]
 
   /* Design. A state is always chosen by the time this matters, and `ready`
      costs nothing everywhere, so an unanswered step behaves as done. */
   const design = input.designKey ? type.design[input.designKey] : 0
   if (design > 0) {
-    total += design
+    const add = line(design)
+    total += add
     weeks = [weeks[0] + 1, weeks[1] + 2]
-    factors.push({ kind: 'design', add: priced(design) })
+    factors.push({ kind: 'design', add })
   }
 
   /* A server, unless this kind of work is already one. */
   const server = Boolean(input.server) && !type.serverIncluded
   if (server) {
-    total += SERVER_ADD
+    const add = line(SERVER_ADD)
+    total += add
     weeks = [weeks[0] + 1, weeks[1] + 2]
-    factors.push({ kind: 'server', add: priced(SERVER_ADD) })
+    factors.push({ kind: 'server', add })
   }
 
+  /* Each add-on is rounded the way /pricing prints it and only then summed, so
+     a reader adding the published figures by hand lands on this same number. */
   let extras = 0
   for (const key of addonKeys) {
-    extras += ADDONS.find((a) => a.key === key)?.add ?? 0
+    const addon = ADDONS.find((a) => a.key === key)
+    if (addon) extras += line(addon.add)
   }
   total += extras
   if (addonKeys.length) {
-    factors.push({ kind: 'features', add: priced(extras), count: addonKeys.length })
+    factors.push({ kind: 'features', add: extras, count: addonKeys.length })
   }
   /* One extra week per three features, which is ours and predates this rewrite;
      theirs stretches the window on the complexity bump alone. */
@@ -464,20 +548,22 @@ export function estimate(input: EstimateInput): Estimate | null {
 
   const hits = complexityHits(description)
   if (hits >= 2 || addonKeys.length >= 5) {
-    total += COMPLEXITY_ADD.high
+    const add = line(COMPLEXITY_ADD.high)
+    total += add
     weeks = [weeks[0] + 1, weeks[1] + 2]
-    factors.push({ kind: 'complexity', add: priced(COMPLEXITY_ADD.high), level: 'high' })
+    factors.push({ kind: 'complexity', add, level: 'high' })
   } else if (hits === 1 || addonKeys.length >= 3) {
-    total += COMPLEXITY_ADD.some
+    const add = line(COMPLEXITY_ADD.some)
+    total += add
     weeks = [weeks[0] + 1, weeks[1] + 1]
-    factors.push({ kind: 'complexity', add: priced(COMPLEXITY_ADD.some), level: 'some' })
+    factors.push({ kind: 'complexity', add, level: 'some' })
   }
 
   const hasServer = server || type.serverIncluded
   const support = hasServer ? Math.max(type.support, SUPPORT_FLOOR_WITH_SERVER) : type.support
 
   return {
-    total: priced(total),
+    total,
     weeks,
     support: monthly(support),
     factors,

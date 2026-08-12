@@ -15,7 +15,7 @@ import {
   SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
   TELEGRAM, TELEGRAM_HANDLE, BRAND,
 } from '@/site/labData'
-import { WORK_TYPES, DESIGN_STATES, SUPPORT_TIERS, ADDONS, money, priced, monthly } from '@/site/labPricing'
+import { WORK_TYPES, DESIGN_STATES, SUPPORT_TIERS, ADDONS, money, priced, monthly, line } from '@/site/labPricing'
 import { PRICING } from '@/site/pricingCopy'
 import { SERVICE_PAGES } from '@/site/servicePages'
 import { localizedHref, servicePath } from '@/site/routing'
@@ -276,7 +276,7 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
                       type rather than typed. On `ready` that maximum is zero on
                       all fifteen, so the plate says $0 and means it. */}
                   <span className="absolute inset-0 flex items-center justify-center font-display text-[18px] leading-none text-white">
-                    +{money(priced(Math.max(...WORK_TYPES.map((w) => w.design[r.key]))))}
+                    +{money(line(Math.max(...WORK_TYPES.map((w) => w.design[r.key]))))}
                   </span>
                   <span
                     aria-hidden
@@ -314,7 +314,7 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
               >
                 <span className="text-[16px] leading-6 text-ink-500">{L(a.label)}</span>
                 <span className="shrink-0 font-display text-[18px] leading-[27px] text-ink-800">
-                  +{money(priced(a.add))}
+                  +{money(line(a.add))}
                 </span>
               </li>
             ))}
