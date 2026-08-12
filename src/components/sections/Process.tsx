@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/Button";
-import { SectionBadge } from "@/components/ui/SectionBadge";
 import { getHome, type HomeContent } from "@/data/content";
 import type { LabLang } from "@/site/labData";
 
@@ -58,7 +57,6 @@ export function Process({ lang }: { lang: LabLang }) {
       className="section-shell items-start gap-10 desktop:gap-[60px]"
     >
       <div className="flex w-full flex-col items-center gap-4">
-        <SectionBadge {...process.badge} />
         <div className="flex w-full max-w-[780px] flex-col items-center gap-[14px] text-center">
           <h2 className="text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
             {process.title}

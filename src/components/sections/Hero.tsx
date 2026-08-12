@@ -1,16 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 
 import { HorizonGrid } from "@/components/backgrounds/HorizonGrid";
-import { Button } from "@/components/ui/Button";
+import { HeroAside } from "@/components/sections/HeroAside";
 import { RotatingWord } from "@/components/ui/RotatingWord";
-import { getSite } from "@/config/site";
 import { getHome } from "@/data/content";
 import { heroVariants, transitions } from "@/lib/motion";
-import { UI, tx, type LabLang } from "@/site/labData";
-import { pricingPath } from "@/site/routing";
+import { type LabLang } from "@/site/labData";
 
 /**
  * The hero, on our content.
@@ -61,8 +58,10 @@ export function Hero({ lang }: { lang: LabLang }) {
      `id="estimate"`. This button, `content.ts` (about and process) and
      `ANCHORS.estimate` all say `#estimate`, so the three light up together the
      moment that section lands under that id. */
-  const primaryCta = getSite(lang).heroCta;
-  const secondaryCta = { label: tx(UI.priceList, lang), href: pricingPath(lang) };
+  /* The two CTA definitions that used to sit here went with the buttons they
+     fed. They were `getSite(lang).heroCta` and `UI.priceList` on
+     `pricingPath(lang)`; both are still assembled elsewhere, so bringing the
+     row back is markup rather than data. */
 
   return (
     <section
@@ -86,7 +85,33 @@ export function Hero({ lang }: { lang: LabLang }) {
        * header; the slightly larger top value pushes the optical centre down a
        * touch, which is what compensates for that header.
        */
-      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center gap-[50px] overflow-hidden px-4 pt-[110px] pb-[40px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
+      /* THE FIRST SCREEN HAS ITS OWN GROUND, AND IT DISSOLVES INTO THE PAGE.
+         It used to sit on the page colour like everything else, so the fold and
+         the run of white cards below it were one undifferentiated field.
+
+         A FLAT FILL WAS THE FIRST ATTEMPT AND IT WAS WRONG. Ending a solid tint
+         at the section's edge draws a hard line straight across the viewport at
+         exactly the height the eye is travelling through. The gradient holds the
+         tint solid down to 58%, which is where `HorizonGrid`'s vanishing point
+         sits at `horizon={0.6}`, and spends the remaining 42% arriving at the
+         page colour: the copy stands on flat ground, the grid animates through
+         the dissolve, and by the bottom edge the section already IS the page, so
+         there is nothing to seam.
+
+         IT ENDS ON `page` AND NOT ON WHITE, which matters more than it reads.
+         What follows this section is the page at #f6f7f9, not #ffffff. Fading to
+         white would move the seam rather than remove it: the line would land one
+         pixel lower, between the white the gradient reached and the grey the
+         page actually is.
+
+         THE TINT IS `surface-alt` AND NOT `surface-tint`, and that was measured.
+         The palette's light blue is #f1f7fc against a #f6f7f9 page: nine parts
+         of a percent of luminance, [-5, 0, +3] per channel, which is not a tint,
+         it is the same colour. The greys are the only tokens with enough
+         distance to read, and #edeff3 is the furthest at -7.3%. A blue that
+         strong is not in the palette, so a blue fold means adding a token to
+         DESIGN.md rather than reaching for one. */
+      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center gap-[50px] overflow-hidden bg-linear-to-b from-surface-alt from-[58%] to-page px-4 pt-[110px] pb-[40px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
     >
       {/* The horizon runs the full height of the first screen, with its
           vanishing point just under the headline: 0.6 of the hero height, measured
@@ -94,6 +119,10 @@ export function Hero({ lang }: { lang: LabLang }) {
           `hero-grid.svg` that was 223px tall and pinned 256px down, so the
           perspective started below the copy and ran out well before the fold. */}
       <HorizonGrid color="#c0c5cd" speed={0.5} horizon={0.6} className="z-0" />
+
+      {/* The four artefacts in the margins. After the grid so it paints over it,
+          before the copy column so the copy paints over both. */}
+      <HeroAside lang={lang} />
 
       {/* -------------------------------------------------- decorative layer */}
       {/* GONE, and this is why, because the markup looked harmless.
@@ -162,65 +191,53 @@ export function Hero({ lang }: { lang: LabLang }) {
             </div>
           </div>
 
-          <div className="relative flex flex-col items-center justify-center gap-4">
-            {/* Both buttons ride the template's single button entrance, so the
-                pair arrives as one beat rather than two. */}
-            <motion.div
-              variants={heroVariants.riseIn}
-              initial={initial}
-              animate={animate}
-              transition={transitions.button}
-              className="flex flex-wrap items-center justify-center gap-3"
-            >
-              <Button
-                href={primaryCta.href}
-                className="h-[58px] px-6 py-4 text-[17px] leading-[25.5px]"
-              >
-                {primaryCta.label}
-              </Button>
-              <Button
-                href={secondaryCta.href}
-                variant="muted"
-                className="h-[58px] px-6 py-4 text-[17px] leading-[25.5px]"
-              >
-                {secondaryCta.label}
-              </Button>
-            </motion.div>
-            {/* THREE PLATES instead of the one mono line that used to close the
-                fold. The line said the floor and the window; these say what it
-                costs to start, to build and to keep, which is the whole shape of
-                the offer and the three things a stranger wants before they scroll.
+          {/* THE TWO BUTTONS ARE GONE and the plates stayed. They used to share
+              a wrapper, so the wrapper went with them and this is now the fold's
+              last element in its own right.
 
-                THREE COLUMNS AT EVERY WIDTH, including 360px, and that is the
-                load-bearing decision. Stacked they add about 240px and push the
-                next section back above the fold, which is the one thing this
-                hero was explicitly built not to do. Side by side they cost 90px.
-                The type steps down rather than the layout breaking up: 13px
-                figures and 11px captions on a phone, which is small but is a
-                figure and a label, not prose.
+              WHAT THAT COST, on the record rather than rediscovered: the fold
+              has no action left. The header's CTA is the only one on the first
+              screen now, and it leaves on a scroll down. `site.heroCta` and
+              `UI.priceList` are still assembled in `config/site.ts`, so the row
+              comes back as markup rather than as data.
 
-                No border and no shadow. Four objects with outlines stacked under
-                two buttons reads as a toolbar; a hairline between them is enough
-                to say they are three of a kind. */}
-            <motion.div
-              variants={heroVariants.riseIn}
-              initial={initial}
-              animate={animate}
-              transition={transitions.note}
-              className="mt-1 grid w-full max-w-[680px] grid-cols-3 divide-x divide-line-soft"
-            >
-              {hero.marks.map((m) => (
-                <div key={m.caption} className="flex flex-col items-center gap-[2px] px-2 text-center tablet:px-4">
-                  <span className="font-display text-[13px] leading-5 font-semibold whitespace-nowrap text-ink-800 tablet:text-[18px] tablet:leading-7">
-                    {m.value}
-                  </span>
-                  <span className="text-[11px] leading-[15px] text-ink-250 tablet:text-[14px] tablet:leading-5">
-                    {m.caption}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-          </div>
+              THREE PLATES instead of the one mono line that used to close the
+              fold. The line said the floor and the window; these say what it
+              costs to start, to build and to keep, which is the whole shape of
+              the offer and the three things a stranger wants before they scroll.
+
+              THREE COLUMNS AT EVERY WIDTH, including 360px, and that is the
+              load-bearing decision. Stacked they add about 240px and push the
+              next section back above the fold, which is the one thing this hero
+              was explicitly built not to do. Side by side they cost 90px. The
+              type steps down rather than the layout breaking up: 13px figures
+              and 11px captions on a phone, which is small but is a figure and a
+              label, not prose.
+
+              No border, no shadow and no rules between them either. The
+              hairlines went the same way the ones in the motto panel did: three
+              figures with their own captions are already three groups, and a
+              line drawn between them repeats what the spacing has said. The gap
+              carries it instead, and stays small on a phone where the three
+              columns have about 90px each to live in. */}
+          <motion.div
+            variants={heroVariants.riseIn}
+            initial={initial}
+            animate={animate}
+            transition={transitions.note}
+            className="relative grid w-full max-w-[680px] grid-cols-3 gap-x-3 tablet:gap-x-8"
+          >
+            {hero.marks.map((m) => (
+              <div key={m.caption} className="flex flex-col items-center gap-[2px] px-2 text-center tablet:px-4">
+                <span className="font-display text-[13px] leading-5 font-semibold whitespace-nowrap text-ink-800 tablet:text-[18px] tablet:leading-7">
+                  {m.value}
+                </span>
+                <span className="text-[11px] leading-[15px] text-ink-250 tablet:text-[14px] tablet:leading-5">
+                  {m.caption}
+                </span>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>

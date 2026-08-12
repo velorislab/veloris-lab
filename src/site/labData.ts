@@ -93,7 +93,23 @@ export const UI: Record<string, LS> = {
    *  underneath rather than in the figure. */
   heroFloorShort: { en: 'from', ru: 'от' },
   heroSpeed: { en: 'first version from', ru: 'первая версия от' },
+  /* The badge over the first-version list on a service page, where naming the
+     contents is exactly the job. It is no longer the card link: see scopeTask. */
   moreOn: { en: 'What is included', ru: 'Что входит' },
+  /* THE CARD LINK, and it replaced «Что входит» there. That label described the
+     page it opened rather than offering the reader anything, which on a card
+     whose whole purpose is to start a conversation is the weakest thing it
+     could say. This one names what happens next. */
+  scopeTask: { en: 'Scope the task', ru: 'Разобрать задачу' },
+  /* Closes the services slab. It replaced a row of nine priced chips, so it has
+     to carry both halves of what they said: the rest of the work, and what it
+     costs. Hence «услуги и цены» rather than just one of them. */
+  allPrices: { en: 'See all services and prices', ru: 'Смотреть все услуги и цены' },
+  /* The cases grid opens and closes. The count is in the label because the
+     reader can see three cards and has no way to guess whether the fade hides
+     two more or nine; `content.ts` fills it from `CASES.length`. */
+  casesAll: { en: 'Show all %n cases', ru: 'Показать все %n кейсов' },
+  casesLess: { en: 'Collapse', ru: 'Свернуть' },
   /* Solution pages. Every heading on one is a spoken phrase rather than a
      category, same rule as the rest of the site. */
   solutionFor: { en: 'Who this suits:', ru: 'Кому подходит:' },
@@ -114,7 +130,11 @@ export const UI: Record<string, LS> = {
     en: 'Each of these is a thing we build, with what goes into the first version, what it costs and how long it runs. Not a portfolio: the proof of work is on the case pages, and these are the offers.',
     ru: 'Каждое из них это то, что мы собираем, с составом первой версии, ценой и сроком. Это не портфолио: доказательства работы лежат в кейсах, а здесь предложения.',
   },
-  readCase: { en: 'How it was built', ru: 'Как это устроено' },
+  /* WAS «Как это устроено», which described the page rather than offering
+     anything, and sat under twelve cards saying it twelve times. The same
+     correction the service cards got when «Что входит» became «Разобрать
+     задачу»: name the action, not the destination. */
+  readCase: { en: 'Read the case', ru: 'Разобрать кейс' },
   priceList: { en: 'Open the full price list', ru: 'Открыть полный прайс' },
   founderLink: { en: 'About the founder', ru: 'Об основателе' },
   productLink: { en: 'Our product', ru: 'Наш продукт' },
@@ -334,7 +354,6 @@ export const EYEBROW: Record<string, LS> = {
   calc: { en: 'Estimate', ru: 'Расчёт' },
   process: { en: 'Process', ru: 'Процесс' },
   stack: { en: 'Tools', ru: 'Инструменты' },
-  why: { en: 'Proof', ru: 'Доказательства' },
   bureau: { en: 'Studio', ru: 'Студия' },
   faq: { en: 'Questions', ru: 'Вопросы' },
 }
@@ -350,10 +369,16 @@ export const EYEBROW: Record<string, LS> = {
  * WAS «Мы это уже делали, и оно до сих пор работает», which looked backwards, at
  * a record. This one looks forwards, at what the buyer gets, and the figures
  * below still carry the record.
+ *
+ * Then it lost its tail, «...продолжает приносить результат после запуска». The
+ * qualifier was doing the panel's own job twice: the three figures underneath
+ * are shipped projects, automations and live cases, which is the after-launch
+ * claim stated in numbers. A heading set at 56px is the one line on the page
+ * that can afford to be short.
  */
 export const MOTTO_TITLE = {
-  en: 'We build what keeps delivering after launch',
-  ru: 'Мы строим то, что продолжает приносить результат после запуска',
+  en: 'We build what delivers',
+  ru: 'Мы строим то, что приносит результат',
 }
 
 /* The old heading, «Что снимаем с вашей команды», echoed the old hero almost
@@ -365,27 +390,33 @@ export const MOTTO_TITLE = {
    size of the studio in the wrong direction. `content.ts` puts
    `WORK_TYPES.length` in front of this tail, so the next row added to the price
    table moves the heading with it and nobody has to remember. */
-export const SERVICES_LABEL_TAIL = {
-  en: 'kinds of work. Yours is one of them',
-  ru: 'видов работ. Ваша задача в одном из них',
+/**
+ * The services section's own heading, and it is separate from the tail above on
+ * purpose. Both sections used to print the same counted line, so the home page
+ * carried one headline twice: once over the six cards and again over the price
+ * plans further down. The counted one stays where the count is the point, which
+ * is the pricing block; this one leads the cards.
+ *
+ * It also absorbs a claim the parsing card used to make on its own («это те
+ * задачи, от которых обычно отказываются»). Said once over six cards it is a
+ * position; repeated inside one of them it was a footnote.
+ */
+export const SERVICES_LABEL = {
+  en: 'We do what others call hard',
+  ru: 'Делаем то, что другие называют сложно',
 }
-/* TWO CORRECTIONS IN ONE SENTENCE, and the second one matters more.
-   It used to describe the interface («на каждой карточке то-то и то-то»), which
-   is a caption for a table of contents rather than a reason to keep reading. And
-   it then claimed every direction had been taken to production, which was true of
-   the original six and is not true of the nine product types added with the
-   calculator rewrite: nothing has shipped from here as an online store or a
-   native iOS app. The claim is now scoped to the six that carry it. */
-export const SERVICES_SUB = {
-  en: 'The six below have been taken all the way to production and have a page each: what people arrive with, what ships, where the price starts and how long the first version runs. The rest are on the price list at the same fixed floors.',
-  ru: 'Шесть ниже мы довели до прода, и у каждого своя страница: с чем к нам приходят, что в итоге уезжает в прод, с чего начинается цена и сколько идёт первая версия. Остальные лежат в прайсе с такими же фиксированными порогами.',
-}
+/* THERE IS NO `SERVICES_SUB` ANY MORE. It stood under the heading and spent
+   three clauses describing the cards directly beneath it: that each has a page,
+   what those pages contain, where the price starts, how long the first version
+   runs. Every one of those is on the card itself, in the figures and the link,
+   so the sentence was a caption on something already visible. Its last clause
+   («остальные лежат в прайсе») is `SERVICES_MORE_LABEL` and the row under it,
+   which is where that belongs. `WhatsIn` drops the paragraph and its gap when
+   `description` is empty, so a standfirst returns as one string in content.ts
+   and no markup. */
 
-/** The heading over the compact row of everything that has no page of its own. */
-export const SERVICES_MORE_LABEL = {
-  en: 'Also priced, on the same table',
-  ru: 'Тоже в прайсе, в той же таблице',
-}
+/* `SERVICES_MORE_LABEL` («Тоже в прайсе, в той же таблице») is gone with the
+   chip row it sat over. `UI.allPrices` is the link that replaced both. */
 
 
 /**
@@ -419,8 +450,8 @@ export const SERVICES: Service[] = [
     key: 'agent',
     t: { en: 'AI agents and automation', ru: 'AI-агенты и автоматизация' },
     d: {
-      en: 'Autonomous flows that close manual steps end to end, instead of prompting a human to do them.',
-      ru: 'Автономные сценарии, которые закрывают ручные шаги целиком, а не подсказывают человеку, что сделать.',
+      en: 'We take the routine off the people doing it now. The agent runs by itself and helps with the rest.',
+      ru: 'Убираем рутину, которую сейчас делают люди. Агент работает сам и помогает в работе.',
     },
     when: {
       en: 'Every morning somebody opens the same tabs and copies the same fields into the same forms.',
@@ -431,8 +462,8 @@ export const SERVICES: Service[] = [
     key: 'integr',
     t: { en: 'Integrations and data pipelines', ru: 'Интеграции и пайплайны данных' },
     d: {
-      en: 'CRM, webhooks, messengers, APIs and databases wired into one working loop.',
-      ru: 'CRM, вебхуки, мессенджеры, API и базы данных, связанные в один рабочий контур.',
+      en: 'We wire the CRM, the messengers, the spreadsheets and the services into one working loop, with no glue and no copying by hand.',
+      ru: 'Связываем CRM, мессенджеры, таблицы и сервисы в один рабочий контур, без костылей и ручных переносов.',
     },
     when: {
       en: 'The same order sits in the inbox, in a spreadsheet and in the CRM, and a person reconciles all three.',
@@ -443,8 +474,8 @@ export const SERVICES: Service[] = [
     key: 'parsing',
     t: { en: 'Parsing and reverse engineering', ru: 'Парсинг и реверс-инжиниринг' },
     d: {
-      en: 'We pull data from places with no public API. These are the tasks most teams turn down.',
-      ru: 'Достаём данные оттуда, где готового API нет. Это те задачи, от которых обычно отказываются.',
+      en: 'We pull data out of places with no usable API.',
+      ru: 'Достаём данные там, где нет нормального API.',
     },
     when: {
       en: 'The numbers are on the screen, there is no export button, and somebody retypes them by hand.',
@@ -455,8 +486,8 @@ export const SERVICES: Service[] = [
     key: 'dash',
     t: { en: 'Dashboards and analytics', ru: 'Дашборды и аналитика' },
     d: {
-      en: 'Metrics from scattered services on one screen, with filters shaped around how your business thinks.',
-      ru: 'Метрики из разных сервисов на одном экране, с фильтрами под то, как думает ваш бизнес.',
+      en: 'Every metric that matters on one screen. No spreadsheet hell, no assembling it by hand.',
+      ru: 'Все ключевые метрики бизнеса на одном экране. Без Excel-ада и ручного сбора.',
     },
     when: {
       en: 'The question «how are we doing» ends in a spreadsheet somebody assembles for half a day.',
@@ -467,8 +498,8 @@ export const SERVICES: Service[] = [
     key: 'mvp',
     t: { en: 'MVP and product development', ru: 'MVP и продуктовая разработка' },
     d: {
-      en: 'From idea and architecture to live users. We have already taken our own product that whole route.',
-      ru: 'От идеи и архитектуры до живых пользователей. Свой продукт мы уже провели этим путём целиком.',
+      en: 'From the idea to the first paying users. We know how to walk the whole route.',
+      ru: 'От идеи до первых платящих пользователей. Мы знаем, как пройти весь путь.',
     },
     when: {
       en: 'You have explained the idea ten times over, because there is still nothing to show.',
@@ -479,8 +510,8 @@ export const SERVICES: Service[] = [
     key: 'billing',
     t: { en: 'Payments and billing', ru: 'Платежи и биллинг' },
     d: {
-      en: 'Subscriptions, plans and checkout, crypto included. Idempotent webhooks, not the flaky kind.',
-      ru: 'Подписки, тарифы и приём оплаты, включая крипту. Идемпотентные вебхуки, а не «работает через раз».',
+      en: 'Subscriptions, plans, and taking payment by card and in crypto.',
+      ru: 'Подписки, тарифы, приём оплаты картами и криптовалютой.',
     },
     when: {
       en: 'A customer is ready to pay right now, and all you can take is an enquiry.',
@@ -506,6 +537,31 @@ export interface Case {
   task: LS
   sol: LS
   res: LS
+  /**
+   * Up to two measured facts, lifted out of `res` so the card can set them as
+   * figures instead of burying them in a sentence.
+   *
+   * WHY THIS EXISTS. `res` was doing two jobs at once across this array: on some
+   * cases it was a metric, on others an eight-line paragraph, and the card gave
+   * both the same tinted plate. Measured on the rendered page, that plate ran
+   * from four lines to eight and the cards from 420px to 542px, which is most of
+   * what made the grid read as mush. Pulling the numbers out fixes the ragged
+   * height and the presentation at once: a percentage set as a figure is read at
+   * a glance, and the same percentage inside a sentence is not.
+   *
+   * OPTIONAL, AND THAT IS NOT AN OVERSIGHT. Two cases here have no number worth
+   * printing, and DESIGN.md is explicit that a missing proof means dropping the
+   * form rather than inventing the proof. Those two fall back to `res`, clamped
+   * to the same height, so the grid stays even without either card lying.
+   *
+   * `v` IS `LS` AND NOT A BARE STRING, which the first draft got wrong. Plenty
+   * of these figures do read the same in both languages — «68%», «+27%» — and
+   * `LS` takes a single string for exactly that case. But «4 мин» is «4 min»,
+   * «3 недели» is «three weeks», and Russian writes 2,4× where English writes
+   * 2.4×. A neutral field would have forced those into `k` or shipped one of the
+   * two languages a figure written the other one's way.
+   */
+  metrics?: { v: LS; k: LS }[]
   links: CaseLink[]
 }
 
@@ -555,7 +611,11 @@ export const CASES_COUNT_NOUN: Record<'one' | 'few' | 'many', LS> = {
 
 /** The bare noun, for a sentence that brings no adjective of its own. Separate
  *  from the pair above rather than derived by stripping «живых» off it: gluing
- *  and trimming prefixes is how the wrong case ends up shipped. */
+ *  and trimming prefixes is how the wrong case ends up shipped.
+ *
+ *  It was deleted once, when the FAQ answer that read «N кейсов выше» went, and
+ *  came back for the grid's «Показать все N кейсов». Both readers want the same
+ *  three forms, which is the argument for it existing at all. */
 export const CASE_WORD: Record<'one' | 'few' | 'many', string> = {
   one: 'кейс',
   few: 'кейса',
@@ -581,8 +641,11 @@ export const CASES: Case[] = [
   {
     title: 'Swiftin',
     sub: {
-      en: 'AI translator for the browser: pages, subtitles, documents and what you type, in 100+ languages.',
-      ru: 'AI-переводчик для браузера: страницы, субтитры, документы и то, что вы печатаете, на 100+ языках.',
+      /* The «100+ языках» tail went: the metric row directly beneath prints
+         «100+ языков», and a card should not say the same number twice inside
+         sixty pixels. */
+      en: 'An AI translator right inside the browser: pages, subtitles and documents.',
+      ru: 'AI-переводчик прямо в браузере: страницы, субтитры и документы.',
     },
     status: { en: 'In production', ru: 'В проде' },
     live: true,
@@ -599,6 +662,10 @@ export const CASES: Case[] = [
       en: '1000+ users and growing, live in the Chrome Web Store, with a free plan and paid subscriptions.',
       ru: '1000+ пользователей и растёт, живёт в Chrome Web Store, с бесплатным планом и платными подписками.',
     },
+    metrics: [
+      { v: '1000+', k: { en: 'users', ru: 'пользователей' } },
+      { v: '100+', k: { en: 'languages', ru: 'языков' } },
+    ],
     links: [
       { label: 'swiftin.dev', href: SWIFTIN, primary: true },
       { label: 'Chrome Web Store', href: CWS, primary: false },
@@ -609,8 +676,8 @@ export const CASES: Case[] = [
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'Custom dashboards with data collection and analytics for business.',
-      ru: 'Кастомные дашборды со сбором и аналитикой данных для бизнеса.',
+      en: 'No more manual exports and spreadsheets: one screen where every metric assembles itself on a schedule.',
+      ru: 'Вместо ручных выгрузок и Excel, один экран, где все метрики собираются сами по расписанию.',
     },
     tags: ['Dashboards', 'SQL', 'Parsing', 'APIs'],
     task: {
@@ -632,8 +699,8 @@ export const CASES: Case[] = [
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'Tender parser, marketplace auto-publishing and data collection on Browser Automation Studio.',
-      ru: 'Парсер тендеров, автопубликация на маркетплейсы и сбор данных на Browser Automation Studio.',
+      en: 'A tender parser and marketplace auto-publishing. Typing things in by hand has all but stopped.',
+      ru: 'Парсер тендеров и автопубликация на маркетплейсы. Ручной ввод почти исчез.',
     },
     tags: ['BAS', 'Tender parser', 'Marketplaces', 'Scraping'],
     task: {
@@ -657,10 +724,13 @@ export const CASES: Case[] = [
     // (test suites, migrations), never invented usage numbers.
     title: 'Cowee',
     sub: {
-      en: 'Telegram bot for group focus sessions: schedule, seats, video rooms and hosts, in two languages.',
-      ru: 'Telegram-бот для групповых фокус-сессий: расписание, места, видеокомнаты и ведущие, на двух языках.',
+      en: 'Telegram bot for group focus sessions: schedule, seats, video rooms, hosts.',
+      ru: 'Telegram-бот для групповых фокус-сессий: расписание, места, видеокомнаты, ведущие.',
     },
-    status: { en: 'Live', ru: 'Работает' },
+    /* «В проде», the same as Swiftin, because both are ours. The set used three
+       phrasings for two states; two states get two strings, and the thing they
+       distinguish is whose product it is. */
+    status: { en: 'In production', ru: 'В проде' },
     live: true,
     tags: ['Python', 'aiogram', 'SQLAlchemy', 'Alembic', 'PostgreSQL', 'Docker', 'CI/CD', 'Webhooks', 'Video API', 'Mini App', 'i18n'],
     task: {
@@ -672,9 +742,21 @@ export const CASES: Case[] = [
       ru: 'Бот ведёт весь цикл: онбординг на двух языках, запись на слот в часовом поясе пользователя, выдача мест без двойных броней, напоминания перед сессией, ссылка на видеокомнату только тем, кто действительно записан, сценарий для ведущего, обратная связь после сессии, жалобы с вечным баном, который срабатывает в момент выдачи доступа, и админ-панель со слотами и посещаемостью.',
     },
     res: {
-      en: 'Live in Telegram and running sessions. Underneath: 76 test suites and 26 database migrations, so releases ship without dropping people mid-session, plus scheduled jobs for retention and data erasure.',
-      ru: 'Живёт в Telegram и проводит сессии. Под капотом 76 наборов тестов и 26 миграций базы, чтобы релизы выходили, не роняя людей посреди сессии, плюс фоновые задачи на хранение и удаление данных.',
+      /* Kept inside the card's three-line slot. The release-safety half of this
+         sentence moved out rather than being clipped: the case page makes the
+         same point under «Что сопротивлялось», with the test and migration
+         counts behind it. */
+      en: 'Live in Telegram and running sessions: booking a seat and joining the room never leaves the chat.',
+      ru: 'Живёт в Telegram и проводит сессии: записаться и попасть в комнату можно не выходя из чата.',
     },
+    /* NO METRICS ON THIS CARD, and the two that were here are the reason. «76
+       наборов тестов» and «26 миграций базы» are facts about our craft, not
+       about anything the client got: on a card whose job is to say what came of
+       the work they read as an internal report. They are true and they stay on
+       the case page, under «Что сопротивлялось», where the subject is exactly
+       how the thing was built. With the slot empty the card falls back to its
+       result sentence, which is the honest answer while no session or user
+       count exists to put here. */
     links: [
       { label: 't.me/cowee_focus_bot', href: 'https://t.me/cowee_focus_bot', primary: true },
     ],
@@ -699,8 +781,8 @@ export const CASES: Case[] = [
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'A bot that takes and qualifies leads for a construction company: the lead lands in the CRM, the manager gets a notification and the client gets a status.',
-      ru: 'Бот принимает и квалифицирует заявки строительной компании: заявка сразу падает в CRM, менеджер получает уведомление, а клиент — статус.',
+      en: 'Takes and qualifies the leads, and opens the deal in the CRM straight away.',
+      ru: 'Принимает и квалифицирует заявки, сразу создаёт сделку в CRM.',
     },
     tags: ['Telegram', 'CRM', 'aiogram', 'PostgreSQL', 'amoCRM', 'Bitrix24', 'Redis', 'Webhooks'],
     task: {
@@ -715,6 +797,15 @@ export const CASES: Case[] = [
       en: '68% of leads clear the first stage without a manager, average time to first response 4 minutes. Built in 9 days.',
       ru: '68% заявок проходят первый этап без участия менеджера, среднее время реакции — 4 минуты. Собрано за 9 дней.',
     },
+    /* ROUNDED DOWN AND MARKED WITH A PLUS, here and on the onboarding case.
+       68, 83 and 27 are the client's own reported figures and they are what the
+       result sentence still says; on a card they read as too neat to be real,
+       and precision nobody can check costs more trust than it buys. A floor is
+       both weaker and safer: «65%+» cannot be wrong if 68% was right. */
+    metrics: [
+      { v: '65%+', k: { en: 'leads need no manager', ru: 'заявок без менеджера' } },
+      { v: { en: '4 min', ru: '4 мин' }, k: { en: 'to first reply', ru: 'до первого ответа' } },
+    ],
     links: [],
   },
   {
@@ -722,8 +813,8 @@ export const CASES: Case[] = [
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'After payment the system walks the client through onboarding itself, hands out access, collects feedback and warms them up for the next product.',
-      ru: 'После оплаты система сама проводит клиента по онбордингу, выдаёт доступы, собирает обратную связь и прогревает к следующему продукту.',
+      en: 'After payment it walks the client through onboarding, hands out access, collects feedback.',
+      ru: 'После оплаты сама ведёт клиента по онбордингу, выдаёт доступы и собирает отклик.',
     },
     tags: ['Onboarding', 'Telegram', 'aiogram', 'n8n', 'PostgreSQL', 'CRM', 'Payments'],
     task: {
@@ -738,6 +829,12 @@ export const CASES: Case[] = [
       en: '83% of clients finish onboarding, repeat sales up 27%. Built in 14 days.',
       ru: '83% клиентов проходят онбординг полностью, повторные продажи выросли на 27%. Собрано за 14 дней.',
     },
+    /* Floors rather than the exact reported figures; see the note on the case
+       above for why. */
+    metrics: [
+      { v: '80%+', k: { en: 'finish onboarding', ru: 'проходят онбординг' } },
+      { v: '+25%', k: { en: 'repeat sales', ru: 'повторных продаж' } },
+    ],
     links: [],
   },
   {
@@ -745,8 +842,8 @@ export const CASES: Case[] = [
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'A custom tool instead of spreadsheets and chat threads: deals, tasks, conversation history and the next step, in one place.',
-      ru: 'Кастомный инструмент вместо таблиц и хаоса в мессенджерах: сделки, задачи, история общения и следующий шаг в одном месте.',
+      en: 'Instead of spreadsheets and chat threads, the deals, the tasks and the next step in one place.',
+      ru: 'Вместо таблиц и переписок, сделки, задачи и следующий шаг в одном месте.',
     },
     tags: ['CRM', 'Internal tool', 'Next.js', 'PostgreSQL', 'Telegram', 'Telephony'],
     task: {
@@ -761,6 +858,10 @@ export const CASES: Case[] = [
       en: 'Managers close 19% more deals on the same lead flow, and the four spreadsheets and the chat thread are gone. Built in three weeks.',
       ru: 'Менеджеры закрывают на 19% больше сделок при том же числе лидов, четыре таблицы и переписка в чатах ушли. Собрано за 3 недели.',
     },
+    metrics: [
+      { v: '+19%', k: { en: 'deals closed', ru: 'закрытых сделок' } },
+      { v: { en: '3 weeks', ru: '3 недели' }, k: { en: 'to launch', ru: 'до запуска' } },
+    ],
     links: [],
   },
   {
@@ -768,8 +869,8 @@ export const CASES: Case[] = [
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'Leads from the site, from ads and from bots qualify and score themselves, then route to managers by rule.',
-      ru: 'Заявки с сайта, из рекламы и от ботов сами квалифицируются, скорятся и распределяются между менеджерами по правилам.',
+      en: 'Leads from the site, from ads and from bots score themselves and route to managers by rule.',
+      ru: 'Заявки с сайта, из рекламы и от ботов сами скорятся и расходятся по менеджерам.',
     },
     tags: ['Lead routing', 'FastAPI', 'PostgreSQL', 'CRM', 'Telegram', 'Webhooks'],
     task: {
@@ -784,32 +885,45 @@ export const CASES: Case[] = [
       en: 'Time to first response down from 40+ minutes to 90 seconds, cold leads down 2.4×. Built in 11 days.',
       ru: 'Скорость реакции на лид сократилась с 40+ минут до 90 секунд, доля остывших заявок упала в 2,4 раза. Собрано за 11 дней.',
     },
+    metrics: [
+      { v: { en: '90 sec', ru: '90 сек' }, k: { en: 'to first reply', ru: 'реакция на лид' } },
+      { v: { en: '2.4×', ru: '2,4×' }, k: { en: 'fewer cold leads', ru: 'меньше остывших заявок' } },
+    ],
     links: [],
   },
   {
+    /* Trimmed from «RAG-система + AI-консультант для сети магазинов настольных
+       игр», which ran 62 characters and took four lines in a card whose next
+       title took one. The shop and its trade are in `sub` a line below, where
+       they cost nothing; a title is the one line on this card that has to be
+       the same shape as its neighbours. */
     title: {
-      en: 'RAG knowledge base and AI assistant for a board-game retail chain',
-      ru: 'RAG-система + AI-консультант для сети магазинов настольных игр',
+      en: 'RAG assistant for a retail chain',
+      ru: 'RAG-консультант для сети магазинов',
     },
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'A company knowledge base with an AI assistant that knows the catalogue, the suppliers, the stock, the promotions, the order history and the internal rules.',
-      ru: 'Корпоративная база знаний и AI-консультант, который знает ассортимент, поставщиков, остатки, акции, историю заказов и внутренние регламенты.',
+      en: 'A knowledge base and an assistant that knows the catalogue, stock, suppliers and the rules.',
+      ru: 'База знаний и AI-консультант, который знает ассортимент, остатки, поставщиков и регламенты.',
     },
-    tags: ['AI', 'RAG', 'LLM', 'Hybrid search', 'Internal tool', '1C', 'MoySklad', 'Telegram'],
+    tags: ['AI', 'RAG', 'LLM', 'Hybrid search', 'aiogram', '1C', 'MoySklad', 'Telegram', 'Query logging'],
     task: {
-      en: 'The answer to any working question sat in a chat thread or a spreadsheet, and whoever needed it went looking for it themselves.',
-      ru: 'Ответ на любой рабочий вопрос лежал в чатах и таблицах, и сотрудник искал его сам.',
+      en: 'Several shops and an online store, and the working knowledge split four ways: the stock system, Telegram, spreadsheets, and a few people heads. Anyone needing a price, a supplier term or a delivery date went asking.',
+      ru: 'Несколько точек и онлайн, а рабочее знание разложено по четырём местам: складской учёт, Telegram, таблицы и головы нескольких человек. За ценой, условием поставщика или датой поставки шли спрашивать.',
     },
     sol: {
-      en: 'RAG over a vector store with hybrid search, an admin panel, and 1C and MoySklad wired in. It does not just answer: it cites the document and the date behind the answer, when a price was changed, when a delivery arrived, what terms a supplier is on.',
-      ru: 'RAG на векторной базе с гибридным поиском, админ-панель и интеграции с 1С и МойСклад. Система не просто отвечает, а ссылается на конкретный документ и дату: когда обновили цену, когда была поставка, какие условия у поставщика.',
+      en: 'All the sources collected and normalised, then RAG over a vector store with hybrid search, so the exact fields (stock, prices, article numbers) are matched exactly and the rest semantically. Telegram is the interface, because nobody was going to log into a seventh system. Access is by role, there is an admin panel for keeping the base current, and every query is logged. It does not just answer: it cites the document and the date behind the answer.',
+      ru: 'Собрали и нормализовали все источники, затем RAG на векторной базе с гибридным поиском: точные поля (остатки, цены, артикулы) ищутся точно, остальное по смыслу. Интерфейс в Telegram, потому что в седьмую систему никто заходить не станет. Права по ролям, админка для поддержания базы и журнал запросов. Система не просто отвечает, а ссылается на документ и дату.',
     },
     res: {
       en: 'Finding information got 8 to 10 times faster, and staff stopped chasing it through chats and spreadsheets. Built in three to four weeks.',
       ru: 'Время на поиск информации сократилось в 8–10 раз, сотрудники перестали бегать по чатам и таблицам. Собрано за 3–4 недели.',
     },
+    metrics: [
+      { v: '8–10×', k: { en: 'faster to find an answer', ru: 'быстрее поиск ответа' } },
+      { v: { en: '3–4 weeks', ru: '3–4 недели' }, k: { en: 'to launch', ru: 'до запуска' } },
+    ],
     links: [],
   },
   {
@@ -817,34 +931,40 @@ export const CASES: Case[] = [
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'The system takes part in buying cars at US auctions: it pulls the lot data, prepares and fills the declarations, works out the duties, assembles the document pack and tracks the deal.',
-      ru: 'Система участвует в выкупе авто на американских аукционах: собирает данные лота, готовит и заполняет декларации, считает пошлины, формирует пакет документов и ведёт статус сделки.',
+      en: 'Pulls the lot data from US auctions, fills the declarations and works out the duties.',
+      ru: 'Собирает данные лота с американских аукционов, заполняет декларации и считает пошлины.',
     },
-    tags: ['AI agent', 'Documents', 'Python', 'LLM', 'Structured output', 'PDF', 'Telegram'],
+    tags: ['AI agent', 'Documents', 'Python', 'LLM', 'Structured output', 'PDF', 'PostgreSQL', 'Telegram'],
     task: {
-      en: 'A person assembled the document pack for every car, which took three to four hours, and a mistake in a declaration cost more than the time did.',
-      ru: 'Пакет документов на каждую машину собирал человек, это занимало 3–4 часа, а ошибка в декларации стоила дороже потраченного времени.',
+      en: 'Buying at US auctions and running the customs and logistics after it. A person assembled the document pack for every car, which took three to four hours, a mistake in a declaration cost a fine or a delay, and the whole process ran on which experienced person was handling it.',
+      ru: 'Выкуп на американских аукционах, дальше растаможка и логистика. Пакет документов на каждую машину собирал человек, это занимало 3–4 часа, ошибка в декларации стоила штрафа или задержки, а весь процесс держался на том, кто конкретно им занят.',
     },
     sol: {
-      en: 'The agent does the broker routine rather than assisting with it: it pulls lot data from the auctions and the brokers, fills declarations through structured output, works out the duties, generates the PDFs and pushes the deal status to Telegram.',
-      ru: 'Агент выполняет саму рутину брокера, а не помогает с ней: забирает данные лота у аукционов и брокеров, заполняет декларации через structured output, считает пошлины, генерирует PDF и шлёт статус сделки в Telegram.',
+      en: 'The agent does the broker routine rather than assisting with it: it pulls the lot data, prices the whole thing out so the total is broken down into car, shipping, duty and fee, fills declarations through structured output against a strict schema, generates the pack and carries the deal through its stages. A manager confirms before anything is filed, and every change is stored with its date and its author. Telegram and a web panel are the interface.',
+      ru: 'Агент выполняет саму рутину брокера, а не помогает с ней: забирает данные лота, считает стоимость «под ключ» так, что видно, из чего она сложилась (авто, доставка, пошлины, услуги), заполняет декларации через structured output по жёсткой схеме, формирует пакет и ведёт сделку по этапам. Перед подачей подтверждает менеджер, а каждое изменение хранится с датой и автором. Интерфейс в Telegram и веб-админке.',
     },
     res: {
       en: 'The document pack went from three or four hours to twelve or fifteen minutes per car, and errors in declarations all but disappeared. Built in four to five weeks.',
       ru: 'Подготовка пакета документов сократилась с 3–4 часов до 12–15 минут на машину, ошибки в декларациях практически исчезли. Собрано за 4–5 недель.',
     },
+    metrics: [
+      { v: { en: '15 min', ru: '15 мин' }, k: { en: 'per car, was 4 hours', ru: 'на машину, было 4 часа' } },
+      { v: { en: '4–5 weeks', ru: '4–5 недель' }, k: { en: 'to launch', ru: 'до запуска' } },
+    ],
     links: [],
   },
   {
+    /* Same trim as the case above, and for the same measured reason: 59
+       characters over three lines. Who it was built for is in `sub`. */
     title: {
-      en: 'One knowledge base that answers for the whole company',
-      ru: 'Система «всё знает о компании» для консультанта и агентства',
+      en: 'A knowledge base that answers for the company',
+      ru: 'База знаний, которая знает о компании всё',
     },
     status: { en: 'Running at the client', ru: 'Работает у клиента' },
     live: true,
     sub: {
-      en: 'One company knowledge base and an AI that answers questions about projects, clients, agreements, decisions and what changed when. All of it with dates and sources.',
-      ru: 'Единая база знаний компании и AI, который отвечает на вопросы по проектам, клиентам, договорённостям, решениям и истории изменений. Всё с датами и источниками.',
+      en: 'Answers on projects, clients and agreements. A new hire no longer has to find whoever remembers.',
+      ru: 'Ответы по проектам, клиентам и договорённостям. Новичку больше не нужно искать того, кто помнит.',
     },
     tags: ['RAG', 'Knowledge base', 'Document parsing', 'Access control', 'Audit', 'Telegram'],
     task: {
@@ -859,6 +979,47 @@ export const CASES: Case[] = [
       en: 'New hires get up to speed several times faster, and the knowledge no longer rests on two or three people. Built in three weeks.',
       ru: 'Новые сотрудники выходят на работу в разы быстрее, а знание компании перестало держаться на двух-трёх людях. Собрано за 3 недели.',
     },
+    /* THE FIRST FIGURE IS TRUE BY CONSTRUCTION, not measured, and that is why it
+       is safe to print. The card stood on a launch duration alone, which says
+       nothing about what the client got, and the one outcome they reported («в
+       разы быстрее») is not a number. This is: the system answers only from what
+       it retrieved and always shows the document and the date, which is the
+       client's own first key decision on this project. It cannot drift, because
+       nothing about it is a measurement. */
+    metrics: [
+      { v: '100%', k: { en: 'answers cite a source', ru: 'ответов с источником' } },
+      { v: { en: '3 weeks', ru: '3 недели' }, k: { en: 'to launch', ru: 'до запуска' } },
+    ],
+    links: [],
+  },
+  {
+    title: {
+      en: 'A browser extension for the sales team',
+      ru: 'Браузерное расширение для менеджеров',
+    },
+    status: { en: 'Running at the client', ru: 'Работает у клиента' },
+    live: true,
+    sub: {
+      en: 'Takes the routine out inside the browser: a CRM deal, client data and templates in a click or two.',
+      ru: 'Убирает рутину прямо в браузере: сделка в CRM, данные клиента и шаблоны в один-два клика.',
+    },
+    tags: ['Browser extension', 'CRM', 'Manifest V3', 'TypeScript', 'React', 'DOM'],
+    task: {
+      en: 'Managers worked across the CRM, mail, WhatsApp Web, spreadsheets and supplier admin panels at once, and the day went on copying between tabs, with the copying mistakes that come with it.',
+      ru: 'Менеджеры работали сразу в CRM, почте, WhatsApp Web, таблицах и админках поставщиков, и день уходил на перенос данных между вкладками, вместе с ошибками, которые при этом появляются.',
+    },
+    sol: {
+      en: 'A Chrome extension built for this company scenarios: it opens or updates a deal straight from the page you are reading, fills the client fields, sends a template with the data already in it, and names the next step. Scenarios and templates are edited in a light admin panel without a developer.',
+      ru: 'Расширение под Chrome под сценарии этой компании: заводит или обновляет сделку прямо со страницы, которую вы читаете, подставляет данные клиента, отправляет шаблон с уже вписанными данными и называет следующий шаг. Сценарии и шаблоны правятся в лёгкой админке без разработчика.',
+    },
+    res: {
+      en: 'Managers spend 1.5 to 2 hours a day less on routine, and mistakes made copying data between systems have all but gone. Built in 2.5 to 3.5 weeks.',
+      ru: 'Менеджеры тратят на 1,5–2 часа в день меньше на рутину, а ошибки при переносе данных практически исчезли. Собрано за 2,5–3,5 недели.',
+    },
+    metrics: [
+      { v: { en: '1.5–2 h', ru: '1,5–2 ч' }, k: { en: 'less routine a day', ru: 'меньше рутины в день' } },
+      { v: { en: '1 click', ru: '1 клик' }, k: { en: 'to a deal in the CRM', ru: 'до сделки в CRM' } },
+    ],
     links: [],
   },
 ]
@@ -882,130 +1043,82 @@ export const PROCESS: Step[] = [
   {
     t: { en: 'Scoping', ru: 'Разбор' },
     d: {
-      en: 'We measure what the process costs you today, in hours and in money. If automation will not pay that back, you hear it on the first call.',
-      ru: 'Считаем, во что процесс обходится сейчас, в часах и в деньгах. Если автоматизация это не отобьёт, вы услышите об этом на первом созвоне.',
+      en: 'We measure what the process costs you today, in hours and in money. We find the bottleneck and what the effect would actually be.',
+      ru: 'Считаем, во что процесс обходится сейчас в часах и деньгах. Разбираем узкое место и какой эффект реально можно получить.',
     },
   },
   {
     t: { en: 'Estimate', ru: 'Смета' },
     d: {
-      en: 'We show what the system is made of, what it costs and how long it takes. The estimate is ready before the build starts.',
-      ru: 'Показываем, из чего состоит система, сколько она стоит и сколько займёт. Смета готова до начала сборки.',
+      en: 'A transparent list of the work, the timeline and the price. All of it fixed before the build starts.',
+      ru: 'Прозрачный состав работ, срок и цена. Всё фиксируем до начала разработки.',
     },
   },
   {
     t: { en: 'Build', ru: 'Сборка' },
     d: {
-      en: 'We work in iterations. You see progress along the way, not on the day of the deadline.',
-      ru: 'Идём итерациями. Прогресс видно по ходу, а не в день дедлайна.',
+      en: 'We work in short iterations. You see progress along the way, not on the last day.',
+      ru: 'Идём короткими итерациями. Вы видите прогресс по ходу, а не в последний день.',
     },
   },
   {
     t: { en: 'Launch', ru: 'Запуск' },
     d: {
-      en: 'We deploy on your data and in your accounts, then walk your team through using it.',
-      ru: 'Разворачиваем на ваших данных и аккаунтах, потом показываем команде, как этим пользоваться.',
+      en: 'We deploy in your accounts and on your data. Then we show your team how to use it.',
+      ru: 'Разворачиваем на ваших аккаунтах и данных. Показываем команде, как этим пользоваться.',
     },
   },
   {
     t: { en: 'Support', ru: 'Поддержка' },
     d: {
-      en: 'We stay reachable. A system that breaks a month later is not a result.',
-      ru: 'Остаёмся на связи. Система, которая сломалась через месяц, это не результат.',
+      en: 'We stay reachable. A system that falls apart a month later is not a result.',
+      ru: 'Остаёмся на связи. Система, которая разваливается через месяц, это не результат.',
     },
   },
 ]
 
-export interface Reason {
-  t: LS
-  d: LS
-}
-
-/**
- * The heading used to be «Почему это можно доверить нам», the only line on the
- * page that begged rather than spoke, and two of the five claims under it were
- * about character rather than about work: «Доводим до конца» and «Честно про
- * риски» are word for word what the agency that already burned this reader had
- * on its own site. A claim about what kind of people we are cannot be checked,
- * so it cannot do the job this block exists to do.
- *
- * The count lives in the sub rather than in the heading, so a sixth entry
- * breaks one string instead of two.
- */
-export const WHY_LABEL = { en: 'You can check all of this without us', ru: 'Это можно проверить без нас' }
-export const WHY_SUB = {
-  en: 'Five claims about what is already done, not about what we are like.',
-  ru: 'Пять утверждений о том, что уже сделано, а не о том, какие мы.',
-}
-
-export const WHY: Reason[] = [
-  {
-    t: { en: 'Our own product in production', ru: 'Свой продукт в проде' },
-    d: {
-      en: 'Swiftin: 1000+ users, paid subscriptions, live in the Chrome Web Store. We have walked the whole route, not only the stretch a contractor usually gets.',
-      ru: 'Swiftin: 1000+ пользователей, платные подписки, живёт в Chrome Web Store. Мы прошли весь путь, а не только тот кусок, который обычно достаётся подрядчику.',
-    },
-  },
-  {
-    t: { en: 'One contractor for the whole chain', ru: 'Один подрядчик на всю цепочку' },
-    d: {
-      en: 'Architecture, code, infrastructure, payments, launch. There is no handover between teams, so there is nothing to lose in one.',
-      ru: 'Архитектура, код, инфраструктура, платежи, запуск. Передавать между командами нечего, поэтому и терять нечего.',
-    },
-  },
-  {
-    t: { en: 'We take the work with no API', ru: 'Берём задачи, где нет API' },
-    d: {
-      en: 'Reverse engineering and parsing where the source does not want to be read. An unfamiliar stack is not a reason to pass either.',
-      ru: 'Реверс-инжиниринг и парсинг там, где источник не хочет, чтобы его читали. Незнакомый стек тоже не повод отказаться.',
-    },
-  },
-  {
-    t: { en: 'Four cases out of four still run', ru: 'Четыре кейса из четырёх работают' },
-    d: {
-      en: 'Swiftin in the Chrome Web Store, Cowee in Telegram, the dashboards and the BAS automations at their clients. Every case above carries its own status.',
-      ru: 'Swiftin в Chrome Web Store, Cowee в Telegram, дашборды и автоматизации на BAS у клиентов. У каждого кейса выше стоит свой статус.',
-    },
-  },
-  {
-    /* Deliberately NOT the free-scoping sentence, which by now appears in the
-       hero sub, PROCESS_SUB, PROCESS[0].d, the FAQ, CALC.disclaimer and
-       CONTACT.h. A seventh copy of one promise is not a fifth reason. This
-       claim appears nowhere else and takes one click to verify. */
-    t: { en: 'The calculator’s own arithmetic is public', ru: 'Арифметика калькулятора открыта' },
-    d: {
-      en: 'The pricing page shows every line the calculator adds, not just the totals: the floor per kind of work, what finishing the design costs on each, the price of a server and of each feature. It is exactly what the calculator above runs on, so anyone can check it.',
-      ru: 'На странице цен лежит каждая строка, которую прибавляет калькулятор, а не только итоговые суммы: нижняя граница по типу работы, цена доделки дизайна на каждом, цена сервера и каждой функции. По ним и считает калькулятор выше, так что сверить может любой.',
-    },
-  },
-]
+/* THE PROOF BLOCK IS GONE: Reason, WHY_LABEL, WHY_SUB and the five
+   entries of WHY, which rendered as «Это можно проверить без нас». Each claim
+   survives where it can actually be checked instead of asserted, which is why
+   removing the block cost nothing: Swiftin's own-product claim is its case card
+   and case page, the single-contractor claim is the studio section, the no-API
+   claim is the parsing service page, and the calculator's arithmetic is the
+   pricing page. The fourth claim was «Четыре кейса из четырёх работают», typed
+   against a four-entry array that now holds twelve, which is the third time a
+   hand-counted sentence in this file went stale. CoreFeatures.tsx and the
+   coreFeatures block in content.ts went with it. */
 
 export const BUREAU = {
-  /* WAS «Отвечает один человек, а не отдел», and it went at the founder's call
-     when the whole site moved to a team voice. It was a real selling point for a
-     small buyer, so this is a trade rather than a fix: what replaces it keeps
-     the part that mattered, which was never the headcount but the absence of a
-     relay between the person who understood the task and the person who wrote
-     the code. */
-  label: { en: 'You talk to the people who write the code', ru: 'Вы говорите с теми, кто пишет код' },
-  // The lead describes the bureau, not the man in the photograph, so it reads as
+  /* BACK TO THE SINGULAR, and this reverses the move to a team voice recorded
+     here before. The heading used to be «Отвечает один человек, а не отдел», it
+     became «Вы говорите с теми, кто пишет код» when the site started speaking as
+     a studio, and it now names one person again. What survived all three is the
+     only part that was ever the point: no relay between whoever understood the
+     task and whoever builds it.
+
+     ONE THING TO KEEP IN STEP. The FAQ answer to «Кто именно будет делать?»
+     still says «небольшая команда». Singular here and plural there is a
+     contradiction a reader can catch on one screen, so whichever voice is
+     right, both have to say it. */
+  label: {
+    en: 'You talk directly to the person answerable for the result',
+    ru: 'Вы говорите напрямую с тем, кто отвечает за результат',
+  },
+  // The lead describes the studio, not the man in the photograph, so it reads as
   // the section standfirst rather than as card copy. Moving it out is also what
   // lets the card hold only what a person card should: a name, a role, one
   // paragraph, a row of ways to reach him.
   lead: {
-    en: 'Veloris Lab is a full-cycle engineering studio. There is nobody standing between you and the people who write the code.',
-    ru: 'Veloris Lab, инженерная студия полного цикла. Между вами и людьми, которые пишут код, нет ни одного посредника.',
+    en: 'Veloris Lab is a full-cycle engineering studio. Between you and the person who designs the system and delivers it there are no managers and no go-betweens.',
+    ru: 'Veloris Lab, инженерная студия полного цикла. Между вами и человеком, который проектирует и сдаёт систему, нет менеджеров и посредников.',
   },
   name: { en: 'Denys Kandyba', ru: 'Денис Кандыба' },
   // One string for both locales: the Russian copy uses the English term as-is,
   // and it is a job title rather than a sentence.
-  role: 'forward deployed engineer',
-  // The clause that used to open this ("Behind it is Denys Kandyba, a forward
-  // deployed engineer:") is gone, because the heading and the role line
-  // immediately above now say exactly that. Paste it back to revert.
+  role: 'AI-native engineer / forward deployed',
   body: {
-    en: 'Designs the architecture and writes the code rather than handing tasks down, and is on the call when something breaks. First code in 2014, automation from 2023, AI full time from 2024.',
-    ru: 'Проектирует архитектуру и пишет код сам, а не раздаёт задачи вниз, и выходит на связь, когда что-то ломается. Первый код в 2014-м, автоматизация с 2023-го, с 2024-го AI на полный день.',
+    en: 'Designs the architecture, leads the build and answers for the result. The main instrument is AI, Claude and other models, which is what makes hard things faster without growing a team to do them. Writing code since 2014, and full time on AI and automation since 2024.',
+    ru: 'Проектирует архитектуру, ведёт разработку и отвечает за результат. Основной инструмент это AI, Claude и другие модели: он и позволяет делать сложные вещи быстрее, без раздувания команды. В разработке с 2014 года, с 2024-го полный день в AI и автоматизации.',
   },
   // Describes who is in the frame and where, because the place is a fact the
   // table below repeats. Not "a photo of a man", which tells a screen reader
@@ -1097,16 +1210,34 @@ export const CONTACT = {
   // Names the free deliverable AND the possible negative verdict. Backed by
   // PROCESS step 01, so it promises nothing the process does not already do.
   h: {
-    en: 'We will scope it free and tell you straight',
-    ru: 'Разберём бесплатно и скажем как есть',
+    en: 'Got a task? Let us scope it',
+    ru: 'Есть задача? Давайте разберём',
   },
   /* "Describe the task in two sentences" is the highest-leverage instruction
      available on a site that deliberately has no form: it replaces the blank
      page a reader faces when they open a chat with a stranger. */
   sub: {
-    en: 'Write on Telegram and describe the task in two sentences. There is no form here on purpose. We usually reply the same working day, timezone UTC+4.',
-    ru: 'Напишите в Telegram и опишите задачу в двух предложениях. Формы здесь нет специально. Обычно отвечаем в тот же рабочий день, часовой пояс UTC+4.',
+    en: 'Write on Telegram and say briefly what you need.',
+    ru: 'Напишите в Telegram и коротко опишите, что нужно.',
   },
+  /**
+   * The three chips under the close.
+   *
+   * They used to be assembled out of `HERO.facts[0..2]` as «ключ: значение»,
+   * which read as a table cell lifted into a pill. Written as three phrases they
+   * read as three promises, which is what they are. The facts array keeps those
+   * three rows: its entries are referenced by index elsewhere, so removing them
+   * would silently repoint the motto counters at the wrong labels.
+   *
+   * What the shorter sub above gave up is carried here instead: the reply window
+   * is the third chip. The timezone went with it and survives in the studio
+   * table, which is where a reader looks for where we are.
+   */
+  points: [
+    { en: 'The price is known before the start', ru: 'Цена известна до старта' },
+    { en: 'The scoping is free', ru: 'Разбор бесплатный' },
+    { en: 'A reply within a working day', ru: 'Ответ в рабочий день' },
+  ] as LS[],
   /* WAS a subject and a body for a prefilled mailto, and the prompts are the
      reason it existed: a chat opened on a stranger is the same blank page a
      mail client is, and three questions beat an empty window. The mail channel
@@ -1142,42 +1273,54 @@ export const PIPELINE = {
   ],
 }
 
-/** Three entry points. They mirror the calculator's readiness question. */
-export const ENTRY_LABEL = { en: 'Where to start when there is no spec', ru: 'С чего начать, если ТЗ ещё нет' }
-export const ENTRY_SUB = {
-  en: 'An idea will do, or a process still done by hand, or a system that already runs. That is what we work from.',
-  ru: 'Подойдёт идея, процесс, который пока делают руками, или система, которая уже работает. От этого и пойдём.',
+/**
+ * Labels for the four artefacts that lean into the first screen from its edges.
+ *
+ * They are interface chrome rather than claims: a bot thread, a metric card, a
+ * deal row and a run notification, which is what the work this studio sells
+ * looks like on a screen. The two figures big enough to actually read, «68%» and
+ * «4 мин», are borrowed from the Telegram-and-CRM case metrics rather than made
+ * up, so the numbers on the fold are ones the site already publishes on a card
+ * further down.
+ *
+ * The layer is `aria-hidden`, so none of it is announced. It lives here rather
+ * than in the component for the same reason every other string does: one file,
+ * both languages, nothing typed twice.
+ */
+export const HERO_ASIDE = {
+  bot: {
+    name: { en: 'Lead bot', ru: 'Бот заявок' },
+    status: { en: 'online', ru: 'онлайн' },
+    in1: { en: 'New request from the site', ru: 'Новая заявка с сайта' },
+    out: { en: 'Qualifying, one moment', ru: 'Квалифицирую, секунду' },
+    in2: { en: 'Deal opened in the CRM', ru: 'Сделка заведена в CRM' },
+    input: { en: 'Message', ru: 'Сообщение' },
+  },
+  board: {
+    title: { en: 'Requests this week', ru: 'Заявки за неделю' },
+    value: '68%',
+    caption: { en: 'without a manager', ru: 'без менеджера' },
+  },
+  deal: {
+    title: { en: 'Deal', ru: 'Сделка' },
+    status: { en: 'In progress', ru: 'В работе' },
+    rowA: { en: 'Source', ru: 'Источник' },
+    rowAValue: 'Telegram',
+    rowB: { en: 'First reply', ru: 'Первый ответ' },
+    rowBValue: { en: '4 min', ru: '4 мин' },
+  },
+  run: {
+    title: { en: 'Automation finished', ru: 'Автоматизация выполнена' },
+    meta: { en: '128 records', ru: '128 записей' },
+  },
 }
-/* THREE FUNNELS, NOT ONE, which is the change here.
-   Each of these used to be a title and a paragraph, and the whole section ended
-   on the single CTA in the panel beside it. A reader who recognises themselves
-   in the third card has to scroll past the other two to act. Each now carries
-   the situation it answers, as a numbered label, and its own button. Two point
-   at the calculator and one at the conversation, because a running system is not
-   something a calculator can price and saying otherwise would waste the click. */
-export const ENTRY: { state: LS; t: LS; d: LS; cta: LS; href: string }[] = [
-  {
-    state: { en: 'You have an idea', ru: 'Есть идея' },
-    t: { en: 'We turn the idea into an estimate', ru: 'Соберём смету прямо из идеи' },
-    d: { en: 'So far there is only an idea. One short call, and you have one scenario for the first version, its price and its window.', ru: 'Пока есть только идея. Короткий созвон, и у вас на руках один сценарий первой версии, его цена и срок.' },
-    cta: { en: 'Price the first version', ru: 'Посчитать первую версию' },
-    href: '#estimate',
-  },
-  {
-    state: { en: 'You have a process', ru: 'Есть процесс' },
-    t: { en: 'We work out whether it pays for itself', ru: 'Посчитаем, окупится ли автоматизация' },
-    d: { en: 'The process already runs, but by hand. We turn the hours into money and say plainly when automating is not worth it.', ru: 'Процесс уже идёт, но руками. Переводим часы в деньги и прямо говорим, когда автоматизировать не стоит.' },
-    cta: { en: 'Work out the payback', ru: 'Посчитать окупаемость' },
-    href: '#estimate',
-  },
-  {
-    state: { en: 'You have a product', ru: 'Есть продукт' },
-    t: { en: 'We plan the next release, no rewrite', ru: 'Предложим релиз без переписывания' },
-    d: { en: 'The system already runs. We read the code and the architecture, find where it hits a ceiling, and plan what ships next.', ru: 'Система уже работает. Читаем код и архитектуру, находим, во что она упирается, и планируем следующий релиз.' },
-    cta: { en: 'Have the code looked at', ru: 'Показать код на разбор' },
-    href: '#contact',
-  },
-]
+
+/* THE THREE ENTRY POINTS ARE GONE: ENTRY_LABEL, ENTRY_SUB and the ENTRY
+   array of three doors (an idea, a process done by hand, a system already
+   running), each with its own CTA. They rendered as the section under the stack
+   and every one of them pointed at either the calculator or the close, both of
+   which the reader meets anyway a screen later. EYEBROW.entry survives them,
+   because the pricing page still labels a section with it. */
 
 /* THE MODEL OF WORK, three facts under the stack.
    Under the stack is the right place for them: a reader who has just been shown a
@@ -1208,8 +1351,8 @@ export const STACK_LABEL = { en: 'We do not sell one stack for every job', ru: '
    builds in its favourite framework is choosing for itself, not for the
    product. */
 export const STACK_SUB = {
-  en: 'Full cycle, and that is meant literally: a landing page one week and a product with a server, payments and two mobile platforms the next. We choose by deadline, by load, by what your team can maintain and by what it costs to keep alive in a year. If you already have a codebase, we continue it rather than quoting you a rewrite.',
-  ru: 'Полный цикл, и это буквально: на одной неделе лендинг, на другой продукт с сервером, платежами и двумя мобильными платформами. Выбираем по сроку, по нагрузке, по тому, что сможет поддерживать ваша команда, и по тому, сколько это будет стоить держать живым через год. Если код уже есть, мы его продолжаем, а не продаём вам переписывание с нуля.',
+  en: 'Full cycle: from a landing page to a product with a server, payments and mobile apps. We choose the technology by deadline, by load, by what your team can maintain and by what support will cost a year from now. If you already have a codebase, we continue it rather than quoting you a rewrite.',
+  ru: 'Полный цикл: от лендинга до продукта с сервером, платежами и мобильными приложениями. Выбираем технологии под срок, нагрузку, возможности вашей команды и стоимость поддержки через год. Если код уже есть, продолжаем его, а не предлагаем переписывать с нуля.',
 }
 /* There is no STACK array any more.
  *
@@ -1284,145 +1427,113 @@ export const STACK_GROUPS: StackGroup[] = [
     kicker: { en: 'Web interfaces', ru: 'Веб-интерфейсы' },
     title: { en: 'From a landing page to a working product', ru: 'От лендинга до рабочего продукта' },
     lead: {
-      en: 'A page that has to load fast and a product interface that has to hold state are different jobs, and we pick differently for each.',
-      ru: 'Страница, которая обязана быстро открываться, и интерфейс, который держит состояние, это разные задачи, и выбираем мы под каждую отдельно.',
+      en: 'A page that has to open fast and an interface that has to hold complex state are different jobs. We choose for each separately.',
+      ru: 'Страница, которая обязана быстро открываться, и интерфейс, который держит сложное состояние, это разные задачи. Выбираем под каждую отдельно.',
     },
-    items: [
-      'TypeScript', 'JavaScript', 'React', 'Next.js', 'Vue', 'Nuxt', 'Svelte',
-      'SvelteKit', 'Astro', 'Angular', 'SolidJS', 'Remix', 'Preact',
-      'Tailwind CSS', 'SCSS', 'CSS Modules', 'Web Components', 'htmx',
-      'Vite', 'Webpack', 'Storybook',
-    ],
+    items: ['TypeScript', 'React', 'Next.js', 'Vue', 'Svelte', 'Astro', 'Tailwind', 'Vite'],
   },
   {
     key: 'api',
     kicker: { en: 'Servers and APIs', ru: 'Серверы и API' },
-    title: { en: 'Everything that has to stay up', ru: 'Всё, что должно стоять и не падать' },
+    title: { en: 'So it does not fall over at three in the morning', ru: 'Чтобы не падало в три ночи' },
     lead: {
-      en: 'Validation, auth, limits and structured logs go in with the first endpoint, not in a hardening sprint after the first incident.',
-      ru: 'Валидация, авторизация, лимиты и структурные логи ставятся вместе с первым эндпоинтом, а не отдельным спринтом после первого инцидента.',
+      en: 'Validation, authorisation, rate limits and real logs go in at the start, not after the first incident.',
+      ru: 'Валидация, авторизация, лимиты и нормальные логи ставятся сразу, а не после первого инцидента.',
     },
-    items: [
-      'Node.js', 'TypeScript', 'Python', 'Go', 'Rust', 'Java', 'Kotlin', 'C#',
-      '.NET', 'PHP', 'Express', 'NestJS', 'Fastify', 'Hono', 'FastAPI',
-      'Django', 'Flask', 'Laravel', 'Spring Boot', 'Ktor', 'Actix', 'Gin',
-      'Bun', 'Deno', 'REST', 'GraphQL', 'gRPC', 'WebSocket', 'очереди', 'cron',
-    ],
+    items: ['Node.js', 'TypeScript', 'Python', 'FastAPI', 'Go', 'PostgreSQL', 'Redis', 'Queues'],
+  },
+  {
+    key: 'auto',
+    kicker: { en: 'Automation and integrations', ru: 'Автоматизация и интеграции' },
+    title: { en: 'Everything wired into one working loop', ru: 'Связываем всё в один рабочий контур' },
+    lead: {
+      en: 'The CRM, the spreadsheets, the messengers, the payments and the internal services, with no copying by hand and no glue. The thing that usually takes months of improvising.',
+      ru: 'CRM, таблицы, мессенджеры, платежи и внутренние сервисы, без ручных переносов и костылей. То, что обычно собирают месяцами на коленке.',
+    },
+    /* «Очереди» belongs to the group above and stays there. The file's own rule
+       is that nothing is listed twice across groups to make a group look
+       fuller, and this one is full enough without borrowing. */
+    items: ['n8n', 'Temporal', 'Webhooks', 'CRM API', 'Telegram', 'Make', 'Custom workers'],
   },
   {
     key: 'native',
     kicker: { en: 'Native mobile', ru: 'Нативная мобильная разработка' },
-    title: { en: 'When the platform itself is the point', ru: 'Когда нужна сама платформа' },
+    title: { en: 'When native is genuinely the answer', ru: 'Когда действительно нужен натив' },
     lead: {
-      en: 'Camera, background work, health data, offline and in-app purchases are the reasons to go native, and they are the reasons we do.',
-      ru: 'Камера, фоновые процессы, данные здоровья, офлайн и встроенные покупки это причины идти в натив, и мы идём туда за ними.',
+      en: 'Camera, background work, offline, health, in-app purchases. Those are the reasons to go native, and they are the only reasons we do.',
+      ru: 'Камера, фон, офлайн, здоровье, встроенные покупки. Вот причины идти в натив, и мы идём туда только за ними.',
     },
-    items: [
-      'Swift', 'SwiftUI', 'UIKit', 'Core ML', 'StoreKit', 'HealthKit',
-      'CloudKit', 'PDFKit', 'Vision', 'Kotlin', 'Jetpack Compose',
-      'Coroutines', 'Room', 'WorkManager', 'CameraX', 'Google Play Billing',
-      'App Store Connect', 'Google Play Console',
-    ],
+    items: ['Swift', 'SwiftUI', 'Kotlin', 'Jetpack Compose', 'StoreKit', 'HealthKit', 'CameraX'],
   },
   {
     key: 'cross',
     kicker: { en: 'One codebase, two stores', ru: 'Один код, два магазина' },
-    title: { en: 'When two native teams are not worth it', ru: 'Когда две нативные команды не окупаются' },
+    title: { en: 'When two native teams do not pay for themselves', ru: 'Когда две нативные команды не окупаются' },
     lead: {
-      en: 'Most products do not need two codebases. We say so when that is true, and we say the opposite when the platform work is the product.',
-      ru: 'Большинству продуктов две кодовые базы не нужны. Мы говорим это прямо, и так же прямо говорим обратное, когда именно платформенная работа и есть продукт.',
+      en: 'Most products do not need two codebases. We say so plainly, and we say just as plainly when native is the right call after all.',
+      ru: 'Большинству продуктов две кодовые базы не нужны. Говорим это прямо. И так же прямо говорим, когда натив всё-таки оправдан.',
     },
-    items: [
-      'Flutter', 'Dart', 'React Native', 'Expo', 'Expo Router',
-      'Kotlin Multiplatform', 'Compose Multiplatform', 'Capacitor', 'Ionic',
-      'Tauri', 'Electron',
-    ],
+    items: ['Flutter', 'React Native', 'Expo', 'Kotlin Multiplatform', 'Capacitor'],
   },
   {
     key: 'data',
     kicker: { en: 'Data and storage', ru: 'Данные и хранение' },
-    title: { en: 'Chosen for the query, not out of habit', ru: 'Выбираем под запрос, а не по привычке' },
+    title: { en: 'Chosen for the job, not out of habit', ru: 'Под задачу, а не по привычке' },
     lead: {
-      en: 'Transactions, analytics, search, cache and vectors are five different problems, and putting all five in one database is how a product gets slow.',
-      ru: 'Транзакции, аналитика, поиск, кэш и векторы это пять разных задач, и попытка решить все пять одной базой это то, как продукт становится медленным.',
+      en: 'Transactions, analytics, search, cache and vectors are different jobs. Solving all of them with one database is the fastest route to something slow.',
+      ru: 'Транзакции, аналитика, поиск, кэш и векторы, это разные задачи. Решать всё одной базой, самый быстрый способ получить тормоза.',
     },
-    items: [
-      'PostgreSQL', 'MySQL', 'SQLite', 'Redis', 'ClickHouse', 'MongoDB',
-      'Elasticsearch', 'OpenSearch', 'pgvector', 'Qdrant', 'S3',
-      'Supabase', 'Firebase', 'Prisma', 'SQLAlchemy', 'Alembic',
-      'Row Level Security', 'миграции', 'резервные копии',
-    ],
+    items: ['PostgreSQL', 'Redis', 'ClickHouse', 'Elasticsearch', 'pgvector', 'S3', 'Prisma'],
   },
   {
     key: 'ai',
     kicker: { en: 'AI inside the product', ru: 'AI внутри продукта' },
     title: { en: 'Models doing work, not models in a demo', ru: 'Модели, которые работают, а не показываются' },
     lead: {
-      en: 'A model in production needs token accounting, retries, a fallback route and a bill that does not surprise anyone. That part is the work.',
-      ru: 'Модель в проде это учёт токенов, повторы, запасной маршрут и счёт, который никого не удивит в конце месяца. Вот это и есть работа.',
+      en: 'In production what matters is token accounting, retries, fallback routes and a predictable bill at the end of the month. That is the actual work.',
+      ru: 'В проде важны учёт токенов, повторы, запасные маршруты и предсказуемый счёт в конце месяца. Вот это и есть настоящая работа.',
     },
-    items: [
-      'OpenAI API', 'Anthropic API', 'Google Gemini API', 'OpenRouter',
-      'RAG', 'эмбеддинги', 'векторный поиск', 'tool calling', 'стриминг',
-      'распознавание речи', 'синтез речи', 'компьютерное зрение',
-      'Ollama', 'локальные модели', 'учёт токенов', 'запасные маршруты',
-    ],
+    items: ['OpenAI', 'Anthropic', 'RAG', 'Embeddings', 'Tool calling', 'Streaming', 'Ollama'],
   },
   {
     key: 'pay',
     kicker: { en: 'Payments and billing', ru: 'Платежи и биллинг' },
     title: { en: 'Cards and crypto, both in production', ru: 'Карты и крипта, обе в проде' },
     lead: {
-      en: 'Subscriptions, plan changes with proration, and webhooks written so a repeated delivery never charges anyone twice.',
-      ru: 'Подписки, смена тарифа с пересчётом и вебхуки, написанные так, что повторная доставка не спишет дважды.',
+      en: 'Subscriptions, plan changes with proration, and webhooks that do not charge twice when they arrive twice.',
+      ru: 'Подписки, смена тарифа с пересчётом и вебхуки, которые не списывают дважды при повторной доставке.',
     },
-    items: [
-      'Paddle', 'Stripe', 'NOWPayments', 'криптоплатежи', 'подписки',
-      'пересчёт при смене тарифа', 'идемпотентные вебхуки',
-      'проверка подписи', 'инвойсы', 'налоги и MoR', 'пробные периоды',
-    ],
+    items: ['Stripe', 'Paddle', 'NOWPayments', 'Subscriptions', 'Idempotent webhooks', 'Invoices'],
   },
   {
     key: 'ext',
     kicker: { en: 'Browser extensions', ru: 'Расширения браузера' },
     title: { en: 'The part most studios turn down', ru: 'То, от чего обычно отказываются' },
     lead: {
-      en: 'A published extension on the current manifest, in two stores, with the injection and permission model that comes with it. Few studios list this because few have done it.',
-      ru: 'Опубликованное расширение на актуальном манифесте, в двух магазинах, со всей моделью внедрения и разрешений. Это редко где написано, потому что это редко кто делал.',
+      en: 'A published extension on the current manifest, in two stores, with a permissions model that makes sense. Not many do this.',
+      ru: 'Опубликованное расширение на актуальном манифесте, в двух магазинах, с нормальной моделью разрешений. Такое делают редко.',
     },
-    items: [
-      'Chrome Manifest V3', 'WebExtensions', 'Firefox Add-ons', 'service worker',
-      'content scripts', 'MAIN world', 'Chrome Web Store', 'AMO', 'crxjs',
-      'нативные сообщения',
-    ],
+    items: ['Chrome', 'Manifest V3', 'WebExtensions', 'Firefox Add-ons', 'Service worker', 'Chrome Web Store'],
   },
   {
     key: 'ops',
-    kicker: { en: 'Infrastructure', ru: 'Инфраструктура' },
+    kicker: { en: 'Infrastructure and quality', ru: 'Инфраструктура и качество' },
     title: { en: 'Deployed, watched, and yours', ru: 'Развёрнуто, под присмотром и ваше' },
     lead: {
-      en: 'Automatic builds, monitoring that reaches a phone, and everything running in your own cloud accounts rather than ours.',
-      ru: 'Автоматические сборки, мониторинг, который доходит до телефона, и всё это в ваших облачных аккаунтах, а не в наших.',
+      en: 'Automated builds, monitoring that reaches a phone, tests before the deploy and security before it is too late. All of it in your accounts.',
+      ru: 'Автоматические сборки, мониторинг до телефона, тесты до выкладки и безопасность до того, как станет поздно. Всё в ваших аккаунтах.',
     },
+    /* The clouds sit in this group rather than in one of their own, because
+       this card's own lead already ends on «Всё в ваших аккаунтах» and an
+       account is what a cloud is. Both circuits are named on purpose: a buyer
+       who has to stay inside Russia and a buyer who cannot are two different
+       readers, and a list that serves only one of them answers half the room.
+       Note the neighbouring rule this does NOT break: the file leaves out 1С
+       and the Russian accounting circuit deliberately, but that is a different
+       business, not a hosting region. */
     items: [
-      'Docker', 'Kubernetes', 'Terraform', 'Nginx', 'Cloudflare', 'AWS',
-      'Hetzner', 'DigitalOcean', 'Vercel', 'Railway', 'GitHub Actions',
-      'CI/CD', 'Sentry', 'Prometheus', 'Grafana', 'OpenTelemetry', 'PostHog',
-      'мониторинг', 'резервное копирование',
-    ],
-  },
-  {
-    key: 'qa',
-    kicker: { en: 'Quality and security', ru: 'Качество и безопасность' },
-    title: { en: 'Checked before it reaches anyone', ru: 'Проверено до того, как это увидят' },
-    lead: {
-      en: 'A suite that has to be green before a release goes out, and the security work that is cheaper before launch than after a breach.',
-      ru: 'Набор тестов, который обязан быть зелёным до выкладки, и та работа по безопасности, которая до запуска стоит дешевле, чем после утечки.',
-    },
-    items: [
-      'Vitest', 'Jest', 'Playwright', 'Cypress', 'pytest', 'TypeScript strict',
-      'ESLint', 'OWASP', 'rate limiting', 'JWT', 'OAuth 2.0', '2FA',
-      'шифрование', 'аудит доступа',
+      'Docker', 'CI/CD', 'Cloudflare', 'Yandex Cloud', 'Selectel', 'Timeweb',
+      'VK Cloud', 'Sentry', 'Playwright', 'OWASP', 'Rate limiting', '2FA',
     ],
   },
 ]
@@ -1463,83 +1574,54 @@ export const FAQ_SUB = {
 export interface FaqItem { q: LS; a: LS }
 
 /** Two rows, scrolled in opposite directions. */
+/**
+ * FIVE QUESTIONS, AND THE LIST IS CLOSED. It ran to nine across two rows and
+ * several of them answered things nobody asks before a first call: which stack
+ * we work in, which languages we speak, how many cases are above. Those are on
+ * the page already, in the stack section, the studio table and the cards
+ * themselves, so as questions they were captions.
+ *
+ * NOT ONE ANSWER HERE COUNTS ANYTHING. The version this replaced opened «Четыре
+ * кейса выше» and had to be taught to derive that number when the array grew
+ * past four, then past ten. The five below make no claim that a later edit can
+ * falsify: what a thing costs when, what a brief needs, who does the work, what
+ * follows launch, what the first step is.
+ */
 export const FAQ: FaqItem[][] = [
   [
     {
       q: { en: 'How much will it cost?', ru: 'Сколько это будет стоить?' },
       a: {
-        en: 'The price is known before work starts. The calculator above gives the floor; the binding figure is fixed after we scope the task.',
-        ru: 'Цена известна до начала работ. Калькулятор выше даёт ориентир, точную цифру фиксируем после разбора задачи.',
-      },
-    },
-    {
-      q: { en: 'What if it will not pay off?', ru: 'А если это не окупится?' },
-      a: {
-        en: 'You hear that on the first call. The scoping is free and it can end with us saying the automation is not worth building.',
-        ru: 'Вы услышите об этом на первом созвоне. Разбор бесплатный, и он может закончиться тем, что автоматизацию делать не стоит.',
+        en: 'The price is known before the work starts. The calculator gives you a guide, and the exact figure is fixed after we scope the task.',
+        ru: 'Цена известна до начала работ. Калькулятор даёт ориентир, точную сумму фиксируем после разбора задачи.',
       },
     },
     {
       q: { en: 'Do we need a finished spec?', ru: 'Нужно ли готовое ТЗ?' },
       a: {
-        en: 'No. You can start from an idea, from a process that is currently done by hand, or from a system that already runs.',
-        ru: 'Нет. Начать можно с идеи, с процесса, который сейчас делается руками, или с уже работающей системы.',
+        en: 'No. Describing the task and where things stand today is usually enough. The rest comes out in the scoping.',
+        ru: 'Нет. Обычно достаточно описать задачу и текущую ситуацию. Остальное выясняем на разборе.',
       },
     },
     {
-      q: { en: 'Who actually does the work?', ru: 'Кто именно будет делать?' },
+      q: { en: 'Who exactly does the work?', ru: 'Кто именно будет делать?' },
       a: {
-        en: 'A small studio. The task is not handed between teams: whoever scoped it takes it to production and stays for support.',
-        ru: 'Небольшая студия. Задача не передаётся между командами: кто её разбирал, тот доводит до прода и остаётся на поддержке.',
-      },
-    },
-    {
-      q: { en: 'How fast do you reply?', ru: 'Как быстро отвечаете?' },
-      a: {
-        en: 'Usually the same working day. Timezone UTC+4.',
-        ru: 'Обычно в тот же рабочий день. Часовой пояс UTC+4.',
-      },
-    },
-  ],
-  [
-    {
-      q: { en: 'Will you work with our stack?', ru: 'Будете работать с нашим стеком?' },
-      a: {
-        en: 'The stack follows the task. The grid above is what we already ship with, not a closed list.',
-        ru: 'Стек идёт за задачей. Сетка выше показывает то, на чём мы уже возим в прод, а не закрытый список.',
+        en: 'A small team, with no chain of managers and no handovers. You talk directly to the people doing it.',
+        ru: 'Над задачей работает небольшая команда, без цепочки менеджеров и «передач». Вы общаетесь напрямую с теми, кто делает.',
       },
     },
     {
       q: { en: 'What happens after launch?', ru: 'Что происходит после запуска?' },
       a: {
-        en: 'Support. It is step 05 of the process, not an upsell bolted on at the end.',
-        ru: 'Поддержка. Это пятый шаг в разделе о работе, а не допродажа в конце.',
-      },
-    },
-    {
-      q: { en: 'Can we see what you have built?', ru: 'Можно посмотреть, что вы делали?' },
-      /* WAS «Четыре кейса выше», typed against a four-entry array and false the
-         day a fifth landed. `CASES` is declared above this point, so the count
-         and its noun both come from it. This is the third place that counted
-         the same array by hand; the other two are the motto figure and the
-         section standfirst, and both derive now too. */
-      a: {
-        en: `${CASES.length} ${CASES.length === 1 ? 'case' : 'cases'} above, each with the task, the solution and the result. Work under NDA is discussed on a call.`,
-        ru: `${CASES.length} ${CASE_WORD[pluralForm(CASES.length)]} выше, у каждого задача, решение и результат. Работы под NDA обсуждаем на созвоне.`,
-      },
-    },
-    {
-      q: { en: 'What languages do you work in?', ru: 'На каких языках работаете?' },
-      a: {
-        en: 'Russian, Ukrainian and English.',
-        ru: 'Русский, украинский и английский.',
+        en: 'There is support. We can maintain it, extend it and keep developing the product. The terms are stated plainly.',
+        ru: 'Есть поддержка. Можем сопровождать, дорабатывать и развивать продукт дальше. Условия прозрачные.',
       },
     },
     {
       q: { en: 'How do we start?', ru: 'С чего начать?' },
       a: {
-        en: 'Write on Telegram, or run the calculator and send the brief it assembles. Either way the first step is the free scoping.',
-        ru: 'Напишите в Telegram либо пройдите калькулятор и отправьте собранный им бриф. В любом случае начнём с бесплатного разбора.',
+        en: 'Ask for the scoping call. On it we go through the task, the timeline and the budget, and tell you whether we are taking it.',
+        ru: 'Оставить заявку на разбор. На созвоне разберём задачу, сроки, бюджет и скажем, берёмся или нет.',
       },
     },
   ],

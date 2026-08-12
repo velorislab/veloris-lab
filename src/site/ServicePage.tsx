@@ -108,7 +108,6 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
           {/* ---- WHAT THE FIRST VERSION INCLUDES --------------------------- */}
           <section className="section-shell gap-10 desktop:gap-[60px]">
             <SectionHeading
-              badge={{ icon: '/images/icons/badge/whats-inside.svg', label: L(UI.moreOn) }}
               title={L(SP_LABELS.first)}
               description={L(SP_LABELS.firstSub)}
               textWidth={780}
@@ -159,7 +158,6 @@ export default function ServicePageBody({ lang, page }: { lang: LabLang; page: S
               </div>
 
               <SectionHeading
-                badge={{ icon: '/images/icons/badge/pricing.svg', label: L(UI.navPricing) }}
                 title={L(SP_LABELS.drivers)}
                 align="left"
                 className="relative"

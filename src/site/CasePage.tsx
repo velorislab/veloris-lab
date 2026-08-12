@@ -26,8 +26,10 @@ import { localizedHref, servicePath, casePath } from '@/site/routing'
  *   hero          the standalone-page heading scale `SectionHeading` documents
  *                 (32/42/56, `as="h1"`); `SectionBadge`'s pill for the two
  *                 eyebrow tokens, the hero badge's pill for the status.
- *   difficulties  the numbered plate from `CoreFeatures`, laid on its side so
- *                 three long paragraphs read in a column instead of across it.
+ *   difficulties  a numbered plate laid on its side, so three long paragraphs
+ *                 read in a column instead of across it. The home page had the
+ *                 same plate upright in `CoreFeatures`, which has since gone
+ *                 with the proof section; this is where that shape now lives.
  *   sidebar       the stack on the white card + ring every feature card uses,
  *                 the estimate panel on the `WhoCanUse` wash.
  *   other cases   the same white card, with `WhatsIn`'s corner arrow.
@@ -268,6 +270,41 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
             )}
 
             <Block title={L(CP_LABELS.did)} body={L(c.sol)} />
+
+            {/* Rendered only where the client reported the stages themselves.
+                A rail with the week labels in the measurement voice, because
+                they are durations and every measured value on this site is set
+                that way. The rule is on the list rather than between the items,
+                so the last phase does not trail a line into nothing. */}
+            {page.timeline && page.timeline.length > 0 && (
+              <section className="flex w-full flex-col items-start gap-5">
+                <h2 className="font-display text-[22px] leading-[33px] text-ink-800 tablet:text-[26px] tablet:leading-[39px]">
+                  {L(CP_LABELS.timeline)}
+                </h2>
+                <ol className="flex w-full flex-col border-l border-line pl-5 tablet:pl-6">
+                  {page.timeline.map((p) => (
+                    <li
+                      key={tx(p.t, 'en')}
+                      className="relative flex flex-col gap-1 pb-5 last:pb-0"
+                    >
+                      {/* The marker sits on the rail, not beside it: `-left`
+                          matches the padding above plus half the dot. */}
+                      <span
+                        aria-hidden
+                        className="absolute top-[9px] -left-[calc(1.25rem+3px)] size-[7px] rounded-full bg-accent tablet:-left-[calc(1.5rem+3px)]"
+                      />
+                      <span className="font-numeric text-[13px] font-medium tracking-[0.08em] text-ink-200 uppercase">
+                        {L(p.t)}
+                      </span>
+                      <p className="text-[16px] leading-[26px] text-ink-400 tablet:text-[17px]">
+                        {L(p.d)}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
+
             <Block title={L(CP_LABELS.outcome)} body={L(c.res)} />
           </div>
 

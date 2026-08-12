@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { Button } from "@/components/ui/Button";
-import { SectionBadge } from "@/components/ui/SectionBadge";
 import { getHome } from "@/data/content";
 import type { LabLang } from "@/site/labData";
 
@@ -52,7 +51,6 @@ export function About({ lang }: { lang: LabLang }) {
       <div className="flex w-full flex-1 flex-col items-start gap-8 desktop:gap-[50px]">
         <div className="flex w-full flex-col items-start gap-[30px]">
           <div className="flex w-full flex-col items-start gap-4">
-            <SectionBadge {...about.badge} />
             <div className="flex flex-col items-start gap-[14px]">
               <h2 className="text-[32px] leading-[1.2] text-ink-900 tablet:text-[38px] desktop:text-[48px] desktop:leading-[57.6px]">
                 {about.title}

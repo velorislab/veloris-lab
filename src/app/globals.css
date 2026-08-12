@@ -219,10 +219,20 @@
   }
 }
 
-/* Default section shell: 1200px wide, centred, shrinking with the viewport. */
+/* Default section shell: the page column's own width, centred, shrinking with
+   the viewport.
+
+   IT WAS 1200px AND THE PAGE HAD FOUR WIDTHS. `page-main` is 1380, the dark
+   stack slab and the calculator are `w-full` inside it and therefore 1380, this
+   shell capped at 1200, the stack groups at 1036 and the FAQ at 796. Nothing
+   chose those four numbers together: they are the template's per-section values,
+   kept section by section. One column edge down the whole page is worth more
+   than any of them, so this matches `page-main` and the outliers were widened
+   to meet it. The measure of the text inside is held by the elements that carry
+   prose, not by the shells around them. */
 @utility section-shell {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1380px;
   display: flex;
   flex-direction: column;
   align-items: center;

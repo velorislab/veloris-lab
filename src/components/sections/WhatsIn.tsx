@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { Button } from "@/components/ui/Button";
 import { Mark } from "@/components/ui/Mark";
 import { StarSurge } from "@/components/backgrounds/StarSurge";
 import Link from "next/link";
@@ -133,23 +134,31 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
   return (
     <section
       id="what-in"
-      className="relative flex w-full scroll-mt-[110px] flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 pt-20 pb-10 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:pt-24 tablet:pb-16 desktop:gap-20 desktop:px-20 desktop:pt-[130px] desktop:pb-20"
+      /* Top and bottom padding match. They did not: 130px above the crest and
+         80px under the row below it, which was fine while that row was a wall
+         of chips heavy enough to hold the bottom edge down. With one button
+         there instead, the slab needs the same air under the button as it has
+         over the crest, or the button looks dropped rather than placed. */
+      className="relative flex w-full scroll-mt-[110px] flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 py-20 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:py-24 desktop:gap-20 desktop:px-20 desktop:py-[130px]"
     >
       {/* One background instead of the three overlays this slab used to carry.
           The pointer trail that used to be here piled glyphs into the corner
           whenever the pointer rested there, and the 50px radius sliced them; a
           background has no relationship to the pointer and cannot do that. */}
       <StarSurge color="#c9cfe6" speed={0.9} count={240} className="z-0" />
-      <div className="relative flex w-full flex-col items-center gap-5">
-        {/* ---- badge, on its beam-lit backdrop ---- */}
-        <div className="relative flex size-[150px] items-center justify-center">
-          {/* Two nested plates and a 14px inset used to sit between the halo and
-              the template's letterform, which is what a letterform needs and a
-              disc does not: our mark arrived at 50 visual pixels inside a 150px
-              halo and read as lost. The halo stays, the plates go, and the mark
-              is the crest at its own size. */}
-          <Mark size={94} className="relative z-10" />
-        </div>
+      <div className="relative flex w-full flex-col items-center gap-12">
+        {/* ---- the crest ---- */}
+        {/* THE 150px BOX IS GONE and the mark is its own size. That box held two
+            nested plates behind the template's letterform; the plates went, and
+            what was left was 28px of empty inset on every side of a 94px disc.
+            It was invisible until the slab's padding was made symmetric, which
+            put the mark 158px from the top edge against the button's 130px from
+            the bottom. Compensating with a smaller `pt` would have meant three
+            hand-computed values that break the moment the mark is resized, so
+            the dead inset went instead and the wrapper's `gap` grew by exactly
+            the 28px it used to contribute, leaving the crest-to-heading rhythm
+            where it was. */}
+        <Mark size={94} className="relative z-10" />
 
         <div className="relative z-10 flex w-full flex-col items-center gap-[14px] text-center">
           <h2 className="text-[28px] leading-[1.25] text-white tablet:text-[40px] desktop:text-[56px] desktop:leading-[72.8px]">
@@ -171,33 +180,17 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
         </div>
       )}
 
-      {/* The nine work types with no card of their own, as one row of chips.
-          Without them the page says we do six things directly under a heading
-          that counts fifteen. With them the count is honest and the reader can
-          see the whole shape of the offer in one glance, with the price on each
-          and the table one click away. */}
-      {whatsIn.more.length > 0 && (
-        <div className="relative flex w-full flex-col items-center gap-4">
-          <span className="text-[13px] font-medium tracking-[0.08em] text-white/40 uppercase">
-            {whatsIn.moreLabel}
-          </span>
-          <ul className="flex flex-wrap justify-center gap-[10px]">
-            {whatsIn.more.map((m) => (
-              <li key={m.key}>
-                <Link
-                  href={whatsIn.moreHref}
-                  className="flex items-center gap-2 rounded-pill bg-white/[0.06] px-4 py-2 transition-colors duration-200 hover:bg-white/[0.12]"
-                >
-                  <span className="text-[15px] leading-6 text-white/80">{m.label}</span>
-                  <span className="font-display text-[15px] leading-6 whitespace-nowrap text-white/45">
-                    {m.price}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* WAS A ROW OF NINE PRICED CHIPS under a small-caps label. It existed
+          because the heading above used to count fifteen work types while the
+          slab showed six, and the chips closed that gap. The heading counts
+          nothing now, and a second grid of prices directly under a grid of
+          prices was the busiest thing on the page. One button, on the white
+          fill the rest of the site uses for a light action on a dark ground. */}
+      <div className="relative z-10 flex w-full justify-center">
+        <Button href={whatsIn.moreHref} variant="secondary">
+          {whatsIn.moreLabel}
+        </Button>
+      </div>
     </section>
   );
 }

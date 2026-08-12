@@ -4,7 +4,6 @@ import type { ReactNode } from 'react'
 
 import { Accordion } from '@/components/ui/Accordion'
 import { Button } from '@/components/ui/Button'
-import { SectionBadge } from '@/components/ui/SectionBadge'
 import { Estimate } from '@/components/sections/Estimate'
 import { SectionHeading } from '@/components/ui/SectionHeading'
 import { Footer } from '@/components/layout/Footer'
@@ -12,7 +11,7 @@ import { Header } from '@/components/layout/Header'
 import { FinalCta } from '@/components/sections/FinalCta'
 import {
   type LabLang, tx,
-  SERVICES, CALC, UI, EYEBROW, FAQ, type FaqItem,
+  SERVICES, CALC, UI, FAQ, type FaqItem,
   SEPARATE, SEPARATE_LABEL, SEPARATE_SUB,
   TELEGRAM, TELEGRAM_HANDLE, BRAND,
 } from '@/site/labData'
@@ -60,7 +59,8 @@ import { localizedHref, servicePath } from '@/site/routing'
  *   waiting for the ported component to mount into it.
  */
 
-const BADGE = '/images/icons/badge'
+/* `BADGE`, the path to the eyebrow glyphs, went with the eyebrows. The files
+   are still in `public/images/icons/badge/` and nothing reads them. */
 
 /**
  * The table's own responsive contract, written once here because six rows and
@@ -169,7 +169,6 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
         {/* ----------------------------------------------------- the six */}
         <section className="section-shell gap-10 desktop:gap-[60px]">
           <SectionHeading
-            badge={{ icon: `${BADGE}/whats-inside.svg`, label: L(EYEBROW.services) }}
             title={L(PRICING.tableLabel)}
             description={L(PRICING.tableSub)}
             textWidth={860}
@@ -248,7 +247,6 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
             figure is the content. */}
         <section className="flex w-full max-w-[1080px] flex-col items-center gap-10 desktop:gap-20">
           <SectionHeading
-            badge={{ icon: `${BADGE}/who-can-use.svg`, label: L(EYEBROW.entry) }}
             title={L(PRICING.readyLabel)}
             description={L(PRICING.readySub)}
             textWidth={800}
@@ -396,13 +394,11 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
           lang={lang}
           title={PRICING.estimateLabel}
           description={PRICING.estimateSub}
-          badgeIcon={`${BADGE}/numbers.svg`}
         />
 
         {/* ------------------------------------------------------------ faq */}
         <section className="flex w-full max-w-[796px] flex-col items-center gap-10 desktop:gap-20">
           <div className="flex w-full flex-col items-center gap-4">
-            <SectionBadge icon={`${BADGE}/faq.svg`} label={L(EYEBROW.faq)} />
             <h2 className="text-center text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
               {L(PRICING_FAQ_LABEL)}
             </h2>
@@ -429,29 +425,42 @@ const PRICING_FAQ_LABEL = {
 }
 
 /**
- * The five questions this page should answer, in reading order.
+ * The questions this page should answer, in reading order.
  *
- * Two are written for this page and two are lifted by reference from the home
- * page's list, never by copy: `FAQ[0][2]` and `FAQ[0][1]` say the same thing in
- * both places because they ARE the same strings.
+ * Some are written for this page and some are lifted by reference from the home
+ * page's list, never by copy: a shared question says the same thing in both
+ * places because it IS the same object.
+ *
+ * PICKED BY QUESTION, NOT BY POSITION, and that is a repair. It used to read
+ * `FAQ[0][2]`, `FAQ[0][1]` and `FAQ[1][4]`, so the home list could not be
+ * reordered or resized without silently repointing this page at whatever landed
+ * on those indices. It could not even be shortened: trimming that list to one
+ * row of five made `FAQ[1]` undefined and the build failed on this page rather
+ * than on the file that changed. The same rule the case pages already follow,
+ * where the join is a title and not an index.
  *
  * Home's "How much will it cost?" is deliberately not among them. Its answer
  * points at the calculator, and on a page that is nothing but prices the whole
  * document is the answer; reprinting it would be a question answered twice.
  *
- * Every reused item was checked for direction words. "The grid above" and
- * "step 05 of the process" are true on the home page and false here, so those
- * two are not reused, and this comment exists so the next person picking items
- * checks the same thing.
+ * Every reused item was checked for direction words: a phrase like "the grid
+ * above" is true on the home page and false here. This comment exists so the
+ * next person picking items checks the same thing.
  */
+function fromHome(question: string): FaqItem | undefined {
+  return FAQ.flat().find((f) => tx(f.q, 'en') === question)
+}
+
 function pricingFaq(): FaqItem[] {
   return [
     PRICING_OWN_FAQ[0],
-    FAQ[0][2],
+    fromHome('Who exactly does the work?'),
     PRICING_OWN_FAQ[1],
-    FAQ[0][1],
-    FAQ[1][4],
-  ]
+    fromHome('Do we need a finished spec?'),
+    fromHome('How do we start?'),
+    /* A question that has been renamed on the home page drops out of this list
+       rather than taking the build down with it. */
+  ].filter((f): f is FaqItem => Boolean(f))
 }
 
 const PRICING_OWN_FAQ: FaqItem[] = [

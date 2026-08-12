@@ -21,19 +21,17 @@
 
 import { type LabLang, tx } from '@/site/labData'
 import {
-  HERO, SERVICES, SERVICES_LABEL_TAIL, SERVICES_SUB, SERVICES_MORE_LABEL,
+  HERO, SERVICES, SERVICES_LABEL,
   PROCESS, PROCESS_LABEL, PROCESS_SUB,
-  WHY, WHY_LABEL, WHY_SUB,
-  ENTRY, ENTRY_LABEL, ENTRY_SUB,
   STACK_LABEL, STACK_SUB, TOOLS, STACK_GROUPS, WORK_MODEL, WORK_MODEL_LABEL,
   FAQ, FAQ_LABEL,
-  BUREAU, CONTACT, CASES, CASES_LABEL, CASES_COUNT_NOUN, pluralForm,
+  BUREAU, CONTACT, CASES, CASES_LABEL, CASES_COUNT_NOUN, CASE_WORD, pluralForm,
   EYEBROW, UI, MOTTO_TITLE, CALC, MARQUEE,
 } from '@/site/labData'
 import { WORK_TYPES, SUPPORT_TIERS, money, priced, monthly } from '@/site/labPricing'
 import { SERVICE_PAGES } from '@/site/servicePages'
 import { CASE_PAGES } from '@/site/casePages'
-import { pricingPath, servicePath, casePath, solutionsPath, localizedHref } from '@/site/routing'
+import { pricingPath, servicePath, casePath, localizedHref } from '@/site/routing'
 
 const ICON = '/images/icons/badge'
 
@@ -129,6 +127,14 @@ export function getHome(lang: LabLang) {
          drops the paragraph and its gap when this is empty, so a standfirst
          comes back by filling this string and nothing else. */
       description: '',
+      /* The grid opens on the first few and fades the rest; these label the
+         control that opens it. The figure and its noun are derived here for the
+         same reason every other count on this page is. */
+      showAllLabel: L(UI.casesAll)
+        .replace('%n', String(CASES.length))
+        .replace('cases', CASES.length === 1 ? 'case' : 'cases')
+        .replace('кейсов', CASE_WORD[pluralForm(CASES.length)]),
+      collapseLabel: L(UI.casesLess),
       items: CASES.map((c) => {
         /* `match` is documented as the English title, so the join has to ask
            for the English form explicitly rather than the reader's. */
@@ -144,6 +150,10 @@ export function getHome(lang: LabLang) {
           sub: L(c.sub),
           status: L(c.status),
           live: c.live,
+          /* Resolved here rather than in the card, so the component never sees
+             an `LS`. Empty where a case has no number worth printing, which the
+             card reads as "show the result sentence instead". */
+          metrics: (c.metrics ?? []).map((m) => ({ v: L(m.v), k: L(m.k) })),
           result: L(c.res),
           href: page ? casePath(lang, page.slug) : pricingPath(lang),
           readLabel: L(UI.readCase),
@@ -154,8 +164,12 @@ export function getHome(lang: LabLang) {
 
     /* ------------------------------------------------- the six, as cards */
     whatsIn: {
-      title: `${WORK_TYPES.length} ${L(SERVICES_LABEL_TAIL)}`,
-      description: L(SERVICES_SUB),
+      /* Its own heading, not the counted one the pricing block uses. Both
+         printed the same line until now, so the page carried one headline
+         twice. */
+      title: L(SERVICES_LABEL),
+      /* Empty on purpose; see the note where SERVICES_SUB used to be. */
+      description: '',
       cards: SERVICES.map((s) => {
         const w = WORK_TYPES.find((t) => t.key === s.key)
         const page = SERVICE_PAGES.find((p) => p.key === s.key)
@@ -180,24 +194,18 @@ export function getHome(lang: LabLang) {
           href: page ? servicePath(lang, page.slug) : pricingPath(lang),
           /* Their cards name the link rather than leaving an arrow to imply it,
              and an arrow alone does not say whether it goes to a page or opens
-             something. UI.moreOn is the label the pricing cards already use. */
-          hrefLabel: L(UI.moreOn),
+             something. It offers the next step rather than naming the page. */
+          hrefLabel: L(UI.scopeTask),
         }
       }),
-      /* EVERYTHING THE SIX CARDS DO NOT COVER, as one compact row.
-         Nine of the fifteen work types arrived with the calculator rewrite and
-         have no card and no page: a landing, a site, a shop, two mobile
-         platforms, a backend, a Telegram product, a CRM. Leaving them off the
-         home page means the page says we do six things while the price list says
-         fifteen and the heading right above now counts the fifteen. They get
-         their label, their floor and a link to the row they live on, which is
-         all there is to say about them until one earns a page. */
-      moreLabel: L(SERVICES_MORE_LABEL),
-      more: WORK_TYPES.filter((w) => !SERVICES.some((x) => x.key === w.key)).map((w) => ({
-        key: w.key,
-        label: L(w.label),
-        price: `${L({ en: 'from', ru: 'от' })} ${money(priced(w.from))}`,
-      })),
+      /* ONE LINK, WHERE NINE PRICE CHIPS USED TO BE. They listed the work types
+         with no card of their own, each with its floor, and the argument for
+         them was that the heading above counted fifteen while the page showed
+         six. That heading no longer counts anything, so the row was answering a
+         question nobody was being asked, and it put a second grid of prices
+         directly under a grid of prices. The link says the same thing in four
+         words and the table is one click away. */
+      moreLabel: L(UI.allPrices),
       moreHref: pricingPath(lang),
       orbitLogos: [] as string[],
     },
@@ -215,11 +223,12 @@ export function getHome(lang: LabLang) {
       badge: { icon: `${ICON}/whats-inside.svg`, label: L(EYEBROW.stack) },
       title: L(STACK_LABEL),
       description: L(STACK_SUB),
-      /* THE TICKER RUNS ON EVERYTHING NOW, seventy-one names instead of twelve.
-         Three rows of twelve meant each row was the same short list rotated and
-         you could watch a name come round again inside one screen width. The
-         full stack fills the track properly and, more to the point, breadth is
-         the thing this section is for. */
+      /* THE TICKER RUNS ON THE WHOLE STACK, not on the twelve sourced tools it
+         used to. Three rows of twelve meant each row was the same short list
+         rotated, and you could watch a name come round again inside one screen
+         width. The full set fills the track and, more to the point, breadth is
+         what this section is for. The count is deliberately not written down
+         here: it is `STACK_GROUPS.flatMap`, and it has already changed twice. */
       tags: STACK_GROUPS.flatMap((g) => g.items),
       /* And the same stack again, grouped, with a sentence per group saying
          what we do with it. The ticker shows how much there is; the groups say
@@ -254,44 +263,24 @@ export function getHome(lang: LabLang) {
       used: TOOLS.map((t) => ({ name: t.name, note: L(t.note) })),
     },
 
-    /* --------------------------------------- what a reader can check */
-    coreFeatures: {
-      /* `badge/features.svg` and not `badge/core-features.svg`: the second one
-         was never in the template's asset set. The five items carry no icon at
-         all. The template gave each card a bespoke 66px glyph drawn for its own
-         feature list; none of those means anything next to a claim of ours, and
-         a decorative badge glyph repeated five times reads as a mistake. The
-         card renders its position instead, which is what `index` is for. */
-      badge: { icon: `${ICON}/features.svg`, label: L(EYEBROW.why) },
-      title: L(WHY_LABEL),
-      description: L(WHY_SUB),
-      items: WHY.map((r, i) => ({
-        title: L(r.t),
-        description: L(r.d),
-        index: i,
-      })),
-    },
+    /* THE PROOF SECTION IS GONE, and it was `coreFeatures`: five numbered
+       claims under «Это можно проверить без нас». Every one of them is still
+       made somewhere it can be checked rather than asserted, which is what
+       made the section removable: the own-product claim is the Swiftin card and
+       its case page, the full-chain claim is the studio section, the no-API
+       claim is the parsing service page, the calculator arithmetic is /pricing,
+       and the fourth claim counted four cases at a point where there are
+       twelve. `CoreFeatures.tsx` went with it. */
 
-    /* ------------------------------------------------------------ pricing */
-    pricing: {
-      badge: { icon: `${ICON}/pricing.svg`, label: L(EYEBROW.services) },
-      title: `${WORK_TYPES.length} ${L(SERVICES_LABEL_TAIL)}`,
-      description: L(SERVICES_SUB),
-      plans: WORK_TYPES.map((w) => {
-        const svc = SERVICES.find((s) => s.key === w.key)
-        const page = SERVICE_PAGES.find((p) => p.key === w.key)
-        return {
-          name: L(svc?.t ?? w.label),
-          audience: L(svc?.when ?? ''),
-          price: `${L({ en: 'from', ru: 'от' })} ${money(priced(w.from))}`,
-          billingNote: `${w.weeks[0]}–${w.weeks[1]} ${L({ en: 'weeks', ru: 'нед.' })} · ${L({ en: 'support from', ru: 'поддержка от' })} ${money(monthly(w.support))}${L({ en: '/mo', ru: '/мес' })}`,
-          ctaLabel: L(UI.moreOn),
-          ctaHref: page ? servicePath(lang, page.slug) : pricingPath(lang),
-        }
-      }),
-      allHref: pricingPath(lang),
-      allLabel: L(UI.priceList),
-    },
+    /* THE `pricing` BLOCK IS GONE, and it had been dead for a while: nothing
+       destructured it out of `getHome`, because the home page's pricing section
+       went when the six service cards started carrying their own figures. It
+       cost more than the lines it took. Building fifteen plan objects on every
+       render of every page is the cheap part; the expensive part is that it
+       still printed a heading, so reading this file suggested the home page had
+       two headings when it has one. `SERVICES_LABEL_TAIL` went with it, being
+       the string only this block read. The real price list is `PricingPage`,
+       which has its own copy in `pricingCopy.ts`. */
 
     /* -------------------------------------------------------------- about */
     about: {
@@ -310,42 +299,28 @@ export function getHome(lang: LabLang) {
       secondaryCta: { label: L(UI.priceList), href: pricingPath(lang) },
     },
 
-    /* ------------------------------------------------- starting points */
-    whoCanUse: {
-      badge: { icon: `${ICON}/who-can-use.svg`, label: L(EYEBROW.entry) },
-      title: L(ENTRY_LABEL),
-      description: L(ENTRY_SUB),
-      /* «Смотреть все решения →» belongs in this section's header: a reader who
-         has just recognised their own situation in one of the three doors is the
-         reader most likely to want the scenario list. */
-      allHref: solutionsPath(lang),
-      allLabel: L(UI.solutionAll),
-      items: ENTRY.map((e, i) => ({
-        /* «01 / Есть идея», the reader's own situation as the label. Numbered
-           because three states read as a sequence otherwise, and they are not
-           one: they are three doors. */
-        marker: `${String(i + 1).padStart(2, '0')} / ${L(e.state)}`,
-        title: L(e.t),
-        description: L(e.d),
-        ctaLabel: L(e.cta),
-        ctaHref: e.href,
-      })),
-      panel: {
-        kicker: L(EYEBROW.calc),
-        title: L(CONTACT.h),
-        subtitle: L(CONTACT.sub),
-        ctaLabel: L(UI.cta),
-        ctaHref: '#contact',
-      },
-    },
+    /* THE STARTING-POINTS SECTION IS GONE, and it was `whoCanUse`: the heading
+       «С чего начать, если ТЗ ещё нет», the link to /solutions, three numbered
+       doors (idea, process, product) and a panel repeating the free-scoping
+       offer. `WhoCanUse.tsx` and `ENTRY` went with it.
+
+       Nothing it carried is now unreachable. /solutions is in the header pill,
+       the calculator the three doors pointed at is the section directly below,
+       and its panel was the third copy of «Разберём бесплатно и скажем как
+       есть» on one page: `CONTACT.h` still opens the close, which is where that
+       sentence has an anchor and a channel under it. */
 
     /* ------------------------------------------------------------ process */
     process: {
       badge: { icon: `${ICON}/process.svg`, label: L(EYEBROW.process) },
       title: L(PROCESS_LABEL),
       description: L(PROCESS_SUB),
-      ctaLabel: L(UI.ctaCalc),
-      ctaHref: '#estimate',
+      /* «Бесплатный разбор», not «Узнать цену за минуту». The section ends on
+         step 01, which IS the free scoping, so the button should offer the step
+         the reader has just read about rather than send them back up to the
+         calculator. */
+      ctaLabel: L(UI.cta),
+      ctaHref: '#contact',
       steps: PROCESS.map((s, i) => ({
         step: `${L({ en: 'Step', ru: 'Шаг' })} ${String(i + 1).padStart(2, '0')}`,
         title: L(s.t),
@@ -366,12 +341,9 @@ export function getHome(lang: LabLang) {
       title: L(CONTACT.h),
       description: L(CONTACT.sub),
       /* The template's three bullets were product perks. Ours are the three
-         promises the rest of the page has already kept. */
-      points: [
-        `${L(HERO.facts[0].k)}: ${L(HERO.facts[0].v)}`,
-        `${L(HERO.facts[1].k)}: ${L(HERO.facts[1].v)}`,
-        `${L(HERO.facts[2].k)}: ${L(HERO.facts[2].v)}`,
-      ],
+         promises the rest of the page has already kept, and they are their own
+         strings now rather than `HERO.facts` glued into «ключ: значение». */
+      points: CONTACT.points.map(L),
       ctaLabel: L(UI.cta),
       ctaHref: '#contact',
       home: localizedHref(lang),

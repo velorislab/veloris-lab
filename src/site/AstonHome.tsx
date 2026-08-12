@@ -1,7 +1,6 @@
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { About } from '@/components/sections/About'
-import { CoreFeatures } from '@/components/sections/CoreFeatures'
 import { Estimate } from '@/components/sections/Estimate'
 import { Faq } from '@/components/sections/Faq'
 import { FinalCta } from '@/components/sections/FinalCta'
@@ -11,7 +10,6 @@ import { Cases } from "@/components/sections/Cases";
 import { PlatformHighlight } from '@/components/sections/PlatformHighlight'
 import { Process } from '@/components/sections/Process'
 import { WhatsIn } from '@/components/sections/WhatsIn'
-import { WhoCanUse } from '@/components/sections/WhoCanUse'
 import type { LabLang } from '@/site/labData'
 
 /**
@@ -47,9 +45,7 @@ export default function AstonHome({ lang }: { lang: LabLang }) {
         <Motto lang={lang} />
         <Cases lang={lang} />
         <WhatsIn lang={lang} />
-        <CoreFeatures lang={lang} />
         <PlatformHighlight lang={lang} />
-        <WhoCanUse lang={lang} />
         <Estimate lang={lang} />
         <Process lang={lang} />
         <About lang={lang} />

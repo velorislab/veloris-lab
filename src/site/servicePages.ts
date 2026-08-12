@@ -233,12 +233,27 @@ export const SERVICE_PAGES: ServicePage[] = [
  * diff and survives the array being reordered, which an index does not.
  * Every service has at least one, so no page renders an empty section.
  */
+/* THE LISTS ARE CAPPED AT FOUR, and that is a decision rather than what fitted.
+   The array grew from four cases to twelve, and every one of the new ones could
+   defend a place under `agent`. A service page that ends on eight case cards
+   stops being a service page; these are the ones that argue hardest for their
+   own service, and the rest are one click away on the home page. */
 export const CASES_BY_SERVICE: Record<string, string[]> = {
-  agent: ['20+ automations on BAS'],
-  integr: ['Swiftin', 'Cowee'],
+  agent: [
+    'RAG assistant for a retail chain',
+    'AI agent for importing cars from the US',
+    'Automated onboarding and nurture',
+    '20+ automations on BAS',
+  ],
+  integr: [
+    'Swiftin',
+    'Telegram bot and CRM for B2B sales',
+    'Lead qualification and routing',
+    'A browser extension for the sales team',
+  ],
   parsing: ['20+ automations on BAS', 'One screen instead of manual exports'],
   dash: ['One screen instead of manual exports'],
-  mvp: ['Swiftin', 'Cowee'],
+  mvp: ['Swiftin', 'Cowee', 'An internal tool for a sales team'],
   billing: ['Swiftin'],
 }
 

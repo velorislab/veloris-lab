@@ -1,5 +1,4 @@
 import { Accordion } from "@/components/ui/Accordion";
-import { SectionBadge } from "@/components/ui/SectionBadge";
 import { getHome } from "@/data/content";
 import type { LabLang } from "@/site/labData";
 
@@ -22,22 +21,31 @@ export function Faq({ lang }: { lang: LabLang }) {
   return (
     <section
       id="faq"
-      className="flex w-full max-w-[796px] flex-col items-center gap-10 desktop:gap-20"
+      /* The section is on the page column like everything else now; the
+         accordion below keeps its own 796px, because that width is the reading
+         measure of the answers rather than a container preference. Widening the
+         shell and widening the prose are two different things, and only the
+         first was asked for. */
+      className="flex w-full flex-col items-center gap-10 desktop:gap-20"
     >
       <div className="flex w-full flex-col items-center gap-4">
-        <SectionBadge {...faq.badge} />
         <h2 className="text-center text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
           {faq.title}
         </h2>
       </div>
-      <Accordion
-        variant="card"
-        defaultOpen={-1}
-        items={faq.items.map((item) => ({
-          title: item.question,
-          body: item.answer,
-        }))}
-      />
+      {/* The 796px the section used to carry lives here now. A question row is
+          short and an answer is prose, and prose set across the full 1380px
+          column is a line nobody tracks back to the start of. */}
+      <div className="w-full max-w-[796px]">
+        <Accordion
+          variant="card"
+          defaultOpen={-1}
+          items={faq.items.map((item) => ({
+            title: item.question,
+            body: item.answer,
+          }))}
+        />
+      </div>
     </section>
   );
 }

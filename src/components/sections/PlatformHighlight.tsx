@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { Marquee } from "@/components/ui/Marquee";
-import { SectionBadge } from "@/components/ui/SectionBadge";
 import { getHome } from "@/data/content";
 import type { LabLang } from "@/site/labData";
 
@@ -50,7 +49,10 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
   return (
     <section
       id="highlight"
-      className="relative flex w-full max-w-[1036px] flex-col items-start gap-10 overflow-hidden rounded-section border border-line p-6 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_6px_#ffffff] tablet:p-10 desktop:gap-[60px] desktop:p-[50px]"
+      /* `max-w-[1036px]` went: it was the template's own number for this panel
+         and it left this section standing narrower than the dark slab directly
+         above it. Everything on the page is on the `page-main` column now. */
+      className="relative flex w-full flex-col items-start gap-10 overflow-hidden rounded-section border border-line p-6 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_6px_#ffffff] tablet:p-10 desktop:gap-[60px] desktop:p-[50px]"
       style={{
         backgroundImage:
           "radial-gradient(63.001% 100% at 50% 0%, rgb(212, 231, 246) 0%, rgb(240, 247, 252) 82.4379%, rgb(246, 247, 249) 100%)",
@@ -102,7 +104,6 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
       </div>
 
       <div className="relative flex w-full flex-col items-center gap-4">
-        <SectionBadge {...platformHighlight.badge} />
         <h2 className="text-center text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
           {platformHighlight.title}
         </h2>
@@ -118,10 +119,10 @@ export function PlatformHighlight({ lang }: { lang: LabLang }) {
       </div>
 
       {/* ONE ROW, AND aria-hidden, and both are corrections to the change that
-          put seventy-one names in here.
+          put the whole stack in here rather than twelve sourced tools.
 
           Three rows, each duplicated by the marquee so the loop has no seam, put
-          426 tool names into the page text in a row. On screen that is a ticker;
+          several hundred tool names into the page text in a row. On screen that is a ticker;
           in the accessibility tree, in a text extraction and to a search engine
           it is a wall of nouns that buries everything after it. The grouped cards
           directly below carry every one of those names in a real list with a

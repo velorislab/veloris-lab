@@ -16,25 +16,28 @@ import { Mark } from "@/components/ui/Mark";
 import type { LabLang } from "@/site/labData";
 
 /**
- * The nav pill, in the template's shape and our navigation.
+ * The nav bar: full width, on the page's own ground, with a hairline under it.
  *
- * Three things changed and nothing else did.
+ * IT WAS A DARK PILL, floating centred inside a 94px band, and the pill was the
+ * template's shape rather than a decision. What it bought was a ground of its
+ * own: this bar is `fixed`, the page runs underneath it, and dark chrome on a
+ * self-coloured plate never has to care what is passing below. A flat bar has
+ * to earn that another way, which is what the background rule on `<header>`
+ * does: transparent over the first screen, where it sits on the hero's own
+ * tint, and a translucent page-coloured plate with a hairline from the moment
+ * anything can pass beneath it.
  *
- *   The wordmark is text. There is no Veloris Lab logo file, and the two Aston
- *   SVGs it used to load are somebody else's brand.
+ * EVERY COLOUR IN HERE FLIPPED WITH IT. The pill's palette was white and
+ * `ink-50` on `#2d2d2d`; on the page it is `ink-900` down to `ink-200`, and
+ * `chevron-down.svg` had to stop being a file at all, being a white stroke
+ * drawn for a dark plate. It is geometry now, on `currentColor`, so it follows
+ * the label beside it.
  *
- *   The dropdown holds our four case pages instead of Aston's seven routes.
- *   `/waitlist`, `/changelog`, `/privacy-policy` and `/404` do not exist here;
- *   the case pages do, and they are the only part of the site with no
- *   home-page section to scroll to. Its rows lost their icon pair with the
- *   routes they belonged to: `public/images/icons/nav/` has a glyph for
- *   "pricing" and "waitlist", none for a case, and a case is not getting an
- *   invented path to one.
- *
- *   The language switcher is new, because the template had no concept of a
- *   second language. It is built out of the pill's own two states: the active
- *   language is the white pill an active nav link already is, the other is the
- *   same ink-50 that hovers to white. Nothing else was added to the bar.
+ * WHAT DID NOT CHANGE. The wordmark is text, because there is no Veloris Lab
+ * logo file and the two Aston SVGs it used to load are somebody else's brand.
+ * The dropdown holds our case pages, which are the only part of the site with
+ * no home-page section to scroll to. And the language switcher still crosses to
+ * the same page in the other language rather than to the other home page.
  */
 
 /**
@@ -104,10 +107,14 @@ function LangSwitch({
     <div role="group" aria-label={label} className="flex shrink-0 items-center gap-[2px]">
       {LANGS.map((code) =>
         code === lang ? (
+          /* The white plate is gone with the pill it borrowed from. On the page
+             the active language is the one set in the ink the wordmark is, and
+             the other is the same quiet grey the nav links rest at, so the pair
+             reads as a state rather than as two buttons. */
           <span
             key={code}
             aria-current="true"
-            className="flex h-[38px] items-center rounded-pill bg-surface px-[10px] text-[16px] leading-[24px] font-semibold text-ink-700"
+            className="flex h-[34px] items-center rounded-pill px-[8px] text-[15px] leading-[24px] font-semibold text-ink-900"
           >
             {code}
           </span>
@@ -116,7 +123,7 @@ function LangSwitch({
             key={code}
             href={twinPath(pathname, code)}
             hrefLang={code}
-            className="flex h-[38px] items-center rounded-pill px-[10px] text-[16px] leading-[24px] font-semibold text-ink-50 transition-colors duration-200 hover:text-surface"
+            className="flex h-[34px] items-center rounded-pill px-[8px] text-[15px] leading-[24px] font-semibold text-ink-200 transition-colors duration-200 hover:text-ink-700"
           >
             {code}
           </Link>
@@ -135,6 +142,81 @@ export function Header({ lang }: { lang: LabLang }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const mobileRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * The header leaves on the way down and comes back on the way up.
+   *
+   * WHAT THIS REPLACED. The pill used to fold to the wordmark past a scroll
+   * threshold and open on hover, which worked but put the nav, the language
+   * switcher and the only CTA in the chrome behind a hover the reader had to
+   * discover. Sliding the whole bar is the behaviour people already know from
+   * every other site that does this, and it needs nothing explained.
+   *
+   * `hidden` STARTS FALSE AND THAT IS DELIBERATE. It is the state the server
+   * renders, so the first paint matches the markup; reading `window.scrollY`
+   * during render would be a hydration mismatch on any reload that restores a
+   * scroll position.
+   */
+  const [hidden, setHidden] = useState(false);
+  /**
+   * Over the first screen the bar has no plate and no hairline: it stands on
+   * the hero's own tint, and drawing a page-coloured band across it would put a
+   * seam through the top of the fold. Past that, anything can be underneath, so
+   * the bar takes a ground of its own. Both start in the at-top state, which is
+   * what the server renders.
+   */
+  const [atTop, setAtTop] = useState(true);
+
+  useEffect(() => {
+    let last = window.scrollY;
+    /* Travel since the direction last changed, not the delta of one event. A
+       per-event threshold fires on the first flick of the wheel, which is what
+       made the bar feel like it was snatched away the instant you moved. */
+    let travel = 0;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      setAtTop(y < 120);
+      /* Above the fold the bar is always there: at the top of a page there is
+         no "back up" left to ask for. */
+      if (y < 120) {
+        setHidden(false);
+        last = y;
+        travel = 0;
+        return;
+      }
+
+      const delta = y - last;
+      last = y;
+      if (delta === 0) return;
+      /* A change of direction starts the count again, so a scroll down followed
+         by a nudge up does not carry its momentum into the decision. */
+      if (delta > 0 !== travel > 0) travel = 0;
+      travel += delta;
+
+      /* ASYMMETRIC ON PURPOSE, and this is the fix for "it vanishes the moment
+         I move". Leaving costs 64px of sustained downward scroll, which is a
+         deliberate move down the page; coming back costs 8px, because reaching
+         for the nav is a small upward flick and it has to answer at once. Equal
+         thresholds make one of the two feel wrong whichever number you pick. */
+      if (travel > 64) {
+        setHidden(true);
+        travel = 0;
+      } else if (travel < -8) {
+        setHidden(false);
+        travel = 0;
+      }
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* An open menu pins the bar. Both panels hang off buttons inside it, so
+     letting it leave would take the panel with it, or worse, leave the panel
+     floating where its trigger used to be. */
+  const away = hidden && !menuOpen && !mobileOpen;
 
   // Close either menu on outside click or Escape.
   useEffect(() => {
@@ -180,79 +262,128 @@ export function Header({ lang }: { lang: LabLang }) {
   ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[94px]">
+    <header
+      /* `-translate-y-full` is exact now: the bar IS the band, where the pill
+         used to float 24px inside a taller one and needed 130% to clear it.
+         `motion-reduce` keeps the bar still for a reader who asked for that:
+         the point of the behaviour is reclaimed reading space, and it survives
+         being instant. */
+      /* `translate` AND NOT `transform` IN THE TRANSITION LIST, which is why the
+         bar was appearing and vanishing with no animation at all. Tailwind v4
+         compiles `-translate-y-full` to the standalone `translate` property, not
+         to a `transform` function, so a hand-written
+         `transition-[transform,...]` names a property that never changes and the
+         one that does is left uncovered. Measured rather than guessed: the
+         computed `transition-property` read `transform, background-color,
+         border-color` while the element animated nothing. The shorthand
+         `transition-transform` expands to `transform, translate, scale, rotate`
+         precisely to hide this; an arbitrary list has to say it.
+
+         NO `backdrop-blur` EITHER, and that was the other artefact. A
+         translucent plate over a blur makes the element its own compositing
+         layer, so while the bar slid its edge painted as a hard rectangle
+         against the page behind it. A solid `page` plate reads the same standing
+         still and has no layer to betray it.
+
+         NO HAIRLINE. The plate is enough of an edge on the sections it crosses,
+         and the line was drawing itself across the blue panel underneath. */
+      className={`fixed inset-x-0 top-0 z-50 transition-[translate,background-color] duration-300 ease-out motion-reduce:transition-none ${
+        away ? "-translate-y-full" : "translate-y-0"
+      } ${atTop ? "bg-transparent" : "bg-page"}`}
+    >
       <nav
         aria-label={site.labels.mainNav}
-        className="relative flex h-[94px] w-full items-center justify-center overflow-visible px-4 pt-6 tablet:px-10 desktop:px-0"
+        className="relative mx-auto flex h-[72px] w-full max-w-[1200px] items-center gap-6 px-4 tablet:px-[30px] desktop:gap-9 desktop:px-0"
       >
-        <div className="flex h-[70px] w-full max-w-[450px] items-center justify-between rounded-pill bg-surface-dark py-3 pr-3 pl-4 tablet:max-w-[800px] desktop:max-w-[810px]">
-          <Link
-            href={site.home}
-            aria-label={site.homeAria}
-            className="flex shrink-0 items-center gap-[10px] font-display text-[22px] leading-10 font-medium text-surface transition-colors duration-200 hover:text-ink-50"
-          >
-            <Mark size={26} />
-            {site.name}
-          </Link>
+        <Link
+          href={site.home}
+          aria-label={site.homeAria}
+          className="flex shrink-0 items-center gap-[10px] font-display text-[21px] leading-9 font-medium text-ink-900 transition-colors duration-200 hover:text-ink-500"
+        >
+          <Mark size={26} />
+          {site.name}
+        </Link>
 
-          <div className="flex items-center gap-[14px]">
-            {/* ---- Desktop links (>= 1320px) ---- */}
-            <div className="hidden items-center desktop:flex">
-              {site.nav.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  aria-current={isActive(link.href) ? "page" : undefined}
-                  className={`flex h-[46px] items-center rounded-pill px-4 py-[10px] text-[17px] leading-[25.5px] font-semibold transition-colors duration-200 ${
-                    isActive(link.href)
-                      ? "bg-surface text-ink-700"
-                      : "text-ink-50 hover:text-surface"
-                  }`}
+        {/* ---- Desktop links (>= 1320px), beside the wordmark ----
+             They used to ride in the right-hand group because the pill packed
+             everything against its own two edges. On a full-width bar the links
+             belong next to the mark they navigate, and only the controls belong
+             at the far edge. */}
+        <div className="hidden items-center desktop:flex">
+          {site.nav.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={isActive(link.href) ? "page" : undefined}
+              /* No plate on the active link either. A white pill was legible on
+                 #2d2d2d and is invisible on the page, so the state is carried in
+                 weight of colour: rest sits at ink-400 and the current page is
+                 the ink the wordmark is. */
+              className={`flex h-[40px] items-center rounded-pill px-[14px] text-[16px] leading-6 font-medium transition-colors duration-200 ${
+                isActive(link.href)
+                  ? "text-ink-900"
+                  : "text-ink-400 hover:text-ink-900"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          {site.navMenu.links.length > 0 && (
+            <div ref={dropdownRef} className="relative flex items-center">
+              <button
+                type="button"
+                onClick={() => setMenuOpen((open) => !open)}
+                aria-expanded={menuOpen}
+                aria-haspopup="true"
+                className="flex h-[40px] items-center gap-[2px] rounded-pill px-[14px] text-[16px] leading-6 font-medium text-ink-400 transition-colors duration-200 hover:text-ink-900"
+              >
+                {site.navMenu.label}
+                <motion.span
+                  animate={{ rotate: menuOpen ? 180 : 0 }}
+                  transition={transitions.variantFast}
+                  className="flex size-5 items-center justify-center"
                 >
-                  {link.label}
-                </Link>
-              ))}
-
-              {site.navMenu.links.length > 0 && (
-                <div ref={dropdownRef} className="relative flex items-center">
-                  <button
-                    type="button"
-                    onClick={() => setMenuOpen((open) => !open)}
-                    aria-expanded={menuOpen}
-                    aria-haspopup="true"
-                    className="flex items-center gap-[2px] rounded-[12px] py-[10px] pr-[14px] pl-4 text-[17px] leading-[25.5px] font-semibold text-ink-50 transition-colors duration-200 hover:text-surface"
+                  {/* Drawn rather than fetched, and that is the whole reason it
+                      changed: `chevron-down.svg` is a white stroke, which was
+                      right inside a #2d2d2d pill and invisible on the page.
+                      `currentColor` also makes it follow the label's hover,
+                      which an `<img>` cannot do. */}
+                  <svg
+                    viewBox="0 0 20 20"
+                    width={20}
+                    height={20}
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden
                   >
-                    {site.navMenu.label}
-                    <motion.span
-                      animate={{ rotate: menuOpen ? 180 : 0 }}
-                      transition={transitions.variantFast}
-                      className="flex size-5 items-center justify-center"
-                    >
-                      <Image
-                        src="/images/icons/chevron-down.svg"
-                        alt=""
-                        width={20}
-                        height={20}
-                      />
-                    </motion.span>
-                  </button>
-                  <AnimatePresence>
-                    {menuOpen && (
-                      <MenuPanel
-                        groups={[site.navMenu.links]}
-                        onNavigate={() => setMenuOpen(false)}
-                      />
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
+                    <path d="m5 8 4.293 4.293a1 1 0 0 0 1.414 0L15 8" />
+                  </svg>
+                </motion.span>
+              </button>
+              <AnimatePresence>
+                {menuOpen && (
+                  <MenuPanel
+                    groups={[site.navMenu.links]}
+                    onNavigate={() => setMenuOpen(false)}
+                  />
+                )}
+              </AnimatePresence>
             </div>
+          )}
+        </div>
 
+        {/* `ml-auto` rather than `justify-between`: the links stay welded to the
+            wordmark and only what follows is pushed to the far edge. */}
+        <div className="ml-auto flex items-center gap-[14px]">
             <LangSwitch lang={lang} label={site.labels.language} pathname={pathname} />
 
             <Link
               href={site.cta.href}
-              className="hidden h-[46px] items-center rounded-pill bg-accent px-4 py-[10px] text-[17px] leading-[25.5px] font-semibold text-surface transition-colors duration-200 hover:bg-accent-600 desktop:flex"
+              className="hidden h-[42px] items-center rounded-pill bg-accent px-5 text-[16px] leading-6 font-semibold whitespace-nowrap text-surface transition-colors duration-200 hover:bg-accent-600 desktop:flex"
             >
               {site.cta.label}
             </Link>
@@ -265,7 +396,10 @@ export function Header({ lang }: { lang: LabLang }) {
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-menu"
                 aria-label={mobileOpen ? site.labels.menuClose : site.labels.menuOpen}
-                className="flex items-center justify-center rounded-pill bg-surface px-[18px] py-3"
+                /* The white plate went with the dark pill: on the page it was a
+                   white button on a near-white bar. The glyph is `#262626` in
+                   the file and needs no plate to be seen here. */
+                className="flex size-[40px] items-center justify-center rounded-pill transition-colors duration-200 hover:bg-surface-muted"
               >
                 <Image
                   src="/images/icons/menu.svg"
@@ -287,7 +421,6 @@ export function Header({ lang }: { lang: LabLang }) {
               </AnimatePresence>
             </div>
           </div>
-        </div>
       </nav>
     </header>
   );

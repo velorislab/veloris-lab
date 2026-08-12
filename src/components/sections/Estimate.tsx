@@ -1,6 +1,6 @@
 import Calculator from '@/site/Calculator'
 import { SectionHeading } from '@/components/ui/SectionHeading'
-import { EYEBROW, CALC, tx, type LabLang, type LS } from '@/site/labData'
+import { CALC, tx, type LabLang, type LS } from '@/site/labData'
 
 /**
  * The calculator, in a section of its own.
@@ -28,13 +28,13 @@ export function Estimate({
   seedType,
   title,
   description,
-  badgeIcon = '/images/icons/badge/pricing.svg',
+  /* `badgeIcon` went with the badge: callers used to choose which pill glyph sat
+     over this heading, and there is no pill any more. */
 }: {
   lang: LabLang
   seedType?: string
   title?: LS
   description?: LS
-  badgeIcon?: string
 }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
 
@@ -45,12 +45,17 @@ export function Estimate({
       className="flex w-full scroll-mt-[120px] flex-col items-center gap-10 px-4 tablet:px-10 desktop:px-0"
     >
       <SectionHeading
-        badge={{ icon: badgeIcon, label: L(EYEBROW.calc) }}
         title={L(title ?? CALC.label)}
         description={L(description ?? CALC.sub)}
         textWidth={780}
       />
-      <div className="w-full max-w-[1101px]">
+      {/* The 1101px cap went with the page's other four widths. It was the last
+          thing standing narrower than the column: the section around it already
+          measured the full 1339, so the widget looked inset by 238px against
+          the dark slab above it. The estimate panel beside the steps keeps its
+          fixed 360px, so the extra width all goes to the step column, which is
+          the half that holds the chips. */}
+      <div className="w-full">
         <Calculator lang={lang} seedType={seedType} />
       </div>
     </section>
