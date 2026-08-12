@@ -123,9 +123,53 @@ export const UI: Record<string, LS> = {
   solutionFlow: { en: 'How the path goes', ru: 'Как проходит путь' },
   solutionWatch: { en: 'What decides whether this works or annoys people', ru: 'Что решает, будет это работать или раздражать' },
   solutionMetrics: { en: 'What to measure once it is live', ru: 'Что мерить после запуска' },
+  /* «Возможный», not «наш». The stack is chosen against the task at the scoping
+     and this list is what it is usually chosen from, so a heading that promised
+     a fixed stack would contradict both the home page and the next sentence. */
+  solutionStack: { en: 'A likely stack for this', ru: 'Возможный стек под это' },
+  solutionStackSub: {
+    en: 'Picked against the task when we scope it, not decided in advance. This is the shelf it usually comes off.',
+    ru: 'Выбирается под задачу на разборе, а не решается заранее. Это полка, с которой его обычно берут.',
+  },
+  /* SHARED ACROSS ALL SOLUTION PAGES, and deliberately not per scenario: it is a
+     claim about how the studio works, so writing it fifty-six times would be
+     fifty-six chances to say it differently.
+
+     IT PROMISES NOTHING IT CANNOT KEEP. No multiplier, no week count, no «in
+     record time». The claim is only that a known shape is not re-decided from
+     nothing, which is true of every scenario in this catalogue by construction,
+     and that the time saved goes somewhere nameable. The delivery window is
+     already on this page, from the price table, and it is the number that
+     actually binds us. */
+  solutionFast: { en: 'Why this comes out faster', ru: 'Почему это выходит быстрее' },
+  solutionFastBody: {
+    en: 'The shape of this one is known: the states, the edge cases and the things that usually go wrong have been decided before. Nothing here is a template, and the saving is not in your half of the work. It goes into your process, your content and the systems this has to talk to, which is the part nobody can have solved in advance.',
+    ru: 'Форма этой задачи известна: состояния, крайние случаи и то, что обычно ломается, здесь уже продуманы. Шаблоном при этом ничего не делается, и экономия идёт не из вашей половины работы. Она уходит в ваш процесс, ваш контент и системы, с которыми это должно разговаривать, то есть в ту часть, которую заранее решить нельзя.',
+  },
+  solutionStart: { en: 'What it starts at', ru: 'С чего это начинается' },
   solutionFaq: { en: 'Asked before the first call', ru: 'Спрашивают до первого созвона' },
   solutionNear: { en: 'Close to this', ru: 'Рядом с этим' },
   solutionAll: { en: 'All solutions', ru: 'Все решения' },
+  /* THE COUNT IS INSERTED, NOT TYPED. `{n}` is replaced with the length of the
+     catalogue at render, and the Russian noun agrees through `pluralForm`, so
+     adding a scenario cannot leave a heading claiming the old number. */
+  solutionCatalogue: { en: 'Another {n} scenarios, priced the same way', ru: 'Ещё {n} {w}, посчитанных так же' },
+  solutionCatalogueSub: {
+    en: 'Each one carries the figure and the window of the work it sits on, so nothing here is a separate price list. Grouped by the kind of work rather than by industry, because the kind of work is what decides the number.',
+    ru: 'У каждого цифра и срок той работы, на которой он стоит, поэтому отдельного прайса здесь нет. Сгруппированы по виду работы, а не по отрасли, потому что цифру решает именно вид работы.',
+  },
+  solutionWord: { en: 'scenarios', ru: 'сценарий|сценария|сценариев' },
+  /* THE MIDDLE TIER. A visitor who does not recognise their scenario in the
+     catalogue still recognises the kind of work, and this is the row that lets
+     them jump straight to the figure instead of reading fifty-six cards to find
+     out we do not have theirs. Six of these have a page of their own; the rest
+     carry their line of the price table and go to it. */
+  solutionKinds: { en: 'Or start from the kind of work', ru: 'Или начните с вида работы' },
+  solutionKindOwn: { en: 'a page of its own', ru: 'есть отдельная страница' },
+  solutionKindsSub: {
+    en: 'The whole price table, as the thing each scenario below is priced from. Where there is a page about the work, the card opens it.',
+    ru: 'Весь прайс целиком, тем, от чего считается каждый сценарий ниже. Если про эту работу есть отдельная страница, карточка её и откроет.',
+  },
   solutionsLabel: { en: 'We already know this scenario', ru: 'Этот сценарий нам уже знаком' },
   solutionsSub: {
     en: 'Each of these is a thing we build, with what goes into the first version, what it costs and how long it runs. Not a portfolio: the proof of work is on the case pages, and these are the offers.',

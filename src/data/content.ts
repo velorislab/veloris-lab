@@ -31,7 +31,7 @@ import {
 import { WORK_TYPES, SUPPORT_TIERS, money, priced, monthly } from '@/site/labPricing'
 import { SERVICE_PAGES } from '@/site/servicePages'
 import { CASE_PAGES } from '@/site/casePages'
-import { pricingPath, servicePath, casePath, localizedHref } from '@/site/routing'
+import { pricingPath, servicePath, casePath, solutionsPath, localizedHref } from '@/site/routing'
 
 const ICON = '/images/icons/badge'
 
@@ -204,8 +204,15 @@ export function getHome(lang: LabLang) {
          question nobody was being asked, and it put a second grid of prices
          directly under a grid of prices. The link says the same thing in four
          words and the table is one click away. */
+      /* POINTS AT /solutions, NOT AT /pricing, and the label did not have to
+         change for it: «все услуги и цены» is now more true of the solutions hub
+         than of the price table. The hub opens on every kind of work with its
+         floor, then fifty-six named scenarios, and the price table is one click
+         further on for the reader who wants the add-ons and the support ladder.
+         Sending that click straight to a table skipped the page that answers
+         «а моё вы делаете?», which is the question actually being asked here. */
       moreLabel: L(UI.allPrices),
-      moreHref: pricingPath(lang),
+      moreHref: solutionsPath(lang),
       orbitLogos: [] as string[],
     },
 
