@@ -134,7 +134,6 @@ export function getHome(lang: LabLang) {
         .replace('%n', String(CASES.length))
         .replace('cases', CASES.length === 1 ? 'case' : 'cases')
         .replace('кейсов', CASE_WORD[pluralForm(CASES.length)]),
-      collapseLabel: L(UI.casesLess),
       items: CASES.map((c) => {
         /* `match` is documented as the English title, so the join has to ask
            for the English form explicitly rather than the reader's. */

@@ -214,14 +214,20 @@ export function Cases({ lang }: { lang: LabLang }) {
       )}
       </div>
 
-      {collapsible && (
+      {/* ONE WAY ONLY: the control opens the grid and then leaves. Collapsing
+          again is a thing nobody does on a page they are reading downwards, and
+          a button that alternates its own label is a second state to notice for
+          no gain. `aria-expanded` is still correct while the button exists, and
+          it is the last element in the section, so nothing below it loses its
+          place when it goes. */}
+      {collapsible && !open && (
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
+          onClick={() => setOpen(true)}
+          aria-expanded={false}
           className="inline-flex h-[52px] items-center rounded-pill bg-surface px-6 text-[16px] leading-6 font-semibold text-ink-700 shadow-[0_0_0_1px_var(--color-line),0_2px_6px_0_rgba(182,182,182,0.12)] transition-colors duration-200 hover:bg-surface-muted"
         >
-          {open ? cases.collapseLabel : cases.showAllLabel}
+          {cases.showAllLabel}
         </button>
       )}
     </section>

@@ -109,7 +109,8 @@ export const UI: Record<string, LS> = {
      reader can see three cards and has no way to guess whether the fade hides
      two more or nine; `content.ts` fills it from `CASES.length`. */
   casesAll: { en: 'Show all %n cases', ru: 'Показать все %n кейсов' },
-  casesLess: { en: 'Collapse', ru: 'Свернуть' },
+  /* There is no «Свернуть» counterpart. The grid opens once and the button
+     leaves with the fade it was explaining. */
   /* Solution pages. Every heading on one is a spoken phrase rather than a
      category, same rule as the rest of the site. */
   solutionFor: { en: 'Who this suits:', ru: 'Кому подходит:' },
@@ -244,7 +245,7 @@ export const HERO = {
    * inside 200px costs it its force instead of doubling it.
    *
    * THE FIGURE IS THE FOUNDER'S AND IS NOT DERIVED FROM ANYTHING IN THIS REPO.
-   * Site data holds one user count, Swiftin's 1000+; ten thousand is the total
+   * Site data holds one user count, Swiftin's 4000+; ten thousand is the total
    * across everything built here, confirmed by the founder on 2026-08-10. It is
    * the kind of claim a prospect can ask about, so it moves only on their word.
    *
@@ -300,7 +301,7 @@ export const HERO = {
        Swiftin case page and the services copy. Kept because the indices above
        are referenced positionally and because the fact is true and may want a
        home again, not because it is on screen. */
-    { k: { en: 'Own product', ru: 'Свой продукт' }, v: { en: 'Swiftin, 1000+ users', ru: 'Swiftin, 1000+ пользователей' }, hot: true },
+    { k: { en: 'Own product', ru: 'Свой продукт' }, v: { en: 'Swiftin, 4000+ users', ru: 'Swiftin, 4000+ пользователей' }, hot: true },
   ] as { k: LS; v: LS; hot: boolean }[],
 }
 
@@ -659,11 +660,15 @@ export const CASES: Case[] = [
       ru: 'Одно расширение переводит веб-страницы, выделенный текст, то, что вы печатаете в любом поле, субтитры и целые документы, плюс AI-озвучка.',
     },
     res: {
-      en: '1000+ users and growing, live in the Chrome Web Store, with a free plan and paid subscriptions.',
-      ru: '1000+ пользователей и растёт, живёт в Chrome Web Store, с бесплатным планом и платными подписками.',
+      en: '4000+ users and growing, live in the Chrome Web Store, with a free plan and paid subscriptions.',
+      ru: '4000+ пользователей и растёт, живёт в Chrome Web Store, с бесплатным планом и платными подписками.',
     },
+    /* THE ONE FIGURE ON THIS SITE A STRANGER CAN CHECK, which is why it is worth
+       keeping current: the Chrome Web Store listing publishes the user count and
+       this card links straight to it. Moved from 1000+ on the founder's word on
+       2026-08-12. It should never sit above what the listing shows. */
     metrics: [
-      { v: '1000+', k: { en: 'users', ru: 'пользователей' } },
+      { v: '4000+', k: { en: 'users', ru: 'пользователей' } },
       { v: '100+', k: { en: 'languages', ru: 'языков' } },
     ],
     links: [
@@ -1135,7 +1140,13 @@ export const BUREAU = {
     { k: { en: 'Working languages', ru: 'Языки работы' }, v: { en: 'Russian, Ukrainian, English', ru: 'русский, украинский, английский' }, mono: false },
     { k: { en: 'Base', ru: 'База' }, v: { en: 'Batumi, Georgia, UTC+4', ru: 'Батуми, Грузия, UTC+4' }, mono: false },
     { k: { en: 'Projects delivered', ru: 'Проектов сдано' }, v: '15+', mono: true },
-    { k: { en: 'Full time on AI since', ru: 'Полный день с AI с' }, v: '2024', mono: true },
+    /* CHECK THIS AGAINST `body` ABOVE BEFORE CHANGING EITHER. The paragraph on
+       the card says «с 2024-го полный день в AI и автоматизации» and this row
+       now says the two started in 2023. Both can be true only if they mean
+       different things: working with them from 2023, full time from 2024. If
+       that is the intent, the paragraph should say it; if not, one of the two
+       years is wrong and a reader sees both without scrolling. */
+    { k: { en: 'AI and automation since', ru: 'AI и автоматизация с' }, v: '2023', mono: true },
   ],
 }
 
