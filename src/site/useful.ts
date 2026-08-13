@@ -952,4 +952,16 @@ export const USEFUL: UsefulTool[] = [
       ru: 'Готовый стартовый набор для веб-приложений и сайтов, которые собирают кодовым агентом, а его страница фонов это каталог анимированных canvas- и WebGL-эффектов, входящих в комплект. Нужен, чтобы начать проект, где герой, тёмные секции и движение уже решены. Продаётся разово, а не по подписке, цена лежит не на той странице, которую можно прочитать скриптом, и иконку здесь он делит с getdesign.md, потому что издаётся теми же людьми.',
     },
   },
+  {
+    key: 'openreply',
+    group: 'ai',
+    url: 'https://github.com/diwenne/openreply',
+    icon: '/images/useful/openreply.png',
+    name: 'OpenReply',
+    price: { en: 'free, MIT, self-hosted', ru: 'бесплатно, MIT, у себя' },
+    what: {
+      en: 'A self-hosted comment-to-DM automation for Instagram: somebody comments a keyword under a post and gets a private reply with your link, with tracked links, a follow gate and per-account rate limiting. It is the one feature people pay ManyChat a monthly fee for, running on your own infrastructure with no seat limits. It goes through Meta official private replies rather than scraping or driving a browser, so the account stays inside the rules, and the cost of that is a Meta developer app whose approval takes longer than the deploy does.',
+      ru: 'Автоматизация ответов в личные сообщения по комментариям в Instagram, разворачиваемая у себя: человек пишет ключевое слово под постом и получает в личку вашу ссылку, с отслеживанием переходов, проверкой подписки и ограничением частоты по каждому аккаунту. Это ровно та функция, за которую платят ManyChat ежемесячно, но на своей инфраструктуре и без лимита мест. Работает через официальные приватные ответы Meta, а не через скрейпинг или управление браузером, поэтому аккаунт остаётся в рамках правил, и платой за это становится приложение разработчика Meta, согласование которого занимает больше времени, чем сам деплой.',
+    },
+  },
 ]
