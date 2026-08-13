@@ -5,7 +5,7 @@ import { Estimate } from '@/components/sections/Estimate'
 import { getHome } from '@/data/content'
 import {
   STACK_CHOOSE, STACK_CHOOSE_LABEL, STACK_USED_LABEL, STACK_USED_SUB,
-  UI, tx, type LabLang,
+  tx, type LabLang,
 } from './labData'
 
 /* =============================================================================
@@ -39,10 +39,10 @@ export default function StackPage({ lang }: { lang: LabLang }) {
       <Header lang={lang} />
       <main id="main-content" className="page-main">
         <section className="section-shell gap-8 pt-4">
+          {/* No kicker over the h1, for the reason DESIGN.md gives for the
+              section badges: a heading that needs a label saying what it is
+              about is doing half its job. */}
           <div className="flex w-full max-w-[900px] flex-col items-center gap-4 text-center">
-            <span className="text-[12px] font-medium tracking-[0.1em] text-ink-200 uppercase">
-              {L(UI.stackAll)}
-            </span>
             <h1 className="text-[34px] leading-[1.15] font-semibold text-ink-900 tablet:text-[44px] desktop:text-[56px] desktop:leading-[1.15]">
               {stack.title}
             </h1>
@@ -111,13 +111,13 @@ export default function StackPage({ lang }: { lang: LabLang }) {
             {L(STACK_CHOOSE_LABEL)}
           </h2>
           <ul className="grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2">
-            {STACK_CHOOSE.map((c, n) => (
-              <li key={L(c.t)} className="flex flex-col gap-2 border-t border-line pt-5">
-                <span className="font-numeric text-[13px] font-medium tracking-[0.08em] text-accent">
-                  {String(n + 1).padStart(2, '0')}
-                </span>
+            {/* No 01-04: four things that decide a choice are considered
+                together, not in order. Numbering them would promise a sequence
+                the reader would then look for and not find. */}
+            {STACK_CHOOSE.map((c) => (
+              <li key={L(c.t)} className="flex flex-col gap-3 border-t border-line pt-5">
                 <h3 className="text-[18px] leading-7 text-ink-900">{L(c.t)}</h3>
-                <p className="text-[15px] leading-[22px] text-ink-300">{L(c.d)}</p>
+                <p className="text-[16px] leading-[26px] text-ink-300">{L(c.d)}</p>
               </li>
             ))}
           </ul>

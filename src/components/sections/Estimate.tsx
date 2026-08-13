@@ -28,6 +28,7 @@ export function Estimate({
   seedType,
   title,
   description,
+  compact = false,
   /* `badgeIcon` went with the badge: callers used to choose which pill glyph sat
      over this heading, and there is no pill any more. */
 }: {
@@ -35,6 +36,18 @@ export function Estimate({
   seedType?: string
   title?: LS
   description?: LS
+  /**
+   * FOR A PAGE THAT IS READ RATHER THAN SOLD.
+   *
+   * `SectionHeading` is 42px and centred, which is right where this section is
+   * one of a landing page's beats. Dropped into the middle of a solution page it
+   * was the only centred heading among ten and half again the size of the other
+   * nine: measured on the rendered page, the single thing still breaking that
+   * document's grammar. Compact gives it the document's own heading instead. The
+   * calculator underneath is untouched, because the widget is the same widget
+   * wherever it stands.
+   */
+  compact?: boolean
 }) {
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
 
@@ -44,11 +57,20 @@ export function Estimate({
       /* Clears the fixed pill, or the jump parks the heading under it. */
       className="flex w-full scroll-mt-[120px] flex-col items-center gap-10 px-4 tablet:px-10 desktop:px-0"
     >
-      <SectionHeading
-        title={L(title ?? CALC.label)}
-        description={L(description ?? CALC.sub)}
-        textWidth={780}
-      />
+      {compact ? (
+        <div className="read-col flex flex-col gap-3">
+          <h2 className="text-[26px] leading-[1.2] text-ink-900 tablet:text-[30px]">
+            {L(title ?? CALC.label)}
+          </h2>
+          <p className="text-[16px] leading-[26px] text-ink-300">{L(description ?? CALC.sub)}</p>
+        </div>
+      ) : (
+        <SectionHeading
+          title={L(title ?? CALC.label)}
+          description={L(description ?? CALC.sub)}
+          textWidth={780}
+        />
+      )}
       {/* The 1101px cap went with the page's other four widths. It was the last
           thing standing narrower than the column: the section around it already
           measured the full 1339, so the widget looked inset by 238px against

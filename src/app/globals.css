@@ -245,6 +245,19 @@
   position: relative;
 }
 
+/* THE READING COLUMN, and it is the FAQ's exception generalised.
+   `section-shell` is 1380 wide and centres its children, which is right for a
+   page that sells and wrong for one that explains: at 1380 a Russian line runs
+   past 200 characters, and centring every heading turns a document into a stack
+   of posters. A solution page is read, not scanned, so its prose sits in one
+   column at a reading measure and stays left-aligned inside the same shell every
+   other page uses. 860 is about 70 characters at 16px in Manrope, measured on
+   the longest lead in `solutions.ts` rather than picked. */
+@utility read-col {
+  width: 100%;
+  max-width: 780px;
+}
+
 @utility text-balance-heading {
   text-wrap: balance;
 }
