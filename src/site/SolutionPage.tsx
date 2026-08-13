@@ -8,7 +8,7 @@ import { Estimate } from '@/components/sections/Estimate'
 import { SOLUTIONS, solutionQuote, type Solution } from './solutions'
 import { SEPARATE_LABEL, UI, CALC, tx, type LabLang } from './labData'
 import { WORK_TYPES, money } from './labPricing'
-import { solutionPath, solutionsPath, pricingPath } from './routing'
+import { solutionPath, solutionsPath, pricingPath, stackPath } from './routing'
 
 /* =============================================================================
    One solution page.
@@ -233,6 +233,15 @@ export default function SolutionPage({ lang, page }: { lang: LabLang; page: Solu
               </li>
             ))}
           </ul>
+          {/* THE CLICK THIS SECTION HAS BEEN OWED. Its whole premise is that the
+              stack is chosen against the task, which is only credible if there
+              is somewhere showing what it is chosen from. */}
+          <Link
+            href={stackPath(lang)}
+            className="text-[15px] leading-6 text-accent underline-offset-4 hover:underline"
+          >
+            {L(UI.stackSeeAll)}
+          </Link>
         </section>
 
         {/* ------------------------------------------------------ estimator */}

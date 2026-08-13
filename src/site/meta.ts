@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { BRAND, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx } from './labData'
-import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang , buildServicesAlternates, servicesUrl, buildCasesAlternates, casesUrl } from './routing'
+import { BRAND, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx , STACK_LABEL, STACK_SUB } from './labData'
+import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang , buildServicesAlternates, servicesUrl, buildCasesAlternates, casesUrl , buildStackAlternates, stackUrl } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
 import { CASE_PAGES, type CasePage } from './casePages'
 import { CASES } from './labData'
@@ -392,5 +392,17 @@ export function casesMetadata(lang: LabLang): Metadata {
     description,
     alternates: buildCasesAlternates(lang),
     openGraph: { type: 'website', title, description, url: casesUrl(lang), siteName: BRAND },
+  }
+}
+
+export function stackMetadata(lang: LabLang): Metadata {
+  const t = (v: Parameters<typeof tx>[0]) => tx(v, lang)
+  const title = `${t(STACK_LABEL)} · ${BRAND}`
+  const description = t(STACK_SUB)
+  return {
+    title,
+    description,
+    alternates: buildStackAlternates(lang),
+    openGraph: { type: 'website', title, description, url: stackUrl(lang), siteName: BRAND },
   }
 }

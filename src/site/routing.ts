@@ -148,6 +148,25 @@ export function buildCasesAlternates(lang: LabLang) {
   }
 }
 
+/* The stack page. Fifty-six solution pages carry a «возможный стек» section
+   whose premise is that the choice is made against the task; this is where that
+   section's «посмотреть весь стек» finally goes. */
+
+export function stackPath(lang: LabLang): string {
+  return lang === 'en' ? '/stack' : `/${lang}/stack`
+}
+
+export function stackUrl(lang: LabLang): string {
+  return `${SITE_URL}${stackPath(lang)}`
+}
+
+export function buildStackAlternates(lang: LabLang) {
+  return {
+    canonical: stackUrl(lang),
+    languages: { en: stackUrl('en'), ru: stackUrl('ru'), 'x-default': stackUrl('en') },
+  }
+}
+
 /* Case pages, same shape as the service ones. */
 
 export function casePath(lang: LabLang, slug: string): string {

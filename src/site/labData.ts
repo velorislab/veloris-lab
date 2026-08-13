@@ -150,6 +150,8 @@ export const UI: Record<string, LS> = {
   solutionFaq: { en: 'Asked before the first call', ru: 'Спрашивают до первого созвона' },
   solutionNear: { en: 'Close to this', ru: 'Рядом с этим' },
   solutionAll: { en: 'All solutions', ru: 'Все решения' },
+  stackAll: { en: 'Technologies', ru: 'Технологии' },
+  stackSeeAll: { en: 'See the whole stack', ru: 'Посмотреть весь стек' },
   /* THE COUNT IS INSERTED, NOT TYPED. `{n}` is replaced with the length of the
      catalogue at render, and the Russian noun agrees through `pluralForm`, so
      adding a scenario cannot leave a heading claiming the old number. */
@@ -1497,6 +1499,59 @@ export interface StackGroup {
   /** One sentence on what we do with this group, in the team's voice. */
   lead: LS
   items: string[]
+}
+
+/**
+ * The four things that actually decide the stack, on the page of their own.
+ *
+ * NOT A NEW CLAIM. STACK_SUB already says «выбираем технологии под срок,
+ * нагрузку, возможности вашей команды и стоимость поддержки через год» in one
+ * sentence. A sentence with four things in it is read as a slogan; four named
+ * blocks are read as a method, and a reader can disagree with one of them.
+ * Nothing here is added to what that sentence already promised.
+ */
+export const STACK_CHOOSE_LABEL = {
+  en: 'Not by fashion. By what the product cannot do without.',
+  ru: 'Не по моде. По тому, без чего продукт не сможет.',
+}
+export const STACK_CHOOSE: { t: LS; d: LS }[] = [
+  {
+    t: { en: 'How soon it has to be in front of users', ru: 'Как скоро это должно оказаться у людей' },
+    d: {
+      en: 'One codebase reaches two stores sooner than two do. Where the deadline is the binding constraint, that is the argument, and where it is not, it is a bad reason to give up native depth.',
+      ru: 'Одна кодовая база доходит до двух магазинов быстрее, чем две. Там, где срок и есть главное ограничение, это аргумент, а там, где нет, это плохая причина отказаться от нативной глубины.',
+    },
+  },
+  {
+    t: { en: 'What it has to be able to do', ru: 'Что оно должно уметь' },
+    d: {
+      en: 'A camera, background work, real time, offline, heavy data or a system integration decide the stack on their own, and they decide it before anybody has an opinion about frameworks.',
+      ru: 'Камера, фоновая работа, реальное время, офлайн, тяжёлые данные или системная интеграция решают за стек сами, и решают до того, как у кого-то появится мнение о фреймворках.',
+    },
+  },
+  {
+    t: { en: 'What already exists on your side', ru: 'Что уже есть с вашей стороны' },
+    d: {
+      en: 'A working codebase gets continued, not quoted for a rewrite. If your own people maintain it afterwards, what they know is a constraint on the choice rather than a detail of it.',
+      ru: 'Работающий код продолжается, а не оценивается под переписывание. Если дальше его ведут ваши люди, то, что они знают, это ограничение выбора, а не деталь.',
+    },
+  },
+  {
+    t: { en: 'What it costs to keep alive in a year', ru: 'Во что это обойдётся держать через год' },
+    d: {
+      en: 'The first release is the cheap part. Servers, updates, the security patches nobody plans and the hiring market for the thing you chose all outlive it, and they are counted before the choice rather than after.',
+      ru: 'Первый релиз это дешёвая часть. Серверы, обновления, патчи безопасности, которых никто не планировал, и рынок найма под выбранное переживут его, и считаются они до выбора, а не после.',
+    },
+  },
+]
+
+export const STACK_USED_LABEL = {
+  en: 'And where each of these has actually run',
+  ru: 'И где это уже работало',
+}
+export const STACK_USED_SUB = {
+  en: 'A list of tools anybody can write. This is the same list with the project each one shipped on beside it, which is the version that can be checked.',
+  ru: 'Список технологий может написать кто угодно. Это тот же список, но рядом с каждой строкой проект, на котором она реально работала, и такую версию можно проверить.',
 }
 
 export const STACK_GROUPS: StackGroup[] = [
