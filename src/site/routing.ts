@@ -167,6 +167,21 @@ export function buildStackAlternates(lang: LabLang) {
   }
 }
 
+export function usefulPath(lang: LabLang): string {
+  return lang === 'en' ? '/useful' : '/' + lang + '/useful'
+}
+
+export function usefulUrl(lang: LabLang): string {
+  return SITE_URL + usefulPath(lang)
+}
+
+export function buildUsefulAlternates(lang: LabLang) {
+  return {
+    canonical: usefulUrl(lang),
+    languages: { en: usefulUrl('en'), ru: usefulUrl('ru'), 'x-default': usefulUrl('en') },
+  }
+}
+
 /* Case pages, same shape as the service ones. */
 
 export function casePath(lang: LabLang, slug: string): string {

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { BRAND, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx , STACK_LABEL, STACK_SUB } from './labData'
-import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang , buildServicesAlternates, servicesUrl, buildCasesAlternates, casesUrl , buildStackAlternates, stackUrl } from './routing'
+import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang , buildServicesAlternates, servicesUrl, buildCasesAlternates, casesUrl , buildStackAlternates, stackUrl , buildUsefulAlternates, usefulUrl } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
 import { CASE_PAGES, type CasePage } from './casePages'
 import { CASES } from './labData'
@@ -404,5 +404,17 @@ export function stackMetadata(lang: LabLang): Metadata {
     description,
     alternates: buildStackAlternates(lang),
     openGraph: { type: 'website', title, description, url: stackUrl(lang), siteName: BRAND },
+  }
+}
+
+export function usefulMetadata(lang: LabLang): Metadata {
+  const t = (v: Parameters<typeof tx>[0]) => tx(v, lang)
+  const title = `${t(UI.usefulLabel)} · ${BRAND}`
+  const description = t(UI.usefulSub)
+  return {
+    title,
+    description,
+    alternates: buildUsefulAlternates(lang),
+    openGraph: { type: 'website', title, description, url: usefulUrl(lang), siteName: BRAND },
   }
 }

@@ -151,6 +151,11 @@ export const UI: Record<string, LS> = {
   solutionNear: { en: 'Close to this', ru: 'Рядом с этим' },
   solutionAll: { en: 'All solutions', ru: 'Все решения' },
   stackAll: { en: 'Technologies', ru: 'Технологии' },
+  usefulLabel: { en: 'Tools we point people at', ru: 'Инструменты, на которые мы показываем' },
+  usefulSub: {
+    en: 'Every one of these was opened and read before it was written down, and each card says what it actually charges. Where something has a condition that changes whether you would pick it, that is on the card too: this list is only worth the click if it saves the ten minutes of finding that out.',
+    ru: 'Каждый из них открыт и прочитан до того, как попал сюда, и на каждой карточке написано, сколько он на самом деле стоит. Если у инструмента есть условие, которое меняет решение, оно тоже на карточке: этот список стоит клика только если экономит те десять минут, за которые это выясняется.',
+  },
   stackSeeAll: { en: 'See the whole stack', ru: 'Посмотреть весь стек' },
   /* THE COUNT IS INSERTED, NOT TYPED. `{n}` is replaced with the length of the
      catalogue at render, and the Russian noun agrees through `pluralForm`, so
