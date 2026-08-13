@@ -52,7 +52,7 @@ export default function CasesHub({ lang }: { lang: LabLang }) {
 
         <Cases lang={lang} all />
 
-        <Estimate lang={lang} />
+        <Estimate lang={lang} compact />
       </main>
       <Footer lang={lang} />
     </>

@@ -189,7 +189,7 @@ export default function SolutionsHub({ lang }: { lang: LabLang }) {
           ))}
         </section>
 
-        <Estimate lang={lang} />
+        <Estimate lang={lang} compact />
       </main>
       <Footer lang={lang} />
     </>

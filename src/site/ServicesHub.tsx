@@ -113,7 +113,7 @@ export default function ServicesHub({ lang }: { lang: LabLang }) {
           </ul>
         </section>
 
-        <Estimate lang={lang} />
+        <Estimate lang={lang} compact />
       </main>
       <Footer lang={lang} />
     </>
