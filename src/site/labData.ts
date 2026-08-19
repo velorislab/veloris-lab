@@ -1196,8 +1196,8 @@ export const BUREAU = {
   // and it is a job title rather than a sentence.
   role: 'AI-native engineer / forward deployed',
   body: {
-    en: 'Designs the architecture, leads the build and answers for the result. The main instrument is AI, Claude and other models, which is what makes hard things faster without growing a team to do them. Writing code since 2014, and full time on AI and automation since 2024.',
-    ru: 'Проектирует архитектуру, ведёт разработку и отвечает за результат. Основной инструмент это AI, Claude и другие модели: он и позволяет делать сложные вещи быстрее, без раздувания команды. В разработке с 2014 года, с 2024-го полный день в AI и автоматизации.',
+    en: 'Designs the architecture, leads the build and answers for the result. The main instrument is AI, Claude and other models, which is what makes hard things faster without growing a team to do them. Working in automation and development since 2022, and full time on AI since 2024.',
+    ru: 'Проектирует архитектуру, ведёт разработку и отвечает за результат. Основной инструмент это AI, Claude и другие модели: он и позволяет делать сложные вещи быстрее, без раздувания команды. В автоматизации и разработке с 2022 года, с 2024-го полный день в AI.',
   },
   // Describes who is in the frame and where, because the place is a fact the
   // table below repeats. Not "a photo of a man", which tells a screen reader
@@ -1214,13 +1214,13 @@ export const BUREAU = {
     { k: { en: 'Working languages', ru: 'Языки работы' }, v: { en: 'Russian, Ukrainian, English', ru: 'русский, украинский, английский' }, mono: false },
     { k: { en: 'Base', ru: 'База' }, v: { en: 'Batumi, Georgia, UTC+4', ru: 'Батуми, Грузия, UTC+4' }, mono: false },
     { k: { en: 'Projects delivered', ru: 'Проектов сдано' }, v: '15+', mono: true },
-    /* CHECK THIS AGAINST `body` ABOVE BEFORE CHANGING EITHER. The paragraph on
-       the card says «с 2024-го полный день в AI и автоматизации» and this row
-       now says the two started in 2023. Both can be true only if they mean
-       different things: working with them from 2023, full time from 2024. If
-       that is the intent, the paragraph should say it; if not, one of the two
-       years is wrong and a reader sees both without scrolling. */
-    { k: { en: 'AI and automation since', ru: 'AI и автоматизация с' }, v: '2023', mono: true },
+    /* CHECK THIS AGAINST `body` ABOVE BEFORE CHANGING EITHER. The row and the
+       paragraph now say the same thing: automation started in 2022, and AI
+       became the full-time work in 2024. Those are two different claims sharing
+       one card, and a reader sees both without scrolling, so moving one year
+       without the other puts a contradiction on screen. An earlier draft read
+       2014 here and 2023 in this row; both were slips, not facts. */
+    { k: { en: 'AI and automation since', ru: 'AI и автоматизация с' }, v: '2022', mono: true },
   ],
 }
 
