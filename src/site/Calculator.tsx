@@ -86,7 +86,32 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
   // instead of snapping. Mid-flight values are rounded to the same grid the
   // totals sit on, so the readout lands on the figure the breakdown adds up to
   // rather than near it. See STEP_LINE for what a coarser grid here cost.
-  const priceMv = useSpring(0, { stiffness: 90, damping: 20, restDelta: 1 })
+  /* IT OPENS ON THE REAL FIGURE, NOT ON ZERO, and that is about what gets
+     served rather than about the animation. A motion value renders whatever it
+     currently holds, the server included, so `useSpring(0)` put «от $0» into
+     the static HTML of all eight pages carrying this widget — a price that is
+     in no table, sitting under a heading that promises one, for however long it
+     takes the bundle to arrive, and forever for a reader with no JavaScript.
+     Everything else on this site reads its figures from `labPricing`; this one
+     printed a number of its own. Verified on the export rather than assumed:
+     /ru/pricing ships $1,700 and the booking solution page ships its own $750.
+
+     `est` is a `useMemo` above this line, so it is already correct on the first
+     render and there is nothing to wait for. What it costs is the count-up on
+     mount: the price now simply IS the opening figure. The spring still runs on
+     every answer the reader changes, which is the moment they are actually
+     looking at it — this widget sits several screens down and the mount
+     animation was mostly played to nobody. */
+  /* A `useState` initialiser, not `est.total` inline and not a ref. `useSpring`
+     has to be handed the SAME number on every render: passing `est.total`
+     directly would change the argument each time an answer changes, and whether
+     motion reads a changed numeric source as a new target or as a new resting
+     value is not something this file should be betting on — the effect below is
+     the one driver of this spring and stays the one driver. A ref does the same
+     job and the lint rule against reading `.current` during render is right to
+     stop it; this initialiser runs once and is a render-time value by design. */
+  const [openingTotal] = useState(() => est?.total ?? 0)
+  const priceMv = useSpring(openingTotal, { stiffness: 90, damping: 20, restDelta: 1 })
   const priceText = useTransform(priceMv, (v) => money(Math.round(v / STEP_LINE) * STEP_LINE))
   useEffect(() => {
     if (!est) return
@@ -377,6 +402,11 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
                 <span className="text-[13px] font-medium tracking-[0.08em] text-ink-200 uppercase">{L(CALC.resultLbl)}</span>
                 <p className="flex items-baseline gap-2 font-display text-[42px] leading-none font-semibold text-ink-900 tablet:text-[48px]">
                   <span className="text-[17px] font-medium text-ink-200">{L(CALC.bfFrom)}</span>
+                  {/* This renders whatever the motion value currently holds,
+                      including on the server, which is the whole reason the
+                      spring's opening number had to stop being 0. Nothing is
+                      gated on `hydrated` here: measured on the export, the
+                      figure is in the static HTML now. */}
                   <motion.span>{priceText}</motion.span>
                 </p>
                 <div className="mt-1 flex flex-col">
