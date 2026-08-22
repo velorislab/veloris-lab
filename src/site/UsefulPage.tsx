@@ -1,5 +1,7 @@
 import Image from 'next/image'
 
+import staticImageLoader from '../../image-loader'
+
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
@@ -87,10 +89,31 @@ export default function UsefulPage({ lang }: { lang: LabLang }) {
                             own line instead of taking the name's room. */}
                         <span className="flex flex-wrap items-start gap-x-3 gap-y-2">
                           {/* Unoptimised: these are small third-party marks in
-                              mixed formats including .ico, and the export's
-                              custom loader has nothing useful to do with them. */}
+                              mixed formats — nineteen .ico and ten .svg of the
+                              sixty-four — and the default optimiser refuses SVG
+                              without `dangerouslyAllowSVG`, which is not a flag
+                              to turn on for files fetched from other people's
+                              domains.
+
+                              AND THAT IS WHY THE PATH GOES THROUGH THE LOADER BY
+                              HAND. `unoptimized` bypasses the loader, and the
+                              loader is the one thing that prepends `basePath` —
+                              which is the exact bug `image-loader.ts` was written
+                              to fix and whose comment says so in the first
+                              paragraph. Set per image rather than in the config,
+                              it reintroduced it: every one of these sixty-four
+                              marks asked for `/images/useful/...` and got a 404
+                              from Pages, which serves this site from
+                              `/veloris-lab`. Verified on the deployed page, not
+                              inferred — `naturalWidth` was 0 and the same path
+                              with the prefix answered 200.
+
+                              Calling the loader as a function keeps the rule in
+                              the one file that owns it. It is idempotent, so a
+                              path that already carries the prefix is left
+                              alone. */}
                           <Image
-                            src={t.icon}
+                            src={staticImageLoader({ src: t.icon, width: 28 })}
                             alt=""
                             width={28}
                             height={28}
