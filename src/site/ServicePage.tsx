@@ -370,7 +370,7 @@ function ServiceHero({
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
 
   return (
-    <section className="relative flex w-full flex-col items-center overflow-hidden px-4 pt-[122px] pb-[10px] tablet:px-10 tablet:pt-[140px] desktop:px-0 desktop:pt-[150px]">
+    <section className="relative flex w-full flex-col items-center overflow-hidden px-4 pt-[120px] pb-[10px] tablet:px-10 tablet:pt-[140px] desktop:px-0 desktop:pt-[150px]">
       <div
         aria-hidden
         className="pointer-events-none absolute top-[180px] left-1/2 z-0 hidden h-[339px] w-[481px] -translate-x-1/2 desktop:block"

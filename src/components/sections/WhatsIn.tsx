@@ -138,8 +138,23 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
          80px under the row below it, which was fine while that row was a wall
          of chips heavy enough to hold the bottom edge down. With one button
          there instead, the slab needs the same air under the button as it has
-         over the crest, or the button looks dropped rather than placed. */
-      className="relative flex w-full scroll-mt-[110px] flex-col items-end gap-10 overflow-hidden rounded-[50px] bg-[#110f20] px-4 py-20 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:px-10 tablet:py-24 desktop:gap-20 desktop:px-20 desktop:py-[130px]"
+         over the crest, or the button looks dropped rather than placed.
+
+         THE SIDES ARE 24px ON A PHONE, NOT 16, and that is about the page
+         rather than about this slab. Four panels stand on this column and three
+         of them (`Motto`, `PlatformHighlight`, `FinalCta`) open their content
+         24px inside their own edge; this one opened it 16px in, so its cards
+         started 32px from the screen edge while every other panel's content
+         started at 41. One number was wrong and it was this one.
+
+         AND THE CORNER SCALES WITH THEM. 50px was the slab's own radius against
+         the other three panels' 40, which is a 10px difference on a 1380px
+         column and reads as a deliberate softening. On a 343px phone panel the
+         same 10px is the difference between an 8% corner and a 15% one, and the
+         slab stopped matching the section above it. Below the tablet breakpoint
+         it takes the same 28px `--radius-section` resolves to there; above it,
+         nothing changed. */
+      className="relative flex w-full scroll-mt-[120px] flex-col items-end gap-10 overflow-hidden rounded-[28px] bg-[#110f20] px-6 py-20 shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_8px_#ffffff] tablet:rounded-[50px] tablet:px-10 tablet:py-24 desktop:gap-20 desktop:px-20 desktop:py-[130px]"
     >
       {/* One background instead of the three overlays this slab used to carry.
           The pointer trail that used to be here piled glyphs into the corner

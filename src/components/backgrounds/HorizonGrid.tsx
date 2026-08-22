@@ -171,10 +171,52 @@ export function HorizonGrid({
       draw();
       raf = requestAnimationFrame(frame);
     };
-    raf = requestAnimationFrame(frame);
+
+    /* IT STOPS WHEN IT LEAVES THE SCREEN, and on a phone that is most of the
+       time. This canvas is the height of the first screen and backs a page that
+       runs to sixteen thousand pixels; without this it repaints a 750x1624
+       buffer sixty times a second for the whole of that scroll, having been out
+       of view since the first flick. `requestAnimationFrame` is throttled by
+       the browser only when the whole tab is hidden, not when one element has
+       scrolled away.
+
+       `last` is reset on resume rather than carried across the pause: the frame
+       clamps `dt` at 50ms anyway, but restarting the clock is what keeps the
+       grid from stepping forward on the first frame back.
+
+       IT STARTS RUNNING AND THE OBSERVER ONLY EVER PAUSES IT. Starting from
+       stopped and waiting for the first callback would be tidier and puts the
+       whole animation behind one API doing its job; this way a browser that
+       never delivers that callback falls back to exactly the behaviour this
+       component had before, which is the failure worth having.
+
+       The observer is not gated on `reduce`, because the reduced-motion path
+       returns above and never reaches this. */
+    let running = false;
+    const start = () => {
+      if (running) return;
+      running = true;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+    const stop = () => {
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+    start();
+
+    const io = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      /* One viewport of slack, so the animation is already running by the time
+         the section's edge appears rather than starting under the reader. */
+      { rootMargin: "100% 0px" },
+    );
+    io.observe(host);
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      io.disconnect();
       ro.disconnect();
     };
   }, [color, background, speed, horizon, fadeOut, columns, rows, reduce]);

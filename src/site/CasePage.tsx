@@ -132,11 +132,19 @@ export default function CasePageBody({ lang, page }: { lang: LabLang; page: CP }
       {/* `page-main`'s widths and its 200/150/80 rhythm are written out here
           rather than borrowed: that utility is sized for a home page whose first
           child is a hero section of its own, and it puts only 80px above the
-          fold on a phone, which is under the 94px fixed nav. An inner page whose
-          first child IS the heading has to clear the pill itself. */}
+          fold on a phone, which is 8px under the fixed bar. An inner page whose
+          first child IS the heading has to clear the bar itself.
+
+          120px ON A PHONE, AND IT IS THE SAME 120 EVERYWHERE NOW. The bar is
+          72px, so this is 48px of clearance. Four different answers to this one
+          question were in the repo at once — 130 here, 122 on a service page,
+          144 on the price list and 96 on the six pages that took `page-main`'s
+          80 plus a `pt-4` — which on a phone is a gap between the nav and the
+          h1 that changes by a factor of three depending on which page you
+          landed on. */}
       <main
         id="main-content"
-        className="mx-auto flex w-full max-w-[450px] flex-col items-center gap-20 px-4 pt-[130px] pb-20 tablet:max-w-[800px] tablet:gap-[110px] tablet:px-[30px] tablet:pt-[150px] tablet:pb-24 desktop:w-[94%] desktop:max-w-[1380px] desktop:gap-[150px] desktop:px-0 desktop:pt-[190px] desktop:pb-[120px]"
+        className="mx-auto flex w-full max-w-[450px] flex-col items-center gap-20 px-4 pt-[120px] pb-20 tablet:max-w-[800px] tablet:gap-[110px] tablet:px-[30px] tablet:pt-[150px] tablet:pb-24 desktop:w-[94%] desktop:max-w-[1380px] desktop:gap-[150px] desktop:px-0 desktop:pt-[190px] desktop:pb-[120px]"
       >
         {/* ------------------------------------------------------------ hero */}
         <section className="section-shell items-start gap-6 desktop:gap-8">

@@ -64,7 +64,14 @@ export function FinalCta({ lang }: { lang: LabLang }) {
   return (
     <section
       id={SECTION_ID}
-      className="section-shell overflow-hidden rounded-section border border-line px-6 py-12 tablet:px-12 tablet:py-16 desktop:gap-[50px] desktop:px-20 desktop:py-[60px]"
+      /* `gap-8` AND NOT ONLY `desktop:gap-[50px]`. `section-shell` sets no gap
+         of its own, so below 1320px this panel had none at all and the button
+         row sat flush against the bottom of the chip list: on a phone the
+         Telegram pill and the last white chip shared an edge, which reads as
+         one control that failed to lay out rather than as two things. Every
+         other section on the page carries `gap-10` from the phone up; this one
+         gets 32 because its own vertical padding is already smaller. */
+      className="section-shell gap-8 overflow-hidden rounded-section border border-line px-6 py-12 tablet:px-12 tablet:py-16 desktop:gap-[50px] desktop:px-20 desktop:py-[60px]"
       style={{
         backgroundImage:
           "linear-gradient(210.198deg, rgb(0, 101, 255) 0%, rgb(51, 132, 255) 69.6669%)",

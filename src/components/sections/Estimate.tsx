@@ -54,8 +54,19 @@ export function Estimate({
   return (
     <section
       id="estimate"
-      /* Clears the fixed pill, or the jump parks the heading under it. */
-      className="flex w-full scroll-mt-[120px] flex-col items-center gap-10 px-4 tablet:px-10 desktop:px-0"
+      /* `scroll-mt` clears the fixed bar, or the jump parks the heading under it.
+       *
+       * NO HORIZONTAL PADDING, and it used to carry `px-4 tablet:px-10`. Every
+       * one of the eight callers renders this inside `page-main` (or, on a case
+       * page, inside the hand-written equivalent), and that wrapper already
+       * pads the column: 16px on a phone, 30px on a tablet. The two stacked, so
+       * the calculator was the only section on the site standing inset from the
+       * page — 32px against everyone else's 16 on a phone, 70 against 30 on a
+       * tablet — on the home page, the price list, the stack page and all five
+       * hubs and detail pages at once. Measured on the rendered page rather
+       * than reasoned about: every sibling section reported [16..359] at 375px
+       * and this one [32..343]. */
+      className="flex w-full scroll-mt-[120px] flex-col items-center gap-10"
     >
       {compact ? (
         <div className="read-col flex flex-col gap-3">

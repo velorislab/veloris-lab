@@ -26,7 +26,10 @@ export function Faq({ lang }: { lang: LabLang }) {
          measure of the answers rather than a container preference. Widening the
          shell and widening the prose are two different things, and only the
          first was asked for. */
-      className="flex w-full flex-col items-center gap-10 desktop:gap-20"
+      /* `scroll-mt` because the nav points here and the bar is fixed over it;
+         the sections built on `section-shell` inherit the same 120px from the
+         utility, this one is not one of them. */
+      className="flex w-full scroll-mt-[120px] flex-col items-center gap-10 desktop:gap-20"
     >
       <div className="flex w-full flex-col items-center gap-4">
         <h2 className="text-center text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">

@@ -146,7 +146,13 @@ export function Hero({ lang }: { lang: LabLang }) {
           `aria-hidden pointer-events-none absolute inset-x-0 top-0 h-[725px]` box. */}
 
       {/* ------------------------------------------------------------ content */}
-      <div className="relative flex w-full max-w-[1101px] flex-col items-center gap-[50px]">
+      {/* `page-col` AND NOT `max-w-[1101px]`, because 1101 was only ever the
+          desktop half of the answer. See the utility in globals.css: below the
+          tablet breakpoint the page under this hero is a 418px column and this
+          block was ignoring it, so the fold and the first section disagreed
+          about the width of the page by nearly 300px on any screen between a
+          large phone in landscape and a small tablet. */}
+      <div className="page-col relative flex flex-col items-center gap-[50px]">
         <div className="relative flex w-full flex-col items-center gap-10 desktop:px-20">
           <div className="relative flex w-full max-w-[941px] flex-col items-center gap-4">
             {/* The credential pill that used to open the fold is gone, at the
@@ -219,7 +225,16 @@ export function Hero({ lang }: { lang: LabLang }) {
               figures with their own captions are already three groups, and a
               line drawn between them repeats what the spacing has said. The gap
               carries it instead, and stays small on a phone where the three
-              columns have about 90px each to live in. */}
+              columns have about 90px each to live in.
+
+              AND NO INNER PADDING ON A PHONE, which is what those 90px buy.
+              `px-2` was spending 16 of them, and the figures do not wrap: at
+              360px «от $120/мес» and its caption were both wider than the box
+              they were centred in and painted over the gutter, at 320px by
+              15px. The 12px gap is the whole separation there, and it is enough
+              because nothing in a column reaches its edge any more. The padding
+              comes back at tablet, where there is room for it to mean
+              something. */}
           <motion.div
             variants={heroVariants.riseIn}
             initial={initial}
@@ -228,7 +243,7 @@ export function Hero({ lang }: { lang: LabLang }) {
             className="relative grid w-full max-w-[680px] grid-cols-3 gap-x-3 tablet:gap-x-8"
           >
             {hero.marks.map((m) => (
-              <div key={m.caption} className="flex flex-col items-center gap-[2px] px-2 text-center tablet:px-4">
+              <div key={m.caption} className="flex flex-col items-center gap-[2px] text-center tablet:px-4">
                 <span className="font-display text-[13px] leading-5 font-semibold whitespace-nowrap text-ink-800 tablet:text-[18px] tablet:leading-7">
                   {m.value}
                 </span>

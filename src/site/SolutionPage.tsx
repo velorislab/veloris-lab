@@ -120,7 +120,7 @@ export default function SolutionPage({ lang, page }: { lang: LabLang; page: Solu
       <main id="main-content" className="page-main">
         {/* ------------------------------------------------------------ head */}
         {/* The one centred thing on the page. */}
-        <section className="section-shell gap-8 pt-4">
+        <section className="section-shell gap-8 pt-10 tablet:pt-4">
           <div className="flex w-full max-w-[900px] flex-col items-center gap-5 text-center">
             <h1 className="text-[34px] leading-[1.15] font-semibold text-ink-900 tablet:text-[44px] desktop:text-[56px] desktop:leading-[1.15]">
               {L(page.title)}

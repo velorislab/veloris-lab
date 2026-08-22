@@ -65,6 +65,7 @@
   /* ---- Radii ----------------------------------------------------------- */
   --radius-card: 16px;
   --radius-panel: 20px;
+  /* Overridden on a phone; see the media query under `:root` below. */
   --radius-section: 40px;
   --radius-pill: 100px;
 
@@ -90,6 +91,20 @@
     0 2px 2px 0 rgba(0, 0, 0, 0.02);
   --shadow-ring: 0 0 0 4px #ffffff;
   --shadow-ring-6: 0 0 0 6px #ffffff, 0 17px 24px 0 rgba(178, 178, 178, 0.08);
+}
+
+/* THE SECTION RADIUS IS A FRACTION, NOT A NUMBER, and 40px stops being the
+   same fraction on a phone. On the desktop column a panel is 1380px wide and
+   40px is 3% of it; on a 375px screen the same panel is 343px and the corner
+   eats 12%, which is enough to push the first word of a centred heading
+   visibly inwards and to make one panel's corner read louder than the section
+   it opens. 28px is 8% at 343 and reads as the same shape the desktop panel
+   has. Only the section radius scales: `card` and `panel` are already small
+   enough that the proportion barely moves. */
+@media (max-width: 809px) {
+  :root {
+    --radius-section: 28px;
+  }
 }
 
 /* =============================================================================
@@ -225,6 +240,31 @@
   }
 }
 
+/* THE SAME COLUMN, FOR THE ONE SECTION THAT IS NOT INSIDE `page-main`.
+   The hero is a sibling of `main`, so it carried its own widths, and the two
+   sets disagreed exactly where it shows most. Below 810px `page-main` freezes
+   its column at 450px while the hero kept growing with the viewport: measured
+   on a 744px screen, the headline ran 712px wide and every section under it
+   sat in a 418px column, a 294px step down at the first scroll. Above 1320px
+   the hero is deliberately the narrower of the two (1101 against 1354), which
+   is the relationship this restores at every width rather than only that one.
+
+   The numbers are `page-main`'s own arithmetic, resolved to content width:
+   450 - 32 of padding, 800 - 60, and the hero's own 1101 on desktop where the
+   page column is wider than it anyway. */
+@utility page-col {
+  width: 100%;
+  max-width: 1101px;
+
+  @media (min-width: 810px) and (max-width: 1319px) {
+    max-width: 740px;
+  }
+
+  @media (max-width: 809px) {
+    max-width: 418px;
+  }
+}
+
 /* Default section shell: the page column's own width, centred, shrinking with
    the viewport.
 
@@ -243,6 +283,17 @@
   flex-direction: column;
   align-items: center;
   position: relative;
+  /* THE BAR IS FIXED, SO EVERY SECTION IS A JUMP TARGET WITH SOMETHING OVER IT.
+     Four of the six destinations in the phone menu — process, about, faq,
+     contact — had no scroll margin at all, so tapping one of them parked the
+     section's own heading in the 72px the bar occupies, and past 120px of
+     scroll that bar is opaque. It read as a jump that went one screen too far.
+     Three sections had spelled the offset out for themselves, at 110 twice and
+     120 once. 120 is the number the whole site now opens on under the bar; it
+     belongs here, once, where a section that becomes an anchor later inherits
+     it without anybody remembering to. Scroll margin costs nothing on an
+     element nothing links to. */
+  scroll-margin-top: 120px;
 }
 
 /* THE READING COLUMN, and it is the FAQ's exception generalised.

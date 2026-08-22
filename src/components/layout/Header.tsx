@@ -41,17 +41,37 @@ import type { LabLang } from "@/site/labData";
  */
 
 /**
- * The menu panel, shared by the desktop dropdown and the mobile sheet.
+ * The menu panel, shared by the desktop dropdown and the phone sheet.
  *
- * `groups` rather than a flat list: on mobile it carries the whole nav and then
+ * `groups` rather than a flat list: on a phone it carries the whole nav and then
  * the case pages, and those are two different kinds of destination, so a
  * hairline separates them. One group renders no separator at all.
+ *
+ * `sheet` IS WHERE THE TWO STOP BEING THE SAME OBJECT, and the reason is the
+ * finger. A dropdown is aimed with a cursor that lands on a pixel, so a 25px row
+ * of text is a perfectly good target and 235px is a perfectly good width for a
+ * panel hanging under one button. On a phone the same markup was the whole
+ * navigation of the site: seven 25px rows, 14px apart, in a 228px panel pinned
+ * to the right edge of a 375px screen. Nothing about that is wrong for a
+ * dropdown and everything about it is wrong for the only way into the site on a
+ * phone. As a sheet the rows are 44px, which is the target size a thumb is
+ * specified against, the panel takes the screen's own margins, and the pointer
+ * hover gets a pressed state to answer to instead.
+ *
+ * `cta` IS SEPARATE FROM THE GROUPS FOR THE SAME REASON. It used to ride along
+ * as the last entry of the first group, which made the one conversion action on
+ * the page identical to «О студии» directly above it. It is a filled pill here,
+ * as it is in the bar on desktop.
  */
 function MenuPanel({
   groups,
+  cta,
+  sheet = false,
   onNavigate,
 }: {
   groups: NavLink[][];
+  cta?: NavLink;
+  sheet?: boolean;
   onNavigate: () => void;
 }) {
   return (
@@ -60,23 +80,50 @@ function MenuPanel({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8, scale: 0.97 }}
       transition={transitions.accordion}
-      className="absolute right-0 top-[calc(100%+10px)] z-20 flex w-[235px] origin-top-right flex-col gap-[14px] overflow-hidden rounded-[20px] bg-surface p-5 shadow-[0_10px_41px_0_rgba(0,0,0,0.08),0_2px_2px_0_rgba(0,0,0,0.02)]"
+      /* The sheet's width is the screen minus the bar's own 16px gutters, so its
+         left edge lands on the page column rather than somewhere inside it, and
+         it stops at 320 on the wider phones where a full-bleed sheet would just
+         be a long way for the eye to travel back. */
+      className={`absolute right-0 top-[calc(100%+10px)] z-20 flex origin-top-right flex-col overflow-hidden bg-surface shadow-[0_10px_41px_0_rgba(0,0,0,0.08),0_2px_2px_0_rgba(0,0,0,0.02)] ${
+        sheet
+          ? "w-[min(320px,calc(100vw-32px))] gap-1 rounded-[20px] p-3"
+          : "w-[235px] gap-[14px] rounded-[20px] p-5"
+      }`}
     >
       {groups.map((group, index) => (
         <Fragment key={group[0]?.href ?? index}>
-          {index > 0 && <div aria-hidden className="h-px w-full bg-line" />}
+          {index > 0 && (
+            <div
+              aria-hidden
+              className={`h-px w-full bg-line ${sheet ? "my-2" : ""}`}
+            />
+          )}
           {group.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={onNavigate}
-              className="w-[195px] text-[17px] leading-[25.5px] font-semibold text-ink-250 transition-colors duration-200 hover:text-ink-700"
+              className={
+                sheet
+                  ? "flex min-h-[44px] items-center rounded-[12px] px-3 text-[17px] leading-[25.5px] font-semibold text-ink-250 transition-colors duration-200 hover:bg-surface-muted hover:text-ink-700 active:bg-surface-muted"
+                  : "w-[195px] text-[17px] leading-[25.5px] font-semibold text-ink-250 transition-colors duration-200 hover:text-ink-700"
+              }
             >
               {link.label}
             </Link>
           ))}
         </Fragment>
       ))}
+
+      {cta && (
+        <Link
+          href={cta.href}
+          onClick={onNavigate}
+          className="mt-2 flex min-h-[48px] items-center justify-center rounded-pill bg-accent px-4 text-center text-[17px] leading-[25.5px] font-semibold text-surface transition-colors duration-200 hover:bg-accent-600"
+        >
+          {cta.label}
+        </Link>
+      )}
     </motion.div>
   );
 }
@@ -114,16 +161,20 @@ function LangSwitch({
           <span
             key={code}
             aria-current="true"
-            className="flex h-[34px] items-center rounded-pill px-[8px] text-[15px] leading-[24px] font-semibold text-ink-900"
+            className="flex h-[44px] items-center rounded-pill px-[10px] text-[15px] leading-[24px] font-semibold text-ink-900"
           >
             {code}
           </span>
         ) : (
+          /* 44px tall, and the height is the whole change: the pair reads
+             exactly as before because neither half has a plate at rest, but the
+             inactive one was a 34x34 target sitting next to a 40x40 hamburger in
+             a 72px bar with room for neither problem. */
           <Link
             key={code}
             href={twinPath(pathname, code)}
             hrefLang={code}
-            className="flex h-[34px] items-center rounded-pill px-[8px] text-[15px] leading-[24px] font-semibold text-ink-200 transition-colors duration-200 hover:text-ink-700"
+            className="flex h-[44px] items-center rounded-pill px-[10px] text-[15px] leading-[24px] font-semibold text-ink-200 transition-colors duration-200 hover:text-ink-700"
           >
             {code}
           </Link>
@@ -252,12 +303,14 @@ export function Header({ lang }: { lang: LabLang }) {
     href.startsWith("/") &&
     (href === site.home ? pathname === site.home : pathname.startsWith(href));
 
-  /* Everything the pill hides below 1320px, plus the case pages under a
-     hairline. The CTA rides along as its last row: the template's mobile menu
-     simply dropped it, which on this site means the one conversion action on
-     the page is unreachable on a phone. */
+  /* Everything the bar hides below 1320px, plus the case pages under a
+     hairline. The CTA is handed to the panel separately rather than appended
+     here: the template's mobile menu dropped it entirely, which on this site
+     means the one conversion action on the page is unreachable on a phone, and
+     the first fix put it back as an ordinary nav row, which is only half of
+     what it needs to be. */
   const mobileGroups: NavLink[][] = [
-    [...site.nav, ...site.navRest, site.cta],
+    [...site.nav, ...site.navRest],
     ...(site.navMenu.links.length > 0 ? [site.navMenu.links] : []),
   ];
 
@@ -399,7 +452,7 @@ export function Header({ lang }: { lang: LabLang }) {
                 /* The white plate went with the dark pill: on the page it was a
                    white button on a near-white bar. The glyph is `#262626` in
                    the file and needs no plate to be seen here. */
-                className="flex size-[40px] items-center justify-center rounded-pill transition-colors duration-200 hover:bg-surface-muted"
+                className="flex size-[44px] items-center justify-center rounded-pill transition-colors duration-200 hover:bg-surface-muted"
               >
                 <Image
                   src="/images/icons/menu.svg"
@@ -413,7 +466,9 @@ export function Header({ lang }: { lang: LabLang }) {
                 {mobileOpen && (
                   <div id="mobile-menu">
                     <MenuPanel
+                      sheet
                       groups={mobileGroups}
+                      cta={site.cta}
                       onNavigate={() => setMobileOpen(false)}
                     />
                   </div>

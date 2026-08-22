@@ -36,7 +36,7 @@ export default function CasesHub({ lang }: { lang: LabLang }) {
     <>
       <Header lang={lang} />
       <main id="main-content" className="page-main">
-        <section className="section-shell gap-6 pt-4">
+        <section className="section-shell gap-6 pt-10 tablet:pt-4">
           <div className="flex w-full max-w-[900px] flex-col items-center gap-4 text-center">
             <span className="text-[12px] font-medium tracking-[0.1em] text-ink-200 uppercase">
               {L(UI.navCases)}

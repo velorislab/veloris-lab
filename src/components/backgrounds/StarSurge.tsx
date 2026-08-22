@@ -149,10 +149,48 @@ export function StarSurge({
       draw();
       raf = requestAnimationFrame(frame);
     };
-    raf = requestAnimationFrame(frame);
+
+    /* IT STOPS WHEN IT LEAVES THE SCREEN, and this is the canvas that made the
+       difference. The slab it backs is as tall as its content, which on a phone
+       is six stacked cards: measured at 375px, 343x2332 CSS pixels, and at
+       device-pixel-ratio 2 that is a 686x4664 buffer — 3.2 megapixels cleared
+       and repainted with 240 arcs sixty times a second, for the entire length of
+       a page that is five times taller than the slab. `requestAnimationFrame`
+       throttles when the tab is hidden, not when one section has scrolled past.
+
+       The drift is time-based, so a paused field does not fall behind; it simply
+       resumes from where it stopped, which for a star field nobody can see is
+       the correct amount of catching up. `last` is reset on resume so the first
+       frame back is a normal frame rather than one carrying the whole pause.
+
+       IT STARTS RUNNING AND THE OBSERVER ONLY EVER PAUSES IT, so a browser that
+       never delivers the first callback degrades to the behaviour this had
+       before rather than to a slab with no stars in it. */
+    let running = false;
+    const start = () => {
+      if (running) return;
+      running = true;
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    };
+    const stop = () => {
+      if (!running) return;
+      running = false;
+      cancelAnimationFrame(raf);
+    };
+    start();
+
+    const io = new IntersectionObserver(
+      ([entry]) => (entry.isIntersecting ? start() : stop()),
+      /* One viewport of slack, so it is already breathing by the time the
+         slab's edge comes into view. */
+      { rootMargin: "100% 0px" },
+    );
+    io.observe(host);
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
+      io.disconnect();
       ro.disconnect();
     };
   }, [color, background, speed, count, reduce]);

@@ -34,7 +34,7 @@ export default function UsefulPage({ lang }: { lang: LabLang }) {
     <>
       <Header lang={lang} />
       <main id="main-content" className="page-main">
-        <section className="section-shell gap-8 pt-4">
+        <section className="section-shell gap-8 pt-10 tablet:pt-4">
           <div className="flex w-full max-w-[900px] flex-col items-center gap-5 text-center">
             <h1 className="text-[34px] leading-[1.15] font-semibold text-ink-900 tablet:text-[44px] desktop:text-[56px] desktop:leading-[1.15]">
               {L(UI.usefulLabel)}
@@ -70,8 +70,22 @@ export default function UsefulPage({ lang }: { lang: LabLang }) {
                         {/* Mark, name, and the price in the corner. The price is
                             the first thing scanned and the last thing that needs
                             a heading over it: four words up here let a reader
-                            compare a whole grid without reading one card. */}
-                        <span className="flex items-start gap-3">
+                            compare a whole grid without reading one card.
+
+                            THE ROW WRAPS, AND THE NAME HAS A FLOOR. It did not,
+                            and the price is not always four words: fifteen of
+                            the sixty-four entries carry a whole clause there
+                            («бесплатно, нарушает условия провайдера» is 291px
+                            of a 303px row on a phone). The pill was `shrink-0`
+                            and the name was `min-w-0`, so every one of those
+                            fifteen names was squeezed to between 0 and 16px and
+                            spelled itself down the card one letter per line.
+                            Measured, not guessed: free-claude-code reported a
+                            name box 0px wide. With `flex-wrap` and a 7rem floor
+                            the short prices still sit in the corner where they
+                            are meant to be scanned, and a long one drops to its
+                            own line instead of taking the name's room. */}
+                        <span className="flex flex-wrap items-start gap-x-3 gap-y-2">
                           {/* Unoptimised: these are small third-party marks in
                               mixed formats including .ico, and the export's
                               custom loader has nothing useful to do with them. */}
@@ -87,7 +101,9 @@ export default function UsefulPage({ lang }: { lang: LabLang }) {
                               was saying nothing the card did not: the whole card
                               is the link, and a reader who wants the address has
                               the status bar and the icon beside the name. */}
-                          <span className="min-w-0 text-[17px] leading-7 text-ink-900">{t.name}</span>
+                          <span className="min-w-[7rem] flex-1 text-[17px] leading-7 text-ink-900">
+                            {t.name}
+                          </span>
                           <span className="ml-auto shrink-0 rounded-pill bg-surface-tint px-3 py-1 text-right font-numeric text-[13px] leading-5 text-ink-700">
                             {L(t.price)}
                           </span>

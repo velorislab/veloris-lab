@@ -68,7 +68,7 @@ export function Cases({ lang, all = false }: { lang: LabLang; all?: boolean }) {
   const collapsible = !all && cases.items.length > COLLAPSED;
 
   return (
-    <section id="cases" className="section-shell scroll-mt-[110px] gap-10 desktop:gap-[60px]">
+    <section id="cases" className="section-shell gap-10 desktop:gap-[60px]">
       <div className="flex w-full flex-col items-center gap-4 text-center">
         <h2 className="max-w-[900px] text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
           {cases.title}
@@ -90,11 +90,24 @@ export function Cases({ lang, all = false }: { lang: LabLang; all?: boolean }) {
            under a coloured sheet: a sheet would have to match the page colour
            exactly and would still square off over the rounded corners. It runs
            only while collapsed, because a fade at the end of the full set would
-           be hiding nothing. */
+           be hiding nothing.
+
+           AND ONLY FROM THE TABLET BREAKPOINT UP, which is the width where the
+           thing it fades exists. The fade is calibrated for the second row of a
+           two- or three-column grid: black to 46%, gone by 94%. In one column
+           the grid renders three tiles, not six, so those percentages land
+           inside the tiles themselves — measured, tile three spanned 68% to
+           100% of the grid, which put its title at half opacity and its two
+           links at almost none while both stayed clickable and in the tab
+           order. That is precisely the defect the six-not-twelve slice above
+           exists to avoid, reintroduced by a gradient. The blur that rides on
+           top of this was already `hidden tablet:block`; the two halves of one
+           effect now agree, and on a phone the button below names the remainder
+           out loud instead. */
         className={`grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2 desktop:grid-cols-3 ${
           open || !collapsible
             ? ""
-            : "[mask-image:linear-gradient(to_bottom,black_0%,black_46%,transparent_94%)]"
+            : "tablet:[mask-image:linear-gradient(to_bottom,black_0%,black_46%,transparent_94%)]"
         }`}
       >
         {shown.map((c, i) => (
@@ -183,10 +196,19 @@ export function Cases({ lang, all = false }: { lang: LabLang; all?: boolean }) {
                 </p>
               )}
 
+              {/* `-my-1 py-1` ON EVERY LINK IN THE ROW, and the pair cancels.
+                  These are the way into a case page and they were 24px tall,
+                  which is a fine size for a text link a cursor points at and a
+                  small one for the finger this grid is mostly read with. The
+                  padding grows the hit area to 32px and the negative margin
+                  gives the 8px straight back to the layout, so the row, the
+                  card and the whole grid measure exactly what they measured
+                  before. 8px is also the row's own `gap-y`, so two wrapped rows
+                  meet rather than overlap. */}
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 <Link
                   href={c.href}
-                  className="text-[15px] leading-6 font-medium text-accent underline decoration-accent/30 underline-offset-4 transition-colors duration-200 hover:decoration-accent"
+                  className="-my-1 py-1 text-[15px] leading-6 font-medium text-accent underline decoration-accent/30 underline-offset-4 transition-colors duration-200 hover:decoration-accent"
                 >
                   {c.readLabel}
                 </Link>
@@ -196,7 +218,7 @@ export function Cases({ lang, all = false }: { lang: LabLang; all?: boolean }) {
                     href={l.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[15px] leading-6 text-ink-300 underline decoration-line-strong underline-offset-4 transition-colors duration-200 hover:text-ink-800"
+                    className="-my-1 py-1 text-[15px] leading-6 text-ink-300 underline decoration-line-strong underline-offset-4 transition-colors duration-200 hover:text-ink-800"
                   >
                     {l.label}
                   </a>
