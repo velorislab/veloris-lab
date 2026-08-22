@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AnimatePresence, motion, useReducedMotion, useSpring, useTransform,
 } from 'motion/react'
@@ -97,11 +97,14 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
      /ru/pricing ships $1,700 and the booking solution page ships its own $750.
 
      `est` is a `useMemo` above this line, so it is already correct on the first
-     render and there is nothing to wait for. What it costs is the count-up on
-     mount: the price now simply IS the opening figure. The spring still runs on
-     every answer the reader changes, which is the moment they are actually
-     looking at it — this widget sits several screens down and the mount
-     animation was mostly played to nobody. */
+     render and there is nothing to wait for.
+
+     THE COUNT-UP IS NOT LOST, IT MOVED TO THE SCROLL THAT REACHES IT. See the
+     effect below: this is `Motto`'s contract for the same problem, and that file
+     argues it at length. The short version is that the true value is what the
+     server renders, and the animation is allowed to borrow the number only once
+     the reader is about to watch it happen — never on mount, where zeroing after
+     the first paint makes the real figure flash and reset. */
   /* A `useState` initialiser, not `est.total` inline and not a ref. `useSpring`
      has to be handed the SAME number on every render: passing `est.total`
      directly would change the argument each time an answer changes, and whether
@@ -118,6 +121,81 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
     if (reduce) priceMv.jump(est.total)
     else priceMv.set(est.total)
   }, [est, priceMv, reduce])
+
+  /* The figure the count-up has to land on, kept where a callback can read it.
+     The effect below fires once, long after this render, and by then `est` may
+     be a different object; closing over the one that existed at mount would
+     count up to a number the reader has already changed. */
+  const totalRef = useRef(0)
+  useEffect(() => {
+    if (est) totalRef.current = est.total
+  }, [est])
+
+  const priceRef = useRef<HTMLParagraphElement>(null)
+
+  /**
+   * The price counts up once, on the scroll that first brings it into view.
+   *
+   * THIS IS `Motto`'s CONTRACT, POINT FOR POINT, and it is here because the two
+   * are the same problem: a figure that must be true in the HTML and would like
+   * to be animated in the browser. That file carries the full argument; what
+   * follows is why each clause of it is repeated rather than dropped.
+   *
+   * The spring opens on the real total, so the server ships the real total. The
+   * animation therefore cannot start on mount — it would have to zero a number
+   * that has already been painted, and a price that flashes «$1,700» and resets
+   * to «$0» is worse than a price that never moves.
+   *
+   * ALREADY ON SCREEN AT LOAD MEANS NO ANIMATION AT ALL. Same reason: there is
+   * no scroll to trigger it and nothing to hide the reset behind. A deep link to
+   * #estimate lands here.
+   *
+   * NOTHING IS ZEROED UNTIL THE FRAME LOOP IS ABOUT TO RUN. Zeroing on mount and
+   * leaving the restore to machinery that may never run is how a panel ends up
+   * reading «$0» for the rest of the session, which is the exact defect this
+   * whole change set out to remove.
+   *
+   * AND THERE IS A BACKSTOP ON THE WALL CLOCK, armed in the same tick as the
+   * zeroing. A spring is driven by `requestAnimationFrame`, which stops in a
+   * hidden document; from the moment the value is parked at zero the readout is
+   * false, so a timer restores it a little after the spring should have settled.
+   * When the loop runs normally this jumps to the number it is already on.
+   *
+   * `matchMedia` rather than the `reduce` hook: `useReducedMotion` reads null
+   * until it has a client to ask, and this effect runs once with whatever value
+   * it had at mount. The same reasoning is written out in `Motto`.
+   */
+  useEffect(() => {
+    const root = priceRef.current
+    if (!root) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (typeof IntersectionObserver === 'undefined') return
+
+    const box = root.getBoundingClientRect()
+    if (box.top < window.innerHeight && box.bottom > 0) return
+
+    let backstop = 0
+    /* Longer than the spring needs. At stiffness 90 / damping 20 it settles
+       inside a second and a half; this only has to be after that, not near it. */
+    const SETTLED = 1800
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return
+        io.disconnect()
+        priceMv.jump(0)
+        priceMv.set(totalRef.current)
+        backstop = window.setTimeout(() => priceMv.jump(totalRef.current), SETTLED)
+      },
+      { threshold: 0.4 },
+    )
+    io.observe(root)
+
+    return () => {
+      io.disconnect()
+      if (backstop) clearTimeout(backstop)
+    }
+  }, [priceMv])
 
   const go = (n: number) => setStep([n, n > step ? 1 : -1])
 
@@ -400,7 +478,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
             ? (
               <>
                 <span className="text-[13px] font-medium tracking-[0.08em] text-ink-200 uppercase">{L(CALC.resultLbl)}</span>
-                <p className="flex items-baseline gap-2 font-display text-[42px] leading-none font-semibold text-ink-900 tablet:text-[48px]">
+                <p ref={priceRef} className="flex items-baseline gap-2 font-display text-[42px] leading-none font-semibold text-ink-900 tablet:text-[48px]">
                   <span className="text-[17px] font-medium text-ink-200">{L(CALC.bfFrom)}</span>
                   {/* This renders whatever the motion value currently holds,
                       including on the server, which is the whole reason the
