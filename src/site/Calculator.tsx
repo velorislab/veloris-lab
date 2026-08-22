@@ -426,11 +426,31 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
               is not going to be one.
               The scroll target is the [data-calc-steps] card, not #estimate: below
               the desktop breakpoint that card is ordered BELOW the panel, so
-              scrolling to the section top would put the step change off-screen. */}
+              scrolling to the section top would put the step change off-screen.
+
+              AND ON STEP ONE, BELOW THE DESKTOP BREAKPOINT, IT IS NOT THERE.
+              That sentence above says «has self-qualified», and on step one
+              nobody has. On desktop it does not matter: the panel is a 360px
+              rail beside the questions, so the shortcut reads as an accessory to
+              a form the reader can see. On a phone the same panel is `order-
+              first`, which puts it ABOVE the questions — so the first thing in
+              the whole block, and the only filled control in it, was a
+              full-width accent button whose one job is to skip the five
+              questions the reader has not been shown yet. Tapping it takes the
+              counter from «Шаг 1 из 5» to «Шаг 5 из 5» before a single question
+              has been asked, which is exactly what it looked like: a form that
+              opens on its last step.
+
+              The number above it is the reason the panel is first on a phone at
+              all, and that is untouched. The shortcut comes back the moment the
+              reader has answered anything, which is when it starts being a
+              shortcut rather than an exit. */}
           {step < STEPS && (
             <button
               type="button"
-              className="w-full rounded-pill bg-accent px-6 py-[14px] text-[16px] font-medium text-white transition-colors duration-200 hover:bg-accent-600"
+              className={`w-full rounded-pill bg-accent px-6 py-[14px] text-[16px] font-medium text-white transition-colors duration-200 hover:bg-accent-600 ${
+                step === 1 ? 'hidden desktop:block' : ''
+              }`}
               onClick={() => {
                 setStep([STEPS, 1])
                 document.querySelector('[data-calc-steps]')?.scrollIntoView({
