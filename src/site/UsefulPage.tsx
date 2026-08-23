@@ -1,12 +1,15 @@
-import Image from 'next/image'
-
 import staticImageLoader from '../../image-loader'
 
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-import { USEFUL, USEFUL_GROUPS } from './useful'
-import { UI, tx, type LabLang } from './labData'
+import {
+  USEFUL, USEFUL_GROUPS, USEFUL_UI,
+  USEFUL_COST_LABEL, USEFUL_RUNS_LABEL, USEFUL_CAUTION_LABEL,
+  USEFUL_COST_ORDER, USEFUL_RUNS_ORDER, USEFUL_CAUTION_ORDER, USEFUL_BLOCK_WORD,
+} from './useful'
+import { UsefulExplorer, type ExplorerLabels } from './UsefulExplorer'
+import { UI, tx, pluralForm, type LabLang, type LS } from './labData'
 
 /* =============================================================================
    Useful things.
@@ -27,10 +30,87 @@ import { UI, tx, type LabLang } from './labData'
    is doing a real job rather than decorating: in a grid of nine, the mark is
    what a reader recognises before they have read a word, and a directory without
    marks is a wall of identical rectangles.
+
+   THIS FILE IS NOW A SERVER COMPONENT THAT RESOLVES AND HANDS OFF, and the list
+   itself lives in `UsefulExplorer`. The split is the locale rule: the explorer
+   is `"use client"` because narrowing needs a browser, and a client component
+   cannot be given `tx` or an `LS` pair to resolve later. So every string is
+   resolved to the page's language here, on the server, and crosses the boundary
+   as a plain string. Nothing about the list is client-only: all sixty-five cards
+   and the index above them render in the HTML with no filter applied, which is
+   what a reader with no JavaScript and every crawler gets.
    ========================================================================== */
 
 export default function UsefulPage({ lang }: { lang: LabLang }) {
-  const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
+  const L = (v: LS) => tx(v, lang)
+
+  /* Only the groups that carry something, counted rather than assumed. The
+     lead says how many there are and must never be told: it is the same rule as
+     the case grid's «Показать все N кейсов», and the same three Russian forms. */
+  const liveGroups = USEFUL_GROUPS.filter((g) => USEFUL.some((t) => t.group === g.key))
+  const indexLead = L(USEFUL_UI.indexLead)
+    .replace('{n}', String(liveGroups.length))
+    .replace('{w}', USEFUL_BLOCK_WORD[pluralForm(liveGroups.length)])
+
+  /* Resolved once, here. The explorer receives strings and knows no locale. */
+  const labels: ExplorerLabels = {
+    indexTitle: L(USEFUL_UI.indexTitle),
+    indexLead: indexLead,
+    filters: L(USEFUL_UI.filters),
+    searchPh: L(USEFUL_UI.searchPh),
+    costLabel: L(USEFUL_UI.costLabel),
+    runsLabel: L(USEFUL_UI.runsLabel),
+    cautionLabel: L(USEFUL_UI.cautionLabel),
+    any: L(USEFUL_UI.any),
+    anyRuns: L(USEFUL_UI.anyRuns),
+    reset: L(USEFUL_UI.reset),
+    found: L(USEFUL_UI.found),
+    nothing: L(USEFUL_UI.nothing),
+    nothingHint: L(USEFUL_UI.nothingHint),
+    tagsNote: L(USEFUL_UI.tagsNote),
+    cost: Object.fromEntries(
+      Object.entries(USEFUL_COST_LABEL).map(([k, v]) => [k, L(v)]),
+    ),
+    runs: Object.fromEntries(
+      Object.entries(USEFUL_RUNS_LABEL).map(([k, v]) => [k, L(v)]),
+    ),
+    caution: Object.fromEntries(
+      Object.entries(USEFUL_CAUTION_LABEL).map(([k, v]) => [k, L(v)]),
+    ),
+    costOrder: USEFUL_COST_ORDER,
+    runsOrder: USEFUL_RUNS_ORDER,
+    cautionOrder: USEFUL_CAUTION_ORDER,
+  }
+
+  /* Only the groups that have something in them, computed from the array rather
+     than trusted: an empty block would otherwise print a heading and a lead over
+     nothing, and its index entry would scroll to it. */
+  const groups = liveGroups.map((g) => ({
+    key: g.key,
+    title: L(g.title),
+    lead: L(g.lead),
+  }))
+
+  const tools = USEFUL.map((t) => ({
+    key: t.key,
+    group: t.group,
+    url: t.url,
+    /* THROUGH THE LOADER, ON THE SERVER, and this is the second time this exact
+       bug has been written. The cards are `unoptimized` because nineteen of the
+       marks are .ico and ten are .svg, which the default optimiser will not
+       serve without `dangerouslyAllowSVG`; `unoptimized` bypasses the loader,
+       and the loader is the only thing that prepends `basePath`. Left raw, all
+       sixty-five icons 404 the moment Pages serves the site from a subpath.
+       Resolved here rather than in the explorer so the rule stays on the server
+       and the client is handed a finished URL. */
+    icon: staticImageLoader({ src: t.icon, width: 28 }),
+    name: t.name,
+    price: L(t.price),
+    what: L(t.what),
+    cost: t.cost,
+    runsWhere: t.runsWhere,
+    cautions: t.cautions,
+  }))
 
   return (
     <>
@@ -47,105 +127,7 @@ export default function UsefulPage({ lang }: { lang: LabLang }) {
           </div>
         </section>
 
-        {USEFUL_GROUPS.map((g) => {
-          const inGroup = USEFUL.filter((t) => t.group === g.key)
-          if (inGroup.length === 0) return null
-          return (
-            <section key={g.key} className="section-shell gap-6">
-              <div className="flex w-full max-w-[1180px] flex-col gap-6">
-                <div className="flex flex-col gap-3">
-                  <h2 className="text-[26px] leading-[1.2] text-ink-900 tablet:text-[30px]">
-                    {L(g.title)}
-                  </h2>
-                  <p className="max-w-[780px] text-[16px] leading-[26px] text-ink-300">{L(g.lead)}</p>
-                </div>
-
-                <ul className="grid grid-cols-1 gap-[14px] tablet:grid-cols-2 desktop:grid-cols-3">
-                  {inGroup.map((t) => (
-                    <li key={t.key} className="h-full">
-                      <a
-                        href={t.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-full flex-col gap-4 rounded-card bg-surface p-5 shadow-[0_0_0_1px_var(--color-line-soft)] transition-colors duration-200 hover:bg-surface-muted"
-                      >
-                        {/* Mark, name, and the price in the corner. The price is
-                            the first thing scanned and the last thing that needs
-                            a heading over it: four words up here let a reader
-                            compare a whole grid without reading one card.
-
-                            THE ROW WRAPS, AND THE NAME HAS A FLOOR. It did not,
-                            and the price is not always four words: fifteen of
-                            the sixty-four entries carry a whole clause there
-                            («бесплатно, нарушает условия провайдера» is 291px
-                            of a 303px row on a phone). The pill was `shrink-0`
-                            and the name was `min-w-0`, so every one of those
-                            fifteen names was squeezed to between 0 and 16px and
-                            spelled itself down the card one letter per line.
-                            Measured, not guessed: free-claude-code reported a
-                            name box 0px wide. With `flex-wrap` and a 7rem floor
-                            the short prices still sit in the corner where they
-                            are meant to be scanned, and a long one drops to its
-                            own line instead of taking the name's room. */}
-                        <span className="flex flex-wrap items-start gap-x-3 gap-y-2">
-                          {/* Unoptimised: these are small third-party marks in
-                              mixed formats — nineteen .ico and ten .svg of the
-                              sixty-four — and the default optimiser refuses SVG
-                              without `dangerouslyAllowSVG`, which is not a flag
-                              to turn on for files fetched from other people's
-                              domains.
-
-                              AND THAT IS WHY THE PATH GOES THROUGH THE LOADER BY
-                              HAND. `unoptimized` bypasses the loader, and the
-                              loader is the one thing that prepends `basePath` —
-                              which is the exact bug `image-loader.ts` was written
-                              to fix and whose comment says so in the first
-                              paragraph. Set per image rather than in the config,
-                              it reintroduced it: every one of these sixty-four
-                              marks asked for `/images/useful/...` and got a 404
-                              from Pages, which serves this site from
-                              `/veloris-lab`. Verified on the deployed page, not
-                              inferred — `naturalWidth` was 0 and the same path
-                              with the prefix answered 200.
-
-                              Calling the loader as a function keeps the rule in
-                              the one file that owns it. It is idempotent, so a
-                              path that already carries the prefix is left
-                              alone. */}
-                          <Image
-                            src={staticImageLoader({ src: t.icon, width: 28 })}
-                            alt=""
-                            width={28}
-                            height={28}
-                            unoptimized
-                            className="mt-[2px] h-7 w-7 shrink-0 rounded-[6px] object-contain"
-                          />
-                          {/* The name alone. The domain used to sit under it and
-                              was saying nothing the card did not: the whole card
-                              is the link, and a reader who wants the address has
-                              the status bar and the icon beside the name. */}
-                          <span className="min-w-[7rem] flex-1 text-[17px] leading-7 text-ink-900">
-                            {t.name}
-                          </span>
-                          <span className="ml-auto shrink-0 rounded-pill bg-surface-tint px-3 py-1 text-right font-numeric text-[13px] leading-5 text-ink-700">
-                            {L(t.price)}
-                          </span>
-                        </span>
-
-                        {/* One block of prose, always the same three sentences.
-                            The labelled Cost and Worth-knowing blocks that used
-                            to sit here made every card a small form to fill in
-                            with the eye; the facts they carried are inside the
-                            description now, which is where they read. */}
-                        <span className="text-[15px] leading-[24px] text-ink-500">{L(t.what)}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </section>
-          )
-        })}
+        <UsefulExplorer tools={tools} groups={groups} labels={labels} />
       </main>
       <Footer lang={lang} />
     </>
