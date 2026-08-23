@@ -234,22 +234,36 @@ export const USEFUL_CAUTION_LABEL: Record<UsefulCaution, LS> = {
   hardware: { en: 'needs hardware', ru: 'нужно железо' },
 }
 
-/** The order the caution chips render in: commonest first, so the row reads as
- *  a frequency list rather than as an alphabet. Counted at render, never typed. */
+/**
+ * The order the tags render in on a card, so the same two flags land the same
+ * way round on every one of them and a row reads as a column.
+ *
+ * IT IS COMMONEST FIRST AND THAT IS NOW ONLY A TIE-BREAK. It was the order of a
+ * row of filter chips, where a frequency list is worth having; the filter is
+ * gone and this is what survived it, because the argument for a stable order on
+ * the cards holds on its own.
+ */
 export const USEFUL_CAUTION_ORDER: UsefulCaution[] = [
   'licence', 'meter', 'thirdparty', 'noncommercial', 'terms', 'abandoned', 'consent', 'hardware',
 ]
 
-export const USEFUL_COST_ORDER: UsefulCost[] = ['free', 'freemium', 'paid', 'tokens', 'unclear']
-export const USEFUL_RUNS_ORDER: UsefulRuns[] = ['hosted', 'local', 'selfhost', 'both']
+/* `USEFUL_COST_ORDER` and `USEFUL_RUNS_ORDER` were here and went with the filter
+   that was their only reader. A card prints one cost and one runsWhere, so it
+   has nothing to order. They come back the day a control needs to list every
+   value of an axis; the labels above already do the naming. */
 
 /**
- * The explorer's own words.
+ * The page's own words, for the parts that are not a card.
  *
  * Here rather than in `labData` for the same reason the group titles are here:
  * nothing outside this page says any of them, and a string that names a facet
- * belongs beside the facet it names. `{n}` and `{w}` are the count and its
- * Russian form, filled at render from the array. Nothing here types a number.
+ * belongs beside the facet it names.
+ *
+ * It held thirteen more of these until the filter above the list was removed:
+ * a search placeholder, three axis headings, two «any» chips, a reset, a result
+ * count and an empty state. All of them went with it rather than being kept
+ * warm, because a string nothing renders is a string that quietly stops being
+ * true in one language first.
  */
 export const USEFUL_UI: Record<string, LS> = {
   indexTitle: { en: 'What is in here', ru: 'Что здесь есть' },
@@ -260,29 +274,6 @@ export const USEFUL_UI: Record<string, LS> = {
   indexLead: {
     en: '{n} blocks, and what each one is actually for. The page runs long, so this is the map.',
     ru: '{n} {w} и то, для чего каждый нужен на самом деле. Страница длинная, так что это карта.',
-  },
-  filters: { en: 'Filters', ru: 'Фильтры' },
-  searchPh: { en: 'Find by name', ru: 'Найти по названию' },
-  costLabel: { en: 'What it costs', ru: 'Сколько стоит' },
-  runsLabel: { en: 'Where it runs', ru: 'Где работает' },
-  cautionLabel: { en: 'What to watch for', ru: 'На что смотреть' },
-  /* «Any» rather than «all»: the chip clears the axis, it does not select
-     everything, and those read differently when the result count is beside it. */
-  any: { en: 'any', ru: 'любая' },
-  anyRuns: { en: 'anywhere', ru: 'где угодно' },
-  reset: { en: 'Reset', ru: 'Сбросить' },
-  found: { en: '{n} of {t}', ru: '{n} из {t}' },
-  nothing: { en: 'Nothing matches', ru: 'Ничего не нашлось' },
-  nothingHint: {
-    en: 'Drop a filter, or clear them all and scroll instead.',
-    ru: 'Снимите фильтр или сбросьте все и просто листайте.',
-  },
-  /* The caution tags are on the cards whether or not anything is filtered, and
-     this line says so once, above the grid, rather than the tags having to
-     explain themselves sixty-five times. */
-  tagsNote: {
-    en: 'The tag on a card is the thing in its third sentence that changes the answer.',
-    ru: 'Метка на карточке это то из третьего предложения, что меняет решение.',
   },
 }
 
