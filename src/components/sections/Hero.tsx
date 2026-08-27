@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from "motion/react";
 
 import { HorizonGrid } from "@/components/backgrounds/HorizonGrid";
-import { HeroAside } from "@/components/sections/HeroAside";
 import { RotatingWord } from "@/components/ui/RotatingWord";
 import { getHome } from "@/data/content";
 import { heroVariants, transitions } from "@/lib/motion";
@@ -113,16 +112,33 @@ export function Hero({ lang }: { lang: LabLang }) {
          DESIGN.md rather than reaching for one. */
       className="relative flex min-h-[100svh] w-full flex-col items-center justify-center gap-[50px] overflow-hidden bg-linear-to-b from-surface-alt from-[58%] to-page px-4 pt-[110px] pb-[40px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
     >
-      {/* The horizon runs the full height of the first screen, with its
-          vanishing point just under the headline: 0.6 of the hero height, measured
-          against where the h1 actually ends rather than guessed. It replaces a static
-          `hero-grid.svg` that was 223px tall and pinned 256px down, so the
-          perspective started below the copy and ran out well before the fold. */}
-      <HorizonGrid color="#c0c5cd" speed={0.5} horizon={0.6} className="z-0" />
+      {/* THE ONLY THING IN THE BACKGROUND, and the fold went through two other
+          answers to get here.
 
-      {/* The four artefacts in the margins. After the grid so it paints over it,
-          before the copy column so the copy paints over both. */}
-      <HeroAside lang={lang} />
+          FOUR DRAWN INTERFACES used to lean in from the margins: a bot thread,
+          a metric card, a deal row and a run notification. They were there
+          because the template put a screenshot of its own product in this spot
+          and the raster never came across, so they were drawn, with invented
+          names, invented figures and an invented «онлайн». On a site that
+          deletes a section rather than invent the proof it asks for, four small
+          fake products in the fold were the one place that rule was not
+          applied. `HeroAside.tsx` and the `HERO_ASIDE` block that fed it are
+          gone.
+
+          A DOT FIELD replaced them and then went the same way. It filled the
+          top of the screen behind the copy, dissolved into this grid across the
+          band where these lines are born, and lit up under the pointer. It
+          worked, and it was a second texture on a screen that already had one.
+          What the margins are for turns out to be air, and what the fold is for
+          is the sentence in the middle of it.
+
+          The horizon runs the full height of the first screen, with its
+          vanishing point just under the headline: 0.6 of the hero height,
+          measured against where the h1 actually ends rather than guessed. It
+          replaces a static `hero-grid.svg` that was 223px tall and pinned 256px
+          down, so the perspective started below the copy and ran out well
+          before the fold. */}
+      <HorizonGrid color="#c0c5cd" speed={0.5} horizon={0.6} className="z-0" />
 
       {/* -------------------------------------------------- decorative layer */}
       {/* GONE, and this is why, because the markup looked harmless.

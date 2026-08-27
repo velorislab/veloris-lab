@@ -1358,47 +1358,23 @@ export const PIPELINE = {
   ],
 }
 
-/**
- * Labels for the four artefacts that lean into the first screen from its edges.
- *
- * They are interface chrome rather than claims: a bot thread, a metric card, a
- * deal row and a run notification, which is what the work this studio sells
- * looks like on a screen. The two figures big enough to actually read, «68%» and
- * «4 мин», are borrowed from the Telegram-and-CRM case metrics rather than made
- * up, so the numbers on the fold are ones the site already publishes on a card
- * further down.
- *
- * The layer is `aria-hidden`, so none of it is announced. It lives here rather
- * than in the component for the same reason every other string does: one file,
- * both languages, nothing typed twice.
- */
-export const HERO_ASIDE = {
-  bot: {
-    name: { en: 'Lead bot', ru: 'Бот заявок' },
-    status: { en: 'online', ru: 'онлайн' },
-    in1: { en: 'New request from the site', ru: 'Новая заявка с сайта' },
-    out: { en: 'Qualifying, one moment', ru: 'Квалифицирую, секунду' },
-    in2: { en: 'Deal opened in the CRM', ru: 'Сделка заведена в CRM' },
-    input: { en: 'Message', ru: 'Сообщение' },
-  },
-  board: {
-    title: { en: 'Requests this week', ru: 'Заявки за неделю' },
-    value: '68%',
-    caption: { en: 'without a manager', ru: 'без менеджера' },
-  },
-  deal: {
-    title: { en: 'Deal', ru: 'Сделка' },
-    status: { en: 'In progress', ru: 'В работе' },
-    rowA: { en: 'Source', ru: 'Источник' },
-    rowAValue: 'Telegram',
-    rowB: { en: 'First reply', ru: 'Первый ответ' },
-    rowBValue: { en: '4 min', ru: '4 мин' },
-  },
-  run: {
-    title: { en: 'Automation finished', ru: 'Автоматизация выполнена' },
-    meta: { en: '128 records', ru: '128 записей' },
-  },
-}
+/* THE FOUR ARTEFACTS IN THE HERO'S MARGINS ARE GONE, and `HERO_ASIDE` went
+   with them rather than being left here for a component that no longer exists.
+   It held the chrome of a bot thread, a metric card, a deal row and a run
+   notification: a name, an «online» status, three chat bubbles, a percentage
+   and a record count. Two of its figures were honestly borrowed from a real
+   case, and the rest was interface invented to look like product.
+
+   The reason for deleting it is the reason `LOGOS` and `REVIEWS` are empty
+   arrays. A drawn interface in the fold is a claim about what we ship, made
+   with no evidence behind it, and this file's rule is that a form asking for
+   proof we do not have is deleted rather than filled.
+
+   A dot field stood in the margins for one afternoon between the two states and
+   is not here either: the fold carries the horizon grid and nothing else now.
+
+   To bring the artefacts back you would need a screenshot of something real. */
+
 
 /* THE THREE ENTRY POINTS ARE GONE: ENTRY_LABEL, ENTRY_SUB and the ENTRY
    array of three doors (an idea, a process done by hand, a system already
