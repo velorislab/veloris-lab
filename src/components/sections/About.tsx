@@ -37,18 +37,18 @@ export function About({ lang }: { lang: LabLang }) {
       {/* The panel keeps the template's frame exactly: 510/569, 20px radius,
           6px white ring, soft drop. The source is square and the subject sits
           right of centre, so a centred cover crop keeps him whole. */}
-      <div className="relative aspect-[510/569] w-full overflow-hidden rounded-panel shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_6px_#ffffff] desktop:max-w-[510px] desktop:flex-1">
+      <div className="relative aspect-[510/569] w-full overflow-hidden rounded-panel shadow-[0_17px_24px_0_rgba(178,178,178,0.08),0_0_0_6px_#ffffff] desktop:max-w-[min(42vw,640px)] desktop:flex-1">
         <Image
           src={about.photo}
           alt={about.photoAlt}
           fill
           quality={85}
-          sizes="(min-width: 1320px) 510px, 100vw"
+          sizes="(min-width: 1320px) min(42vw, 640px), 100vw"
           className="rounded-panel object-cover"
         />
       </div>
 
-      <div className="flex w-full flex-1 flex-col items-start gap-8 desktop:gap-[50px]">
+      <div className="flex w-full max-w-[42rem] flex-1 flex-col items-start gap-8 desktop:gap-[50px]">
         <div className="flex w-full flex-col items-start gap-[30px]">
           <div className="flex w-full flex-col items-start gap-4">
             <div className="flex flex-col items-start gap-[14px]">

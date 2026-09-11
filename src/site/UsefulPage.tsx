@@ -92,8 +92,8 @@ export default function UsefulPage({ lang }: { lang: LabLang }) {
   return (
     <>
       <Header lang={lang} />
-      <main id="main-content" className="page-main">
-        <section className="section-shell gap-8 pt-10 tablet:pt-4">
+      <main id="main-content" className="page-inner">
+        <section className="section-shell gap-8">
           <div className="flex w-full max-w-[900px] flex-col items-center gap-5 text-center">
             <h1 className="text-[34px] leading-[1.15] font-semibold text-ink-900 tablet:text-[44px] desktop:text-[56px] desktop:leading-[1.15]">
               {L(UI.usefulLabel)}
@@ -147,7 +147,7 @@ export default function UsefulPage({ lang }: { lang: LabLang }) {
               id={`useful-${g.key}`}
               /* Clears the fixed bar, or the jump from the index above parks the
                  heading underneath it. */
-              className="section-shell scroll-mt-[120px] gap-6"
+              className="section-shell gap-6"
             >
               <div className="flex w-full max-w-[1180px] flex-col gap-6">
                 <div className="flex flex-col gap-3">

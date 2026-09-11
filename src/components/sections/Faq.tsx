@@ -29,7 +29,7 @@ export function Faq({ lang }: { lang: LabLang }) {
       /* `scroll-mt` because the nav points here and the bar is fixed over it;
          the sections built on `section-shell` inherit the same 120px from the
          utility, this one is not one of them. */
-      className="flex w-full scroll-mt-[120px] flex-col items-center gap-10 desktop:gap-20"
+      className="flex w-full scroll-mt-[calc(120px+var(--page-safe-top))] flex-col items-center gap-10 desktop:gap-20"
     >
       <div className="flex w-full flex-col items-center gap-4">
         <h2 className="text-center text-[32px] leading-[1.2] text-ink-900 tablet:text-[42px] desktop:text-[56px] desktop:leading-[72.8px]">
@@ -37,7 +37,7 @@ export function Faq({ lang }: { lang: LabLang }) {
         </h2>
       </div>
       {/* The 796px the section used to carry lives here now. A question row is
-          short and an answer is prose, and prose set across the full 1380px
+          short and an answer is prose, and prose set across the full viewport
           column is a line nobody tracks back to the start of. */}
       <div className="w-full max-w-[796px]">
         <Accordion

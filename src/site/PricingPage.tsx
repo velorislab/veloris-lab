@@ -73,9 +73,8 @@ import { localizedHref, servicePath } from '@/site/routing'
  * text a screen reader reads rather than decoration it may skip.
  *
  * `table-fixed` on the table is what keeps this honest between 760 and 810px:
- * the template's `page-main` caps its column at 450px until the tablet
- * breakpoint, and an auto table in that width overflows the page rather than
- * wrapping inside it.
+ * an auto table in a phone-width column overflows the page rather than wrapping
+ * inside it.
  */
 function Cell({
   label,
@@ -115,24 +114,14 @@ export default function PricingPageBody({ lang }: { lang: LabLang }) {
     <>
       <Header lang={lang} />
 
-      <main id="main-content" className="page-main">
+      <main id="main-content" className="page-inner">
         {/* ---------------------------------------------------------- hero */}
         {/* NO SECTION BADGE. The breadcrumb one line above already says
             "Pricing", and an eyebrow that repeats the crumb is decoration.
             Every other badge on this page is an existing `EYEBROW` word; the
             add-ons and the "billed separately" sections have none because
-            `EYEBROW` has no word for them and inventing one is inventing copy.
-
-            `pt-10` BELOW THE TABLET BREAKPOINT, and nothing above it. The nav
-            bar is `fixed` and 72px tall while `page-main` opens on 80px of
-            padding on phones, so without this the breadcrumb renders 8px under
-            it. 40 is not a taste call: 80 + 40 is the same 120px every other
-            inner page now opens on, and it replaced a `pt-16` that made this
-            the roomiest of four different answers. The home page never hit this
-            because its hero sits outside `page-main` and holds its own top
-            padding; the 150px and 200px this shell uses higher up already clear
-            the bar on their own. */}
-        <section className="section-shell gap-6 pt-10 tablet:pt-0">
+            `EYEBROW` has no word for them and inventing one is inventing copy. */}
+        <section className="section-shell gap-6">
           <nav
             aria-label="Breadcrumb"
             className="flex w-full flex-wrap items-center justify-center gap-2 text-[16px] leading-6"

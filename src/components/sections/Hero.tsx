@@ -69,13 +69,14 @@ export function Hero({ lang }: { lang: LabLang }) {
        *
        * `100svh` and not `100vh`: on a phone `vh` is the height with the browser
        * chrome retracted, so a `100vh` hero is taller than what you can actually
-       * see and the next section peeks under the address bar — the precise thing
-       * this is here to stop. `svh` is the small viewport, chrome showing, which
-       * is what you get on arrival.
+       * see and the next section peeks under the address bar by accident. `svh`
+       * is the small viewport, chrome showing, which is what you get on arrival.
+       * The Motto panel's peek is a separate, measured overlap, not this.
        *
-       * `min-h` and not `h`: where the copy is taller than the screen — a narrow
-       * phone in Russian, where the headline runs to four lines — the section
-       * grows instead of clipping.
+       * On a phone the height is locked, not a minimum. `min-h` let the copy
+       * grow the section past the screen, and the blue cap then sat below the
+       * fold instead of on it. Tablet and up return to `min-h`: the peek still
+       * meets a full screen, and a tall headline has room to push.
        *
        * `justify-center` is the other half. Left top-aligned the block just sat
        * under its 160px of padding and the slack all piled up underneath, which
@@ -110,7 +111,7 @@ export function Hero({ lang }: { lang: LabLang }) {
          distance to read, and #edeff3 is the furthest at -7.3%. A blue that
          strong is not in the palette, so a blue fold means adding a token to
          DESIGN.md rather than reaching for one. */
-      className="relative flex min-h-[100svh] w-full flex-col items-center justify-center gap-[50px] overflow-hidden bg-linear-to-b from-surface-alt from-[58%] to-page px-4 pt-[110px] pb-[40px] tablet:gap-[70px] tablet:px-10 desktop:gap-[90px] desktop:px-0"
+      className="page-gutter relative flex h-[100svh] min-h-[100svh] w-full flex-col items-center justify-center gap-[50px] overflow-hidden bg-linear-to-b from-surface-alt from-[58%] to-page pt-[calc(110px+var(--page-safe-top))] pb-[40px] tablet:h-auto tablet:gap-[70px] desktop:gap-[90px]"
     >
       {/* THE ONLY THING IN THE BACKGROUND, and the fold went through two other
           answers to get here.
@@ -162,15 +163,13 @@ export function Hero({ lang }: { lang: LabLang }) {
           `aria-hidden pointer-events-none absolute inset-x-0 top-0 h-[725px]` box. */}
 
       {/* ------------------------------------------------------------ content */}
-      {/* `page-col` AND NOT `max-w-[1101px]`, because 1101 was only ever the
-          desktop half of the answer. See the utility in globals.css: below the
-          tablet breakpoint the page under this hero is a 418px column and this
-          block was ignoring it, so the fold and the first section disagreed
-          about the width of the page by nearly 300px on any screen between a
-          large phone in landscape and a small tablet. */}
+      {/* `page-col` is the page width. The heading used to sit in a 941px box
+          inside a 1101px column inside a 1380px well; the sides were empty
+          because each of those was a postcard, not because the sentence needed
+          the air. It now takes the same edge as the Motto under it. */}
       <div className="page-col relative flex flex-col items-center gap-[50px]">
-        <div className="relative flex w-full flex-col items-center gap-10 desktop:px-20">
-          <div className="relative flex w-full max-w-[941px] flex-col items-center gap-4">
+        <div className="relative flex w-full flex-col items-center gap-10">
+          <div className="relative flex w-full flex-col items-center gap-4">
             {/* The credential pill that used to open the fold is gone, at the
                 founder's call. What it said now opens the sub instead, as a
                 sentence rather than a chip, and the first screen carries one
@@ -186,7 +185,7 @@ export function Hero({ lang }: { lang: LabLang }) {
                 initial={initial}
                 animate={animate}
                 transition={transitions.heading}
-                className="w-full text-balance text-[36px] leading-[1.2] font-semibold text-ink-800 tablet:text-[48px] desktop:text-[64px] desktop:leading-[76.8px]"
+                className="w-full text-balance text-[36px] leading-[1.15] font-semibold text-ink-800 tablet:text-[clamp(2.75rem,1.6rem+3vw,4.5rem)] tablet:leading-[1.15]"
               >
                 {/* The lead is fixed and one word cycles inside it, in the
                     accent, which is the whole point of the device. The plain

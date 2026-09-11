@@ -7,13 +7,13 @@ import type { LabLang } from "@/site/labData";
 
 /**
  * The footer, in one row: the wordmark and what the studio is on the left, the
- * three profiles and the copyright on the right.
+ * the profiles and the copyright on the right.
  *
  * ONE ROW, NOT THREE. What is left of this footer is a name, a descriptor,
- * three chips and a date. Stacked, that was two bands and a hairline of chrome
+ * the profile chips and a date. Stacked, that was two bands and a hairline of chrome
  * around four short things, and the hairline existed to separate bands that no
  * longer exist. `flex-wrap` is what makes the single row honest: the four
- * groups need about 950px and the container offers 1200, so they sit on one
+ * groups need about 950px and the page is full width, so they sit on one
  * line on desktop and fold in the order they are written below it, rather than
  * being clipped at the tablet width where the arithmetic runs out.
  *
@@ -42,10 +42,10 @@ import type { LabLang } from "@/site/labData";
  *   The wordmark is text, for the same reason it is text in the header: there
  *   is no logo file for this brand and the Aston one is not ours to render.
  *
- *   The three profiles, now as three matching chips. Telegram used to render as
+ *   The profiles, now as matching chips. Telegram used to render as
  *   the word "Telegram" beside two full-colour brand tiles, because `public/`
- *   had files for the other two and none for it. All three are geometry now;
- *   see `SocialGlyph` for why that was the fix and not a third file.
+ *   had files for the other two and none for it. They are geometry now;
+ *   see `SocialGlyph` for why that was the fix and not another file.
  */
 
 /** 1px hairline, between the wordmark and the descriptor. */
@@ -58,7 +58,7 @@ export function Footer({ lang }: { lang: LabLang }) {
 
   return (
     <footer className="flex w-full justify-center bg-surface">
-      <div className="flex w-full max-w-[1200px] flex-col items-start gap-8 px-4 py-12 tablet:flex-row tablet:flex-wrap tablet:items-center tablet:justify-between tablet:gap-x-10 tablet:gap-y-6 tablet:px-[30px] tablet:py-14 desktop:px-0">
+      <div className="page-gutter flex w-full flex-col items-start gap-8 py-12 tablet:flex-row tablet:flex-wrap tablet:items-center tablet:justify-between tablet:gap-x-10 tablet:gap-y-6 tablet:py-14">
         {/* ---- Wordmark and descriptor ----
             The rule between them carries the sentence: the wordmark is the
             subject and the descriptor is what it is, which is why that string
@@ -82,10 +82,11 @@ export function Footer({ lang }: { lang: LabLang }) {
 
         {/* ---- Profiles and copyright ---- */}
         <div className="flex flex-col items-start gap-5 tablet:flex-row tablet:items-center tablet:gap-6">
-          {/* Three identical chips, so no rules between them: the hairlines that
-              used to stand there were separating an icon from a word, and there
-              is no longer a word. The label is the accessible name rather than
-              visible text, which is what lets all three be the same square. */}
+          {/* Matching chips, one per profile. No rules between them: the
+              hairlines that used to stand there were separating an icon from a
+              word, and there is no longer a word. The label is the accessible
+              name rather than visible text, which is what lets them share one
+              square. */}
           {social.length > 0 && (
             <div className="flex items-center gap-3">
               {social.map((item) => (

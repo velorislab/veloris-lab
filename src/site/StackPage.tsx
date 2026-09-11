@@ -37,8 +37,8 @@ export default function StackPage({ lang }: { lang: LabLang }) {
   return (
     <>
       <Header lang={lang} />
-      <main id="main-content" className="page-main">
-        <section className="section-shell gap-8 pt-10 tablet:pt-4">
+      <main id="main-content" className="page-inner">
+        <section className="section-shell gap-8">
           {/* No kicker over the h1, for the reason DESIGN.md gives for the
               section badges: a heading that needs a label saying what it is
               about is doing half its job. */}

@@ -66,7 +66,7 @@ export function Estimate({
        * hubs and detail pages at once. Measured on the rendered page rather
        * than reasoned about: every sibling section reported [16..359] at 375px
        * and this one [32..343]. */
-      className="flex w-full scroll-mt-[120px] flex-col items-center gap-10"
+      className="flex w-full scroll-mt-[calc(120px+var(--page-safe-top))] flex-col items-center gap-10"
     >
       {compact ? (
         <div className="read-col flex flex-col gap-3">

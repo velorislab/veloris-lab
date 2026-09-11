@@ -328,10 +328,10 @@ export function getHome(lang: LabLang) {
       ctaLabel: L(UI.cta),
       ctaHref: '#contact',
       steps: PROCESS.map((s, i) => ({
-        step: `${L({ en: 'Step', ru: 'Шаг' })} ${String(i + 1).padStart(2, '0')}`,
+        n: String(i + 1).padStart(2, '0'),
+        icon: s.icon,
         title: L(s.t),
         description: L(s.d),
-        screen: '',
       })),
     },
 

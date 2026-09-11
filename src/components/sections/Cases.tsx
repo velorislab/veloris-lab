@@ -104,7 +104,7 @@ export function Cases({ lang, all = false }: { lang: LabLang; all?: boolean }) {
            top of this was already `hidden tablet:block`; the two halves of one
            effect now agree, and on a phone the button below names the remainder
            out loud instead. */
-        className={`grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2 desktop:grid-cols-3 ${
+        className={`grid w-full grid-cols-1 gap-[14px] tablet:grid-cols-2 desktop:grid-cols-3 min-[1800px]:gap-6 ${
           open || !collapsible
             ? ""
             : "tablet:[mask-image:linear-gradient(to_bottom,black_0%,black_46%,transparent_94%)]"

@@ -48,8 +48,8 @@ export default function ServicesHub({ lang }: { lang: LabLang }) {
   return (
     <>
       <Header lang={lang} />
-      <main id="main-content" className="page-main">
-        <section className="section-shell gap-10 pt-10 tablet:pt-4">
+      <main id="main-content" className="page-inner">
+        <section className="section-shell gap-10">
           <div className="flex w-full max-w-[900px] flex-col items-center gap-4 text-center">
             <span className="text-[12px] font-medium tracking-[0.1em] text-ink-200 uppercase">
               {L(UI.navServices)}

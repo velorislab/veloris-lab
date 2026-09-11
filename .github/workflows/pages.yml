@@ -36,6 +36,11 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # `output: export` has no request runtime, so the geo proxy cannot ship
+      # with this artifact. Production on Vercel keeps the file and uses it.
+      - name: Drop the geo proxy
+        run: rm src/proxy.ts
+
       - name: Build the static export
         env:
           # Turns on output: 'export', unoptimised images, trailing slashes.

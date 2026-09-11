@@ -30,6 +30,31 @@ function useTrackDuration(speed: number, axis: "x" | "y") {
   return { ref, duration };
 }
 
+/** Pause the CSS loop while the ticker is off-screen. The animation is
+ *  compositor-thread, but a page with four of them still composites four
+ *  infinite translates; parking them is free and is the same contract the
+ *  canvases already keep. */
+function usePauseOffscreen() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = ref.current;
+    const track = node?.firstElementChild as HTMLElement | null;
+    if (!node || !track) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        track.style.animationPlayState = entry.isIntersecting ? "running" : "paused";
+      },
+      { rootMargin: "50% 0px" },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
+
+  return ref;
+}
+
 interface MarqueeProps {
   children: ReactNode;
   /** Pixels per second, matching the source's ticker speed. */
@@ -55,9 +80,11 @@ export function Marquee({
   fade = true,
 }: MarqueeProps) {
   const { ref, duration } = useTrackDuration(speed, "x");
+  const rootRef = usePauseOffscreen();
 
   return (
     <div
+      ref={rootRef}
       className={`flex w-full overflow-hidden ${fade ? "marquee-mask" : ""} ${className}`}
     >
       <div
@@ -96,9 +123,11 @@ export function MarqueeColumn({
   fade = true,
 }: MarqueeColumnProps) {
   const { ref, duration } = useTrackDuration(speed, "y");
+  const rootRef = usePauseOffscreen();
 
   return (
     <div
+      ref={rootRef}
       className={`h-full overflow-hidden ${fade ? "marquee-mask-y" : ""} ${className}`}
     >
       <div

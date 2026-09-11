@@ -370,7 +370,7 @@ function ServiceHero({
   const L = (v: Parameters<typeof tx>[0]) => tx(v, lang)
 
   return (
-    <section className="relative flex w-full flex-col items-center overflow-hidden px-4 pt-[120px] pb-[10px] tablet:px-10 tablet:pt-[140px] desktop:px-0 desktop:pt-[150px]">
+    <section className="page-gutter relative flex w-full flex-col items-center overflow-hidden pt-[calc(120px+var(--page-safe-top))] pb-[10px] tablet:pt-[calc(140px+var(--page-safe-top))] desktop:pt-[calc(150px+var(--page-safe-top))]">
       <div
         aria-hidden
         className="pointer-events-none absolute top-[180px] left-1/2 z-0 hidden h-[339px] w-[481px] -translate-x-1/2 desktop:block"
@@ -384,9 +384,9 @@ function ServiceHero({
         />
       </div>
 
-      <div className="relative flex w-full max-w-[1200px] flex-col gap-10 desktop:flex-row desktop:items-center desktop:gap-20">
+      <div className="relative flex w-full flex-col gap-10 desktop:flex-row desktop:items-center desktop:justify-between desktop:gap-20">
         {/* ---- left: what it is, and who it is for ---- */}
-        <div className="flex w-full flex-col items-start gap-6 desktop:flex-1">
+        <div className="flex w-full max-w-[40rem] flex-col items-start gap-6 desktop:flex-1">
           {/* Breadcrumb. Working SEO, so it survives the reskin unchanged in
               structure; only the type and the colours moved. */}
           <nav

@@ -71,7 +71,7 @@ export function FinalCta({ lang }: { lang: LabLang }) {
          one control that failed to lay out rather than as two things. Every
          other section on the page carries `gap-10` from the phone up; this one
          gets 32 because its own vertical padding is already smaller. */
-      className="section-shell gap-8 overflow-hidden rounded-section border border-line px-6 py-12 tablet:px-12 tablet:py-16 desktop:gap-[50px] desktop:px-20 desktop:py-[60px]"
+      className="section-shell gap-8 overflow-hidden rounded-section border border-line px-6 py-12 tablet:px-12 tablet:py-16 desktop:gap-[50px] desktop:px-[clamp(2.5rem,5vw,5rem)] desktop:py-[60px]"
       style={{
         backgroundImage:
           "linear-gradient(210.198deg, rgb(0, 101, 255) 0%, rgb(51, 132, 255) 69.6669%)",

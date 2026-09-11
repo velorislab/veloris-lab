@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Сайт инженерного бюро Sexy AI Studio. Next 16 (App Router, Turbopack), React 19,
+Сайт инженерного бюро Sexy AI. Next 16 (App Router, Turbopack), React 19,
 Tailwind v4, TypeScript. Двуязычный, статический: сервера на отдаче нет.
 
 Устройство и карта файлов в [README.md](README.md). Дизайн-система и аргументы

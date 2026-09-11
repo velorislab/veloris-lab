@@ -1,10 +1,19 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 
 import { Ticker } from "@/components/sections/Ticker";
 import { getHome } from "@/data/content";
 import type { LabLang } from "@/site/labData";
+
+const DESKTOP_MQ = "(min-width: 810px)";
+
+function subscribeDesktop(onStoreChange: () => void) {
+  const mq = window.matchMedia(DESKTOP_MQ);
+  mq.addEventListener("change", onStoreChange);
+  return () => mq.removeEventListener("change", onStoreChange);
+}
 
 /**
  * Statement panel: the line, three headline figures, and the capability ribbon.
@@ -29,14 +38,30 @@ import type { LabLang } from "@/site/labData";
  * what changed is that it now closes a panel instead of straddling the seam
  * between the hero and the page, which is what it was doing.
  *
- * WHY THIS IS A CLIENT COMPONENT. Only the glow. Everything else here is static,
- * and the pointer handler is the entire reason for the directive.
+ * WHY THIS IS A CLIENT COMPONENT. The glow and the scroll-tied scale. The
+ * rest is static. On desktop the panel starts slightly small, peeking into
+ * the hero, and grows as the scroll brings it up. On a phone that scale
+ * reads as a sticker in the gutter, so the phone only gets the layout peek.
  */
 export function Motto({ lang }: { lang: LabLang }) {
   const { motto } = getHome(lang);
   const sectionRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLSpanElement>(null);
   const figuresRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
+  const desktop = useSyncExternalStore(
+    subscribeDesktop,
+    () => window.matchMedia(DESKTOP_MQ).matches,
+    () => true,
+  );
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start 1", "start 0.32"],
+  });
+  /* Independent `scale` would run on the main thread. The origin is the top
+     edge, so the peeked rim stays put while the rest of the panel opens.
+     Phone skips it: 3% off a 418px column is a visible inset, not a grow. */
+  const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1]);
 
   /**
    * The figures count up once, when the scroll first brings them into view.
@@ -229,9 +254,9 @@ export function Motto({ lang }: { lang: LabLang }) {
   }, []);
 
   return (
-    <section
+    <motion.section
       ref={sectionRef}
-      className="section-shell relative w-full overflow-hidden rounded-section border border-line px-6 py-14 shadow-[0_0_0_8px_#ffffff,0_17px_24px_0_rgba(178,178,178,0.08)] tablet:px-16 tablet:py-20 desktop:gap-[60px] desktop:px-[170px] desktop:py-[100px]"
+      className="section-shell relative w-full origin-top overflow-hidden rounded-section border border-line px-6 pt-20 pb-14 shadow-[0_0_0_8px_#ffffff,0_17px_24px_0_rgba(178,178,178,0.08)] tablet:px-16 tablet:pt-24 tablet:pb-20 desktop:gap-[60px] desktop:px-[clamp(4rem,9vw,12rem)] desktop:pt-[120px] desktop:pb-[100px]"
       /* Two blues, and the pale `#bad6ff` that used to sit at 0% is gone. It was
          a fixed wash in the bottom-left corner, which is the one thing on this
          panel that read as a light source; with a light that follows the pointer
@@ -240,6 +265,7 @@ export function Motto({ lang }: { lang: LabLang }) {
          the top-right, same direction as before. */
       style={{
         backgroundImage: "linear-gradient(to top right, #3384ff 0%, #0065ff 100%)",
+        ...(reduceMotion || !desktop ? {} : { scale, willChange: "transform" }),
       }}
     >
       {/* The follower. `blur` rather than a soft gradient stop because a blurred
@@ -303,6 +329,6 @@ export function Motto({ lang }: { lang: LabLang }) {
           <Ticker lang={lang} />
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

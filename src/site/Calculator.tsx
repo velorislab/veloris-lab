@@ -305,7 +305,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
     hydrated && reduce ? { opacity: 0 } : { opacity: 0, x: offset }
 
   return (
-    <div className="w-full">
+    <div className="mx-auto w-full max-w-[1280px]">
       {PRICING_IS_DRAFT && (
         <p className="mb-4 rounded-card border border-line bg-surface-tint px-4 py-3 text-[15px] text-ink-500" role="status">{L(CALC.draftNotice)}</p>
       )}
@@ -472,7 +472,7 @@ export default function Calculator({ lang, seedType }: { lang: LabLang; seedType
         </div>
 
         {/* ---- live estimate ---- */}
-        <aside className="order-first flex flex-col gap-4 rounded-panel border border-line bg-surface-tint p-6 shadow-[var(--shadow-widget)] desktop:order-none desktop:sticky desktop:top-[86px]">
+        <aside className="order-first flex flex-col gap-4 rounded-panel border border-line bg-surface-tint p-6 shadow-[var(--shadow-widget)] desktop:order-none desktop:sticky desktop:top-[calc(86px+var(--page-safe-top))]">
           <div aria-live="polite">
           {est
             ? (

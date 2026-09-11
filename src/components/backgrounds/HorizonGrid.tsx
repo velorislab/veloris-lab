@@ -96,11 +96,14 @@ export function HorizonGrid({
       ctx.lineWidth = 1;
 
       /* Verticals: straight from the vanishing point to the bottom edge, spread
-         well past the sides so the fan still fills the corners. */
+         well past the sides so the fan still fills the corners. Column count
+         follows width so a full-bleed hero is as dense as the 1380 column was,
+         not a handful of lines across 2400px. */
       const spread = w * 1.9;
-      for (let i = 0; i <= columns; i++) {
-        const x = cx + (i / columns - 0.5) * spread;
-        ctx.globalAlpha = 0.5 - Math.abs(i / columns - 0.5) * 0.55;
+      const colCount = Math.max(columns, Math.round(w / 70));
+      for (let i = 0; i <= colCount; i++) {
+        const x = cx + (i / colCount - 0.5) * spread;
+        ctx.globalAlpha = 0.5 - Math.abs(i / colCount - 0.5) * 0.55;
         if (ctx.globalAlpha <= 0.01) continue;
         ctx.beginPath();
         ctx.moveTo(cx, hy);

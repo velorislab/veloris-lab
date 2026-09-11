@@ -1,5 +1,5 @@
 /* ======================================================================
-   Sexy AI Studio content. Edit copy here; the page renders from this.
+   Sexy AI content. Edit copy here; the page renders from this.
 
    Localized fields are objects: { en, ru }. The active language comes from
    the ROUTE segment (English on the bare `/lab`, Russian on `/ru/lab`), not
@@ -28,7 +28,7 @@ export function pickLabLang(lang: string): LabLang {
   return lang === 'ru' ? 'ru' : 'en'
 }
 
-export const BRAND = 'Sexy AI Studio'
+export const BRAND = 'Sexy AI'
 /* There is no EMAIL here on purpose, and a new one should not appear. The site
    answers on one channel and says so in one voice: a second address in the
    footer, in the closing button row and in the JSON-LD splits the reader
@@ -40,6 +40,7 @@ export const TELEGRAM_HANDLE = 't.me/samweyd'
  *  `/in/denys-kandyba` does not resolve. */
 export const LINKEDIN = 'https://www.linkedin.com/in/denys-kandyba-721b803a4/'
 export const INSTAGRAM = 'https://www.instagram.com/veloris_dev/'
+export const THREADS = 'https://www.threads.com/@veloris_dev'
 export const SWIFTIN = 'https://swiftin.dev/'
 
 /** The founder's long-form page. Absolute, because it lives on the Swiftin site
@@ -49,13 +50,14 @@ export const ABOUT_URL = 'https://swiftin.dev/about'
 /**
  * Social profiles for the founder card, in the order they are shown.
  *
- * All three are addresses the owner supplied. The row renders only entries with
- * a `url`, which is how it stayed correct while Instagram was still missing.
- * Never guess a profile URL. A wrong link in a contact row is worse than a
- * missing one, because the reader believes it.
+ * Every entry is an address the owner supplied. The row renders only entries
+ * with a `url`, which is how it stayed correct while Instagram was still
+ * missing. Never guess a profile URL. A wrong link in a contact row is worse
+ * than a missing one, because the reader believes it.
  */
-export const SOCIAL: { key: 'instagram' | 'telegram' | 'linkedin'; label: string; url: string }[] = [
+export const SOCIAL: { key: 'instagram' | 'threads' | 'telegram' | 'linkedin'; label: string; url: string }[] = [
   { key: 'instagram', label: 'Instagram', url: INSTAGRAM },
+  { key: 'threads', label: 'Threads', url: THREADS },
   { key: 'telegram', label: 'Telegram', url: TELEGRAM },
   { key: 'linkedin', label: 'LinkedIn', url: LINKEDIN },
 ]
@@ -1103,7 +1105,10 @@ export const CASES: Case[] = [
   },
 ]
 
+export type ProcessIcon = 'audit' | 'plan' | 'build' | 'launch' | 'support'
+
 export interface Step {
+  icon: ProcessIcon
   t: LS
   d: LS
 }
@@ -1120,38 +1125,43 @@ export const PROCESS_SUB = {
 
 export const PROCESS: Step[] = [
   {
-    t: { en: 'Scoping', ru: 'Разбор' },
+    icon: 'audit',
+    t: { en: 'Audit', ru: 'Разбор' },
     d: {
-      en: 'We measure what the process costs you today, in hours and in money. We find the bottleneck and what the effect would actually be.',
-      ru: 'Считаем, во что процесс обходится сейчас в часах и деньгах. Разбираем узкое место и какой эффект реально можно получить.',
+      en: 'We get on a call and go through the task: what you have now and what you need to end up with. Then we send a proposal with timing and price. If that is the whole job, the project ends here.',
+      ru: 'Созваниваемся и разбираем задачу: что есть сейчас и что нужно получить. Дальше присылаем предложение со сроками и ценой. Если на этом работа сделана, проект здесь и заканчивается.',
     },
   },
   {
-    t: { en: 'Estimate', ru: 'Смета' },
+    icon: 'plan',
+    t: { en: 'Plan', ru: 'План' },
     d: {
-      en: 'A transparent list of the work, the timeline and the price. All of it fixed before the build starts.',
-      ru: 'Прозрачный состав работ, срок и цена. Всё фиксируем до начала разработки.',
+      en: 'The proposal becomes a brief: what has to work and how. Work is split into stages, and you pay per stage rather than for the project.',
+      ru: 'Предложение превращается в задание: что и как должно работать. Работа делится на этапы, и вы платите за этап, а не за проект.',
     },
   },
   {
+    icon: 'build',
     t: { en: 'Build', ru: 'Сборка' },
     d: {
-      en: 'We work in short iterations. You see progress along the way, not on the last day.',
-      ru: 'Идём короткими итерациями. Вы видите прогресс по ходу, а не в последний день.',
+      en: 'We build in short iterations and show you as we go. You look at working pieces, not at progress reports.',
+      ru: 'Собираем короткими итерациями и показываем по ходу. Вы смотрите на работающие куски, а не на отчёты о движении.',
     },
   },
   {
+    icon: 'launch',
     t: { en: 'Launch', ru: 'Запуск' },
     d: {
-      en: 'We deploy in your accounts and on your data. Then we show your team how to use it.',
-      ru: 'Разворачиваем на ваших аккаунтах и данных. Показываем команде, как этим пользоваться.',
+      en: 'We connect it, check it on real data and adjust until it matches the brief. Then we show your team how to use it.',
+      ru: 'Подключаем, проверяем на реальных данных и правим, пока не сойдётся с заданием. Показываем команде, как пользоваться.',
     },
   },
   {
+    icon: 'support',
     t: { en: 'Support', ru: 'Поддержка' },
     d: {
-      en: 'We stay reachable. A system that falls apart a month later is not a result.',
-      ru: 'Остаёмся на связи. Система, которая разваливается через месяц, это не результат.',
+      en: 'We stay reachable and fix what real customers turn up. How support works after that is agreed together with the price.',
+      ru: 'Остаёмся на связи и правим то, что вылезет на живых клиентах. Как устроена поддержка дальше, оговариваем вместе с ценой.',
     },
   },
 ]
@@ -1188,8 +1198,8 @@ export const BUREAU = {
   // lets the card hold only what a person card should: a name, a role, one
   // paragraph, a row of ways to reach him.
   lead: {
-    en: 'Sexy AI Studio is a full-cycle engineering studio. Between you and the person who designs the system and delivers it there are no managers and no go-betweens.',
-    ru: 'Sexy AI Studio, инженерная студия полного цикла. Между вами и человеком, который проектирует и сдаёт систему, нет менеджеров и посредников.',
+    en: `${BRAND} is a full-cycle development studio. Between you and the person who designs the system and delivers it there are no managers and no go-betweens.`,
+    ru: `${BRAND}, студия разработки полного цикла. Между вами и человеком, который проектирует и сдаёт систему, нет менеджеров и посредников.`,
   },
   name: { en: 'Denys Kandyba', ru: 'Денис Кандыба' },
   // One string for both locales: the Russian copy uses the English term as-is,
@@ -1203,8 +1213,8 @@ export const BUREAU = {
   // table below repeats. Not "a photo of a man", which tells a screen reader
   // nothing it could not guess from the section it is standing in.
   photoAlt: {
-    en: 'Denys Kandyba, founder of Sexy AI Studio, on a street in Batumi',
-    ru: 'Денис Кандыба, основатель Sexy AI Studio, на улице в Батуми',
+    en: 'Denys Kandyba, founder of Sexy AI, on a street in Batumi',
+    ru: 'Денис Кандыба, основатель Sexy AI, на улице в Батуми',
   },
   // `mono` marks the values that are measured. Numbers are set in the mono voice
   // everywhere on this page; phrases never are, because mono on a list of
@@ -1330,8 +1340,8 @@ export const CONTACT = {
      `?text=` string where mailto took two fields. The calculator has always
      handed its brief over the same way. */
   tgDirectText: {
-    en: 'Sexy AI Studio, a task to look at\n\nWhat I need:\n\nWhat we do by hand today:\n\nWhen I need it:',
-    ru: 'Sexy AI Studio, задача на разбор\n\nЧто нужно:\n\nЧто сейчас делаем руками:\n\nК какому сроку:',
+    en: 'Sexy AI, a task to look at\n\nWhat I need:\n\nWhat we do by hand today:\n\nWhen I need it:',
+    ru: 'Sexy AI, задача на разбор\n\nЧто нужно:\n\nЧто сейчас делаем руками:\n\nК какому сроку:',
   },
 }
 
@@ -1830,7 +1840,7 @@ export const CALC = {
   /* WAS `mailSubject`, and it was never only a subject: it is the first line of
      the brief itself, which the Telegram handoff carries too. The mail button
      beside it is gone, so the name no longer promises a channel that exists. */
-  briefTitle: { en: 'Sexy AI Studio, project estimate', ru: 'Sexy AI Studio, расчёт проекта' },
+  briefTitle: { en: 'Sexy AI, project estimate', ru: 'Sexy AI, расчёт проекта' },
 
   // Labels used to assemble the brief that goes into Telegram.
   /* The breakdown under the figure. `labPricing.estimate()` returns the shape of
@@ -1878,8 +1888,8 @@ export const FOOTER = {
      twice: the footer sets this line directly beside the wordmark, so the two
      read as one phrase and the wordmark is the subject of it. */
   line: {
-    en: 'a full-cycle engineering studio',
-    ru: 'инженерная студия разработки полного цикла',
+    en: 'a full-cycle development studio',
+    ru: 'студия разработки полного цикла',
   },
 }
 

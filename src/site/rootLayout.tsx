@@ -16,9 +16,25 @@ import '@/app/globals.css'
  * shipped with.
  */
 
-export const sharedMetadata: Metadata = { metadataBase: new URL(SITE_URL) }
+export const sharedMetadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  /* The disc from `Mark`, baked as `public/icon.svg`. Both root layouts export
+     this object, so the tab icon is one declaration rather than two files that
+     can drift. Apple wants a PNG in principle; the same SVG is what we have,
+     and it is the real mark rather than a second drawing of it. */
+  icons: {
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/icon.svg' }],
+  },
+}
 
-export const sharedViewport: Viewport = { themeColor: '#f6f7f9', colorScheme: 'light' }
+export const sharedViewport: Viewport = {
+  themeColor: '#f6f7f9',
+  colorScheme: 'light',
+  /* So `--page-pad-*` can see the notch. Without cover, iOS reports the
+     safe-area insets as zero and the first letter sits under the sensor. */
+  viewportFit: 'cover',
+}
 
 export default function RootShell({ lang, children }: { lang: LabLang; children: React.ReactNode }) {
   return (

@@ -41,16 +41,24 @@ export default function AstonHome({ lang }: { lang: LabLang }) {
     <>
       <Header lang={lang} />
       <Hero lang={lang} />
-      <main id="main-content" className="page-main">
-        <Motto lang={lang} />
-        <Cases lang={lang} />
-        <WhatsIn lang={lang} />
-        <PlatformHighlight lang={lang} />
-        <Estimate lang={lang} />
-        <Process lang={lang} />
-        <About lang={lang} />
-        <Faq lang={lang} />
-        <FinalCta lang={lang} />
+      <main id="main-content">
+        {/* Pulled into the hero so the first screen shows only the blue cap.
+            The overlap is a length per breakpoint, not a share of the viewport:
+            8svh on a phone is already the panel's top padding, so the headline
+            was painting in the fold. Each peek sits inside that padding. */}
+        <div className="page-axis z-[2] -mt-10 tablet:-mt-14 desktop:-mt-[4.75rem]">
+          <Motto lang={lang} />
+        </div>
+        <div className="page-main">
+          <Cases lang={lang} />
+          <WhatsIn lang={lang} />
+          <PlatformHighlight lang={lang} />
+          <Estimate lang={lang} />
+          <Process lang={lang} />
+          <About lang={lang} />
+          <Faq lang={lang} />
+          <FinalCta lang={lang} />
+        </div>
       </main>
       <Footer lang={lang} />
     </>

@@ -87,6 +87,16 @@
     0 2.17323px 1.44882px -1.44882px rgba(0, 0, 0, 0.06),
     2.73989px 13.6995px 20.5492px 0 rgba(0, 0, 51, 0.03),
     0 0 0 4px rgba(255, 255, 255, 0.6);
+  /* One inset for the whole page. Header, hero, Motto, main and footer all
+     read this, so the wordmark, the blue cap and the cards share one edge.
+     The previous 94%/1380 column left a grey well on a wide screen; this is
+     the gutter of a full-width page instead. `--page-pad-*` is the same
+     number or the notch, whichever is larger, so a landscape iPhone does not
+     hide the first letter under the sensor. */
+  --page-x: 16px;
+  --page-pad-left: max(var(--page-x), env(safe-area-inset-left, 0px));
+  --page-pad-right: max(var(--page-x), env(safe-area-inset-right, 0px));
+  --page-safe-top: env(safe-area-inset-top, 0px);
   --shadow-badge: 0 10px 41px 0 rgba(0, 0, 0, 0.04),
     0 2px 2px 0 rgba(0, 0, 0, 0.02);
   --shadow-ring: 0 0 0 4px #ffffff;
@@ -94,13 +104,31 @@
 }
 
 /* THE SECTION RADIUS IS A FRACTION, NOT A NUMBER, and 40px stops being the
-   same fraction on a phone. On the desktop column a panel is 1380px wide and
-   40px is 3% of it; on a 375px screen the same panel is 343px and the corner
-   eats 12%, which is enough to push the first word of a centred heading
-   visibly inwards and to make one panel's corner read louder than the section
-   it opens. 28px is 8% at 343 and reads as the same shape the desktop panel
-   has. Only the section radius scales: `card` and `panel` are already small
-   enough that the proportion barely moves. */
+   same fraction on a phone. On a wide desktop panel 40px is a few percent; on
+   a 375px screen the same panel is ~343px and the corner eats 12%, which is
+   enough to push the first word of a centred heading visibly inwards and to
+   make one panel's corner read louder than the section it opens. 28px is 8%
+   at 343 and reads as the same shape the desktop panel has. Only the section
+   radius scales: `card` and `panel` are already small enough that the
+   proportion barely moves. */
+@media (min-width: 810px) {
+  :root {
+    --page-x: 24px;
+  }
+}
+
+@media (min-width: 1320px) {
+  :root {
+    --page-x: 40px;
+  }
+}
+
+@media (min-width: 1800px) {
+  :root {
+    --page-x: 64px;
+  }
+}
+
 @media (max-width: 809px) {
   :root {
     --radius-section: 28px;
@@ -131,6 +159,10 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* `clip`, not `hidden`: both stop the rotator from painting past the
+       screen, but `hidden` on the root is a scroll container and is what
+       silently kills `position: sticky` on the calculator aside. */
+    overflow-x: clip;
   }
 
   body {
@@ -140,7 +172,7 @@
     font-weight: 500;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   h1,
@@ -198,26 +230,16 @@
    Utilities
    ========================================================================== */
 
-/* The <main> wrapper. Widths, padding and section rhythm are the exact
-   values the Framer project uses at each of its three breakpoints. */
+/* The <main> wrapper. Full viewport, one gutter. The 94%/1380 column was the
+   template sitting in a grey well; the page is the screen now, and `--page-x`
+   is the only inset, shared with the header and the footer. */
 @utility page-main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 94%;
-  max-width: 1380px;
-  /* Framer centres this wrapper inside a flex column; <body> is a block box
-     here, so the auto margins are what keep every section on the page axis. */
+  width: 100%;
   margin-inline: auto;
-  /* The bottom value is not Framer's, because Framer's was zero and that is
-     what put the last section flush against the footer. The footer is white and
-     the page is #f6f7f9, so with no space between them the seam lands on the
-     bottom edge of whatever section ends the page: on the home page that is the
-     blue CTA panel, and the panel reads as sitting on the footer rather than on
-     the page. 80/96/120 is not invented either, it is the bottom padding
-     `CasePage` already writes out for its own main, so the five pages on this
-     utility now end the way the four case pages always did. */
-  padding: 200px 0 120px;
+  padding: 200px var(--page-pad-right) 120px var(--page-pad-left);
   gap: 200px;
   /* `clip`, not `hidden`: both contain the sections that bleed past the page
      axis, but `hidden` would make this a scroll container and break the
@@ -226,59 +248,81 @@
   position: relative;
 
   @media (min-width: 810px) and (max-width: 1319px) {
-    width: 100%;
-    max-width: 800px;
-    padding: 150px 30px 96px;
+    padding-block: 150px 96px;
     gap: 150px;
   }
 
   @media (max-width: 809px) {
-    width: 100%;
-    max-width: 450px;
-    padding: 80px 16px 80px;
+    padding-block: 80px;
     gap: 80px;
   }
 }
 
-/* THE SAME COLUMN, FOR THE ONE SECTION THAT IS NOT INSIDE `page-main`.
-   The hero is a sibling of `main`, so it carried its own widths, and the two
-   sets disagreed exactly where it shows most. Below 810px `page-main` freezes
-   its column at 450px while the hero kept growing with the viewport: measured
-   on a 744px screen, the headline ran 712px wide and every section under it
-   sat in a 418px column, a 294px step down at the first scroll. Above 1320px
-   the hero is deliberately the narrower of the two (1101 against 1354), which
-   is the relationship this restores at every width rather than only that one.
-
-   The numbers are `page-main`'s own arithmetic, resolved to content width:
-   450 - 32 of padding, 800 - 60, and the hero's own 1101 on desktop where the
-   page column is wider than it anyway. */
-@utility page-col {
+/* Inner pages whose first child is the heading, not a hero. Same column as
+   `page-main`, but the top padding clears the fixed 72px bar itself (120/150/190)
+   instead of using the home page's 80/150/200, which is sized for a section
+   that already sits under a 100svh fold. */
+@utility page-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 1101px;
+  margin-inline: auto;
+  padding: calc(190px + var(--page-safe-top)) var(--page-pad-right) 120px var(--page-pad-left);
+  gap: 150px;
+  overflow: clip;
+  position: relative;
 
   @media (min-width: 810px) and (max-width: 1319px) {
-    max-width: 740px;
+    padding-block: calc(150px + var(--page-safe-top)) 96px;
+    gap: 110px;
   }
 
   @media (max-width: 809px) {
-    max-width: 418px;
+    padding-block: calc(120px + var(--page-safe-top)) 80px;
+    gap: 80px;
   }
 }
 
-/* Default section shell: the page column's own width, centred, shrinking with
-   the viewport.
+/* The page column without the vertical rhythm. Motto sits in this, not in
+   `page-main`, because `page-main` clips overflow and a panel that peeks into
+   the hero has to paint above that clip. The same `--page-x` as `page-main`,
+   so the blue panel and the cards under it still share one edge. */
+@utility page-axis {
+  width: 100%;
+  padding-inline: var(--page-pad-left) var(--page-pad-right);
+  position: relative;
+}
 
-   IT WAS 1200px AND THE PAGE HAD FOUR WIDTHS. `page-main` is 1380, the dark
-   stack slab and the calculator are `w-full` inside it and therefore 1380, this
-   shell capped at 1200, the stack groups at 1036 and the FAQ at 796. Nothing
-   chose those four numbers together: they are the template's per-section values,
-   kept section by section. One column edge down the whole page is worth more
-   than any of them, so this matches `page-main` and the outliers were widened
-   to meet it. The measure of the text inside is held by the elements that carry
-   prose, not by the shells around them. */
+/* Hero copy lives in this. It used to be a second, narrower column than the
+   page, which is what left empty fields on either side of the headline. It
+   now takes the same width as everything under it; the heading's own max-width
+   is the reading measure, not the section's. */
+@utility page-col {
+  width: 100%;
+}
+
+/* Shared horizontal inset. Same numbers as `page-main`, so the bar, the fold
+   and the footer land on the Motto's edge instead of each inventing a pad. */
+@utility page-gutter {
+  padding-inline: var(--page-pad-left) var(--page-pad-right);
+}
+
+/* A landscape phone is ~375px tall with the bar taking 72 of them. Locking the
+   hero at 100svh then clips the headline; auto height keeps the motto peek and
+   lets the copy take what it needs. Portrait stays locked so the blue cap
+   sits on the first screen. */
+@media (max-width: 809px) and (orientation: landscape) {
+  #hero {
+    height: auto;
+    min-height: 100svh;
+  }
+}
+
+/* Default section shell: the page's own width. Prose measure lives on the
+   elements that carry it (FAQ 796, `read-col` 780), not on this wrapper. */
 @utility section-shell {
   width: 100%;
-  max-width: 1380px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -293,12 +337,12 @@
      belongs here, once, where a section that becomes an anchor later inherits
      it without anybody remembering to. Scroll margin costs nothing on an
      element nothing links to. */
-  scroll-margin-top: 120px;
+  scroll-margin-top: calc(120px + var(--page-safe-top));
 }
 
 /* THE READING COLUMN, and it is the FAQ's exception generalised.
-   `section-shell` is 1380 wide and centres its children, which is right for a
-   page that sells and wrong for one that explains: at 1380 a Russian line runs
+   `section-shell` is the page width and centres its children, which is right for a
+   page that sells and wrong for one that explains: at full viewport a Russian line runs
    past 200 characters, and centring every heading turns a document into a stack
    of posters. A solution page is read, not scanned, so its prose sits in one
    column at a reading measure and stays left-aligned inside the same shell every

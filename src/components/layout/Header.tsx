@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 /* One import from `routing`, not two. The second line arrived with the switch
    to path-derived locale crossing and still carried `localizedHref`, which the
    header stopped calling when `getSite` began handing it `site.home`. */
+import { persistLang } from "@/site/geoLang";
 import { LANGS, stripLocale, twinPath } from "@/site/routing";
 import { getSite, type NavLink } from "@/config/site";
 import { transitions } from "@/lib/motion";
@@ -33,7 +34,7 @@ import type { LabLang } from "@/site/labData";
  * drawn for a dark plate. It is geometry now, on `currentColor`, so it follows
  * the label beside it.
  *
- * WHAT DID NOT CHANGE. The wordmark is text, because there is no Sexy AI Studio
+ * WHAT DID NOT CHANGE. The wordmark is text, because there is no Sexy AI
  * logo file and the two Aston SVGs it used to load are somebody else's brand.
  * The dropdown holds our case pages, which are the only part of the site with
  * no home-page section to scroll to. And the language switcher still crosses to
@@ -86,7 +87,7 @@ function MenuPanel({
          be a long way for the eye to travel back. */
       className={`absolute right-0 top-[calc(100%+10px)] z-20 flex origin-top-right flex-col overflow-hidden bg-surface shadow-[0_10px_41px_0_rgba(0,0,0,0.08),0_2px_2px_0_rgba(0,0,0,0.02)] ${
         sheet
-          ? "w-[min(320px,calc(100vw-32px))] gap-1 rounded-[20px] p-3"
+          ? "w-[min(320px,calc(100vw-var(--page-pad-left)-var(--page-pad-right)))] gap-1 rounded-[20px] p-3"
           : "w-[235px] gap-[14px] rounded-[20px] p-5"
       }`}
     >
@@ -138,6 +139,9 @@ function MenuPanel({
  * It reads its own path instead. Every route here is `/x` or `/ru/x`, so
  * crossing is a prefix operation and needs nothing from the page. A route added
  * later gets a working switcher without anybody remembering to wire one.
+ *
+ * The click also writes `sas-lang`. Without it, the geo proxy would send a
+ * visitor from Kazakhstan who just chose English straight back to `/ru`.
  */
 function LangSwitch({
   lang,
@@ -174,6 +178,7 @@ function LangSwitch({
             key={code}
             href={twinPath(pathname, code)}
             hrefLang={code}
+            onClick={() => persistLang(code)}
             className="flex h-[44px] items-center rounded-pill px-[10px] text-[15px] leading-[24px] font-semibold text-ink-200 transition-colors duration-200 hover:text-ink-700"
           >
             {code}
@@ -340,13 +345,13 @@ export function Header({ lang }: { lang: LabLang }) {
 
          NO HAIRLINE. The plate is enough of an edge on the sections it crosses,
          and the line was drawing itself across the blue panel underneath. */
-      className={`fixed inset-x-0 top-0 z-50 transition-[translate,background-color] duration-300 ease-out motion-reduce:transition-none ${
+      className={`fixed inset-x-0 top-0 z-50 pt-[var(--page-safe-top)] transition-[translate,background-color] duration-300 ease-out motion-reduce:transition-none ${
         away ? "-translate-y-full" : "translate-y-0"
       } ${atTop ? "bg-transparent" : "bg-page"}`}
     >
       <nav
         aria-label={site.labels.mainNav}
-        className="relative mx-auto flex h-[72px] w-full max-w-[1200px] items-center gap-6 px-4 tablet:px-[30px] desktop:gap-9 desktop:px-0"
+        className="relative mx-auto flex h-[72px] w-full items-center gap-6 pl-[var(--page-pad-left)] pr-[var(--page-pad-right)] desktop:gap-9"
       >
         <Link
           href={site.home}

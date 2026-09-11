@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { BRAND, TELEGRAM, LINKEDIN, SERVICES, UI, CALC, tx , STACK_LABEL, STACK_SUB } from './labData'
+import { BRAND, SOCIAL, SERVICES, UI, CALC, tx , STACK_LABEL, STACK_SUB } from './labData'
 import { buildAlternates, buildServiceAlternates, buildCaseAlternates, localizedUrl, serviceUrl, caseUrl, buildPricingAlternates, pricingUrl, buildSolutionAlternates, buildSolutionsAlternates, solutionUrl, solutionsUrl, type LabLang , buildServicesAlternates, servicesUrl, buildCasesAlternates, casesUrl , buildStackAlternates, stackUrl , buildUsefulAlternates, usefulUrl } from './routing'
 import { SERVICE_PAGES, type ServicePage } from './servicePages'
 import { CASE_PAGES, type CasePage } from './casePages'
@@ -14,13 +14,13 @@ import { SOLUTIONS, type Solution } from './solutions'
  */
 
 export const TITLE: Record<LabLang, string> = {
-  en: 'Sexy AI Studio, AI development and automation studio',
-  ru: 'Sexy AI Studio, студия AI-разработки и автоматизации',
+  en: 'Sexy AI, AI development and automation studio',
+  ru: 'Sexy AI, студия AI-разработки и автоматизации',
 }
 
 export const DESC: Record<LabLang, string> = {
-  en: 'Sexy AI Studio is an engineering studio building AI agents, automation, integrations and data pipelines end to end, from scoping to production and support.',
-  ru: 'Sexy AI Studio, инженерная студия: AI-агенты, автоматизация, интеграции и пайплайны данных под ключ, от разбора задачи до прода и поддержки.',
+  en: `${BRAND} is a full-cycle development studio building AI agents, automation, integrations and data pipelines end to end, from scoping to production and support.`,
+  ru: `${BRAND}, студия разработки полного цикла: AI-агенты, автоматизация, интеграции и пайплайны данных под ключ, от разбора задачи до прода и поддержки.`,
 }
 
 export function labMetadata(lang: LabLang): Metadata {
@@ -73,7 +73,7 @@ export function orgJsonLd(lang: LabLang) {
       url: 'https://swiftin.dev/about',
     },
     knowsLanguage: ['ru', 'uk', 'en'],
-    sameAs: [LINKEDIN, TELEGRAM],
+    sameAs: SOCIAL.map((s) => s.url),
     makesOffer: SERVICES.map((s) => ({
       '@type': 'Offer',
       itemOffered: { '@type': 'Service', name: tx(s.t, lang), description: tx(s.d, lang) },

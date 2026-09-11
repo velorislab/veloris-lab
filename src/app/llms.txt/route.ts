@@ -28,7 +28,7 @@ export function GET() {
 
   p(`# ${BRAND}`)
   p()
-  p('> An engineering studio. AI development, automation and integrations, built by a small')
+  p('> A full-cycle development studio. AI development, automation and integrations, built by a small')
   p('> team that takes a task from scoping to production and stays on for support.')
   p('> Two languages, English and Russian; every page exists at both.')
   p()
