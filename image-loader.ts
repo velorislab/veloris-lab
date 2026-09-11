@@ -5,11 +5,12 @@
  * `output: 'export'` needs next/image to stop pointing at the optimiser route,
  * and the obvious way to do that is `images.unoptimized: true`. That flag
  * bypasses the loader entirely, and the loader is what prepends `basePath`. The
- * result builds cleanly, passes every check on a root-served preview, and then
+ * result builds cleanly, passes every check on a root-served host, and then
  * requests every one of the site's SVGs from `/images/...` instead of
- * `/veloris-lab/images/...` the moment it is served from a project page. Caught
- * by serving the export under the real subpath and counting broken images: 4 of
- * them on the first page checked.
+ * `${basePath}/images/...` the moment it is served from a project subpath.
+ * Caught that way before the custom domain existed, by counting broken images:
+ * 4 of them on the first page checked. Production is now the domain root, so
+ * the prefix is empty there; the loader still has to exist for the export.
  *
  * So the export uses a custom loader instead of the flag. It optimises nothing,
  * which is correct for a static host, and it does the one thing the flag threw

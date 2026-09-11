@@ -25,6 +25,8 @@
    surrounding link is hovered, which is what you actually point at in the header.
    ========================================================================== */
 
+import { BRAND } from '@/site/labData'
+
 export function Mark({ size = 28, className = '' }: { size?: number; className?: string }) {
   return (
     <svg
@@ -33,7 +35,7 @@ export function Mark({ size = 28, className = '' }: { size?: number; className?:
       height={size}
       className={`vl-logo ${className}`}
       role="img"
-      aria-label="Veloris Lab"
+      aria-label={BRAND}
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* The rim. Its own colour rather than the surface's, so the mark reads the

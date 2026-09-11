@@ -1,5 +1,5 @@
 ---
-name: Veloris Lab
+name: Sexy AI Studio
 description: Инженерное бюро. Светлая бумага, синий сигнал, дисплейный гротеск и один терминальный знак.
 basedOn:
   template: Aston
@@ -59,7 +59,7 @@ motion:
   ease: "cubic-bezier(0.12, 0.23, 0.5, 1)"
 ---
 
-# Design System: Veloris Lab
+# Design System: Sexy AI Studio
 
 ## Откуда это взялось
 

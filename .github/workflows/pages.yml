@@ -1,9 +1,11 @@
 name: Deploy to GitHub Pages
 
-# Manual only, on purpose. This is a temporary public copy of the site and not
-# the production deployment, so it should go out when somebody decides it
-# should, not on every push to main.
+# Production host is https://sexyai.studio. The custom domain is the Pages
+# site's root, so this build must not carry a repo subpath: that prefix was
+# only true while the preview lived at velorislab.github.io/veloris-lab.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 # One at a time. A second run started while the first is publishing would race
@@ -36,15 +38,10 @@ jobs:
 
       - name: Build the static export
         env:
-          # Turns on output: 'export', unoptimised images, trailing slashes and
-          # the subpath. See the comment block in next.config.ts for why each one
-          # is needed; none of them affect the normal build.
+          # Turns on output: 'export', unoptimised images, trailing slashes.
+          # See the comment block in next.config.ts for why each one is needed.
           PAGES_BUILD: '1'
-          # The repo is velorislab/veloris-lab, so Pages serves it from
-          # /veloris-lab rather than from the root. Drop both of these the day it
-          # moves to a custom domain or to a velorislab.github.io repo.
-          NEXT_PUBLIC_BASE_PATH: /veloris-lab
-          NEXT_PUBLIC_SITE_URL: https://velorislab.github.io/veloris-lab
+          NEXT_PUBLIC_SITE_URL: https://sexyai.studio
         run: pnpm build
 
       # Jekyll is what Pages runs by default on a plain branch deploy, and it

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Сайт инженерного бюро Veloris Lab. Next 16 (App Router, Turbopack), React 19,
+Сайт инженерного бюро Sexy AI Studio. Next 16 (App Router, Turbopack), React 19,
 Tailwind v4, TypeScript. Двуязычный, статический: сервера на отдаче нет.
 
 Устройство и карта файлов в [README.md](README.md). Дизайн-система и аргументы
@@ -97,9 +97,9 @@ Chrome Web Store и не должны стоять выше того, что т�
 
 Обычная сборка про хостинг ничего не знает. Статический экспорт под GitHub Pages
 включается `PAGES_BUILD=1`; что именно он меняет и почему каждый пункт нужен, в
-шапке `next.config.ts`. Workflow `.github/workflows/pages.yml` запускается
-**руками**, а не на пуш.
+шапке `next.config.ts`. Прод это `https://sexyai.studio`. Workflow
+`.github/workflows/pages.yml` публикует туда с `main`.
 
-`NEXT_PUBLIC_SITE_URL` задаётся в `.env.local`. Без него канонические адреса,
-hreflang, sitemap и JSON-LD уедут на `http://localhost:3000`, и это специально
-заметно, а не молча.
+`NEXT_PUBLIC_SITE_URL` для локальной сборки задаётся в `.env.local`. Без него
+канонические адреса, hreflang, sitemap и JSON-LD уедут на `http://localhost:3000`,
+и это специально заметно, а не молча.

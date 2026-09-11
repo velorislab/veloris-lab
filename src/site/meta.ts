@@ -14,13 +14,13 @@ import { SOLUTIONS, type Solution } from './solutions'
  */
 
 export const TITLE: Record<LabLang, string> = {
-  en: 'Veloris Lab, AI development and automation studio',
-  ru: 'Veloris Lab, студия AI-разработки и автоматизации',
+  en: 'Sexy AI Studio, AI development and automation studio',
+  ru: 'Sexy AI Studio, студия AI-разработки и автоматизации',
 }
 
 export const DESC: Record<LabLang, string> = {
-  en: 'Veloris Lab is an engineering studio building AI agents, automation, integrations and data pipelines end to end, from scoping to production and support.',
-  ru: 'Veloris Lab, инженерная студия: AI-агенты, автоматизация, интеграции и пайплайны данных под ключ, от разбора задачи до прода и поддержки.',
+  en: 'Sexy AI Studio is an engineering studio building AI agents, automation, integrations and data pipelines end to end, from scoping to production and support.',
+  ru: 'Sexy AI Studio, инженерная студия: AI-агенты, автоматизация, интеграции и пайплайны данных под ключ, от разбора задачи до прода и поддержки.',
 }
 
 export function labMetadata(lang: LabLang): Metadata {

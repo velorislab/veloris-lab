@@ -33,7 +33,7 @@ import type { LabLang } from "@/site/labData";
  * drawn for a dark plate. It is geometry now, on `currentColor`, so it follows
  * the label beside it.
  *
- * WHAT DID NOT CHANGE. The wordmark is text, because there is no Veloris Lab
+ * WHAT DID NOT CHANGE. The wordmark is text, because there is no Sexy AI Studio
  * logo file and the two Aston SVGs it used to load are somebody else's brand.
  * The dropdown holds our case pages, which are the only part of the site with
  * no home-page section to scroll to. And the language switcher still crosses to

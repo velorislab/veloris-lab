@@ -2,7 +2,7 @@
   "name": "veloris-lab",
   "version": "0.1.0",
   "private": true,
-  "description": "Veloris Lab, the engineering bureau site. Standalone; formerly a route inside the Swiftin monorepo.",
+  "description": "Sexy AI Studio, the engineering bureau site. Standalone; formerly a route inside the Swiftin monorepo.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

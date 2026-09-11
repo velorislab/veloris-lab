@@ -18,21 +18,22 @@ import type { NextConfig } from 'next'
                            has to be written as solutions/booking/index.html.
                            Without it the export writes booking.html and every
                            inner route 404s.
-     basePath/assetPrefix  the repo is velorislab/veloris-lab, so Pages serves it
-                           from /veloris-lab rather than from the root. Next
-                           rewrites Link and next/image with this automatically,
-                           which is the only reason this works at all: there is
-                           not one raw <img src="/..."> or CSS url(/...) in the
-                           project, checked before adding this.
+     basePath/assetPrefix  only if NEXT_PUBLIC_BASE_PATH is set. Production is
+                           the custom domain sexyai.studio, which GitHub serves
+                           from the site root, so the live export does not set
+                           this. The loader still prepends the prefix when the
+                           variable is present, which is what kept project-page
+                           previews working before the domain existed.
 
    WHAT STILL HAS TO BE PASSED IN, because a static export bakes it at build time
    and there is no runtime to read it later:
 
      NEXT_PUBLIC_SITE_URL   every canonical, hreflang, sitemap entry and llms.txt
                             URL comes from this. Leave it unset and the export
-                            ships localhost links to the public web.
-     NEXT_PUBLIC_BASE_PATH  the subpath, kept separate from SITE_URL because one
-                            is an origin and the other is a prefix.
+                            ships localhost links to the public web. Production
+                            is https://sexyai.studio.
+     NEXT_PUBLIC_BASE_PATH  optional subpath, kept separate from SITE_URL
+                            because one is an origin and the other is a prefix.
 
    The Vercel build reads none of this and behaves exactly as before.
 
@@ -41,8 +42,8 @@ import type { NextConfig } from 'next'
    it asks for `__next.!KHJ1KQ.ru.txt` and the export produced
    `__next.!KHJ1KQ.txt`. Those requests 404. Navigation is unaffected, verified by
    clicking through the served export: the router falls back to loading the page
-   normally and lands on the right URL. It is console noise on a temporary preview
-   host, and the only real fixes are `prefetch = 'force-disabled'` in the root
+   normally and lands on the right URL. It is console noise on the static host,
+   and the only real fixes are `prefetch = 'force-disabled'` in the root
    layout or `prefetch={false}` on every Link, both of which would slow the actual
    production site to tidy up a preview. Confirmed against the Next source: in
    export mode the router appends `.txt` to the URL because it cannot use response

@@ -1,5 +1,5 @@
 /* ======================================================================
-   Veloris Lab, calculator price table.
+   Sexy AI Studio, calculator price table.
 
    WHERE THESE NUMBERS COME FROM. The owner set the price level by reference to
    the rouble market for the same work, and on 2026-08-10 asked for the same

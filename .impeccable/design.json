@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-08-07T00:00:00Z",
-  "title": "Design System: Veloris Lab",
+  "title": "Design System: Sexy AI Studio",
   "extensions": {
     "colorMeta": {
       "paper": {
@@ -313,7 +313,7 @@
       "kind": "nav",
       "refersTo": null,
       "description": "Белая липкая полоса с линией снизу. Переключатель языка — сегментированная группа.",
-      "html": "<div class=\"ds-nav\"><span class=\"ds-nav-brand\"><i class=\"ds-nav-mark\"></i>Veloris Lab</span><nav class=\"ds-nav-links\"><a href=\"#\">Услуги</a><a href=\"#\">Кейсы</a><a href=\"#\">Расчёт</a></nav><span class=\"ds-langsw\"><span class=\"ds-lang-on\">ru</span><a href=\"#\">en</a></span></div>",
+      "html": "<div class=\"ds-nav\"><span class=\"ds-nav-brand\"><i class=\"ds-nav-mark\"></i>Sexy AI Studio</span><nav class=\"ds-nav-links\"><a href=\"#\">Услуги</a><a href=\"#\">Кейсы</a><a href=\"#\">Расчёт</a></nav><span class=\"ds-langsw\"><span class=\"ds-lang-on\">ru</span><a href=\"#\">en</a></span></div>",
       "css": ".ds-nav { display: flex; align-items: center; gap: 22px; height: 60px; padding: 0 20px; background: #fff; border-bottom: 1px solid #d6d9d8; font-family: Inter, system-ui, sans-serif; } .ds-nav-brand { display: inline-flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: #141a18; } .ds-nav-mark { width: 20px; height: 20px; border-radius: 12px; box-shadow: 0 1px 1px rgba(18,32,28,.05), 0 4px 14px -4px rgba(18,32,28,.14); background: #0e7c66; } .ds-nav-links { display: flex; gap: 22px; } .ds-nav-links a { font-size: 14px; color: #4f5754; text-decoration: none; transition: color 0.16s ease; } .ds-nav-links a:hover { color: #141a18; } .ds-langsw { display: inline-flex; margin-left: auto; border: 1px solid #d6d9d8; border-radius: 12px; overflow: hidden; } .ds-langsw a, .ds-langsw span { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 7px 11px; text-decoration: none; color: #4f5754; } .ds-lang-on { color: #fff; background: #141a18; }"
     }
   ],

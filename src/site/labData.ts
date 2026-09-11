@@ -1,5 +1,5 @@
 /* ======================================================================
-   Veloris Lab (/lab) content. Edit copy here; the page renders from this.
+   Sexy AI Studio content. Edit copy here; the page renders from this.
 
    Localized fields are objects: { en, ru }. The active language comes from
    the ROUTE segment (English on the bare `/lab`, Russian on `/ru/lab`), not
@@ -28,7 +28,7 @@ export function pickLabLang(lang: string): LabLang {
   return lang === 'ru' ? 'ru' : 'en'
 }
 
-export const BRAND = 'Veloris Lab'
+export const BRAND = 'Sexy AI Studio'
 /* There is no EMAIL here on purpose, and a new one should not appear. The site
    answers on one channel and says so in one voice: a second address in the
    footer, in the closing button row and in the JSON-LD splits the reader
@@ -1188,8 +1188,8 @@ export const BUREAU = {
   // lets the card hold only what a person card should: a name, a role, one
   // paragraph, a row of ways to reach him.
   lead: {
-    en: 'Veloris Lab is a full-cycle engineering studio. Between you and the person who designs the system and delivers it there are no managers and no go-betweens.',
-    ru: 'Veloris Lab, инженерная студия полного цикла. Между вами и человеком, который проектирует и сдаёт систему, нет менеджеров и посредников.',
+    en: 'Sexy AI Studio is a full-cycle engineering studio. Between you and the person who designs the system and delivers it there are no managers and no go-betweens.',
+    ru: 'Sexy AI Studio, инженерная студия полного цикла. Между вами и человеком, который проектирует и сдаёт систему, нет менеджеров и посредников.',
   },
   name: { en: 'Denys Kandyba', ru: 'Денис Кандыба' },
   // One string for both locales: the Russian copy uses the English term as-is,
@@ -1203,8 +1203,8 @@ export const BUREAU = {
   // table below repeats. Not "a photo of a man", which tells a screen reader
   // nothing it could not guess from the section it is standing in.
   photoAlt: {
-    en: 'Denys Kandyba, founder of Veloris Lab, on a street in Batumi',
-    ru: 'Денис Кандыба, основатель Veloris Lab, на улице в Батуми',
+    en: 'Denys Kandyba, founder of Sexy AI Studio, on a street in Batumi',
+    ru: 'Денис Кандыба, основатель Sexy AI Studio, на улице в Батуми',
   },
   // `mono` marks the values that are measured. Numbers are set in the mono voice
   // everywhere on this page; phrases never are, because mono on a list of
@@ -1330,8 +1330,8 @@ export const CONTACT = {
      `?text=` string where mailto took two fields. The calculator has always
      handed its brief over the same way. */
   tgDirectText: {
-    en: 'Veloris Lab, a task to look at\n\nWhat I need:\n\nWhat we do by hand today:\n\nWhen I need it:',
-    ru: 'Veloris Lab, задача на разбор\n\nЧто нужно:\n\nЧто сейчас делаем руками:\n\nК какому сроку:',
+    en: 'Sexy AI Studio, a task to look at\n\nWhat I need:\n\nWhat we do by hand today:\n\nWhen I need it:',
+    ru: 'Sexy AI Studio, задача на разбор\n\nЧто нужно:\n\nЧто сейчас делаем руками:\n\nК какому сроку:',
   },
 }
 
@@ -1830,7 +1830,7 @@ export const CALC = {
   /* WAS `mailSubject`, and it was never only a subject: it is the first line of
      the brief itself, which the Telegram handoff carries too. The mail button
      beside it is gone, so the name no longer promises a channel that exists. */
-  briefTitle: { en: 'Veloris Lab, project estimate', ru: 'Veloris Lab, расчёт проекта' },
+  briefTitle: { en: 'Sexy AI Studio, project estimate', ru: 'Sexy AI Studio, расчёт проекта' },
 
   // Labels used to assemble the brief that goes into Telegram.
   /* The breakdown under the figure. `labPricing.estimate()` returns the shape of
