@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import {
-  animate,
   motion,
   useMotionValue,
+  useMotionValueEvent,
   useReducedMotion,
   useTransform,
+  type MotionValue,
 } from "motion/react";
 
+import { ProcessGlyph } from "@/components/sections/ProcessGlyph";
 import { Mark } from "@/components/ui/Mark";
 import type { HomeContent } from "@/data/content";
 
@@ -17,20 +19,13 @@ type Step = HomeContent["process"]["steps"][number];
 const MARK = 40;
 const RAIL = 2;
 const RING = 6;
-const MOVE = 0.9;
-const DWELL = 1100;
-const DWELL_LAST = 2200;
-const RESET = 600;
-const EASE = [0.4, 0, 0.2, 1] as const;
 
 type Point = { x: number; y: number };
 type Seg = { left: number; top: number; width: number; height: number };
 
 /**
  * Pale track is drawn only in the gaps between wells, stopping at the 6px
- * white ring. A single first-to-last stroke ran through the empty squares:
- * the list is a stacking context, empty wells are just white boxes, and the
- * line still read as a cut through the station.
+ * white ring. A single first-to-last stroke ran through the empty squares.
  */
 function gapSegs(
   track: HTMLElement,
@@ -91,27 +86,41 @@ function centersOf(track: HTMLElement, wells: Array<HTMLElement | null>): Point[
     });
 }
 
+function alongRail(pts: Point[], t: number): Point {
+  if (pts.length === 0) return { x: 0, y: 0 };
+  if (pts.length === 1) return pts[0];
+  const max = pts.length - 1;
+  const u = Math.max(0, Math.min(max, t * max));
+  const i = Math.min(Math.floor(u), max - 1);
+  const f = u - i;
+  const a = pts[i];
+  const b = pts[i + 1];
+  return { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
+}
+
 /**
  * The mark rides the process. One disc, five stations, the same path Support
  * sits on so it cannot read as an add-on.
  *
- * IT DOES NOT REVERSE. Playing the process backwards would say the work
- * undoes itself. After the extra beat on Support, the fill fades, later
- * stations clear, and it starts again at Audit.
+ * SCROLL DRIVES IT, not a timer. The page parks this section and the wheel
+ * is what moves the mark; playing it on a clock is how Audit was already
+ * grey by the time the reader arrived.
  *
- * IT SLIDES, it does not hop. A bounce reads as a character; a fill along the
- * rail reads as the work landing. Visited stations keep the real mark, not a
- * grey imprint: the first thing you see after scrolling here is Audit, fully
- * inked.
+ * IT LATCHES AT THE END. Playing the process backwards would say the work
+ * undoes itself. Until Support is reached the scrub can reverse with the
+ * scroll; after that the fill stays, and the parent drops the park so the
+ * wheel is free again.
  *
  * POSITIONS ARE MEASURED, not keyed as percentages. A 5-column grid and a
  * vertical timeline do not share arithmetic. ResizeObserver re-aims.
- *
- * IT STOPS OFF-SCREEN, same contract as the hero grid, and it does not start
- * until the section is in view. Running the loop on a page the reader has not
- * reached yet is how Audit was already grey by the time they got here.
  */
-export function ProcessTrack({ steps }: { steps: Step[] }) {
+export function ProcessTrack({
+  steps,
+  progress,
+}: {
+  steps: Step[];
+  progress: MotionValue<number>;
+}) {
   const reduce = useReducedMotion();
   const count = steps.length;
 
@@ -119,17 +128,13 @@ export function ProcessTrack({ steps }: { steps: Step[] }) {
   const wellRefs = useRef<Array<HTMLElement | null>>([]);
   const pointsRef = useRef<Point[]>([]);
   const acrossRef = useRef(true);
-  const visibleRef = useRef(false);
-  const wakeRef = useRef<(() => void) | null>(null);
+  const tRef = useRef(0);
+  const doneRef = useRef(false);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const fillOp = useMotionValue(1);
 
-  const [here, setHere] = useState(0);
-  const hereRef = useRef(0);
   const [ready, setReady] = useState(false);
-  const [moving, setMoving] = useState(false);
   const [visited, setVisited] = useState(() => steps.map((_, i) => i === 0));
   const [rail, setRail] = useState<{
     x: number;
@@ -139,20 +144,39 @@ export function ProcessTrack({ steps }: { steps: Step[] }) {
     across: boolean;
   } | null>(null);
   const [gaps, setGaps] = useState<Seg[]>([]);
-  hereRef.current = here;
 
-  const fillW = useTransform(x, (xv) => {
+  const fillW = useTransform(() => {
     if (!acrossRef.current) return RAIL;
     const a = pointsRef.current[0];
     if (!a) return 0;
-    return Math.max(0, xv + MARK / 2 - a.x);
+    return Math.max(0, x.get() + MARK / 2 - a.x);
   });
-  const fillH = useTransform(y, (yv) => {
+  const fillH = useTransform(() => {
     if (acrossRef.current) return RAIL;
     const a = pointsRef.current[0];
     if (!a) return 0;
-    return Math.max(0, yv + MARK / 2 - a.y);
+    return Math.max(0, y.get() + MARK / 2 - a.y);
   });
+
+  const apply = (raw: number) => {
+    if (raw >= 0.995) doneRef.current = true;
+    const t = doneRef.current ? 1 : Math.max(0, Math.min(1, raw));
+    tRef.current = t;
+    const pts = pointsRef.current;
+    const at = alongRail(pts, t);
+    x.set(at.x - MARK / 2);
+    y.set(at.y - MARK / 2);
+    const u = t * Math.max(count - 1, 1);
+    setVisited((prev) => {
+      let changed = false;
+      const next = prev.map((was, i) => {
+        const on = u + 0.02 >= i;
+        if (on !== was) changed = true;
+        return on;
+      });
+      return changed ? next : prev;
+    });
+  };
 
   const measure = () => {
     const track = trackRef.current;
@@ -178,122 +202,25 @@ export function ProcessTrack({ steps }: { steps: Step[] }) {
   };
 
   useLayoutEffect(() => {
-    const pts = measure();
-    if (pts[0]) {
-      x.set(pts[0].x - MARK / 2);
-      y.set(pts[0].y - MARK / 2);
-    }
+    measure();
+    apply(reduce ? 1 : progress.get());
     const track = trackRef.current;
     if (!track) return;
     const ro = new ResizeObserver(() => {
-      const next = measure();
-      const at = next[hereRef.current] ?? next[0];
-      if (at) {
-        x.set(at.x - MARK / 2);
-        y.set(at.y - MARK / 2);
-      }
+      measure();
+      apply(reduce ? 1 : tRef.current);
     });
     ro.observe(track);
     wellRefs.current.forEach((el) => {
       if (el) ro.observe(el);
     });
     return () => ro.disconnect();
-  }, [count, reduce, x, y]);
+  }, [count, reduce, progress, x, y]);
 
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track || reduce) return;
-
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        visibleRef.current = entry.isIntersecting;
-        if (entry.isIntersecting) wakeRef.current?.();
-      },
-      { rootMargin: "20% 0px" },
-    );
-    io.observe(track);
-    return () => io.disconnect();
-  }, [reduce]);
-
-  useEffect(() => {
+  useMotionValueEvent(progress, "change", (p) => {
     if (reduce) return;
-
-    let cancelled = false;
-    const running: Array<{ stop: () => void }> = [];
-    const timers: number[] = [];
-
-    const play = (ctrl: { stop: () => void; finished: Promise<unknown> }) => {
-      running.push(ctrl);
-      return ctrl.finished.catch(() => undefined);
-    };
-    const wait = (ms: number) =>
-      new Promise<void>((resolve) => {
-        timers.push(window.setTimeout(resolve, ms));
-      });
-    const untilVisible = () => {
-      if (visibleRef.current) return Promise.resolve();
-      return new Promise<void>((resolve) => {
-        wakeRef.current = resolve;
-      });
-    };
-
-    const travel = async (index: number) => {
-      const pts = pointsRef.current;
-      const end = pts[index];
-      if (!end) return;
-      setMoving(true);
-      await Promise.all([
-        play(animate(x, end.x - MARK / 2, { duration: MOVE, ease: EASE })),
-        play(animate(y, end.y - MARK / 2, { duration: MOVE, ease: EASE })),
-      ]);
-      setHere(index);
-      setVisited((prev) => prev.map((v, i) => v || i === index));
-      setMoving(false);
-    };
-
-    const loop = async () => {
-      while (!cancelled) {
-        await untilVisible();
-        if (cancelled) return;
-        const pts = pointsRef.current;
-        if (pts[0]) {
-          x.set(pts[0].x - MARK / 2);
-          y.set(pts[0].y - MARK / 2);
-        }
-        fillOp.set(1);
-        setMoving(false);
-        setHere(0);
-        setVisited(Array.from({ length: count }, (_, i) => i === 0));
-        await wait(DWELL);
-        for (let i = 1; i < count; i++) {
-          await untilVisible();
-          if (cancelled) return;
-          await travel(i);
-          if (cancelled) return;
-          await wait(i === count - 1 ? DWELL_LAST : DWELL);
-        }
-        await untilVisible();
-        if (cancelled) return;
-        await play(animate(fillOp, 0, { duration: 0.4, ease: EASE }));
-        setVisited(Array.from({ length: count }, (_, i) => i === 0));
-        setHere(0);
-        if (pts[0]) {
-          x.set(pts[0].x - MARK / 2);
-          y.set(pts[0].y - MARK / 2);
-        }
-        await wait(RESET);
-      }
-    };
-
-    void loop();
-
-    return () => {
-      cancelled = true;
-      wakeRef.current?.();
-      timers.forEach(clearTimeout);
-      running.forEach((a) => a.stop());
-    };
-  }, [reduce, count, fillOp, x, y]);
+    apply(p);
+  });
 
   const railBox = rail
     ? rail.across
@@ -327,12 +254,11 @@ export function ProcessTrack({ steps }: { steps: Step[] }) {
               top: rail.across ? rail.y - RAIL / 2 : rail.y,
               width: fillW,
               height: fillH,
-              opacity: fillOp,
             }}
           />
         ))}
 
-      {!reduce && ready && moving && (
+      {!reduce && ready && (
         <motion.div
           aria-hidden
           className="pointer-events-none absolute top-0 left-0 z-[2] will-change-transform"
@@ -356,11 +282,22 @@ export function ProcessTrack({ steps }: { steps: Step[] }) {
                 }}
                 className="relative z-[1] flex size-[56px] items-center justify-center rounded-card bg-surface shadow-[0_0_0_1px_var(--color-line-soft),0_0_0_6px_#ffffff]"
               >
-                {on && (
-                  <span aria-hidden className="pointer-events-none">
-                    <Mark size={MARK} />
-                  </span>
-                )}
+                <span
+                  aria-hidden
+                  className={`pointer-events-none text-ink-200 transition-opacity duration-300 ${
+                    on ? "opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <ProcessGlyph name={step.icon} />
+                </span>
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${
+                    on ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <Mark size={MARK} />
+                </span>
               </div>
               <div className="flex min-w-0 flex-col gap-2">
                 <h3

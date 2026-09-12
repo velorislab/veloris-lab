@@ -68,19 +68,22 @@ function MenuPanel({
   groups,
   cta,
   sheet = false,
+  id,
   onNavigate,
 }: {
   groups: NavLink[][];
   cta?: NavLink;
   sheet?: boolean;
+  id?: string;
   onNavigate: () => void;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -8, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -8, scale: 0.97 }}
-      transition={transitions.accordion}
+      id={id}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={transitions.menuPanel}
       /* The sheet's width is the screen minus the bar's own 16px gutters, so its
          left edge lands on the page column rather than somewhere inside it, and
          it stops at 320 on the wider phones where a full-bleed sheet would just
@@ -229,9 +232,23 @@ export function Header({ lang }: { lang: LabLang }) {
        per-event threshold fires on the first flick of the wheel, which is what
        made the bar feel like it was snatched away the instant you moved. */
     let travel = 0;
+    /* Hash links and the hamburger both move the page. The smooth-scroll that
+       follows is not the reader putting the bar away, and treating it as one
+       is how the chrome vanished mid-tap on a phone. */
+    let ignoreUntil = 0;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
+    const HIDE = coarse ? 88 : 64;
+    const SHOW = coarse ? 28 : 12;
+    const DEAD = coarse ? 10 : 0;
 
     const onScroll = () => {
-      const y = window.scrollY;
+      if (Date.now() < ignoreUntil) {
+        last = window.scrollY;
+        travel = 0;
+        return;
+      }
+
+      const y = Math.max(0, window.scrollY);
       setAtTop(y < 120);
       /* Above the fold the bar is always there: at the top of a page there is
          no "back up" left to ask for. */
@@ -242,32 +259,64 @@ export function Header({ lang }: { lang: LabLang }) {
         return;
       }
 
+      const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      /* Rubber-band past the end invents a reverse delta that is not a reader
+         reaching for the nav. */
+      if (y > maxY) {
+        last = y;
+        return;
+      }
+
       const delta = y - last;
       last = y;
-      if (delta === 0) return;
+      if (delta === 0 || Math.abs(delta) < DEAD) return;
       /* A change of direction starts the count again, so a scroll down followed
          by a nudge up does not carry its momentum into the decision. */
       if (delta > 0 !== travel > 0) travel = 0;
       travel += delta;
 
-      /* ASYMMETRIC ON PURPOSE, and this is the fix for "it vanishes the moment
-         I move". Leaving costs 64px of sustained downward scroll, which is a
-         deliberate move down the page; coming back costs 8px, because reaching
-         for the nav is a small upward flick and it has to answer at once. Equal
-         thresholds make one of the two feel wrong whichever number you pick. */
-      if (travel > 64) {
+      /* ASYMMETRIC ON PURPOSE. Leaving still costs a sustained move down.
+         Coming back used to cost 8px, which on a phone is also the jitter from
+         the browser chrome collapsing, so the bar hid and showed in the same
+         gesture. The phone number is a flick, not a twitch. */
+      if (travel > HIDE) {
         setHidden(true);
         travel = 0;
-      } else if (travel < -8) {
+      } else if (travel < -SHOW) {
         setHidden(false);
         travel = 0;
       }
     };
 
+    const onHeaderClick = (event: Event) => {
+      const target = event.target as HTMLElement | null;
+      /* Links, not the hamburger: a tap that starts a smooth-scroll should not
+         also hide the bar, but closing the sheet must not mute the next flick. */
+      if (target?.closest("header a")) {
+        ignoreUntil = Date.now() + 900;
+      }
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    document.addEventListener("click", onHeaderClick, true);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("click", onHeaderClick, true);
+    };
   }, []);
+
+  /* The page used to keep scrolling under the sheet, so by the time the panel
+     closed the bar had already decided to leave and the two animations ran at
+     once. */
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen]);
 
   /* An open menu pins the bar. Both panels hang off buttons inside it, so
      letting it leave would take the panel with it, or worse, leave the panel
@@ -282,15 +331,18 @@ export function Header({ lang }: { lang: LabLang }) {
       const target = event.target as Node;
       if (menuOpen && dropdownRef.current && !dropdownRef.current.contains(target)) {
         setMenuOpen(false);
+        setHidden(false);
       }
       if (mobileOpen && mobileRef.current && !mobileRef.current.contains(target)) {
         setMobileOpen(false);
+        setHidden(false);
       }
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setMenuOpen(false);
         setMobileOpen(false);
+        setHidden(false);
       }
     };
 
@@ -345,7 +397,7 @@ export function Header({ lang }: { lang: LabLang }) {
 
          NO HAIRLINE. The plate is enough of an edge on the sections it crosses,
          and the line was drawing itself across the blue panel underneath. */
-      className={`fixed inset-x-0 top-0 z-50 pt-[var(--page-safe-top)] transition-[translate,background-color] duration-300 ease-out motion-reduce:transition-none ${
+      className={`fixed inset-x-0 top-0 z-50 pt-[var(--page-safe-top)] transition-[translate,background-color] duration-200 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none ${
         away ? "-translate-y-full" : "translate-y-0"
       } ${atTop ? "bg-transparent" : "bg-page"}`}
     >
@@ -425,8 +477,12 @@ export function Header({ lang }: { lang: LabLang }) {
               <AnimatePresence>
                 {menuOpen && (
                   <MenuPanel
+                    key="desktop-menu"
                     groups={[site.navMenu.links]}
-                    onNavigate={() => setMenuOpen(false)}
+                    onNavigate={() => {
+                      setMenuOpen(false);
+                      setHidden(false);
+                    }}
                   />
                 )}
               </AnimatePresence>
@@ -450,7 +506,12 @@ export function Header({ lang }: { lang: LabLang }) {
             <div ref={mobileRef} className="relative desktop:hidden">
               <button
                 type="button"
-                onClick={() => setMobileOpen((open) => !open)}
+                onClick={() =>
+                  setMobileOpen((open) => {
+                    if (open) setHidden(false);
+                    return !open;
+                  })
+                }
                 aria-expanded={mobileOpen}
                 aria-controls="mobile-menu"
                 aria-label={mobileOpen ? site.labels.menuClose : site.labels.menuOpen}
@@ -469,14 +530,17 @@ export function Header({ lang }: { lang: LabLang }) {
               </button>
               <AnimatePresence>
                 {mobileOpen && (
-                  <div id="mobile-menu">
-                    <MenuPanel
-                      sheet
-                      groups={mobileGroups}
-                      cta={site.cta}
-                      onNavigate={() => setMobileOpen(false)}
-                    />
-                  </div>
+                  <MenuPanel
+                    key="mobile-menu"
+                    id="mobile-menu"
+                    sheet
+                    groups={mobileGroups}
+                    cta={site.cta}
+                    onNavigate={() => {
+                      setMobileOpen(false);
+                      setHidden(false);
+                    }}
+                  />
                 )}
               </AnimatePresence>
             </div>

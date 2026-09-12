@@ -59,10 +59,9 @@ export interface SocialLink {
  * ported sections, and `content.ts` links to `#contact` too, which is why the
  * close is spelled that way here rather than the template's `get-started`.
  *
- * `estimate` is the one with nothing behind it yet: the calculator is not on
- * the page. `Hero.tsx` and `content.ts` already point their primary buttons at
- * it, so the anchor is written the same way here and lights up for all three
- * the moment that section lands.
+ * `estimate` is not a home-page section. The widget lives on /pricing and the
+ * inner pages, which address it as a local hash. The home chrome must not use
+ * `at(ANCHORS.estimate)`: on this page that hash is empty.
  */
 export const ANCHORS = {
   home: '#hero',
@@ -163,8 +162,9 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
 
     /** The single conversion action, on all 24 routes of each language. */
     cta: { label: L(UI.cta), href: at(ANCHORS.contact) },
-    /** Read by the hero's primary button. */
-    heroCta: { label: L(UI.ctaCalc), href: at(ANCHORS.estimate) },
+    /** Read by the hero's primary button, if it returns. The widget is on
+     *  /pricing, not on the home page, so this cannot be `at(ANCHORS.estimate)`. */
+    heroCta: { label: L(UI.ctaCalc), href: `${pricingPath(lang)}#estimate` },
 
     /* No `contact` block any more. It carried an address pair, the footer read
        only the mail half of it, and that pill is gone. Telegram reaches the

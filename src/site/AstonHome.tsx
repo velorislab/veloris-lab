@@ -1,7 +1,6 @@
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { About } from '@/components/sections/About'
-import { Estimate } from '@/components/sections/Estimate'
 import { Faq } from '@/components/sections/Faq'
 import { FinalCta } from '@/components/sections/FinalCta'
 import { Hero } from '@/components/sections/Hero'
@@ -35,6 +34,11 @@ import type { LabLang } from '@/site/labData'
  *                         page is the duplication the audit kept catching. The
  *                         component is ported and available; the full table
  *                         lives at /pricing, which the cards and the nav link to.
+ *
+ * The five-step calculator is the same kind of absence. It still runs on
+ * /pricing and the inner pages. On the home page the floors are already on
+ * the cards, and a second widget between those cards and the process asked
+ * the reader to assemble a number before they had finished the page.
  */
 export default function AstonHome({ lang }: { lang: LabLang }) {
   return (
@@ -53,7 +57,6 @@ export default function AstonHome({ lang }: { lang: LabLang }) {
           <Cases lang={lang} />
           <WhatsIn lang={lang} />
           <PlatformHighlight lang={lang} />
-          <Estimate lang={lang} />
           <Process lang={lang} />
           <About lang={lang} />
           <Faq lang={lang} />

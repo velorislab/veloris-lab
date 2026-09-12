@@ -255,7 +255,7 @@ export function Hero({ lang }: { lang: LabLang }) {
             initial={initial}
             animate={animate}
             transition={transitions.note}
-            className="relative grid w-full max-w-[680px] grid-cols-3 gap-x-3 tablet:gap-x-8"
+            className="relative grid w-full max-w-[var(--hero-plates)] grid-cols-3 gap-x-3 tablet:gap-x-8"
           >
             {hero.marks.map((m) => (
               <div key={m.caption} className="flex flex-col items-center gap-[2px] text-center tablet:px-4">

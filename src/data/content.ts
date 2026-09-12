@@ -301,7 +301,7 @@ export function getHome(lang: LabLang) {
       photo: '/founder.jpg',
       photoAlt: L(BUREAU.photoAlt),
       facts: BUREAU.facts.map((f) => ({ k: L(f.k), v: L(f.v) })),
-      primaryCta: { label: L(UI.ctaCalc), href: '#estimate' },
+      primaryCta: { label: L(UI.cta), href: '#contact' },
       secondaryCta: { label: L(UI.priceList), href: pricingPath(lang) },
     },
 
@@ -311,10 +311,10 @@ export function getHome(lang: LabLang) {
        offer. `WhoCanUse.tsx` and `ENTRY` went with it.
 
        Nothing it carried is now unreachable. /solutions is in the header pill,
-       the calculator the three doors pointed at is the section directly below,
-       and its panel was the third copy of «Разберём бесплатно и скажем как
-       есть» on one page: `CONTACT.h` still opens the close, which is where that
-       sentence has an anchor and a channel under it. */
+       and the calculator the three doors pointed at lives on /pricing, not
+       under this heading. Its panel was the third copy of «Разберём бесплатно
+       и скажем как есть» on one page: `CONTACT.h` still opens the close, which
+       is where that sentence has an anchor and a channel under it. */
 
     /* ------------------------------------------------------------ process */
     process: {
@@ -323,8 +323,7 @@ export function getHome(lang: LabLang) {
       description: L(PROCESS_SUB),
       /* «Бесплатный разбор», not «Узнать цену за минуту». The section ends on
          step 01, which IS the free scoping, so the button should offer the step
-         the reader has just read about rather than send them back up to the
-         calculator. */
+         the reader has just read about rather than send them to /pricing. */
       ctaLabel: L(UI.cta),
       ctaHref: '#contact',
       steps: PROCESS.map((s, i) => ({

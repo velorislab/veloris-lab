@@ -97,6 +97,9 @@
   --page-pad-left: max(var(--page-x), env(safe-area-inset-left, 0px));
   --page-pad-right: max(var(--page-x), env(safe-area-inset-right, 0px));
   --page-safe-top: env(safe-area-inset-top, 0px);
+  /* The three plates that close the fold, and the blue cap that peeks under
+     them before you scroll. Same number, or the cap is a different object. */
+  --hero-plates: 680px;
   --shadow-badge: 0 10px 41px 0 rgba(0, 0, 0, 0.04),
     0 2px 2px 0 rgba(0, 0, 0, 0.02);
   --shadow-ring: 0 0 0 4px #ffffff;
@@ -338,6 +341,58 @@
      it without anybody remembering to. Scroll margin costs nothing on an
      element nothing links to. */
   scroll-margin-top: calc(120px + var(--page-safe-top));
+}
+
+/* The process parks on desktop so the wheel, not a timer, fills the five
+   stations. Extra height is the scroll that plays it; the inner stays in
+   the viewport under the 72px bar. Reduced motion drops the park: there is
+   nothing to scrub. Below 1320px the list is already taller than a screen,
+   so the same progress runs as the list itself is scrolled. */
+@utility process-pin {
+  width: 100%;
+
+  @media (min-width: 1320px) {
+    min-height: 300vh;
+    justify-content: flex-start;
+
+    /* Same element, so this beats the 300vh above. After Support the extra
+       height would be a second park on the way back up. The inner keeps its
+       one-screen size and centering: collapsing those was a second jump,
+       and the height-delta scroll then overshot into the calculator. */
+    &:is([data-released]) {
+      min-height: 0;
+
+      & .process-pin-inner {
+        position: static;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    min-height: 0;
+  }
+}
+
+@utility process-pin-inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 1320px) {
+    position: sticky;
+    top: calc(72px + var(--page-safe-top));
+    min-height: calc(100svh - 72px - var(--page-safe-top));
+    justify-content: center;
+    padding-block: 32px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    position: static;
+    min-height: 0;
+    padding-block: 0;
+    justify-content: flex-start;
+  }
 }
 
 /* THE READING COLUMN, and it is the FAQ's exception generalised.

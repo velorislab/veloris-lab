@@ -1,18 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 
 import { Ticker } from "@/components/sections/Ticker";
 import { getHome } from "@/data/content";
 import type { LabLang } from "@/site/labData";
 
-const DESKTOP_MQ = "(min-width: 810px)";
+/** Same number as `--hero-plates`. The peek matches the three fold plates. */
+const PLATES = 680;
 
-function subscribeDesktop(onStoreChange: () => void) {
-  const mq = window.matchMedia(DESKTOP_MQ);
-  mq.addEventListener("change", onStoreChange);
-  return () => mq.removeEventListener("change", onStoreChange);
+/** Ease-out cubic. Linear over a short distance is what made the cap snap:
+    most of the width arrived in one wheel tick. This spends the motion early
+    and lands it, which is the shape of a thing opening rather than a slider. */
+function openEase(t: number) {
+  const x = t < 0 ? 0 : t > 1 ? 1 : t;
+  return 1 - (1 - x) ** 3;
 }
 
 /**
@@ -38,30 +41,55 @@ function subscribeDesktop(onStoreChange: () => void) {
  * what changed is that it now closes a panel instead of straddling the seam
  * between the hero and the page, which is what it was doing.
  *
- * WHY THIS IS A CLIENT COMPONENT. The glow and the scroll-tied scale. The
- * rest is static. On desktop the panel starts slightly small, peeking into
- * the hero, and grows as the scroll brings it up. On a phone that scale
- * reads as a sticker in the gutter, so the phone only gets the layout peek.
+ * WHY THIS IS A CLIENT COMPONENT. The glow and the scroll-tied width. The
+ * rest is static. Before you scroll, the peeked cap is the width of the three
+ * plates above it; as the panel comes up it opens to the page edge. A 3% scale
+ * from the template was not that, it was a sticker of the same object.
  */
 export function Motto({ lang }: { lang: LabLang }) {
   const { motto } = getHome(lang);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const glowRef = useRef<HTMLSpanElement>(null);
   const figuresRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
-  const desktop = useSyncExternalStore(
-    subscribeDesktop,
-    () => window.matchMedia(DESKTOP_MQ).matches,
-    () => true,
-  );
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start 1", "start 0.32"],
+  const { scrollY } = useScroll();
+  /* Parent width, not `100%`: `max-width` cannot interpolate a px start against
+     a percentage end, and a 3% `scale` was the wrong axis. The peeked cap has
+     to be the same object as the three plates (`--hero-plates`); the grow is
+     only the sides opening to the page edge. On a phone the parent is already
+     under 680, so the range collapses and nothing moves.
+
+     PAGE SCROLL, NOT THE SECTION'S INTERSECTION. The panel is pulled into the
+     hero, so at the fold its top is already above the viewport bottom. A
+     `start 1` offset treated that as progress and the cap arrived wider than
+     the plates. `scrollY === 0` is the fold.
+
+     THE DISTANCE USED TO BE 140px, the peeked padding, and that is why it
+     snapped. Half a screen is the rise of the panel, and a spring on the
+     pixels takes the wheel's steps out of the sides. */
+  const fullWidth = useMotionValue(PLATES);
+  const openDist = useMotionValue(480);
+  const rawMaxWidth = useTransform(() => {
+    const full = fullWidth.get();
+    const start = Math.min(PLATES, full);
+    const dist = openDist.get();
+    return start + (full - start) * openEase(scrollY.get() / dist);
   });
-  /* Independent `scale` would run on the main thread. The origin is the top
-     edge, so the peeked rim stays put while the rest of the panel opens.
-     Phone skips it: 3% off a 418px column is a visible inset, not a grow. */
-  const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1]);
+  const maxWidth = useSpring(rawMaxWidth, { stiffness: 90, damping: 24, restDelta: 0.5 });
+
+  useLayoutEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const set = () => {
+      fullWidth.set(el.getBoundingClientRect().width);
+      openDist.set(Math.round(Math.min(640, Math.max(420, window.innerHeight * 0.5))));
+    };
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [fullWidth, openDist]);
 
   /**
    * The figures count up once, when the scroll first brings them into view.
@@ -254,20 +282,21 @@ export function Motto({ lang }: { lang: LabLang }) {
   }, []);
 
   return (
-    <motion.section
-      ref={sectionRef}
-      className="section-shell relative w-full origin-top overflow-hidden rounded-section border border-line px-6 pt-20 pb-14 shadow-[0_0_0_8px_#ffffff,0_17px_24px_0_rgba(178,178,178,0.08)] tablet:px-16 tablet:pt-24 tablet:pb-20 desktop:gap-[60px] desktop:px-[clamp(4rem,9vw,12rem)] desktop:pt-[120px] desktop:pb-[100px]"
-      /* Two blues, and the pale `#bad6ff` that used to sit at 0% is gone. It was
-         a fixed wash in the bottom-left corner, which is the one thing on this
-         panel that read as a light source; with a light that follows the pointer
-         there are otherwise two of them, one of them nailed down. What is left
-         is depth rather than glow: lighter at the bottom-left, deeper towards
-         the top-right, same direction as before. */
-      style={{
-        backgroundImage: "linear-gradient(to top right, #3384ff 0%, #0065ff 100%)",
-        ...(reduceMotion || !desktop ? {} : { scale, willChange: "transform" }),
-      }}
-    >
+    <div ref={wrapRef} className="w-full">
+      <motion.section
+        ref={sectionRef}
+        className="section-shell relative mx-auto w-full max-w-[var(--hero-plates)] overflow-hidden rounded-section border border-line px-6 pt-20 pb-14 shadow-[0_0_0_8px_#ffffff,0_17px_24px_0_rgba(178,178,178,0.08)] tablet:px-16 tablet:pt-24 tablet:pb-20 desktop:gap-[60px] desktop:px-[clamp(4rem,9vw,12rem)] desktop:pt-[120px] desktop:pb-[100px]"
+        /* Two blues, and the pale `#bad6ff` that used to sit at 0% is gone. It was
+           a fixed wash in the bottom-left corner, which is the one thing on this
+           panel that read as a light source; with a light that follows the pointer
+           there are otherwise two of them, one of them nailed down. What is left
+           is depth rather than glow: lighter at the bottom-left, deeper towards
+           the top-right, same direction as before. */
+        style={{
+          backgroundImage: "linear-gradient(to top right, #3384ff 0%, #0065ff 100%)",
+          ...(reduceMotion ? { maxWidth: "100%" } : { maxWidth }),
+        }}
+      >
       {/* The follower. `blur` rather than a soft gradient stop because a blurred
           disc keeps its shape while it moves, where a wide gradient banded
           visibly against the flat blue underneath. The section already clips at
@@ -329,6 +358,7 @@ export function Motto({ lang }: { lang: LabLang }) {
           <Ticker lang={lang} />
         </div>
       </div>
-    </motion.section>
+      </motion.section>
+    </div>
   );
 }

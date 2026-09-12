@@ -74,6 +74,15 @@ export const transitions = {
     bounce: 0.2,
     duration: 0.4,
   } satisfies Transition,
+
+  /* The header menus. Bounce and scale were the accordion's, and a 320px
+     sheet shrinking into the top-right corner is what made close on a phone
+     look like a mistake. Opacity and a short drop, no overshoot. */
+  menuPanel: {
+    type: "tween",
+    duration: 0.2,
+    ease: [0.23, 1, 0.32, 1],
+  } satisfies Transition,
 } as const;
 
 /** Shared entrance shapes. `hidden` values are the Framer `initial` states. */

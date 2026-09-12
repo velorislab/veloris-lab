@@ -39,7 +39,7 @@ export const TELEGRAM_HANDLE = 't.me/samweyd'
  *  the page's schema.org `sameAs`. The full slug matters: the shortened
  *  `/in/denys-kandyba` does not resolve. */
 export const LINKEDIN = 'https://www.linkedin.com/in/denys-kandyba-721b803a4/'
-export const INSTAGRAM = 'https://www.instagram.com/veloris_dev/'
+export const INSTAGRAM = 'https://www.instagram.com/sexy_ai_dev/'
 export const THREADS = 'https://www.threads.com/@veloris_dev'
 export const SWIFTIN = 'https://swiftin.dev/'
 
@@ -1682,9 +1682,9 @@ export const TOOLS: Tool[] = [
 /**
  * FAQ.
  *
- * Every answer here is backed by something else on this page: the calculator,
- * the process steps, the entry points, the cases, or the bureau facts. That is
- * the admission test. Questions whose honest answer is a commercial term the
+ * Every answer here is backed by something else on this page: the service
+ * floors, the process steps, the cases, or the bureau facts. That is the
+ * admission test. Questions whose honest answer is a commercial term the
  * bureau has not fixed yet (contract, deposit, guarantees, code ownership,
  * what happens if a deadline slips, hourly vs fixed) are deliberately absent
  * rather than answered with a plausible invention.
@@ -1716,8 +1716,8 @@ export const FAQ: FaqItem[][] = [
     {
       q: { en: 'How much will it cost?', ru: 'Сколько это будет стоить?' },
       a: {
-        en: 'The price is known before the work starts. The calculator gives you a guide, and the exact figure is fixed after we scope the task.',
-        ru: 'Цена известна до начала работ. Калькулятор даёт ориентир, точную сумму фиксируем после разбора задачи.',
+        en: 'The price is known before the work starts. The floors sit on the service cards above, and the exact figure is fixed after we scope the task.',
+        ru: 'Цена известна до начала работ. Нижняя полка стоит на карточках услуг выше, точную сумму фиксируем после разбора задачи.',
       },
     },
     {
