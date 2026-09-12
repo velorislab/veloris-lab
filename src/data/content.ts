@@ -22,7 +22,7 @@
 import { type LabLang, tx } from '@/site/labData'
 import {
   HERO, SERVICES, SERVICES_LABEL,
-  PROCESS, PROCESS_LABEL, PROCESS_SUB,
+  PROCESS, PROCESS_LABEL,
   STACK_LABEL, STACK_SUB, TOOLS, STACK_GROUPS, WORK_MODEL, WORK_MODEL_LABEL,
   FAQ, FAQ_LABEL,
   BUREAU, CONTACT, CASES, CASES_LABEL, CASES_COUNT_NOUN, CASE_WORD, pluralForm,
@@ -320,7 +320,7 @@ export function getHome(lang: LabLang) {
     process: {
       badge: { icon: `${ICON}/process.svg`, label: L(EYEBROW.process) },
       title: L(PROCESS_LABEL),
-      description: L(PROCESS_SUB),
+      description: '',
       /* «Бесплатный разбор», not «Узнать цену за минуту». The section ends on
          step 01, which IS the free scoping, so the button should offer the step
          the reader has just read about rather than send them to /pricing. */

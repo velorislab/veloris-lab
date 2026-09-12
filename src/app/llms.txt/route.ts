@@ -105,7 +105,7 @@ export function GET() {
   p(`## Machine-readable`)
   p()
   p(`- Sitemap: ${SITE_URL}/sitemap.xml`)
-  p(`- Locales: ${LANGS.join(', ')}. English is x-default; every URL carries hreflang alternates.`)
+  p(`- Locales: ${LANGS.join(', ')}. Russian is x-default; every URL carries hreflang alternates.`)
   p()
 
   return new Response(lines.join('\n'), {

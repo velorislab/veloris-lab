@@ -1,37 +1,26 @@
 import type { LabLang } from './labData'
 
 /**
- * Which language the IP implies, and the cookie that outranks it.
+ * Which language a first visit opens in, and the cookie that outranks it.
  *
- * English is the site's default URL (`/`). Russian is a prefix (`/ru`). A
- * visitor from a Russian-speaking country who types the domain would otherwise
- * land on English every time; this table is what sends them to `/ru` instead.
- *
- * Georgia is English on purpose. It is next to the rest of this list and is
- * still not on it: the founder named it with Europe and America, not with
- * Russia and Kazakhstan.
+ * Russian is the site's default. English still lives at the unprefixed URLs
+ * (`/`, `/pricing`); Russian keeps the `/ru` prefix. A visitor who types the
+ * domain lands on `/ru` unless they already chose English or they are in an
+ * English-primary country.
  *
  * The cookie is only written by the language switcher. Geo never sets it, so a
- * shared `/ru/...` link still opens in Russian for someone in the US until they
- * click `en` themselves, and the other way around.
+ * shared `/pricing` link still opens in English for someone who picked `en`,
+ * and a shared `/ru/...` link stays Russian until they click `en` themselves.
  */
 export const LANG_COOKIE = 'sas-lang'
+
+/** First visit with no cookie and no country signal. */
+export const DEFAULT_LANG: LabLang = 'ru'
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 /** ISO 3166-1 alpha-2, as `x-vercel-ip-country` sends them. */
-const RU_COUNTRIES = new Set([
-  'RU',
-  'UA',
-  'BY',
-  'KZ',
-  'KG',
-  'UZ',
-  'TJ',
-  'TM',
-  'AM',
-  'AZ',
-])
+const EN_COUNTRIES = new Set(['US', 'GB', 'AU', 'CA', 'NZ', 'IE'])
 
 export function pathLang(pathname: string): LabLang {
   return /^\/ru(?=\/|$)/.test(pathname) ? 'ru' : 'en'
@@ -41,12 +30,12 @@ export function parseLangCookie(value: string | undefined): LabLang | null {
   return value === 'en' || value === 'ru' ? value : null
 }
 
-/** `null` when the host did not tell us a country, so the URL is left alone. */
+/** `null` when the host did not tell us a country, so the default language is used. */
 export function langFromCountry(country: string | null | undefined): LabLang | null {
   if (!country) return null
   const code = country.toUpperCase()
   if (code === 'XX' || code === 'T1') return null
-  return RU_COUNTRIES.has(code) ? 'ru' : 'en'
+  return EN_COUNTRIES.has(code) ? 'en' : 'ru'
 }
 
 export function persistLang(lang: LabLang) {

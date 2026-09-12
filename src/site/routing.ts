@@ -3,8 +3,10 @@
  *
  * In the SwiftIn monorepo this page lived at /lab under a shared [lang] segment
  * and borrowed that app's i18n helpers. Standing alone, the bureau owns its
- * root: English is `/`, Russian is `/ru`. This module is the only thing that
- * knows that, so changing the URL shape is a one-file edit.
+ * root: English is `/`, Russian is `/ru`. A first visit still opens in
+ * Russian; the unprefixed tree is the English one, not the default one. This
+ * module is the only thing that knows the URL shape, so changing it is a
+ * one-file edit.
  */
 
 // The language union lives with the copy it indexes, so there is only ever one
@@ -13,7 +15,7 @@ import type { LabLang } from './labData'
 
 export type { LabLang }
 
-export const LANGS: LabLang[] = ['en', 'ru']
+export const LANGS: LabLang[] = ['ru', 'en']
 
 /**
  * Absolute origin, used for canonicals, hreflang and JSON-LD. Set
@@ -33,15 +35,15 @@ export function localizedUrl(lang: LabLang): string {
   return lang === 'en' ? `${SITE_URL}/` : `${SITE_URL}/${lang}`
 }
 
-/** hreflang map for <link rel="alternate">, plus x-default on English. */
+/** hreflang set. x-default is Russian, the language a first visit opens in. */
+function languages(en: string, ru: string) {
+  return { en, ru, 'x-default': ru }
+}
+
 export function buildAlternates(lang: LabLang) {
   return {
     canonical: localizedUrl(lang),
-    languages: {
-      en: localizedUrl('en'),
-      ru: localizedUrl('ru'),
-      'x-default': localizedUrl('en'),
-    },
+    languages: languages(localizedUrl('en'), localizedUrl('ru')),
   }
 }
 
@@ -59,15 +61,10 @@ export function serviceUrl(lang: LabLang, slug: string): string {
   return `${SITE_URL}${servicePath(lang, slug)}`
 }
 
-/** hreflang map for one service page, plus x-default on English. */
 export function buildServiceAlternates(lang: LabLang, slug: string) {
   return {
     canonical: serviceUrl(lang, slug),
-    languages: {
-      en: serviceUrl('en', slug),
-      ru: serviceUrl('ru', slug),
-      'x-default': serviceUrl('en', slug),
-    },
+    languages: languages(serviceUrl('en', slug), serviceUrl('ru', slug)),
   }
 }
 
@@ -85,11 +82,7 @@ export function solutionsUrl(lang: LabLang): string {
 export function buildSolutionsAlternates(lang: LabLang) {
   return {
     canonical: solutionsUrl(lang),
-    languages: {
-      en: solutionsUrl('en'),
-      ru: solutionsUrl('ru'),
-      'x-default': solutionsUrl('en'),
-    },
+    languages: languages(solutionsUrl('en'), solutionsUrl('ru')),
   }
 }
 
@@ -104,11 +97,7 @@ export function solutionUrl(lang: LabLang, slug: string): string {
 export function buildSolutionAlternates(lang: LabLang, slug: string) {
   return {
     canonical: solutionUrl(lang, slug),
-    languages: {
-      en: solutionUrl('en', slug),
-      ru: solutionUrl('ru', slug),
-      'x-default': solutionUrl('en', slug),
-    },
+    languages: languages(solutionUrl('en', slug), solutionUrl('ru', slug)),
   }
 }
 
@@ -129,7 +118,7 @@ export function servicesUrl(lang: LabLang): string {
 export function buildServicesAlternates(lang: LabLang) {
   return {
     canonical: servicesUrl(lang),
-    languages: { en: servicesUrl('en'), ru: servicesUrl('ru'), 'x-default': servicesUrl('en') },
+    languages: languages(servicesUrl('en'), servicesUrl('ru')),
   }
 }
 
@@ -144,7 +133,7 @@ export function casesUrl(lang: LabLang): string {
 export function buildCasesAlternates(lang: LabLang) {
   return {
     canonical: casesUrl(lang),
-    languages: { en: casesUrl('en'), ru: casesUrl('ru'), 'x-default': casesUrl('en') },
+    languages: languages(casesUrl('en'), casesUrl('ru')),
   }
 }
 
@@ -163,7 +152,7 @@ export function stackUrl(lang: LabLang): string {
 export function buildStackAlternates(lang: LabLang) {
   return {
     canonical: stackUrl(lang),
-    languages: { en: stackUrl('en'), ru: stackUrl('ru'), 'x-default': stackUrl('en') },
+    languages: languages(stackUrl('en'), stackUrl('ru')),
   }
 }
 
@@ -178,7 +167,7 @@ export function usefulUrl(lang: LabLang): string {
 export function buildUsefulAlternates(lang: LabLang) {
   return {
     canonical: usefulUrl(lang),
-    languages: { en: usefulUrl('en'), ru: usefulUrl('ru'), 'x-default': usefulUrl('en') },
+    languages: languages(usefulUrl('en'), usefulUrl('ru')),
   }
 }
 
@@ -195,11 +184,7 @@ export function caseUrl(lang: LabLang, slug: string): string {
 export function buildCaseAlternates(lang: LabLang, slug: string) {
   return {
     canonical: caseUrl(lang, slug),
-    languages: {
-      en: caseUrl('en', slug),
-      ru: caseUrl('ru', slug),
-      'x-default': caseUrl('en', slug),
-    },
+    languages: languages(caseUrl('en', slug), caseUrl('ru', slug)),
   }
 }
 
@@ -216,11 +201,7 @@ export function pricingUrl(lang: LabLang): string {
 export function buildPricingAlternates(lang: LabLang) {
   return {
     canonical: pricingUrl(lang),
-    languages: {
-      en: pricingUrl('en'),
-      ru: pricingUrl('ru'),
-      'x-default': pricingUrl('en'),
-    },
+    languages: languages(pricingUrl('en'), pricingUrl('ru')),
   }
 }
 

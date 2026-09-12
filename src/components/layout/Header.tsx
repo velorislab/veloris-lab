@@ -144,7 +144,7 @@ function MenuPanel({
  * later gets a working switcher without anybody remembering to wire one.
  *
  * The click also writes `sas-lang`. Without it, the geo proxy would send a
- * visitor from Kazakhstan who just chose English straight back to `/ru`.
+ * visitor from Georgia who just chose English straight back to `/ru`.
  */
 function LangSwitch({
   lang,

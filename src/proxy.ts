@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-import { LANG_COOKIE, langFromCountry, parseLangCookie, pathLang } from '@/site/geoLang'
+import { DEFAULT_LANG, LANG_COOKIE, langFromCountry, parseLangCookie, pathLang } from '@/site/geoLang'
 import { twinPath } from '@/site/routing'
 
 /**
@@ -17,21 +17,31 @@ import { twinPath } from '@/site/routing'
  * trees; a geo redirect would hide one of them from the crawler that happened
  * to come from the other country.
  *
- * 307, not 301: the same URL is English for Georgia and Russian for Kazakhstan,
+ * 307, not 301: the same URL is English for the US and Russian for Georgia,
  * and a cached permanent redirect would stick the first visitor's language to
  * the address for everybody behind that cache.
+ *
+ * STATIC FILES ARE NOT A LANGUAGE TREE. `/founder.jpg` used to match this
+ * proxy, so a Russian cookie turned it into `/ru/founder.jpg`, which 404s.
+ * Mobile Safari draws that miss as a question mark on the home page photograph.
  */
 export function proxy(request: NextRequest) {
   if (isCrawler(request.headers.get('user-agent'))) return NextResponse.next()
 
   const { pathname } = request.nextUrl
+  /* A file is not a language tree. Matcher skip lists go stale; this does not. */
+  if (
+    pathname.startsWith('/_next/') ||
+    /\.[a-z0-9]+$/i.test(pathname)
+  ) {
+    return NextResponse.next()
+  }
+
   const chosen = parseLangCookie(request.cookies.get(LANG_COOKIE)?.value)
   const implied = langFromCountry(
     request.headers.get('x-vercel-ip-country') ?? request.headers.get('cf-ipcountry'),
   )
-  const target = chosen ?? implied
-  if (!target) return NextResponse.next()
-
+  const target = chosen ?? implied ?? DEFAULT_LANG
   const current = pathLang(pathname)
   if (current === target) return NextResponse.next()
 
@@ -43,11 +53,21 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     {
+      /* Root is its own source: `/((?!…).*)` does not match `/`, and `/` is
+         the address a first visit actually types. */
+      source: '/',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
+    {
       /* Skip the files that are not a language tree: the crawler map, the
-         sitemap, static assets. Prefetch is skipped so a language-switcher
-         hover does not get rewritten into a redirect of the other tree. */
+         sitemap, Next internals, and anything with a file extension. Prefetch
+         is skipped so a language-switcher hover does not get rewritten into a
+         redirect of the other tree. */
       source:
-        '/((?!_next/static|_next/image|favicon.ico|icon.svg|robots.txt|sitemap.xml|llms\\.txt|images/).*)',
+        '/((?!_next/|favicon.ico|icon.svg|robots.txt|sitemap.xml|llms\\.txt|images/|founder\\.jpg).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

@@ -410,10 +410,9 @@ export interface Service {
  * heading that needs a label over it is a heading that is not doing its job.
  *
  * That argument stands, and these pass it. They are not the heading restated:
- * every heading here is now a spoken sentence («Поддержка это пятый шаг, а не
- * допродажа», «Это можно проверить без нас», «Каждый инструмент здесь уже был
- * в проде») and not one of them names its own topic. The eyebrow carries the
- * topic so the heading does not have to, which is exactly what buys the
+ * a heading that already names its topic («Этапы», «Стек») does not get one,
+ * and a spoken sentence that does not name it still does. The eyebrow carries
+ * the topic so the heading does not have to, which is exactly what buys the
  * heading its voice. On a page this long that word is also the scan layer a
  * reader uses to find the section they came for.
  *
@@ -1113,15 +1112,9 @@ export interface Step {
   d: LS
 }
 
-/* Drops «шаг за шагом», which the sub directly below already carries, and
-   names the two real ends instead. That is information rather than filler:
-   support being the far end of the process, not an upsell after it, is the
-   thing this section is quietly proving. */
-export const PROCESS_LABEL = { en: 'Support is step five, not an upsell', ru: 'Поддержка это пятый шаг, а не допродажа' }
-export const PROCESS_SUB = {
-  en: 'The order matters. The first step can end the project, and that is the point of it.',
-  ru: 'Порядок именно такой. Первый шаг может закончить проект, и в этом его смысл.',
-}
+/* The rail already shows that Support is the last station, not a leftover
+   card. The heading only has to name the section. */
+export const PROCESS_LABEL = { en: 'Stages', ru: 'Этапы' }
 
 export const PROCESS: Step[] = [
   {
