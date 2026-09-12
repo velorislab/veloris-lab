@@ -15,13 +15,17 @@ import {
    page carries a «возможный стек» section whose whole premise is that the choice
    is made against the task rather than in advance, and the reference's own
    solution pages end that section with a link to the full list. Ours had nowhere
-   to send that click: the stack lived as a section of the home page, which a
-   reader arriving on a solution page has no reason to have seen.
+   to send that click while the stack also lived as a panel on the home page.
+   The home panel is gone; this is the list. The header points here, and so
+   does every solution page.
 
    NOTHING HERE IS NEW DATA. The ten groups, their leads and all seventy-three
-   tools come from `STACK_GROUPS` through `getHome`, the same assembly the home
-   section reads, so the two can never disagree. Only the two blocks the home has
-   no room for are added: how the choice is made, and where each tool has run.
+   tools come from `STACK_GROUPS` through `getHome`. The work-model row used to
+   close the home panel; it sits here now, after the groups, for the same
+   reason it sat there: a reader who has just been shown the list is one step
+   from asking what any of it costs to be tied to. Only then come the two
+   blocks the home never had room for: how the choice is made, and where each
+   tool has run.
 
    THE SECOND OF THOSE IS THE REASON THIS PAGE BEATS THEIRS. Their stack page is
    nine groups of chips and nothing else, which is a list anybody can write in an
@@ -81,6 +85,33 @@ export default function StackPage({ lang }: { lang: LabLang }) {
             ))}
           </ul>
         </section>
+
+        {/* ---------------------------------------------------------- model */}
+        {stack.model.length > 0 && (
+          <section className="section-shell gap-8">
+            <h2 className="max-w-[820px] text-center text-[24px] leading-[1.2] text-ink-900 tablet:text-[30px]">
+              {stack.modelLabel}
+            </h2>
+            <ul className="grid w-full grid-cols-1 gap-8 tablet:grid-cols-3 tablet:gap-0">
+              {stack.model.map((m, i) => (
+                <li
+                  key={m.k}
+                  className={
+                    "flex flex-col items-center gap-1 text-center tablet:px-8 " +
+                    (i > 0 ? "tablet:border-l tablet:border-line-soft" : "")
+                  }
+                >
+                  <span className="text-[12px] font-medium tracking-[0.08em] text-ink-200 uppercase">
+                    {m.k}
+                  </span>
+                  <span className="font-display text-[20px] leading-8 font-semibold text-ink-900 tablet:text-[22px]">
+                    {m.v}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {/* ----------------------------------------------------------- used */}
         {stack.used.length > 0 && (

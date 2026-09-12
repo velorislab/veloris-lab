@@ -435,9 +435,9 @@ const PRICING_FAQ_LABEL = {
  * than on the file that changed. The same rule the case pages already follow,
  * where the join is a title and not an index.
  *
- * Home's "How much will it cost?" is deliberately not among them. Its answer
- * points at the calculator, and on a page that is nothing but prices the whole
- * document is the answer; reprinting it would be a question answered twice.
+ * Home's "How much will it cost?" is not among them: it is not on the home
+ * list any more, and on a page that is nothing but prices the whole document
+ * is the answer.
  *
  * Every reused item was checked for direction words: a phrase like "the grid
  * above" is true on the home page and false here. This comment exists so the

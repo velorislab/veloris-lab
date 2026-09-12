@@ -142,7 +142,7 @@ export function WhatsIn({ lang }: { lang: LabLang }) {
 
          THE SIDES ARE 24px ON A PHONE, NOT 16, and that is about the page
          rather than about this slab. Four panels stand on this column and three
-         of them (`Motto`, `PlatformHighlight`, `FinalCta`) open their content
+         of them (`Motto`, `FinalCta`) open their content
          24px inside their own edge; this one opened it 16px in, so its cards
          started 32px from the screen edge while every other panel's content
          started at 41. One number was wrong and it was this one.

@@ -72,6 +72,7 @@ export const UI: Record<string, LS> = {
   navCalc: { en: 'Estimate', ru: 'Расчёт' },
   navBureau: { en: 'Studio', ru: 'О студии' },
   navSolutions: { en: 'Solutions', ru: 'Решения' },
+  navStack: { en: 'Stack', ru: 'Стек' },
   ctaCalc: { en: 'Get the price in a minute', ru: 'Узнать цену за минуту' },
   /**
    * The one button on all 24 routes of each language, and it now names the free
@@ -218,12 +219,11 @@ export const UI: Record<string, LS> = {
 }
 
 /* The capability word ticker that used to sit under the old hero is not here.
-   The template runs its own marquee and PlatformHighlight already drives it with
-   our stack, so the strip exists; a second one listing «AI-агенты,
-   Автоматизация, Интеграции…» would sit directly above six cards that say the
-   same six things with a price and a window attached. Restoring it is a
-   thirteen-word array and two lines in AstonHome if that trade ever looks worth
-   making. */
+   The template runs its own marquee; Motto already carries one, and the stack
+   names live on /stack. A second strip listing «AI-агенты, Автоматизация,
+   Интеграции…» would sit directly above six cards that say the same six things
+   with a price and a window attached. Restoring it is a thirteen-word array
+   and two lines in AstonHome if that trade ever looks worth making. */
 
 export const HERO = {
   /**
@@ -351,8 +351,8 @@ export const HERO = {
                    ru: 'Сопровождение после запуска, сколько нужно' },
   },
   sub: {
-    en: 'More than 10,000 people use the products we have built.',
-    ru: 'Продуктами, которые мы собрали, пользуются больше 10 000 человек.',
+    en: 'More than 10,000 people use the products we have built',
+    ru: 'Продуктами, которые мы собрали, пользуются больше 10 000 человек',
   },
   /**
    * The facts strip, directly under the dark band. Every row is checkable
@@ -1699,27 +1699,24 @@ export interface FaqItem { q: LS; a: LS }
 
 /** Two rows, scrolled in opposite directions. */
 /**
- * FIVE QUESTIONS, AND THE LIST IS CLOSED. It ran to nine across two rows and
+ * FOUR QUESTIONS, AND THE LIST IS CLOSED. It ran to nine across two rows and
  * several of them answered things nobody asks before a first call: which stack
  * we work in, which languages we speak, how many cases are above. Those are on
- * the page already, in the stack section, the studio table and the cards
- * themselves, so as questions they were captions.
+ * the page already, in the studio table and the cards themselves, so as
+ * questions they were captions.
+ *
+ * The cost question went with the home-page calculator. The floors sit on the
+ * service cards and the full table is /pricing; asking the same thing again
+ * in this list was a caption for a section the reader had already passed.
  *
  * NOT ONE ANSWER HERE COUNTS ANYTHING. The version this replaced opened «Четыре
  * кейса выше» and had to be taught to derive that number when the array grew
- * past four, then past ten. The five below make no claim that a later edit can
- * falsify: what a thing costs when, what a brief needs, who does the work, what
- * follows launch, what the first step is.
+ * past four, then past ten. The four below make no claim that a later edit can
+ * falsify: what a brief needs, who does the work, what follows launch, what
+ * the first step is.
  */
 export const FAQ: FaqItem[][] = [
   [
-    {
-      q: { en: 'How much will it cost?', ru: 'Сколько это будет стоить?' },
-      a: {
-        en: 'The price is known before the work starts. The floors sit on the service cards above, and the exact figure is fixed after we scope the task.',
-        ru: 'Цена известна до начала работ. Нижняя полка стоит на карточках услуг выше, точную сумму фиксируем после разбора задачи.',
-      },
-    },
     {
       q: { en: 'Do we need a finished spec?', ru: 'Нужно ли готовое ТЗ?' },
       a: {

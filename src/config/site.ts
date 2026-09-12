@@ -35,7 +35,7 @@ import {
   BRAND, SOCIAL, UI, FOOTER,
   tx, type LabLang, type LS,
 } from '@/site/labData'
-import { SITE_URL, localizedHref, pricingPath, solutionsPath, servicesPath, casesPath } from '@/site/routing'
+import { SITE_URL, localizedHref, pricingPath, solutionsPath, servicesPath, casesPath, stackPath } from '@/site/routing'
 import type { SocialKey } from '@/components/ui/SocialGlyph'
 
 export interface NavLink {
@@ -111,7 +111,7 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
     homeAria: L(CHROME.homeAria),
 
     /**
-     * The four links the bar holds, and all four are routes.
+     * The five links the bar holds, and all five are routes.
      *
      * THE WIDTH ARITHMETIC THAT USED TO GOVERN THIS IS GONE WITH THE PILL. It
      * budgeted 366px of a `max-w-[810px]` capsule and is why two entries were
@@ -122,12 +122,15 @@ export function getSite(lang: LabLang, opts: { offHome?: boolean } = {}) {
      * «Услуги» used to be `#what-in`, an anchor into whatever page the reader
      * was already on, which on a case or a solution page scrolled to nothing.
      * Cases used to be a dropdown, for want of an index. Both have a hub now and
-     * both are plain links, so every entry here goes to a page.
+     * both are plain links, so every entry here goes to a page. Stack used to
+     * be a home-page panel; it is the same data at `/stack`, which solution
+     * pages already pointed at.
      */
     nav: [
       { label: L(UI.navServices), href: servicesPath(lang) },
       { label: L(UI.navSolutions), href: solutionsPath(lang) },
       { label: L(UI.navCases), href: casesPath(lang) },
+      { label: L(UI.navStack), href: stackPath(lang) },
       { label: L(UI.navPricing), href: pricingPath(lang) },
     ] satisfies NavLink[],
 

@@ -6,7 +6,6 @@ import { FinalCta } from '@/components/sections/FinalCta'
 import { Hero } from '@/components/sections/Hero'
 import { Motto } from '@/components/sections/Motto'
 import { Cases } from "@/components/sections/Cases";
-import { PlatformHighlight } from '@/components/sections/PlatformHighlight'
 import { Process } from '@/components/sections/Process'
 import { WhatsIn } from '@/components/sections/WhatsIn'
 import type { LabLang } from '@/site/labData'
@@ -39,6 +38,11 @@ import type { LabLang } from '@/site/labData'
  * /pricing and the inner pages. On the home page the floors are already on
  * the cards, and a second widget between those cards and the process asked
  * the reader to assemble a number before they had finished the page.
+ *
+ * The stack panel is the third. The same groups live at /stack, which the
+ * header and every solution page already link to. Repeating them between the
+ * services and the process made the home page argue about tools before it
+ * had finished arguing about the work.
  */
 export default function AstonHome({ lang }: { lang: LabLang }) {
   return (
@@ -56,7 +60,6 @@ export default function AstonHome({ lang }: { lang: LabLang }) {
         <div className="page-main">
           <Cases lang={lang} />
           <WhatsIn lang={lang} />
-          <PlatformHighlight lang={lang} />
           <Process lang={lang} />
           <About lang={lang} />
           <Faq lang={lang} />
