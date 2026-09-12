@@ -38,7 +38,15 @@ export const sharedViewport: Viewport = {
 
 export default function RootShell({ lang, children }: { lang: LabLang; children: React.ReactNode }) {
   return (
-    <html lang={lang} className={`${clashGrotesk.variable} ${instrumentSans.variable} ${manrope.variable}`}>
+    <html
+      lang={lang}
+      className={`${clashGrotesk.variable} ${instrumentSans.variable} ${manrope.variable}`}
+      /* Extensions stamp attributes on `<html>` before React hydrates. SwiftIn
+         writes `data-swiftin-installed`; a wallet writes others. React then
+         reports a mismatch on this node and will not patch it. The warning
+         covers this element's attributes only, not the tree under it. */
+      suppressHydrationWarning
+    >
       <body>
         {/* Tailwind's own visually-hidden pair, not the old `.vl-skip`: that
             class lived in lab.css, which these pages no longer load, so the
